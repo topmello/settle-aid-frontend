@@ -17,3 +17,4 @@ Frontend Tech stack we use:
 * [Axios](https://axios-http.com/docs/intro) - API request library
 * [Redux](https://redux.js.org/) - Global state management for React app
 * [Redux Persist](https://github.com/rt2zz/redux-persist) - Data persistance for Redux
+* [React i18next](https://react.i18next.com/) - Internalization for React

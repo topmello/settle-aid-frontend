@@ -1,6 +1,6 @@
 {
   "name": "settle-aid-frontend",
-  "main": "expo-router/entry",
+  "main": "index.js",
   "version": "1.0.0",
   "scripts": {
     "start": "expo start",
@@ -25,8 +25,10 @@
     "expo-status-bar": "~1.6.0",
     "expo-system-ui": "~2.4.0",
     "expo-web-browser": "~12.3.2",
+    "i18next": "^23.4.6",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-i18next": "^13.2.0",
     "react-native": "0.72.4",
     "react-native-dotenv": "^3.4.9",
     "react-native-gesture-handler": "~2.12.0",
