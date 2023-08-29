@@ -13,6 +13,7 @@ and then scan the QR code in the terminal (you may need to scroll up to see them
 Frontend Tech stack we use:
 * [React Native](https://reactnative.dev/) - Fundamental Framework to build native app for Android and iOS in React
 * [React Native Paper](https://reactnativepaper.com/) - UI component and theme library for UI consistency accross devices
+* [React Native Dates](https://web-ridge.github.io/react-native-paper-dates/docs/intro) - Date selector component for React Native Paper
 * [Expo Router](https://docs.expo.dev/routing/introduction/) - Routing between screens
 * [Axios](https://axios-http.com/docs/intro) - API request library
 * [Redux](https://redux.js.org/) - Global state management for React app

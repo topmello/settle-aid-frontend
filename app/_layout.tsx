@@ -4,6 +4,10 @@ import { useFonts } from 'expo-font';
 import { SplashScreen, Stack } from 'expo-router';
 import { useEffect } from 'react';
 import { useColorScheme } from 'react-native';
+import { PaperProvider } from 'react-native-paper';
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+import translations from '../translation';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -17,6 +21,18 @@ export const unstable_settings = {
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+
+i18n.use(initReactI18next)
+  .init({
+    ns: ['test', 'common', 'account', 'route', 'home', 'tip'],
+    compatibilityJSON: 'v3',
+    resources: translations,
+    lng: "zh-CN",
+    fallbackLng: "en-AU",
+    interpolation: {
+      escapeValue: false
+    } 
+  });
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
@@ -46,11 +62,13 @@ function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-      </Stack>
-    </ThemeProvider>
+    <PaperProvider>
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+        </Stack>
+      </ThemeProvider>
+    </PaperProvider>
   );
 }
