@@ -8,6 +8,8 @@ import { PaperProvider } from 'react-native-paper';
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import translations from '../translation';
+import { Provider as StoreProvider } from 'react-redux';
+import store from '../store';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -62,13 +64,15 @@ function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
   return (
-    <PaperProvider>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-        </Stack>
-      </ThemeProvider>
-    </PaperProvider>
+    <StoreProvider store={store}>
+      <PaperProvider>
+        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+          </Stack>
+        </ThemeProvider>
+      </PaperProvider>
+    </StoreProvider>
   );
 }
