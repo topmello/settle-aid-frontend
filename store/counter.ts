@@ -1,16 +1,16 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 // For testing Redux Toolkit
 export const counterSlice = createSlice({
-  name: 'counter',
+  name: "counter",
   initialState: {
     count: 0,
   },
   reducers: {
-    increment: state => {
+    increment: (state) => {
       state.count += 1;
     },
-    decrement: state => {
+    decrement: (state) => {
       state.count -= 1;
     },
   },
