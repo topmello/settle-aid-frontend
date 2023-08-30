@@ -4,13 +4,31 @@ import { RootState } from "../../store";
 import useLogin from "../../hooks/useLogin";
 import useFetch from "../../hooks/useFetch";
 
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions, ScrollView } from "react-native";
 
-import EditScreenInfo from "../../components/EditScreenInfo";
 import { Text, View } from "../../components/Themed";
-import MapView, { Marker } from "react-native-maps";
+import MapView, { Marker, Polyline } from "react-native-maps";
+import { Card, List } from "react-native-paper";
 
-export default function TabTwoScreen() {
+const body: {
+  query: string[];
+  location_type: string[];
+  longitude: number;
+  latitude: number;
+  distance_threshold: number;
+  similarity_threshold: number;
+  route_type: string;
+} = {
+  query: ["Museum", "Indian", "Spicy", "Park"],
+  location_type: ["landmark", "restaurant", "restaurant", "landmark"],
+  longitude: 144.9549,
+  latitude: -37.81803,
+  distance_threshold: 1000,
+  similarity_threshold: 0,
+  route_type: "walking",
+};
+
+export default function MapScreen() {
   const count = useSelector((state: RootState) => state.counter.count);
   const dispatch = useDispatch();
 
@@ -22,53 +40,70 @@ export default function TabTwoScreen() {
   const { isLoadingFetch, data, errorFetch } = useSelector(
     (state: RootState) => state.fetchData
   );
-
-  const body = useMemo(() => {
-    return {
-      query: "Chinese",
-      location_type: "restaurant",
-      longitude: 144.9549,
-      latitude: -37.81803,
-      distance_threshold: 10000,
-      similarity_threshold: 0.1,
-    };
-  }, []);
-  //useFetch("user/generate/", "GET", token, {});
+  useFetch("search/route/", "POST", token, body);
   //console.log(data);
-  console.log("Fetching data");
-  useFetch("search/", "POST", token, body);
-  console.log(data);
+
+  const route = useMemo(() => {
+    if (data) {
+      return data.route.map((coord: Array<number>) => {
+        return { latitude: coord[1], longitude: coord[0] };
+      });
+    }
+  }, [data]);
+
+  if (isLoadingLogin || isLoadingFetch) {
+    return (
+      <View style={styles.container}>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab Two {count}</Text>
-      <Text onPress={() => dispatch({ type: "counter/increment" })}>
-        Increment
-      </Text>
       <MapView
         style={styles.map}
         initialRegion={{
-          latitude: 37.78825,
-          longitude: -122.4324,
+          latitude: body.latitude,
+          longitude: body.longitude,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
       >
         <Marker
-          coordinate={{ latitude: 37.78825, longitude: -122.4324 }}
+          coordinate={{ latitude: body.latitude, longitude: body.longitude }}
           title="My Marker"
           description="This is my marker"
         />
+        <Polyline coordinates={route} strokeWidth={5} />
       </MapView>
       <View
         style={styles.separator}
         lightColor="#eee"
         darkColor="rgba(255,255,255,0.1)"
       />
-      <EditScreenInfo path="app/(tabs)/two.tsx" />
+      <View style={{ flex: 1 }} />
+      <Card style={styles.card}>
+        <ScrollView>
+          <List.Section>
+            <List.Subheader>My List</List.Subheader>
+            {data?.locations.map((location: string) => {
+              return (
+                <List.Item
+                  title={location}
+                  description="Item description"
+                  left={(props) => <List.Icon {...props} icon="folder" />}
+                />
+              );
+            })}
+          </List.Section>
+        </ScrollView>
+      </Card>
     </View>
   );
 }
+
+const { width, height } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
   container: {
@@ -87,5 +122,13 @@ const styles = StyleSheet.create({
   },
   map: {
     ...StyleSheet.absoluteFillObject,
+  },
+  card: {
+    width: width * 0.99,
+    height: height * 0.3,
+    marginBottom: 10,
+    padding: 0,
+    margin: 0,
+    borderRadius: 20,
   },
 });
