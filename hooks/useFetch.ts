@@ -11,8 +11,8 @@ import {
 const useFetch = (
   endpoint: string,
   method: Method,
-  body: object = {},
-  token: string | null
+  token: string | null,
+  body: object = {}
 ) => {
   const dispatch = useDispatch();
 
@@ -20,7 +20,7 @@ const useFetch = (
     method: method,
     url: `http://34.129.1.154:8000/${endpoint}`,
     headers: token ? { Authorization: `Bearer ${token}` } : {},
-    data: body,
+    //data: body,
   };
 
   const fetchData = async () => {
@@ -36,7 +36,7 @@ const useFetch = (
 
   useEffect(() => {
     fetchData();
-  }, [endpoint, token, JSON.stringify(body)]);
+  }, [JSON.stringify(body)]);
 };
 
 export default useFetch;

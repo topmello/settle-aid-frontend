@@ -1,15 +1,15 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface LoginState {
-  isLoading: boolean;
+  isLoadingLogin: boolean;
   token: string | null;
-  error: { message: string } | null;
+  errorLogin: { message: string } | null;
 }
 
 const initialLoginState: LoginState = {
-  isLoading: false,
+  isLoadingLogin: false,
   token: null,
-  error: null,
+  errorLogin: null,
 };
 
 const loginSlice = createSlice({
@@ -17,17 +17,20 @@ const loginSlice = createSlice({
   initialState: initialLoginState,
   reducers: {
     loginRequest(state) {
-      state.isLoading = true;
+      state.isLoadingLogin = true;
     },
-    loginSuccess(state, action: PayloadAction<string>) {
-      state.isLoading = false;
-      state.token = action.payload;
-      state.error = null;
+    loginSuccess(
+      state,
+      action: PayloadAction<{ access_token: string; token_type: string }>
+    ) {
+      state.isLoadingLogin = false;
+      state.token = action.payload.access_token;
+      state.errorLogin = null;
     },
     loginFailure(state, action: PayloadAction<{ message: string }>) {
-      state.isLoading = false;
+      state.isLoadingLogin = false;
       state.token = null;
-      state.error = action.payload;
+      state.errorLogin = action.payload;
     },
   },
 });

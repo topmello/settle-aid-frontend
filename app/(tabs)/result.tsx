@@ -18,13 +18,13 @@ export default function TabTwoScreen() {
   );
   useLogin("admin", "admin");
 
-  const { isLoadingFetch, dataFetched, errorFetch } = useSelector(
+  const { isLoadingFetch, data, errorFetch } = useSelector(
     (state: RootState) => state.fetchData
   );
   useFetch("user/generate", "GET", token, {
-    username: "admin1",
+    username: "admin",
   });
-  console.log(dataFetched);
+  console.log(data);
 
   return (
     <View style={styles.container}>
