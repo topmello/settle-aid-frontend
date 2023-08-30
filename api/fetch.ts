@@ -18,7 +18,6 @@ export type RequestOptions = {
   data?: object;
   // URL parameters for GET, DELETE
   params?: object;
-  token?: string;
 };
 
 axios.defaults.baseURL = process.env.EXPO_PUBLIC_API_URL;
@@ -41,7 +40,7 @@ axios.defaults.baseURL = process.env.EXPO_PUBLIC_API_URL;
  * });
  */
 export const fetch = async (options: RequestOptions) => {
-  const token = options.token;
+  const token = require("../store/authSlice").selectUserToken();
   switch (options.method) {
     case "GET" || "get":
       return await axios.get(options.url, {

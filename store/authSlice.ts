@@ -36,7 +36,6 @@ export const registerUser = createAsyncThunk('auth/registerUser', async (data: R
     method: 'POST',
     url: '/user',
     data,
-
   });
   return response.data;
 });
