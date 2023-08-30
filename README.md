@@ -19,3 +19,12 @@ Frontend Tech stack we use:
 * [Redux](https://redux.js.org/) - Global state management for React app
 * [Redux Persist](https://github.com/rt2zz/redux-persist) - Data persistance for Redux
 * [React i18next](https://react.i18next.com/) - Internalization for React
+
+### Develop Resources
+#### Icons
+* [Material Design Icons](https://pictogrammers.com/library/mdi/) - Material Community Icons Search Engine, could be used to find the names of certain icon
+* [React Native Paper Icons Page](https://callstack.github.io/react-native-paper/docs/guides/icons)
+
+#### Routers
+* [Expo Router - Create Page](https://docs.expo.dev/routing/create-pages/) - Create page manual of Expo Router
+* [Expo Router - Navigate between pages](https://docs.expo.dev/routing/navigating-pages/) - How to navigate between pages both component and imperative
