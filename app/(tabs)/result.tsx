@@ -41,15 +41,6 @@ export default function MapScreen() {
     (state: RootState) => state.fetchData
   );
   useFetch("search/route/", "POST", token, body);
-  //console.log(data);
-
-  const route = useMemo(() => {
-    if (data) {
-      return data.route.map((coord: Array<number>) => {
-        return { latitude: coord[1], longitude: coord[0] };
-      });
-    }
-  }, [data]);
 
   if (isLoadingLogin || isLoadingFetch) {
     return (
@@ -75,7 +66,7 @@ export default function MapScreen() {
           title="My Marker"
           description="This is my marker"
         />
-        <Polyline coordinates={route} strokeWidth={5} />
+        <Polyline coordinates={data?.route} strokeWidth={5} />
       </MapView>
       <View
         style={styles.separator}
@@ -90,6 +81,7 @@ export default function MapScreen() {
             {data?.locations.map((location: string) => {
               return (
                 <List.Item
+                  key={location}
                   title={location}
                   description="Item description"
                   left={(props) => <List.Icon {...props} icon="folder" />}

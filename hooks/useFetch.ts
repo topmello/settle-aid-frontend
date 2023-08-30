@@ -52,7 +52,7 @@ const useFetch = (
 
   useEffect(() => {
     fetchData();
-  }, [JSON.stringify(body)]);
+  }, [token, JSON.stringify(body)]);
 };
 
 export default useFetch;
