@@ -47,7 +47,7 @@ const location_type_icon: { [key: string]: string } = {
 export default function MapScreen() {
   const token = useSelector(selectUserToken);
 
-  const { isLoading, error } = useSelector((state: RootState) => state.app);
+  const { isLoading, isFail } = useSelector((state: RootState) => state.app);
 
   const [triggerFetch, setTriggerFetch] = useState(0);
 
@@ -79,7 +79,7 @@ export default function MapScreen() {
     });
   };
 
-  if (isLoading) {
+  if (isLoading || isFail) {
     return (
       <View style={styles.container}>
         <Text>Loading...</Text>

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { fetch, RequestOptions } from "../api/fetch";
-import { loading, loaded, error as errorAction } from "../store/appSlice";
+import { loading, loaded, fail } from "../store/appSlice";
 import { AppDispatch } from "../store";
 
 const useFetch = (requestOptions: RequestOptions, deps: any[] = []) => {
@@ -17,7 +17,7 @@ const useFetch = (requestOptions: RequestOptions, deps: any[] = []) => {
       setData(response.data);
       dispatch(loaded());
     } catch (error: any) {
-      dispatch(errorAction({ message: error.message }));
+      dispatch(fail({ message: error.message }));
     }
   };
 

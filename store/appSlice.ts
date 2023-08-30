@@ -9,14 +9,14 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
  */
 interface AppState {
   isLoading: boolean;
-  error: { 
-    message: string 
+  isFail: {
+    message: string;
   } | null;
 }
 
 const initialState: AppState = {
   isLoading: false,
-  error: null,
+  isFail: null,
 };
 
 const appSlice = createSlice({
@@ -29,12 +29,12 @@ const appSlice = createSlice({
     loaded(state) {
       state.isLoading = false;
     },
-    error(state, action: PayloadAction<{ message: string }>) {
+    fail(state, action: PayloadAction<{ message: string }>) {
       state.isLoading = false;
-      state.error = action.payload;
+      state.isFail = action.payload;
     },
   },
 });
 
-export const { loading, loaded, error } = appSlice.actions;
+export const { loading, loaded, fail } = appSlice.actions;
 export default appSlice.reducer;
