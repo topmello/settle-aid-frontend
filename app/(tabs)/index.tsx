@@ -1,16 +1,13 @@
 import { StyleSheet, Pressable } from "react-native";
-import React, { useState } from "react";
-import * as Location from "expo-location";
 import { Link, Tabs } from "expo-router";
-import EditScreenInfo from "../../components/EditScreenInfo";
-import { Text, View } from "../../components/Themed";
+import { View } from "react-native";
 import { useTranslation } from "react-i18next";
-import { createContext } from "react";
 import { loginUser } from "../../store/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUserToken } from "../../store/authSlice";
 import { selectAuthStatus } from "../../store/authSlice";
 import { AppDispatch } from "../../store";
+import { Button, Text } from "react-native-paper";
 
 export default function TabOneScreen() {
   const { t } = useTranslation();
@@ -20,40 +17,43 @@ export default function TabOneScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
-      <Text>{t("test:helloWorld")}</Text>
-      <Link href="/Location" asChild>
-        <Pressable
-          style={{
-            backgroundColor: "blue",
-            padding: 10,
-            borderRadius: 5,
-            alignItems: "center",
-          }}
-        >
-          <Text style={{ color: "white", fontSize: 16 }}>Start Planning</Text>
-        </Pressable>
+      <Text variant="headlineMedium">Tab One</Text>
+      <Text>Translation: {t("test:helloWorld")}</Text>
+      <Link href="/Location">
+        <Button icon="routes" mode="contained">
+          Start Planning
+        </Button>
       </Link>
-      <Text>Token here: {token?token:""}, Status: {authStatus}</Text>
-      <Pressable
-          style={{
-            backgroundColor: "blue",
-            padding: 10,
-            borderRadius: 5,
-            alignItems: "center",
-          }}
-          onPress={() => dispatch(loginUser({ username: "admin", password: "admin" }))}
+      <Text style={styles.title}>Authentication</Text>
+      <Text>
+        Token here: {token ? token : ""}, Status: {authStatus}
+      </Text>
+      <Button  mode="contained"
+        onPress={() =>
+          dispatch(loginUser({ username: "admin", password: "admin" }))
+        }
+      >
+        Retrive Credential
+      </Button>
+      <Text style={styles.title}>Login Button</Text>
+      <Link href={"/auth/login"}>
+        <Button mode="contained"
+          onPress={() =>
+            dispatch(loginUser({ username: "admin", password: "admin" }))
+          }
         >
-        <Text style={{ color: "white", fontSize: 16 }}>
-          Retrive Credential
-        </Text>
-      </Pressable>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
-      />
-      <EditScreenInfo path="app/(tabs)/index.tsx" />
+          Go Login
+        </Button>
+      </Link>
+      <Link href={"/auth/register"}>
+        <Button mode="contained"
+          onPress={() =>
+            dispatch(loginUser({ username: "admin", password: "admin" }))
+          }
+        >
+          Go Register
+        </Button>
+      </Link>
     </View>
   );
 }

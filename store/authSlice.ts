@@ -25,7 +25,7 @@ export const loginUser = createAsyncThunk('auth/loginUser', async (data: LoginDa
   const response = await fetch({
     method: 'POST',
     url: '/login',
-    data
+    data,
   });
   return response.data;
 });
