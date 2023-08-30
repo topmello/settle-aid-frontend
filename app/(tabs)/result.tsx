@@ -4,9 +4,7 @@ import { RootState } from "../../store";
 import useFetch from "../../hooks/useFetch";
 import { RequestOptions } from "../../api/fetch";
 
-import { loginUser } from "../../store/authSlice";
-import { selectAuthStatus } from "../../store/authSlice";
-import { AppDispatch } from "../../store";
+import { selectUserToken } from "../../store/authSlice";
 import { RouteState } from "../../store/routeSlice";
 
 import FontAwesome from "@expo/vector-icons/FontAwesome";
@@ -47,8 +45,7 @@ const location_type_icon: { [key: string]: string } = {
 };
 
 export default function MapScreen() {
-  const dispatch = useDispatch<AppDispatch>();
-  const authStatus = useSelector(selectAuthStatus);
+  const token = useSelector(selectUserToken);
 
   const { isLoading, error } = useSelector((state: RootState) => state.app);
 
@@ -59,6 +56,7 @@ export default function MapScreen() {
       method: "POST",
       url: "/search/route/",
       data: body,
+      token: token,
     };
   }, [body, triggerFetch]);
 
@@ -81,23 +79,10 @@ export default function MapScreen() {
     });
   };
 
-  if (isLoading || !data) {
+  if (isLoading) {
     return (
       <View style={styles.container}>
-        <Text>Loading...{authStatus}</Text>
-        <TouchableOpacity
-          style={{
-            backgroundColor: "blue",
-            padding: 10,
-            borderRadius: 5,
-            alignItems: "center",
-          }}
-          onPress={() =>
-            dispatch(loginUser({ username: "admin", password: "admin" }))
-          }
-        >
-          <Text style={{ color: "white", fontSize: 16 }}>Login</Text>
-        </TouchableOpacity>
+        <Text>Loading...</Text>
       </View>
     );
   }
@@ -118,7 +103,7 @@ export default function MapScreen() {
           (location: Coordinates, index: number) => {
             return (
               <Marker
-                key={location.latitude}
+                key={index}
                 coordinate={location}
                 title={index === 0 ? "You are here" : data.locations[index - 1]}
                 pinColor={index === 0 ? "blue" : "red"}
