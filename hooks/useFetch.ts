@@ -4,7 +4,7 @@ import { fetch, RequestOptions } from "../api/fetch";
 import { loading, loaded, error as errorAction } from "../store/appSlice";
 import { AppDispatch } from "../store";
 
-const useFetch = (requestOptions: RequestOptions) => {
+const useFetch = (requestOptions: RequestOptions, deps: any[] = []) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const [data, setData] = useState<any>(null);
@@ -27,6 +27,7 @@ const useFetch = (requestOptions: RequestOptions) => {
     requestOptions.token,
     JSON.stringify(requestOptions.data),
     requestOptions.params,
+    ...deps,
   ]);
 
   return data;

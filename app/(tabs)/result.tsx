@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../store";
 import useFetch from "../../hooks/useFetch";
@@ -23,15 +23,18 @@ import { Text, View } from "../../components/Themed";
 import MapView, { Marker, Polyline } from "react-native-maps";
 import { Card, List } from "react-native-paper";
 
-const body: {
+interface RequestData {
   query: string[];
-  location_type: string[];
+  location_type: ("landmark" | "restaurant" | "grocery" | "pharmacy")[];
   longitude: number;
   latitude: number;
   distance_threshold: number;
   similarity_threshold: number;
   route_type: string;
-} = {
+}
+
+//Mock data
+const body: RequestData = {
   query: ["Museum", "Indian", "Spicy", "Park"],
   location_type: ["landmark", "restaurant", "restaurant", "landmark"],
   longitude: 144.9549,
@@ -45,6 +48,14 @@ interface Coordinates {
   latitude: number;
   longitude: number;
 }
+
+const location_type_icon: { [key: string]: string } = {
+  landmark: "city-variant",
+  restaurant: "silverware-fork-knife",
+  grocery: "cart",
+  pharmacy: "medical-bag",
+};
+
 export default function MapScreen() {
   const dispatch = useDispatch<AppDispatch>();
   const token = useSelector(selectUserToken);
@@ -52,14 +63,20 @@ export default function MapScreen() {
 
   const { isLoading, error } = useSelector((state: RootState) => state.app);
 
-  const req: RequestOptions = {
-    method: "POST",
-    url: "/search/route/",
-    data: body,
-    token: token,
-  };
+  const [triggerFetch, setTriggerFetch] = useState(0);
 
-  const data = useFetch(req);
+  const req: RequestOptions = useMemo(() => {
+    return {
+      method: "POST",
+      url: "/search/route/",
+      data: body,
+      token: token,
+    };
+  }, [body, token, triggerFetch]);
+
+  const requestData: RequestData = req.data as RequestData;
+
+  const data = useFetch(req, [triggerFetch]);
 
   const [region, setRegion] = useState({
     latitude: body.latitude - 0.005,
@@ -109,12 +126,25 @@ export default function MapScreen() {
           longitudeDelta: 0.0421,
         }}
       >
-        <Marker
-          coordinate={{ latitude: body.latitude, longitude: body.longitude }}
-          title="My Marker"
-          description="This is my marker"
+        {data?.locations_coordinates.map(
+          (location: Coordinates, index: number) => {
+            return (
+              <Marker
+                key={location.latitude}
+                coordinate={location}
+                title={index === 0 ? "You are here" : data.locations[index - 1]}
+                pinColor={index === 0 ? "blue" : "red"}
+                description=""
+              />
+            );
+          }
+        )}
+        <Polyline
+          coordinates={data?.route}
+          strokeWidth={3}
+          strokeColor="rgba(227, 66, 52, 0.7)"
+          lineDashPattern={[1, 5]}
         />
-        <Polyline coordinates={data?.route} strokeWidth={5} />
       </MapView>
       <View
         style={styles.separator}
@@ -154,7 +184,15 @@ export default function MapScreen() {
                   key={location}
                   title={location}
                   description="Item description"
-                  left={(props) => <List.Icon {...props} icon="folder" />}
+                  left={(props) => (
+                    <List.Icon
+                      {...props}
+                      icon={
+                        location_type_icon[requestData?.location_type[index]] ||
+                        "folder"
+                      }
+                    />
+                  )}
                   right={() => (
                     <TouchableOpacity
                       style={{
@@ -182,6 +220,36 @@ export default function MapScreen() {
               );
             })}
           </List.Section>
+          <List.Section>
+            <List.Accordion
+              title="Instructions"
+              left={(props) => <List.Icon {...props} icon="map-legend" />}
+            >
+              {data?.instructions.map((instruction: string, index: number) => {
+                return <List.Item key={index} title={instruction} />;
+              })}
+            </List.Accordion>
+          </List.Section>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-evenly",
+              alignItems: "center",
+              flex: 1,
+              backgroundColor: "transparent",
+              padding: 10,
+            }}
+          >
+            <TouchableOpacity style={styles.button}>
+              <Text>Back</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => setTriggerFetch((prev) => prev + 1)}
+            >
+              <Text>Reroute</Text>
+            </TouchableOpacity>
+          </View>
         </ScrollView>
       </Card>
     </View>
@@ -221,5 +289,12 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     padding: 0,
     paddingRight: 20,
+  },
+  button: {
+    width: width * 0.35,
+    backgroundColor: "blue",
+    padding: 10,
+    borderRadius: 5,
+    alignItems: "center",
   },
 });
