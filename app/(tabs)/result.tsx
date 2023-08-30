@@ -1,15 +1,17 @@
-import { useMemo } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useState } from "react";
+import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import useLogin from "../../hooks/useLogin";
 import useFetch from "../../hooks/useFetch";
+
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 import {
   StyleSheet,
   Dimensions,
   ScrollView,
   FlatList,
-  PanResponder,
+  TouchableOpacity,
 } from "react-native";
 
 import { Text, View } from "../../components/Themed";
@@ -34,6 +36,11 @@ const body: {
   route_type: "walking",
 };
 
+interface Coordinates {
+  latitude: number;
+  longitude: number;
+}
+
 export default function MapScreen() {
   const { isLoadingLogin, token, errorLogin } = useSelector(
     (state: RootState) => state.login
@@ -44,6 +51,23 @@ export default function MapScreen() {
     (state: RootState) => state.fetchData
   );
   useFetch("search/route/", "POST", token, body);
+
+  data.locations_coordinates;
+
+  const [region, setRegion] = useState({
+    latitude: body.latitude - 0.005,
+    longitude: body.longitude,
+    latitudeDelta: 0.05,
+    longitudeDelta: 0.03,
+  });
+
+  const handleLocationSelect = (location: Coordinates) => {
+    setRegion({
+      ...region,
+      latitude: location.latitude - 0.005,
+      longitude: location.longitude,
+    });
+  };
 
   if (isLoadingLogin || isLoadingFetch) {
     return (
@@ -57,6 +81,7 @@ export default function MapScreen() {
     <View style={styles.container}>
       <MapView
         style={styles.map}
+        region={region}
         initialRegion={{
           latitude: body.latitude,
           longitude: body.longitude,
@@ -95,13 +120,36 @@ export default function MapScreen() {
         />
         <ScrollView>
           <List.Section>
-            {data?.locations.map((location: string) => {
+            {data?.locations.map((location: string, index: number) => {
               return (
                 <List.Item
                   key={location}
                   title={location}
                   description="Item description"
                   left={(props) => <List.Icon {...props} icon="folder" />}
+                  right={() => (
+                    <TouchableOpacity
+                      style={{
+                        backgroundColor: "#000",
+                        borderRadius: 24,
+                        height: 48,
+                        width: 48,
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                      onPress={() =>
+                        handleLocationSelect(
+                          data.locations_coordinates[index + 1]
+                        )
+                      }
+                    >
+                      <FontAwesome
+                        name="location-arrow"
+                        size={32}
+                        color="white"
+                      />
+                    </TouchableOpacity>
+                  )}
                 />
               );
             })}
