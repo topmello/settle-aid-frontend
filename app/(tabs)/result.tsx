@@ -5,9 +5,9 @@ import useFetch from "../../hooks/useFetch";
 import { RequestOptions } from "../../api/fetch";
 
 import { loginUser } from "../../store/authSlice";
-import { selectUserToken } from "../../store/authSlice";
 import { selectAuthStatus } from "../../store/authSlice";
 import { AppDispatch } from "../../store";
+import { RouteState } from "../../store/routeSlice";
 
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
@@ -23,18 +23,8 @@ import { Text, View } from "../../components/Themed";
 import MapView, { Marker, Polyline } from "react-native-maps";
 import { Card, List } from "react-native-paper";
 
-interface RequestData {
-  query: string[];
-  location_type: ("landmark" | "restaurant" | "grocery" | "pharmacy")[];
-  longitude: number;
-  latitude: number;
-  distance_threshold: number;
-  similarity_threshold: number;
-  route_type: string;
-}
-
 //Mock data
-const body: RequestData = {
+const body: RouteState = {
   query: ["Museum", "Indian", "Spicy", "Park"],
   location_type: ["landmark", "restaurant", "restaurant", "landmark"],
   longitude: 144.9549,
@@ -58,7 +48,6 @@ const location_type_icon: { [key: string]: string } = {
 
 export default function MapScreen() {
   const dispatch = useDispatch<AppDispatch>();
-  const token = useSelector(selectUserToken);
   const authStatus = useSelector(selectAuthStatus);
 
   const { isLoading, error } = useSelector((state: RootState) => state.app);
@@ -70,11 +59,10 @@ export default function MapScreen() {
       method: "POST",
       url: "/search/route/",
       data: body,
-      token: token,
     };
-  }, [body, token, triggerFetch]);
+  }, [body, triggerFetch]);
 
-  const requestData: RequestData = req.data as RequestData;
+  const requestData: RouteState = req.data as RouteState;
 
   const data = useFetch(req, [triggerFetch]);
 
@@ -96,7 +84,7 @@ export default function MapScreen() {
   if (isLoading || !data) {
     return (
       <View style={styles.container}>
-        <Text>Loading...</Text>
+        <Text>Loading...{authStatus}</Text>
         <TouchableOpacity
           style={{
             backgroundColor: "blue",

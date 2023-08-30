@@ -23,12 +23,7 @@ const useFetch = (requestOptions: RequestOptions, deps: any[] = []) => {
 
   useEffect(() => {
     fetchData();
-  }, [
-    requestOptions.token,
-    JSON.stringify(requestOptions.data),
-    requestOptions.params,
-    ...deps,
-  ]);
+  }, [JSON.stringify(requestOptions.data), requestOptions.params, ...deps]);
 
   return data;
 };

@@ -1,7 +1,7 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface RouteState {
-  location_type: string[];
+export interface RouteState {
+  location_type: ("landmark" | "restaurant" | "grocery" | "pharmacy")[];
   query: string[];
   longitude: number;
   latitude: number;
@@ -17,5 +17,5 @@ const initialState: RouteState = {
   latitude: 0,
   distance_threshold: 0,
   similarity_threshold: 0,
-  route_type: '',
+  route_type: "",
 };
