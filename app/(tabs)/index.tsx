@@ -1,15 +1,19 @@
 import { StyleSheet, Pressable } from 'react-native';
+import React, {useState} from 'react';
+import * as Location from 'expo-location';
 import { Link, Tabs } from 'expo-router';
 import EditScreenInfo from '../../components/EditScreenInfo';
 import { Text, View } from '../../components/Themed';
 import { useTranslation } from "react-i18next";
+import { createContext } from "react";
 
 export default function TabOneScreen() {
   const { t } = useTranslation();
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Tab One</Text>
-      <Text>{t("test:helloWorl")}</Text>
+      <Text>{t("test:helloWorld")}</Text>
       <Link href="/Location" asChild>
       <Pressable>
         <Text>Start Planning</Text>
