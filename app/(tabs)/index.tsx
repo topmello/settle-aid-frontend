@@ -36,21 +36,18 @@ export default function TabOneScreen() {
         Retrive Credential
       </Button>
       <Text style={styles.title}>Login Button</Text>
+      <Link href={"/common/language"}>
+        <Button mode="contained">
+          Go Language
+        </Button>
+      </Link>
       <Link href={"/auth/login"}>
-        <Button mode="contained"
-          onPress={() =>
-            dispatch(loginUser({ username: "admin", password: "admin" }))
-          }
-        >
+        <Button mode="contained" disabled>
           Go Login
         </Button>
       </Link>
       <Link href={"/auth/register"}>
-        <Button mode="contained"
-          onPress={() =>
-            dispatch(loginUser({ username: "admin", password: "admin" }))
-          }
-        >
+        <Button mode="contained" disabled>
           Go Register
         </Button>
       </Link>

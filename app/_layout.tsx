@@ -1,5 +1,5 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { lightTheme, darkTheme } from '../constants/theme';
 import { useFonts } from 'expo-font';
 import { SplashScreen, Stack } from 'expo-router';
 import { useEffect } from 'react';
@@ -65,14 +65,12 @@ function RootLayoutNav() {
 
   return (
     <StoreProvider store={store}>
-      <PaperProvider>
-        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      <PaperProvider theme={colorScheme === 'dark' ? darkTheme : lightTheme }>
           <Stack>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
             <Stack.Screen name="locale" options={{ headerShown: false }} />
           </Stack>
-        </ThemeProvider>
       </PaperProvider>
     </StoreProvider>
   );
