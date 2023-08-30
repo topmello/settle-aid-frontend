@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../store";
 import useLogin from "../../hooks/useLogin";
@@ -21,9 +22,21 @@ export default function TabTwoScreen() {
   const { isLoadingFetch, data, errorFetch } = useSelector(
     (state: RootState) => state.fetchData
   );
-  useFetch("user/generate", "GET", token, {
-    username: "admin",
-  });
+
+  const body = useMemo(() => {
+    return {
+      query: "Chinese",
+      location_type: "restaurant",
+      longitude: 144.9549,
+      latitude: -37.81803,
+      distance_threshold: 10000,
+      similarity_threshold: 0.1,
+    };
+  }, []);
+  //useFetch("user/generate/", "GET", token, {});
+  //console.log(data);
+  console.log("Fetching data");
+  useFetch("search/", "POST", token, body);
   console.log(data);
 
   return (
