@@ -15,8 +15,15 @@ export default function TabOneScreen() {
       <Text style={styles.title}>Tab One</Text>
       <Text>{t("test:helloWorld")}</Text>
       <Link href="/Location" asChild>
-      <Pressable>
-        <Text>Start Planning</Text>
+      <Pressable
+      style={{
+        backgroundColor: 'blue',
+        padding: 10,
+        borderRadius: 5,
+        alignItems: 'center',
+      }}>
+        <Text
+        style={{ color: 'white', fontSize: 16 }}>Start Planning</Text>
       </Pressable>
     </Link>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
