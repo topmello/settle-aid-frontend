@@ -4,7 +4,13 @@ import { RootState } from "../../store";
 import useLogin from "../../hooks/useLogin";
 import useFetch from "../../hooks/useFetch";
 
-import { StyleSheet, Dimensions, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  Dimensions,
+  ScrollView,
+  FlatList,
+  PanResponder,
+} from "react-native";
 
 import { Text, View } from "../../components/Themed";
 import MapView, { Marker, Polyline } from "react-native-maps";
@@ -29,9 +35,6 @@ const body: {
 };
 
 export default function MapScreen() {
-  const count = useSelector((state: RootState) => state.counter.count);
-  const dispatch = useDispatch();
-
   const { isLoadingLogin, token, errorLogin } = useSelector(
     (state: RootState) => state.login
   );
@@ -75,9 +78,23 @@ export default function MapScreen() {
       />
       <View style={{ flex: 1 }} />
       <Card style={styles.card}>
+        <FlatList
+          data={[1, 2, 3]}
+          renderItem={({ item }) => (
+            <Card style={styles.flatListCard}>
+              <Card.Title title={`Tips ${item}`} subtitle="Subtitle" />
+            </Card>
+          )}
+          keyExtractor={(item) => item?.toString()}
+          contentContainerStyle={{
+            columnGap: 10,
+            margin: 14,
+            marginBottom: 30,
+          }}
+          horizontal={true}
+        />
         <ScrollView>
           <List.Section>
-            <List.Subheader>My List</List.Subheader>
             {data?.locations.map((location: string) => {
               return (
                 <List.Item
@@ -117,10 +134,15 @@ const styles = StyleSheet.create({
   },
   card: {
     width: width * 0.99,
-    height: height * 0.3,
+    height: height * 0.35,
     marginBottom: 10,
     padding: 0,
     margin: 0,
     borderRadius: 20,
+  },
+  flatListCard: {
+    width: width * 0.7,
+    marginBottom: 10,
+    padding: 0,
   },
 });
