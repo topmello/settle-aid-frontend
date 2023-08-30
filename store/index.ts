@@ -1,13 +1,16 @@
 import { configureStore } from "@reduxjs/toolkit";
-import counter from "./counter";
 import fetchData from "./fetchData";
 import login from "./login";
+import authSlice from "./authSlice";
+import appSlice from "./appSlice";
 
-const store = configureStore({
+export const store = configureStore({
   reducer: {
-    counter: counter,
     login: login,
     fetchData: fetchData,
+
+    auth: authSlice,
+    app: appSlice,
   },
 });
 

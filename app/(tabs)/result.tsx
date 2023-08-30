@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../store";
 import useLogin from "../../hooks/useLogin";
 import useFetch from "../../hooks/useFetch";
@@ -40,8 +40,8 @@ interface Coordinates {
   latitude: number;
   longitude: number;
 }
-
 export default function MapScreen() {
+  const dispatch = useDispatch();
   const { isLoadingLogin, token, errorLogin } = useSelector(
     (state: RootState) => state.login
   );
