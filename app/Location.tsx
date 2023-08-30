@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import MapView, {Marker} from 'react-native-maps';
 import { StyleSheet, View } from 'react-native';
 import * as Location from 'expo-location';
@@ -6,9 +6,26 @@ import * as Location from 'expo-location';
 export default function App() {
 
   const [pin, setPin] = React.useState({
-    latitude: 0,
-    longitude: 0,
+    latitude: -37.8136,
+    longitude: 144.9631,
   });
+
+  useEffect(() => {
+    (async () => {
+      
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        //setErrorMsg('Permission to access location was denied');
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      setPin({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      })
+    })();
+  }, []);
 
   return (
     <View style={styles.container}>
