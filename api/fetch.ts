@@ -1,4 +1,5 @@
 import axios, { Method } from "axios";
+import { requestForegroundPermissionsAsync } from "expo-location";
 
 /**
  * Axios request wrapper
@@ -9,7 +10,7 @@ import axios, { Method } from "axios";
  * DELETE requests use URL parameters eg. /users?name=John
  */
 
-type RequestOptions = {
+export type RequestOptions = {
   method: Method;
   // URL for the request
   url: string;

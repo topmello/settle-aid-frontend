@@ -1,58 +1,35 @@
-import { useEffect } from "react";
-import axios, { Method } from "axios";
+import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { fetch, RequestOptions } from "../api/fetch";
+import { loading, loaded, error as errorAction } from "../store/appSlice";
+import { AppDispatch } from "../store";
 
-import {
-  fetchDataRequest,
-  fetchDataSuccess,
-  fetchDataFailure,
-} from "../store/fetchData";
+const useFetch = (requestOptions: RequestOptions) => {
+  const dispatch = useDispatch<AppDispatch>();
 
-const useFetch = (
-  endpoint: string,
-  method: Method,
-  token: string | null,
-  body: object
-) => {
-  const dispatch = useDispatch();
-
-  const options: {
-    method: Method;
-    url: string;
-    timeout: number;
-    headers: {
-      Authorization?: string;
-      "Content-Type"?: string;
-    };
-    data?: object;
-  } = {
-    method: method,
-    url: `http://34.129.1.154:8000/${endpoint}`,
-    timeout: 5000,
-    headers: {
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    },
-  };
-
-  if (method !== "GET") {
-    options.headers["Content-Type"] = "application/json";
-    options.data = body;
-  }
+  const [data, setData] = useState<any>(null);
 
   const fetchData = async () => {
-    dispatch(fetchDataRequest());
+    dispatch(loading());
 
     try {
-      const response = await axios(options);
-      dispatch(fetchDataSuccess(response.data));
+      const response = await fetch(requestOptions);
+      setData(response.data);
+      dispatch(loaded());
     } catch (error: any) {
-      dispatch(fetchDataFailure({ message: error.message }));
+      dispatch(errorAction({ message: error.message }));
     }
   };
 
   useEffect(() => {
     fetchData();
-  }, [token, JSON.stringify(body)]);
+  }, [
+    requestOptions.token,
+    JSON.stringify(requestOptions.data),
+    requestOptions.params,
+  ]);
+
+  return data;
 };
 
 export default useFetch;

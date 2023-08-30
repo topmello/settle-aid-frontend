@@ -1,8 +1,13 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../store";
-import useLogin from "../../hooks/useLogin";
 import useFetch from "../../hooks/useFetch";
+import { RequestOptions } from "../../api/fetch";
+
+import { loginUser } from "../../store/authSlice";
+import { selectUserToken } from "../../store/authSlice";
+import { selectAuthStatus } from "../../store/authSlice";
+import { AppDispatch } from "../../store";
 
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
@@ -41,18 +46,20 @@ interface Coordinates {
   longitude: number;
 }
 export default function MapScreen() {
-  const dispatch = useDispatch();
-  const { isLoadingLogin, token, errorLogin } = useSelector(
-    (state: RootState) => state.login
-  );
-  useLogin("admin", "admin");
+  const dispatch = useDispatch<AppDispatch>();
+  const token = useSelector(selectUserToken);
+  const authStatus = useSelector(selectAuthStatus);
 
-  const { isLoadingFetch, data, errorFetch } = useSelector(
-    (state: RootState) => state.fetchData
-  );
-  useFetch("search/route/", "POST", token, body);
+  const { isLoading, error } = useSelector((state: RootState) => state.app);
 
-  data.locations_coordinates;
+  const req: RequestOptions = {
+    method: "POST",
+    url: "/search/route/",
+    data: body,
+    token: token,
+  };
+
+  const data = useFetch(req);
 
   const [region, setRegion] = useState({
     latitude: body.latitude - 0.005,
@@ -69,10 +76,23 @@ export default function MapScreen() {
     });
   };
 
-  if (isLoadingLogin || isLoadingFetch) {
+  if (isLoading || !data) {
     return (
       <View style={styles.container}>
         <Text>Loading...</Text>
+        <TouchableOpacity
+          style={{
+            backgroundColor: "blue",
+            padding: 10,
+            borderRadius: 5,
+            alignItems: "center",
+          }}
+          onPress={() =>
+            dispatch(loginUser({ username: "admin", password: "admin" }))
+          }
+        >
+          <Text style={{ color: "white", fontSize: 16 }}>Login</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -107,7 +127,15 @@ export default function MapScreen() {
           data={[1, 2, 3]}
           renderItem={({ item }) => (
             <Card style={styles.flatListCard}>
-              <Card.Title title={`Tips ${item}`} subtitle="Subtitle" />
+              <Card.Title
+                title={`Tips ${item}`}
+                subtitle="Subtitle"
+                right={(props) => (
+                  <TouchableOpacity>
+                    <Text>Learn</Text>
+                  </TouchableOpacity>
+                )}
+              />
             </Card>
           )}
           keyExtractor={(item) => item?.toString()}
@@ -192,5 +220,6 @@ const styles = StyleSheet.create({
     width: width * 0.7,
     marginBottom: 10,
     padding: 0,
+    paddingRight: 20,
   },
 });
