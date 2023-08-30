@@ -17,7 +17,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-import { Text, View } from "../../components/Themed";
+import { Text, View } from "react-native";
 import MapView, { Marker, Polyline } from "react-native-maps";
 import { Card, List } from "react-native-paper";
 
