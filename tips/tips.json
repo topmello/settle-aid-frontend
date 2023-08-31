@@ -757,6 +757,492 @@
                     ]
                 }
             ]
+        },
+        {
+            "title": "Outdoor Activities",
+            "description": "Outdoor Activities and Entertainment Tips in Melbourne City",
+            "tips": [
+                {
+                    "mode": "Relaxation",
+                    "type": [
+                        {
+                            "description": "Royal Botanic Gardens",
+                            "content": "Indulge in a peaceful stroll through the Royal Botanic Gardens, enjoying the tranquility of nature.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Riverside Cafes",
+                            "content": "Savor a leisurely meal at riverside cafes along the Yarra, relishing beautiful views and gentle breezes.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Lunch at Federation Square",
+                            "content": "Enjoy a relaxed lunch at Federation Square, surrounded by cultural attractions and open spaces.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Picnic at Carlton Gardens",
+                            "content": "Organize a delightful picnic at Carlton Gardens, soaking in the serene surroundings near the Melbourne Museum.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Yarra River Cruise",
+                            "content": "Cruise the Yarra River on a serene boat ride, taking in Melbourne's skyline and gentle waters.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Eureka Skydeck Sunset",
+                            "content": "Experience the breathtaking sunset views from Eureka Skydeck, offering a moment of tranquility.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Coffee by St. Kilda Pier",
+                            "content": "Relax with a coffee by St. Kilda Pier, enjoying sea views and the iconic pier's charm.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Lakeside Reading at Albert Park",
+                            "content": "Find a peaceful spot by Albert Park Lake to enjoy reading a book amidst nature's beauty.",
+                            "link": ""
+                        }
+                    ]
+                },
+                {
+                    "mode": "Wellness",
+                    "type": [
+                        {
+                            "description": "Morning Yoga in Parks",
+                            "content": "Participate in morning yoga sessions held in city parks, fostering physical and mental well-being.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Nature Walks in Fitzroy Gardens",
+                            "content": "Embark on calming nature walks in Fitzroy Gardens, connecting with nature in the heart of the city.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Mindful Art Workshops",
+                            "content": "Engage in mindful art workshops in outdoor settings, tapping into your creativity and mindfulness.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Outdoor Tai Chi",
+                            "content": "Practice outdoor Tai Chi in serene spots, promoting relaxation and inner harmony.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Wellness Retreats in City Outskirts",
+                            "content": "Consider joining wellness retreats in Melbourne's outskirts for holistic rejuvenation and self-care.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Gentle Exercise at St. Kilda Beach",
+                            "content": "Participate in gentle exercise sessions by St. Kilda Beach, combining fitness and sea views.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Guided Meditation in Gardens",
+                            "content": "Experience guided meditation sessions in city gardens, promoting mental clarity and relaxation.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Outdoor Spa Experience",
+                            "content": "Treat yourself to an outdoor spa experience at select city spas, enjoying relaxation and serenity.",
+                            "link": ""
+                        }
+                    ]
+                },
+                {
+                    "mode": "Cultural Enjoyment",
+                    "type": [
+                        {
+                            "description": "Art Gallery Visits",
+                            "content": "Explore art galleries and exhibitions in the city, immersing yourself in Melbourne's cultural scene.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Cultural Events at Federation Square",
+                            "content": "Attend outdoor cultural events at Federation Square, celebrating art, music, and community.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Historical Walking Tours",
+                            "content": "Join historical walking tours in the city, learning about Melbourne's rich past in the open air.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Open-Air Theatre Performances",
+                            "content": "Experience open-air theatre performances at venues like Royal Botanic Gardens, enjoying the arts under the stars.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Live Jazz by the River",
+                            "content": "Relax by the Yarra River while listening to live jazz performances, enjoying the city's musical offerings.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Outdoor Art Installations",
+                            "content": "Admire outdoor art installations and sculptures located throughout the city's parks and public spaces.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Cruise with Cultural Talks",
+                            "content": "Combine a gentle cruise with informative cultural talks, learning about Melbourne's history and landmarks.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Laneway Dining Events",
+                            "content": "Indulge in pop-up laneway dining events featuring local cuisine, art, and live entertainment.",
+                            "link": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "Emergency",
+            "description": "Important Emergency Advice",
+            "tips": [
+                {
+                    "mode": "Emergency Contacts",
+                    "type": [
+                        {
+                            "description": "Emergency Services",
+                            "content": "You should call 000 if you need urgent help from police, fire or ambulance services.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Family Contact",
+                            "content": "Know the location and contact details of your family members so that they can be contacted by the authority.",
+                            "link": ""
+                        }
+                    ]
+                },
+                {
+                    "mode": "Personal Safety",
+                    "type": [
+                        {
+                            "description": "Stay Aware",
+                            "content": "Be vigilant of your surroundings, especially in crowded areas and public transportation.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Travel Companions",
+                            "content": "Stay in touch with your travel family and establish home return time in case you get lost.",
+                            "link": ""
+                        }
+                    ]
+                },
+                {
+                    "mode": "Navigational Safety",
+                    "type": [
+                        {
+                            "description": "Offline Maps",
+                            "content": "Download offline maps or have a physical map to navigate in case your phone's GPS fails.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Landmarks and Meeting Points",
+                            "content": "Identify prominent landmarks and meeting points to aid navigation in unfamiliar areas.",
+                            "link": ""
+                        }
+                    ]
+                },
+                {
+                    "mode": "Health and Medical",
+                    "type": [
+                        {
+                            "description": "Emergency Medical Services",
+                            "content": "Know the nearest medical facilities and clinics in the city center.",
+                            "link": ""
+                        },
+                        {
+                            "description": "First Aid Kit",
+                            "content": "Carry a basic first aid kit with essentials like bandages, antiseptics, and medications.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Allergies or Medical Conditions",
+                            "content": "Wear a medical alert bracelet or carry a card with information about allergies or medical conditions.",
+                            "link": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "Healthcare",
+            "description": "Useful Tips for Locating and Utilizing Pharmacies and Healthcare Services in Melbourne",
+            "tips": [
+                {
+                    "mode": "Pharmacy Services",
+                    "type": [
+                        {
+                            "description": "Pharmacy Locations",
+                            "content": "Identify pharmacies near your accommodation or major landmarks using online maps or apps.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Operating Hours",
+                            "content": "Check the operating hours of pharmacies, as they might vary during weekdays and weekends.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Prescription Refills",
+                            "content": "Ensure you have enough prescription medication during your stay and know the process for refills.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Translation Assistance",
+                            "content": "If needed, have a translation app or phrasebook to communicate your healthcare needs clearly.",
+                            "link": ""
+                        }
+                    ]
+                },
+                {
+                    "mode": "Medical Clinics",
+                    "type": [
+                        {
+                            "description": "Urgent Care Centers",
+                            "content": "Be aware of nearby urgent care centers or medical clinics for non-emergency healthcare needs.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Emergency Medical Services",
+                            "content": "Know the locations of hospitals and emergency rooms in case of serious medical issues.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Health Insurance Information",
+                            "content": "Carry your health insurance details and contact information for quick access during medical visits.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Appointment Booking",
+                            "content": "If visiting a medical clinic, inquire about appointment booking procedures and wait times.",
+                            "link": ""
+                        }
+                    ]
+                },
+                {
+                    "mode": "Healthcare Assistance",
+                    "type": [
+                        {
+                            "description": "Pharmacist Consultation",
+                            "content": "Consult with pharmacists for over-the-counter medication recommendations and health advice.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Language Support",
+                            "content": "Ask if the pharmacy or healthcare facility offers language support or interpreters if needed.",
+                            "link": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "Financial Literacy",
+            "description": "Useful Tips for Understanding Financial Aspects in Australia",
+            "tips": [
+                {
+                    "mode": "Currency and Payments",
+                    "type": [
+                        {
+                            "description": "Australian Dollar (AUD)",
+                            "content": "Familiarize yourself with the Australian Dollar (AUD) and its denominations for easy transactions.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Cash, Cards and Apps",
+                            "content": "Both cash and cards are widely accepted. Use your card for convenience, but carry some cash for smaller purchases. Some stores may accept other forms of paymeent such as weChat pay or AliPay.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Foreign Transaction Fees",
+                            "content": "Check with your bank or card provider for any foreign transaction fees when using your card abroad.",
+                            "link": ""
+                        },
+                        {
+                            "description": "ATM Locations",
+                            "content": "Know the locations of ATMs to avoid extra charges by using your bank's network for withdrawals.",
+                            "link": ""
+                        }
+                    ]
+                },
+                {
+                    "mode": "Shopping and Discounts",
+                    "type": [
+                        {
+                            "description": "Cash Discounts",
+                            "content": "Some shops may offer discounts when paying in cash, so inquire about cash payment options.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Goods and Services Tax (GST)",
+                            "content": "Be aware that Australia has a Goods and Services Tax (GST) on most goods and services, typically included in the displayed price.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Tourist Refund Scheme (TRS)",
+                            "content": "If eligible, you can claim a refund on the GST paid on items purchased in Australia through the TRS at the airport.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Price Comparison",
+                            "content": "Compare prices at different stores and online platforms to make informed purchasing decisions.",
+                            "link": ""
+                        }
+                    ]
+                },
+                {
+                    "mode": "Budgeting and Expenses",
+                    "type": [
+                        {
+                            "description": "Cost of Living",
+                            "content": "Research and understand the cost of living in different cities and regions across Australia.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Accommodation Costs",
+                            "content": "Budget for accommodation costs, which can vary based on location and type of lodging.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Public Transportation",
+                            "content": "Consider using public transportation to save on commuting expenses in urban areas.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Eating Out",
+                            "content": "Plan for eating out expenses by exploring a mix of affordable and indulgent dining options.",
+                            "link": ""
+                        }
+                    ]
+                },
+                {
+                    "mode": "Financial Security",
+                    "type": [
+                        {
+                            "description": "Emergency Funds",
+                            "content": "Maintain an emergency fund to cover unexpected expenses or situations during your stay.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Secure Digital Transactions",
+                            "content": "Practice safe online shopping and banking by using secure websites and protecting your personal information.",
+                            "link": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "Australian Culture",
+            "description": "Useful Tips to Embrace and Respect Australian Traditions and Cultural Aspects",
+            "tips": [
+                {
+                    "mode": "Greeting and Interaction",
+                    "type": [
+                        {
+                            "description": "Informal Greetings",
+                            "content": "In social settings, Australians often use informal greetings like 'G'day' or 'Hi' followed by a first name.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Respect Personal Space",
+                            "content": "Australians value personal space; maintain a comfortable distance while conversing and respect others' boundaries.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Laid-Back Attitude",
+                            "content": "Embrace the relaxed and friendly attitude Australians have in their interactions with others.",
+                            "link": ""
+                        }
+                    ]
+                },
+                {
+                    "mode": "Food and Dining",
+                    "type": [
+                        {
+                            "description": "Barbecue Culture",
+                            "content": "Participate in or enjoy the Australian barbecue culture, where outdoor grilling is a common social activity.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Café Culture",
+                            "content": "Experience the vibrant café culture in Australia, where coffee and casual dining play a significant role.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Try Local Cuisine",
+                            "content": "Sample traditional Australian dishes such as meat pies, lamingtons, and Vegemite.",
+                            "link": ""
+                        }
+                    ]
+                },
+                {
+                    "mode": "Outdoors and Lifestyle",
+                    "type": [
+                        {
+                            "description": "Outdoor Activities",
+                            "content": "Engage in outdoor activities like beach outings, hiking, and sports, which are integral to Australian lifestyle.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Nature Appreciation",
+                            "content": "Show respect for the diverse natural landscapes by following environmental guidelines and preserving wildlife.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Sporting Culture",
+                            "content": "Join in conversations about sports, particularly cricket, rugby, Australian rules football, and tennis.",
+                            "link": ""
+                        }
+                    ]
+                },
+                {
+                    "mode": "Cultural Diversity",
+                    "type": [
+                        {
+                            "description": "Indigenous Culture",
+                            "content": "Respect the traditions and contributions of Australia's Indigenous peoples.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Multicultural Society",
+                            "content": "Appreciate Australia's diverse population, marked by various cultures, languages, and ethnicities.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Festivals and Celebrations",
+                            "content": "Participate in cultural festivals like Lunar New Year, Diwali, and Greek Festival to celebrate diversity.",
+                            "link": ""
+                        }
+                    ]
+                },
+                {
+                    "mode": "Language and Slang",
+                    "type": [
+                        {
+                            "description": "Australian Slang",
+                            "content": "Familiarize yourself with some common Australian slang terms to enhance your communication.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Friendly Banter",
+                            "content": "Engage in light-hearted banter and humor, as Australians often use friendly teasing in conversations.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Clear Communication",
+                            "content": "Speak clearly and politely, and listen attentively to understand and be understood effectively.",
+                            "link": ""
+                        }
+                    ]
+                }
+            ]
         }
+                
     ]
 }
