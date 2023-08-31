@@ -13,7 +13,8 @@ import { selectUserToken, loginUser } from "../../store/authSlice";
 import { RouteState } from "../../store/routeSlice";
 import { StyleSheet, Dimensions, TouchableOpacity } from "react-native";
 
-import { Text, View } from "react-native";
+import { View } from "react-native";
+import { Button, Text } from "react-native-paper";
 import MapView, { Marker, Polyline } from "react-native-maps";
 
 //Mock data
@@ -76,12 +77,11 @@ export default function MapScreen() {
 
   const mapRef = useRef<MapView>(null);
 
-  const {
-    selectedLocationInstruc,
-    region,
-    handlePressRoute,
-    handleLocationSelect,
-  } = useMapRegion(data, body, mapRef);
+  const { region, handleLocationSelect, handlePressRoute } = useMapRegion(
+    data,
+    body,
+    mapRef
+  );
 
   const { checked, handlePress } = useCheckedList(data);
 
@@ -114,7 +114,15 @@ export default function MapScreen() {
 
   return (
     <View style={styles.container}>
-      <MapView ref={mapRef} style={styles.map} region={region}>
+      <MapView
+        ref={mapRef}
+        style={styles.map}
+        initialRegion={region}
+        scrollEnabled={true}
+        pitchEnabled={true}
+        rotateEnabled={true}
+        mapPadding={{ top: 0, left: 0, right: 0, bottom: 150 }}
+      >
         {data?.locations_coordinates.map(
           (location: Coordinates, index: number) => {
             return (
@@ -128,9 +136,7 @@ export default function MapScreen() {
             );
           }
         )}
-        {selectedLocationInstruc && (
-          <Marker coordinate={selectedLocationInstruc} />
-        )}
+        {region && <Marker coordinate={region} />}
         <Polyline
           coordinates={data?.route}
           strokeWidth={3}
@@ -138,7 +144,6 @@ export default function MapScreen() {
           lineDashPattern={[1, 5]}
         />
       </MapView>
-      <View style={styles.separator} />
       <View style={{ flex: 1 }} />
       <ResultOverlay
         data={data}
@@ -163,21 +168,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
-  },
   map: {
     ...StyleSheet.absoluteFillObject,
   },
   card: {
     width: width * 0.99,
-    height: height * 0.35,
+    height: height * 0.4,
     marginBottom: 10,
     padding: 0,
     margin: 0,
@@ -185,15 +181,13 @@ const styles = StyleSheet.create({
   },
   flatListCard: {
     width: width * 0.7,
-    marginBottom: 10,
+    marginTop: 10,
+    marginBottom: 20,
     padding: 0,
     paddingRight: 20,
   },
   button: {
-    width: width * 0.35,
-    backgroundColor: "blue",
-    padding: 10,
-    borderRadius: 5,
+    width: width * 0.3,
     alignItems: "center",
   },
 });
