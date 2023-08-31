@@ -1,10 +1,15 @@
-import { useState, useMemo, useRef, useEffect } from "react";
+import { useState, useMemo, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
+
+import ResultOverlay from "../../components/ResultOverlay";
 import { RootState } from "../../store";
 import useFetch from "../../hooks/useFetch";
+import useMapRegion, { Coordinates } from "../../hooks/useMapRegion";
+import useCheckedList from "../../hooks/useCheckList";
 import { RequestOptions } from "../../api/fetch";
 
-import { selectUserToken } from "../../store/authSlice";
+import { AppDispatch } from "../../store";
+import { selectUserToken, loginUser } from "../../store/authSlice";
 import { RouteState } from "../../store/routeSlice";
 
 import FontAwesome from "@expo/vector-icons/FontAwesome";
@@ -46,11 +51,6 @@ interface RouteResult {
   duration: number;
 }
 
-interface Coordinates {
-  latitude: number;
-  longitude: number;
-}
-
 const location_type_icon: { [key: string]: string } = {
   landmark: "city-variant",
   restaurant: "silverware-fork-knife",
@@ -59,11 +59,17 @@ const location_type_icon: { [key: string]: string } = {
 };
 
 export default function MapScreen() {
+  const dispatch = useDispatch<AppDispatch>();
+
   const token = useSelector(selectUserToken);
 
   const { isLoading, isFail } = useSelector((state: RootState) => state.app);
 
   const [triggerFetch, setTriggerFetch] = useState(0);
+
+  const handleTriggerFetch = () => {
+    setTriggerFetch((prev) => prev + 1);
+  };
 
   const req: RequestOptions = useMemo(() => {
     return {
@@ -76,71 +82,40 @@ export default function MapScreen() {
 
   const data: RouteResult = useFetch(req, [triggerFetch]);
 
-  const [region, setRegion] = useState({
-    latitude: body.latitude - 0.005,
-    longitude: body.longitude,
-    latitudeDelta: 0.01,
-    longitudeDelta: 0.03,
-  });
-
-  const handleLocationSelect = (location: Coordinates) => {
-    setRegion({
-      ...region,
-      latitude: location.latitude - 0.005,
-      longitude: location.longitude,
-    });
-  };
-
   const mapRef = useRef<MapView>(null);
-  const [selectedLocationInstruc, setSelectedLocationInstruc] = useState<{
-    latitude: number;
-    longitude: number;
-    latitudeDelta: number;
-    longitudeDelta: number;
-  } | null>(null);
 
-  const handlePressRoute = (index: number) => {
-    if (index < 0 || index >= data.route.length) {
-      return;
-    }
-    const lat1 = data.route[index].latitude;
-    const lon1 = data.route[index].longitude;
-    const lat2 = data.route[index + 1]?.latitude;
-    const lon2 = data.route[index + 1]?.longitude;
+  const {
+    selectedLocationInstruc,
+    region,
+    handlePressRoute,
+    handleLocationSelect,
+  } = useMapRegion(data, body, mapRef);
 
-    const bearing = lat2 && lon2 ? calculateBearing(lat1, lon1, lat2, lon2) : 0;
-    const newRegion = {
-      latitude: lat1,
-      longitude: lon1,
-      latitudeDelta: 0.001,
-      longitudeDelta: 0.005,
-    };
+  const { checked, handlePress } = useCheckedList(data);
 
-    mapRef.current!.animateCamera(
-      { center: newRegion, heading: bearing },
-      { duration: 1000 }
-    );
-    setSelectedLocationInstruc(newRegion);
+  const tempFunc = () => {
+    dispatch(loginUser({ username: "admin", password: "admin" }));
+    setTriggerFetch((prev) => prev + 1);
   };
 
-  const [checked, setChecked] = useState<boolean[]>([]);
-
-  useEffect(() => {
-    if (data && data.instructions) {
-      setChecked(Array(data.instructions.length).fill(false));
-    }
-  }, [data]);
-
-  const handlePress = (index: number) => {
-    const newChecked = [...checked];
-    newChecked[index] = !newChecked[index];
-    setChecked(newChecked);
-  };
-
-  if (isLoading || isFail) {
+  if (isLoading || token === null) {
     return (
       <View style={styles.container}>
-        <Text>Loading...</Text>
+        <Text>
+          Loading...
+          {isLoading}
+        </Text>
+        <TouchableOpacity
+          style={{
+            backgroundColor: "blue",
+            padding: 10,
+            borderRadius: 5,
+            alignItems: "center",
+          }}
+          onPress={tempFunc}
+        >
+          <Text>Login</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -173,128 +148,17 @@ export default function MapScreen() {
       </MapView>
       <View style={styles.separator} />
       <View style={{ flex: 1 }} />
-      <Card style={styles.card}>
-        <FlatList
-          data={[1, 2, 3]}
-          renderItem={({ item }) => (
-            <Card style={styles.flatListCard}>
-              <Card.Title
-                title={`Tips ${item}`}
-                subtitle="Subtitle"
-                right={(props) => (
-                  <TouchableOpacity>
-                    <Text>Learn</Text>
-                  </TouchableOpacity>
-                )}
-              />
-            </Card>
-          )}
-          keyExtractor={(item) => item?.toString()}
-          contentContainerStyle={{
-            columnGap: 10,
-            margin: 14,
-            marginBottom: 30,
-          }}
-          horizontal={true}
-        />
-        <ScrollView>
-          <List.Section>
-            {data?.locations.map((location: string, index: number) => {
-              return (
-                <List.Item
-                  key={location}
-                  title={location}
-                  description="Item description"
-                  left={(props) => (
-                    <List.Icon
-                      {...props}
-                      icon={
-                        location_type_icon[body?.location_type[index]] ||
-                        "folder"
-                      }
-                    />
-                  )}
-                  right={() => (
-                    <TouchableOpacity
-                      style={{
-                        backgroundColor: "#000",
-                        borderRadius: 24,
-                        height: 48,
-                        width: 48,
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                      onPress={() =>
-                        handleLocationSelect(
-                          data.locations_coordinates[index + 1]
-                        )
-                      }
-                    >
-                      <FontAwesome
-                        name="location-arrow"
-                        size={32}
-                        color="white"
-                      />
-                    </TouchableOpacity>
-                  )}
-                />
-              );
-            })}
-          </List.Section>
-          <List.Section>
-            <List.Accordion
-              title="Instructions"
-              left={(props) => <List.Icon {...props} icon="map-legend" />}
-            >
-              {data?.instructions.map((instruction: string, index: number) => {
-                return (
-                  <List.Item
-                    key={index}
-                    title={instruction}
-                    onPress={() => handlePressRoute(index)}
-                    left={(props) => (
-                      <TouchableOpacity
-                        key={index}
-                        onPress={() => handlePress(index)}
-                        style={{
-                          backgroundColor: "transparent",
-                          paddingLeft: 20,
-                        }}
-                      >
-                        <List.Icon
-                          icon={
-                            checked[index] ? "check" : "checkbox-blank-outline"
-                          }
-                        />
-                      </TouchableOpacity>
-                    )}
-                  />
-                );
-              })}
-            </List.Accordion>
-          </List.Section>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-evenly",
-              alignItems: "center",
-              flex: 1,
-              backgroundColor: "transparent",
-              padding: 10,
-            }}
-          >
-            <TouchableOpacity style={styles.button}>
-              <Text>Back</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => setTriggerFetch((prev) => prev + 1)}
-            >
-              <Text>Reroute</Text>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
-      </Card>
+      <ResultOverlay
+        data={data}
+        body={body}
+        handleTriggerFetch={handleTriggerFetch}
+        handleLocationSelect={handleLocationSelect}
+        handlePressRoute={handlePressRoute}
+        handlePress={handlePress}
+        checked={checked}
+        styles={styles}
+        location_type_icon={location_type_icon}
+      />
     </View>
   );
 }
@@ -341,27 +205,3 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
-
-function degreesToRadians(degrees: number): number {
-  return (degrees * Math.PI) / 180;
-}
-
-function calculateBearing(
-  lat1: number,
-  lon1: number,
-  lat2: number,
-  lon2: number
-): number {
-  lat1 = degreesToRadians(lat1);
-  lon1 = degreesToRadians(lon1);
-  lat2 = degreesToRadians(lat2);
-  lon2 = degreesToRadians(lon2);
-
-  const dLon = lon2 - lon1;
-  const x = Math.cos(lat2) * Math.sin(dLon);
-  const y =
-    Math.cos(lat1) * Math.sin(lat2) -
-    Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon);
-  const bearing = (Math.atan2(x, y) * 180) / Math.PI;
-  return (bearing + 360) % 360;
-}
