@@ -6,6 +6,8 @@ import AustraliaFlagIcon from "../../assets/images/flags/australia-flag.svg";
 import ChinaFlagIcon from "../../assets/images/flags/china-flag.svg";
 import IndiaFlagIcon from "../../assets/images/flags/india-flag.svg";
 import { useTranslation } from "react-i18next";
+import { selectLanguage } from "../../store/appSlice";
+import { useSelector } from "react-redux";
 
 const languages = [
   {
@@ -33,6 +35,12 @@ export default function LanguageScreen() {
   const { t, i18n } = useTranslation();
 
   const [currentLanguage, setCurrentLanguage] = React.useState("en-AU");
+
+  const appLanguage = useSelector(selectLanguage);
+
+  useEffect(() => {
+    setCurrentLanguage(appLanguage);
+  }, [appLanguage]);
 
   useEffect(() => {
     i18n.changeLanguage(currentLanguage);
