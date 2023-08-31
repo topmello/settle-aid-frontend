@@ -9,7 +9,9 @@ Run the development server using
 npm start
 ```
 and then scan the QR code in the terminal (you may need to scroll up to see them)
-## Technical
+## Development Manual
+
+### Tech Stack
 Frontend Tech stack we use:
 * [React Native](https://reactnative.dev/) - Fundamental Framework to build native app for Android and iOS in React
 * [React Native Paper](https://reactnativepaper.com/) - UI component and theme library for UI consistency accross devices
@@ -20,7 +22,17 @@ Frontend Tech stack we use:
 * [Redux Persist](https://github.com/rt2zz/redux-persist) - Data persistance for Redux
 * [React i18next](https://react.i18next.com/) - Internalization for React
 
-### Develop Resources
+### Directory Descrioption
+* api - fetch method wrapper for api requests
+* app - router root directory, all pages sits here
+* assets - static assets like images and fonts
+* components - components that could be used across pages
+* hooks - custom hooks
+* store - UI data store, all ui data resides here, based on Redux
+* theme - ui theme related code
+* translation - translation files
+
+### Additional Resources
 #### Icons
 * [Material Design Icons](https://pictogrammers.com/library/mdi/) - Material Community Icons Search Engine, could be used to find the names of certain icon
 * [React Native Paper Icons Page](https://callstack.github.io/react-native-paper/docs/guides/icons)
