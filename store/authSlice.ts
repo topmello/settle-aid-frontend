@@ -14,7 +14,7 @@ export type RegisterData = {
 export interface AuthState {
   username: string | null;
   token: string | null;
-  status: 'idle' | 'loading' | 'failed';
+  status: 'idle' | 'login' | 'loginSuccess' | 'loginFail' | 'logout' | 'registering' | 'registerSuccess' | 'registerFail';
 }
 
 export const selectUserToken = (state: any) => state.auth?.token;
@@ -54,34 +54,36 @@ const authSlice = createSlice({
     logoutUser: (state) => {
       state.username = null;
       state.token = null;
+      state.status = 'idle';
     }
   },
   extraReducers: (builder) => {
     builder.addCase(loginUser.pending, (state) => {
-      state.status = 'loading';
+      state.status = 'login';
     });
     builder.addCase(loginUser.fulfilled, (state, action) => {
-      state.status = 'idle';
+      state.status = 'loginSuccess';
       state.username = action.payload.username;
       state.token = action.payload.access_token;
     });
     builder.addCase(loginUser.rejected, (state, action) => {
       console.error(action.error.message, action.meta);
-      state.status = 'failed';
+      state.status = 'loginFail';
     });
     builder.addCase(registerUser.pending, (state) => {
-      state.status = 'loading';
+      state.status = 'registering';
     });
     builder.addCase(registerUser.fulfilled, (state, action) => {
-      state.status = 'idle';
+      state.status = 'registerSuccess';
       state.username = action.payload.username;
       state.token = action.payload.token;
     });
     builder.addCase(registerUser.rejected, (state, action) => {
       console.error(action.error.message, action.meta);
-      state.status = 'failed';
+      state.status = 'registerFail';
     });
   }
 });
 
+export const { logoutUser } = authSlice.actions;
 export default authSlice.reducer;

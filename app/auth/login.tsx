@@ -9,39 +9,52 @@ import {
   Button,
   TextInput,
   HelperText,
+  Snackbar,
 } from "react-native-paper";
 import ArrowBackIcon from "../../assets/images/icons/arrow_back.svg";
 import WavingHandIcon from "../../assets/images/icons/waving_hand.svg";
 import { useTranslation } from "react-i18next";
 import { fetch } from "../../api/fetch";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../../store";
+import { loginUser as loginUserThunk } from "../../store/authSlice";
+
 
 export default function LoginPage() {
   const { t } = useTranslation();
   const theme = useTheme();
   const [username, setUsername] = React.useState("");
-  const [usernameError, setUsernameError] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const [passwordError, setPasswordError] = React.useState("");
 
-  const validateUsername = (text: string) => {
-    if (text.length < 3) {
-      setUsernameError(t("At least 3 characters", { ns: "acc" }));
-      return false;
-    } else {
-      setUsernameError("");
-      return true;
-    }
-  };
+  const [notification, setNotification] = React.useState("");
+  const onDissmissNotification = React.useCallback(() => {
+    setNotification("");
+  }, []);
 
-  const validatePassword = (text: string) => {
-    if (text.length < 6 && text.match(/^[0-9a-zA-Z]+$/)) {
-      setPasswordError(t("At least 6 characters or numbers", { ns: "acc" }));
-      return false;
-    } else {
-      setPasswordError("");
-      return true;
+  const pushNotification = React.useCallback((message: string) => {
+    setNotification(message);
+    setTimeout(() => {
+      setNotification("");
+    }, 3000);
+  }, []);
+
+  const selectAuth = useSelector((state: any) => state.auth);
+  const dispatch = useDispatch<AppDispatch>();
+
+  const loginUser = React.useCallback(async () => {
+    dispatch(loginUserThunk({ username, password }));
+  }, [username, password]);
+
+  React.useEffect(() => {
+    // This will redirect to home page if login success
+    if (selectAuth.status === "loginSuccess") {
+      router.replace("/(tabs)");
+      pushNotification(t("Sign in successful", { ns: "acc" }));
+    } else if (selectAuth.status === "loginFailed") {
+      pushNotification(t("Sign in failed", { ns: "acc" }));
     }
-  };
+  }, [selectAuth.status]);
+
   return (
     <View
       style={{
@@ -101,21 +114,14 @@ export default function LoginPage() {
                 background: theme.colors.primaryContainer,
               },
             }}
-            error={!!usernameError}
             mode="outlined"
             label={t("Username", { ns: "acc" })}
             style={{ backgroundColor: "transparent", height: 56 }}
             value={username}
             onChangeText={(text) => {
-              validateUsername(text);
               setUsername(text);
             }}
           />
-          <HelperText type={usernameError ? "error" : "info"}>
-            {usernameError
-              ? usernameError
-              : ""}
-          </HelperText>
         </View>
         <View>
           <TextInput
@@ -124,21 +130,14 @@ export default function LoginPage() {
                 background: theme.colors.primaryContainer,
               },
             }}
-            error={!!passwordError}
             mode="outlined"
             label={t("Password", { ns: "acc" })}
             style={{ backgroundColor: "transparent", height: 56 }}
             value={password}
             onChangeText={(text) => {
-              validatePassword(text);
               setPassword(text);
             }}
           />
-          <HelperText type={passwordError ? "error" : "info"}>
-            {passwordError
-              ? passwordError
-              : ""}
-          </HelperText>
         </View>
       </KeyboardAvoidingView>
       <View
@@ -162,14 +161,15 @@ export default function LoginPage() {
           mode="contained"
           style={{ width: 150 }}
           onPress={() => {
-            if (validateUsername(username) && validatePassword(password)) {
-              router.replace("/(tabs)");
-            }
+            loginUser();
           }}
         >
           {t("Log in", { ns: "acc" })}
         </Button>
       </View>
+      <Snackbar style={{marginLeft: 32}} visible={!!notification} onDismiss={onDissmissNotification}>
+        {notification}
+      </Snackbar>
     </View>
   );
 }

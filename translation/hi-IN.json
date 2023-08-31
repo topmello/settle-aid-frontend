@@ -26,7 +26,11 @@
     "Welcome back,": "वापसी पर स्वागत है,",
     "Let's Sign in": "चलो साइन इन करें",
     "I don't have an account": "मेरे पास खाता नहीं है",
-    "Log in": "लॉग इन करें"
+    "Log in": "लॉग इन करें",
+    "Log in successful": "लॉग इन सफल हुआ",
+    "Log in failed": "लॉग इन विफल हुआ",
+    "Sign up successful": "साइन अप सफल हुआ",
+    "Sign up failed": "साइन अप विफल हुआ"
   },
   "route": {},
   "home": {},
