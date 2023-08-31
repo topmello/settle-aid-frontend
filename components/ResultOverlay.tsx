@@ -6,7 +6,7 @@ import {
   FlatList,
   ScrollView,
 } from "react-native";
-import { Card, List } from "react-native-paper";
+import { Card, List, Button } from "react-native-paper";
 
 import { RouteState } from "../store/routeSlice";
 
@@ -51,8 +51,6 @@ const ResultOverlay: React.FC<OverlayProps> = ({
 }) => {
   return (
     <View>
-      <View style={styles.separator} />
-      <View style={{ flex: 1 }} />
       <Card style={styles.card}>
         <FlatList
           data={[1, 2, 3]}
@@ -61,7 +59,7 @@ const ResultOverlay: React.FC<OverlayProps> = ({
               <Card.Title
                 title={`Tips ${item}`}
                 subtitle="Subtitle"
-                right={(props) => (
+                right={() => (
                   <TouchableOpacity>
                     <Text>Learn</Text>
                   </TouchableOpacity>
@@ -166,15 +164,16 @@ const ResultOverlay: React.FC<OverlayProps> = ({
               padding: 10,
             }}
           >
-            <TouchableOpacity style={styles.button}>
-              <Text>Back</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
+            <Button mode="contained" style={styles.button}>
+              Back
+            </Button>
+            <Button
+              mode="contained"
               style={styles.button}
               onPress={handleTriggerFetch}
             >
-              <Text>Reroute</Text>
-            </TouchableOpacity>
+              Reroute
+            </Button>
           </View>
         </ScrollView>
       </Card>

@@ -12,9 +12,23 @@ export type Coordinates = {
   longitude: number;
 };
 
-function useMapRegion(data: any, body: any, mapRef: any) {
+interface RouteResult {
+  locations: string[];
+  locations_coordinates: {
+    latitude: number;
+    longitude: number;
+  }[];
+  route: {
+    latitude: number;
+    longitude: number;
+  }[];
+  instructions: string[];
+  duration: number;
+}
+
+function useMapRegion(data: RouteResult, body: any, mapRef: any) {
   const [region, setRegion] = useState<MapRegion>({
-    latitude: body.latitude - 0.005,
+    latitude: body.latitude,
     longitude: body.longitude,
     latitudeDelta: 0.01,
     longitudeDelta: 0.03,
@@ -23,19 +37,21 @@ function useMapRegion(data: any, body: any, mapRef: any) {
   const handleLocationSelect = (location: Coordinates) => {
     const newRegion = {
       ...region,
-      latitude: location.latitude - 0.005,
+      latitude: location.latitude,
       longitude: location.longitude,
     };
 
-    mapRef.current!.animateCamera({ center: newRegion }, { duration: 1000 });
+    mapRef.current!.animateCamera(
+      {
+        center: newRegion,
+      },
+      { duration: 1000 }
+    );
 
     setRegion(newRegion);
   };
 
-  const [selectedLocationInstruc, setSelectedLocationInstruc] =
-    useState<MapRegion | null>(null);
-
-  const handlePressRoute = (index: number) => {
+  const handlePressRoute = async (index: number) => {
     if (index < 0 || index >= data.route.length) {
       return;
     }
@@ -46,17 +62,21 @@ function useMapRegion(data: any, body: any, mapRef: any) {
 
     const bearing = lat2 && lon2 ? calculateBearing(lat1, lon1, lat2, lon2) : 0;
     const newRegion = {
+      ...region,
       latitude: lat1,
       longitude: lon1,
-      latitudeDelta: 0.001,
-      longitudeDelta: 0.005,
     };
 
-    mapRef.current!.animateCamera(
-      { center: newRegion, heading: bearing },
-      { duration: 1000 }
-    );
-    setSelectedLocationInstruc(newRegion);
+    if (mapRef.current) {
+      await mapRef.current.animateCamera(
+        {
+          center: region,
+          heading: bearing,
+        },
+        { duration: 1000 }
+      );
+    }
+    setRegion(newRegion);
   };
 
   function degreesToRadians(degrees: number): number {
@@ -84,10 +104,9 @@ function useMapRegion(data: any, body: any, mapRef: any) {
   }
 
   return {
-    selectedLocationInstruc,
     region,
-    handlePressRoute,
     handleLocationSelect,
+    handlePressRoute,
   };
 }
 

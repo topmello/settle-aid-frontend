@@ -31,11 +31,11 @@ export const unstable_settings = {
 SplashScreen.preventAutoHideAsync();
 
 i18n.use(initReactI18next).init({
-  ns: ["test", "common", "account", "route", "home", "tip"],
+  ns: ["comm", "test", "trans", "acc", "route", "home", "tip"],
   compatibilityJSON: "v3",
   resources: translations,
-  lng: "zh-CN",
-  fallbackLng: "en-AU",
+  lng: "en-AU",
+  fallbackLng: "zh-CN",
   interpolation: {
     escapeValue: false,
   },

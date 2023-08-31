@@ -1,23 +1,15 @@
 {
-  "translation": {
-    
+  "comm": {
+    "Next": "अगला"
+  },
+  "trans": {
+    "Choose your language": "अपनी भाषा चुनें"
   },
   "test": {
     "helloWorld": "हैलो वर्ल्ड"
   },
-  "common": {
-
-  },
-  "account": {
-
-  },
-  "route": {
-
-  },
-  "home": {
-
-  },
-  "tip": {
-    
-  }
+  "acc": {},
+  "route": {},
+  "home": {},
+  "tip": {}
 }

@@ -1,18 +1,15 @@
 {
-  "translation": {
-    
-  },"test": {
+  "comm": {
+    "Next": "Next"
+  },
+  "trans": {
+    "Choose your language": "Choose your Language to get started"
+  },
+  "test": {
     "helloWorld": "Hello World"
   },
-  "common": {
-
-  },
-  "account": {
-
-  },
-  "route": {
-
-  },
+  "acc": {},
+  "route": {},
   "home": {
     "title": "Discover Melbourne",
     "startTitle": "Start Here",
@@ -22,9 +19,6 @@
     "more": "More",
     "belovedRoutine": "Beloved Routine"
 
-
   },
-  "tip": {
-    
-  }
+  "tip": {}
 }

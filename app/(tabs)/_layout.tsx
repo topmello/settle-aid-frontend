@@ -1,11 +1,8 @@
-import { Link, Tabs } from "expo-router";
-import { Pressable, useColorScheme } from "react-native";
 import { createMaterialBottomTabNavigator } from "react-native-paper/react-navigation";
 
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
 
   const Tab = createMaterialBottomTabNavigator();
 
