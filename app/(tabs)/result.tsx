@@ -11,20 +11,10 @@ import { RequestOptions } from "../../api/fetch";
 import { AppDispatch } from "../../store";
 import { selectUserToken, loginUser } from "../../store/authSlice";
 import { RouteState } from "../../store/routeSlice";
-
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-
-import {
-  StyleSheet,
-  Dimensions,
-  ScrollView,
-  FlatList,
-  TouchableOpacity,
-} from "react-native";
+import { StyleSheet, Dimensions, TouchableOpacity } from "react-native";
 
 import { Text, View } from "react-native";
 import MapView, { Marker, Polyline } from "react-native-maps";
-import { Card, List } from "react-native-paper";
 
 //Mock data
 const body: RouteState = {
@@ -62,6 +52,8 @@ export default function MapScreen() {
   const dispatch = useDispatch<AppDispatch>();
 
   const token = useSelector(selectUserToken);
+
+  const routeState: RouteState = useSelector((state: RootState) => state.route);
 
   const { isLoading, isFail } = useSelector((state: RootState) => state.app);
 
