@@ -3,19 +3,25 @@ import { useSelector, useDispatch } from "react-redux";
 
 import ResultOverlay from "../../components/ResultOverlay";
 import { RootState } from "../../store";
+
 import useFetch from "../../hooks/useFetch";
 import useMapRegion, { Coordinates } from "../../hooks/useMapRegion";
 import useCheckedList from "../../hooks/useCheckList";
+
 import { RequestOptions } from "../../api/fetch";
 
 import { AppDispatch } from "../../store";
 import { selectUserToken, loginUser } from "../../store/authSlice";
 import { RouteState } from "../../store/routeSlice";
-import { StyleSheet, Dimensions, TouchableOpacity } from "react-native";
 
+import { StyleSheet, Dimensions, TouchableOpacity } from "react-native";
 import { View } from "react-native";
-import { Button, Text } from "react-native-paper";
+import { Text } from "react-native-paper";
+
 import MapView, { Marker, Polyline } from "react-native-maps";
+
+import tips, { Tip, Tips, TipArray } from "../../tips/tipsTyped";
+import findTipsForModes from "../../tips/tipFinder";
 
 //Mock data
 const body: RouteState = {
@@ -50,7 +56,6 @@ const location_type_icon: { [key: string]: string } = {
 };
 
 export default function MapScreen() {
-
   const dispatch = useDispatch<AppDispatch>();
 
   const token = useSelector(selectUserToken);
@@ -58,6 +63,16 @@ export default function MapScreen() {
   const routeState: RouteState = useSelector((state: RootState) => state.route);
 
   const { isLoading, isFail } = useSelector((state: RootState) => state.app);
+
+  const modes: Array<string> = [
+    "Walk",
+    "Local",
+    "Cultural Enjoyment",
+    "Greeting and Interaction",
+    "Personal Safety",
+  ];
+
+  const tipList: Array<Tip> = findTipsForModes(tips, modes);
 
   const [triggerFetch, setTriggerFetch] = useState(0);
 
@@ -86,11 +101,6 @@ export default function MapScreen() {
 
   const { checked, handlePress } = useCheckedList(data);
 
-  const tempFunc = () => {
-    dispatch(loginUser({ username: "admin", password: "admin" }));
-    setTriggerFetch((prev) => prev + 1);
-  };
-
   if (isLoading || token === null) {
     return (
       <View style={styles.container}>
@@ -98,17 +108,6 @@ export default function MapScreen() {
           Loading...
           {isLoading}
         </Text>
-        <TouchableOpacity
-          style={{
-            backgroundColor: "blue",
-            padding: 10,
-            borderRadius: 5,
-            alignItems: "center",
-          }}
-          onPress={tempFunc}
-        >
-          <Text>Login</Text>
-        </TouchableOpacity>
       </View>
     );
   }
@@ -147,6 +146,7 @@ export default function MapScreen() {
       </MapView>
       <View style={{ flex: 1 }} />
       <ResultOverlay
+        tipList={tipList}
         data={data}
         body={body}
         handleTriggerFetch={handleTriggerFetch}
