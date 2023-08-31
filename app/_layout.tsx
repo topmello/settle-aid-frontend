@@ -15,6 +15,7 @@ import {
 } from "react-redux";
 import store, { AppDispatch } from "../store";
 import { selectTheme, setTheme } from "../store/appSlice";
+import { StatusBar } from "expo-status-bar";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -102,6 +103,7 @@ export function RootLayout() {
 
   return (
     <PaperProvider theme={theme}>
+      <StatusBar style={theme.dark ? "light" : "dark"} />
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: "modal" }} />
