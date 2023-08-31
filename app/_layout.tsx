@@ -1,5 +1,5 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { lightTheme, darkTheme } from "../constants/theme";
+import { lightTheme, darkTheme } from "../theme/theme";
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
 import { useEffect, useMemo } from "react";
@@ -107,7 +107,6 @@ export function RootLayout() {
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: "modal" }} />
-        <Stack.Screen name="locale" options={{ headerShown: false }} />
       </Stack>
     </PaperProvider>
   );
