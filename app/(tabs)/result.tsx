@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../store";
 import useFetch from "../../hooks/useFetch";
@@ -32,6 +32,20 @@ const body: RouteState = {
   route_type: "walking",
 };
 
+interface RouteResult {
+  locations: string[];
+  locations_coordinates: {
+    latitude: number;
+    longitude: number;
+  }[];
+  route: {
+    latitude: number;
+    longitude: number;
+  }[];
+  instructions: string[];
+  duration: number;
+}
+
 interface Coordinates {
   latitude: number;
   longitude: number;
@@ -60,14 +74,12 @@ export default function MapScreen() {
     };
   }, [body, triggerFetch]);
 
-  const requestData: RouteState = req.data as RouteState;
-
-  const data = useFetch(req, [triggerFetch]);
+  const data: RouteResult = useFetch(req, [triggerFetch]);
 
   const [region, setRegion] = useState({
     latitude: body.latitude - 0.005,
     longitude: body.longitude,
-    latitudeDelta: 0.05,
+    latitudeDelta: 0.01,
     longitudeDelta: 0.03,
   });
 
@@ -77,6 +89,52 @@ export default function MapScreen() {
       latitude: location.latitude - 0.005,
       longitude: location.longitude,
     });
+  };
+
+  const mapRef = useRef<MapView>(null);
+  const [selectedLocationInstruc, setSelectedLocationInstruc] = useState<{
+    latitude: number;
+    longitude: number;
+    latitudeDelta: number;
+    longitudeDelta: number;
+  } | null>(null);
+
+  const handlePressRoute = (index: number) => {
+    if (index < 0 || index >= data.route.length) {
+      return;
+    }
+    const lat1 = data.route[index].latitude;
+    const lon1 = data.route[index].longitude;
+    const lat2 = data.route[index + 1]?.latitude;
+    const lon2 = data.route[index + 1]?.longitude;
+
+    const bearing = lat2 && lon2 ? calculateBearing(lat1, lon1, lat2, lon2) : 0;
+    const newRegion = {
+      latitude: lat1,
+      longitude: lon1,
+      latitudeDelta: 0.001,
+      longitudeDelta: 0.005,
+    };
+
+    mapRef.current!.animateCamera(
+      { center: newRegion, heading: bearing },
+      { duration: 1000 }
+    );
+    setSelectedLocationInstruc(newRegion);
+  };
+
+  const [checked, setChecked] = useState<boolean[]>([]);
+
+  useEffect(() => {
+    if (data && data.instructions) {
+      setChecked(Array(data.instructions.length).fill(false));
+    }
+  }, [data]);
+
+  const handlePress = (index: number) => {
+    const newChecked = [...checked];
+    newChecked[index] = !newChecked[index];
+    setChecked(newChecked);
   };
 
   if (isLoading || isFail) {
@@ -89,16 +147,7 @@ export default function MapScreen() {
 
   return (
     <View style={styles.container}>
-      <MapView
-        style={styles.map}
-        region={region}
-        initialRegion={{
-          latitude: body.latitude,
-          longitude: body.longitude,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}
-      >
+      <MapView ref={mapRef} style={styles.map} region={region}>
         {data?.locations_coordinates.map(
           (location: Coordinates, index: number) => {
             return (
@@ -112,6 +161,9 @@ export default function MapScreen() {
             );
           }
         )}
+        {selectedLocationInstruc && (
+          <Marker coordinate={selectedLocationInstruc} />
+        )}
         <Polyline
           coordinates={data?.route}
           strokeWidth={3}
@@ -119,9 +171,7 @@ export default function MapScreen() {
           lineDashPattern={[1, 5]}
         />
       </MapView>
-      <View
-        style={styles.separator}
-      />
+      <View style={styles.separator} />
       <View style={{ flex: 1 }} />
       <Card style={styles.card}>
         <FlatList
@@ -159,7 +209,7 @@ export default function MapScreen() {
                     <List.Icon
                       {...props}
                       icon={
-                        location_type_icon[requestData?.location_type[index]] ||
+                        location_type_icon[body?.location_type[index]] ||
                         "folder"
                       }
                     />
@@ -197,7 +247,29 @@ export default function MapScreen() {
               left={(props) => <List.Icon {...props} icon="map-legend" />}
             >
               {data?.instructions.map((instruction: string, index: number) => {
-                return <List.Item key={index} title={instruction} />;
+                return (
+                  <List.Item
+                    key={index}
+                    title={instruction}
+                    onPress={() => handlePressRoute(index)}
+                    left={(props) => (
+                      <TouchableOpacity
+                        key={index}
+                        onPress={() => handlePress(index)}
+                        style={{
+                          backgroundColor: "transparent",
+                          paddingLeft: 20,
+                        }}
+                      >
+                        <List.Icon
+                          icon={
+                            checked[index] ? "check" : "checkbox-blank-outline"
+                          }
+                        />
+                      </TouchableOpacity>
+                    )}
+                  />
+                );
               })}
             </List.Accordion>
           </List.Section>
@@ -269,3 +341,27 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
+
+function degreesToRadians(degrees: number): number {
+  return (degrees * Math.PI) / 180;
+}
+
+function calculateBearing(
+  lat1: number,
+  lon1: number,
+  lat2: number,
+  lon2: number
+): number {
+  lat1 = degreesToRadians(lat1);
+  lon1 = degreesToRadians(lon1);
+  lat2 = degreesToRadians(lat2);
+  lon2 = degreesToRadians(lon2);
+
+  const dLon = lon2 - lon1;
+  const x = Math.cos(lat2) * Math.sin(dLon);
+  const y =
+    Math.cos(lat1) * Math.sin(lat2) -
+    Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon);
+  const bearing = (Math.atan2(x, y) * 180) / Math.PI;
+  return (bearing + 360) % 360;
+}
