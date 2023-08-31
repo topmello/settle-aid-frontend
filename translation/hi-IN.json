@@ -1,7 +1,18 @@
 {
   "comm": {
     "Next": "अगला",
-    "Done": "किया हुआ"
+    "Done": "किया हुआ",
+    "More": "अधिक",
+    "Back":  "वापस",
+    "Cancel": "रद्द करें",
+    "Save": "सहेजें",
+    "Delete": "हटाएं",
+    "Edit": "संपादित करें",
+    "Add": "जोड़ें",
+    "Search": "खोजें",
+    "Home": "होम",
+    "Settings": "सेटिंग्स",
+    "Learn": "सीखें"
   },
   "trans": {
     "Choose your language": "अपनी भाषा चुनें"
@@ -33,6 +44,41 @@
     "Sign up failed": "साइन अप विफल हुआ"
   },
   "route": {},
-  "home": {},
+  "home": {
+    "Discover Melbourne": "मेलबर्न खोजें",
+    "Start Here": "यहां शुरू करें",
+    "Route History": "रूट इतिहास",
+    "Embrace Melbourne": "मेलबर्न को गले लगाएं",
+    "Plan your trip": "एक क्लिक के साथ अपनी यात्रा की योजना बनाएं",
+    "Beloved Routes": "प्रिय रूटें",
+    "Monday": "सोमवार",
+    "Tuesday": "मंगलवार",
+    "Wednesday": "बुधवार",
+    "Thursday": "गुरुवार",
+    "Friday": "शुक्रवार",
+    "Saturday": "शनिवार",
+    "Sunday": "रविवार",
+    "January": "जनवरी",
+    "February": "फरवरी",
+    "March": "मार्च",
+    "April": "अप्रैल",
+    "May": "मई",
+    "June": "जून",
+    "July": "जुलाई",
+    "August": "अगस्त",
+    "September": "सितंबर",
+    "October": "अक्टूबर",
+    "November": "नवंबर",
+    "December": "दिसंबर",
+    "Sunny": "धूप वाला",
+    "Cloudy": "बादलबन्द",
+    "Rainy": "बरसात",
+    "Snowy": "बर्फबारी",
+    "Windy": "वायुमंडलीय",
+    "Dining": "भोजन",
+    "Shopping": "खरीदारी",
+    "Relaxing": "आराम करना",
+    "Travelling": "यात्रा"
+  },
   "tip": {}
 }

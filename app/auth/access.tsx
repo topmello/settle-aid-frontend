@@ -5,6 +5,7 @@ import { router } from "expo-router";
 import ArrowBackIcon from "../../assets/images/icons/arrow_back.svg";
 import GroupAddIcon from "../../assets/images/icons/group_add.svg";
 import { useTranslation } from "react-i18next";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const accessOptions = [
   {
@@ -29,7 +30,7 @@ export default function AccessPage() {
   const theme = useTheme();
   const [accessOption, setAccessOption] = React.useState("create-account");
   return (
-    <View
+    <SafeAreaView
       style={{
         backgroundColor: theme.colors.primaryContainer,
         flex: 1,
@@ -143,6 +144,6 @@ export default function AccessPage() {
           {t("comm:Done")}
         </Button>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }

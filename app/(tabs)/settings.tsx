@@ -10,6 +10,7 @@ import { selectAuthStatus } from "../../store/authSlice";
 import { AppDispatch } from "../../store";
 import { Button, Text } from "react-native-paper";
 import { setDarkTheme, setLightTheme, setSystemTheme } from "../../store/appSlice";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SettingsScreen() {
   const { t } = useTranslation();
@@ -20,7 +21,7 @@ export default function SettingsScreen() {
   const colorScheme = useColorScheme();
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text variant="headlineMedium">Tab One</Text>
       <Text>Translation: {t("test:helloWorld")}</Text>
       <Link href="/Location">
@@ -89,7 +90,7 @@ export default function SettingsScreen() {
           Go Result
         </Button>
       </Link>
-    </View>
+    </SafeAreaView>
   );
 }
 

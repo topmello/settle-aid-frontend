@@ -1,7 +1,18 @@
 {
   "comm": {
     "Next": "下一步",
-    "Done": "完成"
+    "Done": "完成",
+    "More": "更多",
+    "Back":  "返回",
+    "Cancel": "取消",
+    "Save": "保存",
+    "Delete": "删除",
+    "Edit": "编辑",
+    "Add": "添加",
+    "Search": "搜索",
+    "Home": "首页",
+    "Settings": "设置",
+    "Learn": "学习"
   },
   "trans": {
     "Choose your language": "请选择您习惯使用的语言"
@@ -33,6 +44,41 @@
     "Sign up failed": "注册失败"
   },
   "route": {},
-  "home": {},
+  "home": {
+    "Discover Melbourne": "发现墨尔本",
+    "Start Here": "从这里开始",
+    "Route History": "历史路线",
+    "Embrace Melbourne": "拥抱墨尔本",
+    "Plan your trip": "仅需一键计划您的旅行",
+    "Beloved Routes": "最受欢迎的路线",
+    "Monday": "周一",
+    "Tuesday": "周二",
+    "Wednesday": "周三",
+    "Thursday": "周四",
+    "Friday": "周五",
+    "Saturday": "周六",
+    "Sunday": "周日",
+    "January": "一月",
+    "February": "二月",
+    "March": "三月",
+    "April": "四月",
+    "May": "五月",
+    "June": "六月",
+    "July": "七月",
+    "August": "八月",
+    "September": "九月",
+    "October": "十月",
+    "November": "十一月",
+    "December": "十二月",
+    "Sunny": "晴朗",
+    "Cloudy": "多云",
+    "Rainy": "下雨",
+    "Snowy": "下雪",
+    "Windy": "刮风",
+    "Dining": "餐饮",
+    "Shopping": "购物",
+    "Relaxing": "休闲",
+    "Travelling": "旅行"
+  },
   "tip": {}
 }

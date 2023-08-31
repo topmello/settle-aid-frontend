@@ -1,7 +1,18 @@
 {
   "comm": {
     "Next": "Next",
-    "Done": "Done"
+    "Done": "Done",
+    "More": "More",
+    "Back": "Back",
+    "Cancel": "Cancel",
+    "Save": "Save",
+    "Delete": "Delete",
+    "Edit": "Edit",
+    "Add": "Add",
+    "Search": "Search",
+    "Home": "Home",
+    "Settings": "Settings",
+    "Learn": "Learn"
   },
   "trans": {
     "Choose your language": "Choose your Language to get started"
@@ -40,8 +51,42 @@
     "startCardInfo": "Plan your travel route with one click",
     "historyTitle": "Routine History",
     "more": "More",
-    "belovedRoutine": "Beloved Routine"
+    "belovedRoutine": "Beloved Routine",
 
+    "Discover Melbourne": "Discover Melbourne",
+    "Start Here": "Start Here",
+    "Route History": "Route History",
+    "Embrace Melbourne": "Embrace Melbourne",
+    "Plan your trip": "Plan your travel route with one click",
+    "Beloved Routes": "Beloved Routes",
+    "Monday": "Monday",
+    "Tuesday": "Tuesday",
+    "Wednesday": "Wednesday",
+    "Thursday": "Thursday",
+    "Friday": "Friday",
+    "Saturday": "Saturday",
+    "Sunday": "Sunday",
+    "January": "January",
+    "February": "February",
+    "March": "March",
+    "April": "April",
+    "May": "May",
+    "June": "June",
+    "July": "July",
+    "August": "August",
+    "September": "September",
+    "October": "October",
+    "November": "November",
+    "December": "December",
+    "Sunny": "Sunny",
+    "Cloudy": "Cloudy",
+    "Rainy": "Rainy",
+    "Snowy": "Snowy",
+    "Windy": "Windy",
+    "Dining": "Dining",
+    "Shopping": "Shopping",
+    "Relaxing": "Relaxing",
+    "Travelling": "Travelling"
   },
   "tip": {}
 }

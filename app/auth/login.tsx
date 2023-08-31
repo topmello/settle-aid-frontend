@@ -18,6 +18,7 @@ import { fetch } from "../../api/fetch";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../store";
 import { loginUser as loginUserThunk } from "../../store/authSlice";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 
 export default function LoginPage() {
@@ -56,7 +57,7 @@ export default function LoginPage() {
   }, [selectAuth.status]);
 
   return (
-    <View
+    <SafeAreaView
       style={{
         backgroundColor: theme.colors.primaryContainer,
         flex: 1,
@@ -170,6 +171,6 @@ export default function LoginPage() {
       <Snackbar style={{marginLeft: 32}} visible={!!notification} onDismiss={onDissmissNotification}>
         {notification}
       </Snackbar>
-    </View>
+    </SafeAreaView>
   );
 }

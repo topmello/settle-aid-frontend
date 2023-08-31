@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Pressable, View, KeyboardAvoidingView, Platform } from "react-native";
+import { Pressable, View, KeyboardAvoidingView, Platform, SafeAreaView } from "react-native";
 import { router } from "expo-router";
 import {
   Card,
@@ -127,7 +127,7 @@ export default function RegisterPage() {
     }
   };
   return (
-    <View
+    <SafeAreaView
       style={{
         backgroundColor: theme.colors.primaryContainer,
         flex: 1,
@@ -251,6 +251,6 @@ export default function RegisterPage() {
       <Snackbar style={{marginLeft: 32}} visible={!!notification} onDismiss={onDissmissNotification}>
         {notification}
       </Snackbar>
-    </View>
+    </SafeAreaView>
   );
 }
