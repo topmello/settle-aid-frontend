@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { StyleSheet, Appearance, useColorScheme } from "react-native";
 import { Link, Tabs } from "expo-router";
 import { View } from "react-native";

@@ -14,6 +14,14 @@
 
   },
   "home": {
+    "title": "Discover Melbourne",
+    "startTitle": "Start Here",
+    "startCard": "Embrace Melbourne",
+    "startCardInfo": "Plan your travel route with one click",
+    "historyTitle": "Routine History",
+    "more": "More",
+    "belovedRoutine": "Beloved Routine"
+
 
   },
   "tip": {
