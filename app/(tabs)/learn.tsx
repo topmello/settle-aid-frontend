@@ -1,31 +1,62 @@
-import { ScrollView, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { View } from 'react-native';
-import { Button, Text} from 'react-native-paper';
+import { Button, Text } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import tips from "../../tips/tips.json";
 
 export default function LearnScreen() {
+  const [selectedActivity, setSelectedActivity] = useState(null);
+  const [selectedItem, setSelectedItem] = useState(null);
+
+  const handleActivityChange = (activityIndex) => {
+    if (selectedActivity === activityIndex) {
+      setSelectedActivity(null);
+    } else {
+      setSelectedActivity(activityIndex);
+      setSelectedItem(null); // Reset selectedItem when changing activities
+    }
+  };
+
+  const handleItemClick = (itemIndex) => {
+    if (selectedItem === itemIndex) {
+      setSelectedItem(null);
+    } else {
+      setSelectedItem(itemIndex);
+    }
+  };
+
   const holder = tips.tips.map((activity, activityIndex) => (
     <View key={`activity_${activityIndex}`} style={styles.titleActivityContainer}>
-      <Text style={styles.titleActivity}>
-        {activity.title} {'\n\n'}
-        {activity.tips.map((item, index) => (
-          <View key={`item_${index}`} style={styles.titleContentContainer}>
-            <Text style={styles.titleContent}>
-              {item.mode} {"\n\n"}
-              {item.type.map((typeItem, typeIndex) => (
-                <View key={`typeItem_${typeIndex}`} style={styles.contentContainer}>
-                  <Text>
-                    {typeIndex + 1} {". "}
-                    {typeItem.description + '\n'}
-                    {typeItem.content + '\n\n\n'}
-                  </Text>
+      <TouchableOpacity onPress={() => handleActivityChange(activityIndex)}>
+        <Text style={styles.titleActivity}>
+          {activity.title}
+        </Text>
+      </TouchableOpacity>
+      {selectedActivity === activityIndex && (
+        <View>
+          {activity.tips.map((item, itemIndex) => (
+            <View key={`item_${itemIndex}`} style={styles.titleContentContainer}>
+              <TouchableOpacity onPress={() => handleItemClick(itemIndex)}>
+                <Text style={styles.titleContent}>
+                  {item.mode}
+                </Text>
+              </TouchableOpacity>
+              {selectedItem === itemIndex && (
+                <View style={styles.contentContainer}>
+                  {item.type.map((typeItem, typeIndex) => (
+                    <Text key={`typeItem_${typeIndex}`} style={styles.contentContainer}>
+                      {typeIndex + 1} {". "}
+                      {typeItem.description + '\n'}
+                      {typeItem.content + '\n\n\n'}
+                    </Text>
+                  ))}
                 </View>
-              ))}
-            </Text>
-          </View>
-        ))}
-      </Text>
+              )}
+            </View>
+          ))}
+        </View>
+      )}
     </View>
   ));
 
@@ -52,10 +83,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center',
     marginTop: 20,
+    textDecorationLine: 'underline',
   },
   titleContent: {
     fontSize: 15,
     textAlign: 'left',
+    textDecorationLine: 'underline',
   },
   content: {},
   titleContentContainer: {
@@ -65,6 +98,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   contentContainer: {
+    paddingVertical: 10,
     paddingHorizontal: 20,
-  }
+  },
 });
