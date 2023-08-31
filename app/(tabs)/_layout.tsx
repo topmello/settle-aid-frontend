@@ -12,11 +12,11 @@ export default function TabLayout() {
         tabBarIcon: ({ color }) => 
          <MaterialCommunityIcons name="home" color={color} size={26} />,
       }} />
-      <Tab.Screen name="Learn" component={require("./two").default} options={{
+      <Tab.Screen name="Learn" component={require("./learn").default} options={{
         tabBarIcon: ({ color }) =>
           <MaterialCommunityIcons name="book" color={color} size={26} />,
       }} />
-      <Tab.Screen name="Settings" component={require("./result").default} options={{
+      <Tab.Screen name="Settings" component={require("./settings").default} options={{
         tabBarIcon: ({ color }) =>
           <MaterialCommunityIcons name="cog" color={color} size={26} />,
       }}/>
