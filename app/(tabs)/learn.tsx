@@ -1,6 +1,6 @@
-import React from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
+import { Button, Text} from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import tips from "../../tips/tips.json";
 
