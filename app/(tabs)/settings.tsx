@@ -3,7 +3,7 @@ import { StyleSheet, Appearance, useColorScheme } from "react-native";
 import { Link, Tabs } from "expo-router";
 import { View } from "react-native";
 import { useTranslation } from "react-i18next";
-import { loginUser } from "../../store/authSlice";
+import { loginUser, logoutUser } from "../../store/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUserToken } from "../../store/authSlice";
 import { selectAuthStatus } from "../../store/authSlice";
@@ -15,6 +15,7 @@ export default function SettingsScreen() {
   const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
   const token = useSelector(selectUserToken);
+  const username = useSelector((state: any) => state.auth.username);
   const authStatus = useSelector(selectAuthStatus);
   const colorScheme = useColorScheme();
 
@@ -29,6 +30,9 @@ export default function SettingsScreen() {
       </Link>
       <Text style={styles.title}>Authentication</Text>
       <Text>
+        Username here: {username ? username : ""}
+      </Text>
+      <Text>
         Token here: {token ? token : ""}, Status: {authStatus}
       </Text>
       <Button  mode="contained"
@@ -36,7 +40,14 @@ export default function SettingsScreen() {
           dispatch(loginUser({ username: "admin", password: "admin" }))
         }
       >
-        Retrive Credential
+        Test Admin Token
+      </Button>
+      <Button  mode="contained"
+        onPress={() =>
+          dispatch(logoutUser())
+        }
+      >
+        Logout
       </Button>
       <Text style={styles.title}>Login Button</Text>
       <Link href={"/common/language"}>

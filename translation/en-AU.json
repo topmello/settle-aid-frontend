@@ -26,7 +26,11 @@
     "Welcome back,": "Welcome back,",
     "Let's Sign in": "Let's Sign in",
     "I don't have an account": "I don't have an account",
-    "Log in": "Log in"
+    "Log in": "Log in",
+    "Log in successful": "Log in successful",
+    "Log in failed": "Log in failed",
+    "Sign up successful": "Sign up successful",
+    "Sign up failed": "Sign up failed"
   },
   "route": {},
   "home": {

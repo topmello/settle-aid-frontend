@@ -9,11 +9,15 @@ import {
   Button,
   TextInput,
   HelperText,
+  Snackbar,
 } from "react-native-paper";
 import PersonAddIcon from "../../assets/images/icons/person_add.svg";
 import ArrowBackIcon from "../../assets/images/icons/arrow_back.svg";
 import { useTranslation } from "react-i18next";
 import { fetch } from "../../api/fetch";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../../store";
+import { loginUser as loginUserThunk } from "../../store/authSlice";
 
 export default function RegisterPage() {
   const { t } = useTranslation();
@@ -23,8 +27,26 @@ export default function RegisterPage() {
   const [password, setPassword] = React.useState("");
   const [passwordError, setPasswordError] = React.useState("");
   const [generatedUsername, setGeneratedUsername] = React.useState("");
+  const [generating, setGenerating] = React.useState(false);
+  const [registering, setRegistering] = React.useState(false);
+
+  const [notification, setNotification] = React.useState("");
+  const onDissmissNotification = React.useCallback(() => {
+    setNotification("");
+  }, []);
+
+  const pushNotification = React.useCallback((message: string) => {
+    setNotification(message);
+    setTimeout(() => {
+      setNotification("");
+    }, 3000);
+  }, []);
+
+  const selectAuth = useSelector((state: any) => state.auth);
+  const dispatch = useDispatch<AppDispatch>();
 
   const generateUsername = React.useCallback(async () => {
+    setGenerating(true);
     try {
       const response = await fetch({
         method: "GET",
@@ -34,8 +56,9 @@ export default function RegisterPage() {
         setGeneratedUsername(response.data.username);
       }
     } catch(error) {
-      console.log(error);
+      console.error("Failed to generate username ", error);
     }
+    setGenerating(false);
   }, []);
 
   const getGenUsername = React.useCallback((isRegenerate: boolean = false) => {
@@ -49,6 +72,41 @@ export default function RegisterPage() {
     getGenUsername();
   }, []);
 
+  const registerUser = React.useCallback(async () => {
+    setRegistering(true);
+    try {
+      const response = await fetch({
+        method: "POST",
+        url: "/user",
+        data: {
+          username,
+          password,
+        },
+      });
+      if (response.status === 200) {
+        router.replace("/(tabs)");
+        pushNotification(t("Sign up successful", { ns: "acc" }));
+      }
+    } catch(error) {
+      console.error("Failed to register user ", error);
+      pushNotification(t("Sign up failed", { ns: "acc" }));
+    }
+    setRegistering(false);
+  }, [username, password]);
+
+  const loginUser = React.useCallback(async () => {
+    dispatch(loginUserThunk({ username, password }));
+  }, [username, password]);
+
+  React.useEffect(() => {
+    if (selectAuth.status === "loginSuccess") {
+      router.replace("/(tabs)");
+      pushNotification(t("Sign in successful", { ns: "acc" }));
+    } else if (selectAuth.status === "loginFailed") {
+      pushNotification(t("Sign in failed", { ns: "acc" }));
+    }
+  }, [selectAuth.status]);
+
   const validateUsername = (text: string) => {
     if (text.length < 3) {
       setUsernameError(t("At least 3 characters", { ns: "acc" }));
@@ -60,7 +118,7 @@ export default function RegisterPage() {
   };
 
   const validatePassword = (text: string) => {
-    if (text.length < 6 && text.match(/^[0-9a-zA-Z]+$/)) {
+    if (text.length < 6 || !text.match(/^[0-9a-zA-Z]+$/)) {
       setPasswordError(t("At least 6 characters or numbers", { ns: "acc" }));
       return false;
     } else {
@@ -172,21 +230,27 @@ export default function RegisterPage() {
           onPress={() => {
             getGenUsername(true);
           }}
+          loading={generating}
         >
           {t("I don't like this username", { ns: "acc" })}
         </Button>
         <Button
           mode="contained"
           style={{ width: 150 }}
-          onPress={() => {
+          onPress={async () => {
             if (validateUsername(username) && validatePassword(password)) {
-              router.replace("/(tabs)");
+              await registerUser();
+              loginUser();
             }
           }}
+          loading={registering}
         >
           {t("comm:Done")}
         </Button>
       </View>
+      <Snackbar style={{marginLeft: 32}} visible={!!notification} onDismiss={onDissmissNotification}>
+        {notification}
+      </Snackbar>
     </View>
   );
 }
