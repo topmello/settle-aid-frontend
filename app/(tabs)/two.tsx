@@ -14,7 +14,7 @@ export default function TabTwoScreen() {
 
     const scaleAnim = useRef(new Animated.Value(1)).current;
 
-    //animation scale
+    //animation scale.
     const onPressIn = () => {
         Animated.spring(scaleAnim, {
             toValue: 0.95,
