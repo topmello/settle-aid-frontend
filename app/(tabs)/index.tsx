@@ -22,7 +22,7 @@ export default function TabOneScreen() {
     <View style={styles.container}>
       <Text variant="headlineMedium">Tab One</Text>
       <Text>Translation: {t("test:helloWorld")}</Text>
-      <Link href="/Location">
+      <Link href="/map">
         <Button icon="routes" mode="contained">
           Start Planning
         </Button>

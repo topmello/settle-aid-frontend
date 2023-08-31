@@ -50,6 +50,7 @@ const location_type_icon: { [key: string]: string } = {
 };
 
 export default function MapScreen() {
+
   const dispatch = useDispatch<AppDispatch>();
 
   const token = useSelector(selectUserToken);
