@@ -72,6 +72,7 @@ export default function AccessPage() {
       <View style={{ flex: 1, justifyContent: "center", gap: 16 }}>
       {accessOptions.map((option) => (
         <Card
+          key={option.id}
           mode={option.id === accessOption ? "elevated" : "contained"}
           onPress={() => setAccessOption(option.id)}
           style={{
@@ -129,13 +130,13 @@ export default function AccessPage() {
         <Button mode="contained" style={{width:150}} onPress={() => {
           switch(accessOption) {
             case "create-account":
-              router.push("/auth/register");
+              router.replace("/auth/register");
               break;
             case "continue-without-account":
-              router.push("/(tabs)");
+              router.replace("/(tabs)");
               break;
             case "already-have-account":
-              router.push("/auth/login");
+              router.replace("/auth/login");
               break;
           }
         }}>

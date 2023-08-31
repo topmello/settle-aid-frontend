@@ -163,7 +163,7 @@ export default function RegisterPage() {
           height: 160,
           justifyContent: "flex-start",
           alignItems: "center",
-          gap: 24,
+          gap: 28,
         }}
       >
         <Button

@@ -22,7 +22,11 @@
     "At least 3 characters": "至少3个字符",
     "Password": "密码",
     "At least 6 characters or numbers": "至少6个字符或数字",
-    "I don't like this username": "我不喜欢这个用户名"
+    "I don't like this username": "我不喜欢这个用户名",
+    "Welcome back,": "欢迎回来，",
+    "Let's Sign in": "敬请登录",
+    "I don't have an account": "我还没有账户",
+    "Log in": "登录"
   },
   "route": {},
   "home": {},
