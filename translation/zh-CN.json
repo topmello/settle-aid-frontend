@@ -17,7 +17,12 @@
     "Already have an account": "已有账户",
     "Sign in": "登录",
     "Sign up": "注册",
-    "Go to home page": "回到首页"
+    "Go to home page": "回到首页",
+    "Username": "用户名",
+    "At least 3 characters": "至少3个字符",
+    "Password": "密码",
+    "At least 6 characters or numbers": "至少6个字符或数字",
+    "I don't like this username": "我不喜欢这个用户名"
   },
   "route": {},
   "home": {},

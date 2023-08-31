@@ -17,7 +17,12 @@
     "Already have an account": "Already have an account",
     "Sign in": "Sign in",
     "Sign up": "Sign up",
-    "Go to home page": "Go to home page"
+    "Go to home page": "Go to home page",
+    "Username": "Username",
+    "At least 3 characters": "At least 3 characters",
+    "Password": "Password",
+    "At least 6 characters or numbers": "At least 6 characters or numbers",
+    "I don't like this username": "I don't like this username"
   },
   "route": {},
   "home": {

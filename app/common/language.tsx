@@ -123,7 +123,7 @@ export default function LanguageScreen() {
         ))}
       </View>
       <View style={{ height: 120, justifyContent: "flex-start", alignItems: "center" }}>
-        <Button mode="contained" style={{width:200}} onPress={() => {router.replace("/auth/access")}}>
+        <Button mode="contained" style={{width:150}} onPress={() => {router.replace("/auth/access")}}>
           {t("comm:Next")}
         </Button>
       </View>

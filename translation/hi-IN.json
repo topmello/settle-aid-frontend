@@ -17,7 +17,12 @@
     "Already have an account": "पहले से ही एक खाता है",
     "Sign in": "साइन इन करें",
     "Sign up": "साइन अप करें",
-    "Go to home page": "होम पेज पर जाएं"
+    "Go to home page": "होम पेज पर जाएं",
+    "Username": "उपयोगकर्ता नाम",
+    "At least 3 characters": "कम से कम 3 अक्षर",
+    "Password": "पारण शब्द",
+    "At least 6 characters or numbers": "कम से कम 6 अक्षर या नंबर",
+    "I don't like this username": "मुझे यह उपयोगकर्ता नाम नहीं पसंद है"
   },
   "route": {},
   "home": {},
