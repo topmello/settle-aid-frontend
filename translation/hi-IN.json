@@ -1,6 +1,7 @@
 {
   "comm": {
-    "Next": "अगला"
+    "Next": "अगला",
+    "Done": "किया हुआ"
   },
   "trans": {
     "Choose your language": "अपनी भाषा चुनें"
@@ -8,7 +9,16 @@
   "test": {
     "helloWorld": "हैलो वर्ल्ड"
   },
-  "acc": {},
+  "acc": {
+    "Just one more step": "बस एक और कदम",
+    "Do you want to create an account": "क्या आप एक खाता बनाना चाहते हैं",
+    "Create an account": "खाता बनाएं",
+    "Continue without an account": "खाता बनाएं के बिना जारी रखें",
+    "Already have an account": "पहले से ही एक खाता है",
+    "Sign in": "साइन इन करें",
+    "Sign up": "साइन अप करें",
+    "Go to home page": "होम पेज पर जाएं"
+  },
   "route": {},
   "home": {},
   "tip": {}

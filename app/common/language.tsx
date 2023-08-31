@@ -8,6 +8,7 @@ import IndiaFlagIcon from "../../assets/images/flags/india-flag.svg";
 import { useTranslation } from "react-i18next";
 import { selectLanguage } from "../../store/appSlice";
 import { useSelector } from "react-redux";
+import { router } from "expo-router";
 
 const languages = [
   {
@@ -40,7 +41,7 @@ export default function LanguageScreen() {
 
   useEffect(() => {
     setCurrentLanguage(appLanguage);
-  }, [appLanguage]);
+  }, []);
 
   useEffect(() => {
     i18n.changeLanguage(currentLanguage);
@@ -112,19 +113,17 @@ export default function LanguageScreen() {
                 <Text variant="bodyLarge" style={{fontWeight: "900"}}>{language.name}</Text>
                 <Text variant="bodyMedium">{language.desc}</Text>
               </View>
-              <View style={{ justifyContent: "center", width: 80, height: 80 }}>
-                <Text variant="bodyMedium">
-                  <RadioButton value={language.code} onPress={() => {
+              <View style={{ justifyContent: "center", alignItems: "center", width: 80, height: 80 }}>
+                <RadioButton value={language.code} onPress={() => {
                     setCurrentLanguage(language.code);
                   }} status={language.code === currentLanguage ? "checked" : "unchecked"} />
-                </Text>
               </View>
             </View>
           </Card>
         ))}
       </View>
       <View style={{ height: 120, justifyContent: "flex-start", alignItems: "center" }}>
-        <Button mode="contained" style={{width:200}} onPress={() => {}}>
+        <Button mode="contained" style={{width:200}} onPress={() => {router.replace("/auth/access")}}>
           {t("comm:Next")}
         </Button>
       </View>

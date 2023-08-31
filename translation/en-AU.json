@@ -1,6 +1,7 @@
 {
   "comm": {
-    "Next": "Next"
+    "Next": "Next",
+    "Done": "Done"
   },
   "trans": {
     "Choose your language": "Choose your Language to get started"
@@ -8,7 +9,16 @@
   "test": {
     "helloWorld": "Hello World"
   },
-  "acc": {},
+  "acc": {
+    "Just one more step": "Just one more step",
+    "Do you want to create an account": "Do you want to create an account to see your history easily?",
+    "Create an account": "Create an account",
+    "Continue without an account": "Continue without an account",
+    "Already have an account": "Already have an account",
+    "Sign in": "Sign in",
+    "Sign up": "Sign up",
+    "Go to home page": "Go to home page"
+  },
   "route": {},
   "home": {
     "title": "Discover Melbourne",

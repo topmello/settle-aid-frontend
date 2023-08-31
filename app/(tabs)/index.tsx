@@ -44,13 +44,18 @@ export default function TabOneScreen() {
           Go Language
         </Button>
       </Link>
+      <Link href={"/auth/access"}>
+        <Button mode="contained">
+          Go Access
+        </Button>
+      </Link>
       <Link href={"/auth/login"}>
-        <Button mode="contained" disabled>
+        <Button mode="contained">
           Go Login
         </Button>
       </Link>
       <Link href={"/auth/register"}>
-        <Button mode="contained" disabled>
+        <Button mode="contained">
           Go Register
         </Button>
       </Link>

@@ -1,6 +1,7 @@
 {
   "comm": {
-    "Next": "下一步"
+    "Next": "下一步",
+    "Done": "完成"
   },
   "trans": {
     "Choose your language": "请选择您习惯使用的语言"
@@ -8,7 +9,16 @@
   "test": {
     "helloWorld": "你好世界"
   },
-  "acc": {},
+  "acc": {
+    "Just one more step": "还有一步",
+    "Do you want to create an account": "您想创建一个账户吗？",
+    "Create an account": "创建一个账户",
+    "Continue without an account": "只想体验一下",
+    "Already have an account": "已有账户",
+    "Sign in": "登录",
+    "Sign up": "注册",
+    "Go to home page": "回到首页"
+  },
   "route": {},
   "home": {},
   "tip": {}
