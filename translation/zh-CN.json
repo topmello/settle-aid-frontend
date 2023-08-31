@@ -1,23 +1,15 @@
 {
-  "translation": {
-    
+  "comm": {
+    "Next": "下一步"
+  },
+  "trans": {
+    "Choose your language": "请选择您习惯使用的语言"
   },
   "test": {
     "helloWorld": "你好世界"
   },
-  "common": {
-
-  },
-  "account": {
-
-  },
-  "route": {
-
-  },
-  "home": {
-
-  },
-  "tip": {
-    
-  }
+  "acc": {},
+  "route": {},
+  "home": {},
+  "tip": {}
 }

@@ -1,22 +1,15 @@
 {
-  "translation": {
-    
-  },"test": {
+  "comm": {
+    "Next": "Next"
+  },
+  "trans": {
+    "Choose your language": "Choose your Language to get started"
+  },
+  "test": {
     "helloWorld": "Hello World"
   },
-  "common": {
-
-  },
-  "account": {
-
-  },
-  "route": {
-
-  },
-  "home": {
-
-  },
-  "tip": {
-    
-  }
+  "acc": {},
+  "route": {},
+  "home": {},
+  "tip": {}
 }
