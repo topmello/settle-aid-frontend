@@ -12,12 +12,16 @@ interface AppState {
   isFail: {
     message: string;
   } | null;
+  theme: "light" | "dark" | "system" | undefined;
 }
 
 const initialState: AppState = {
   isLoading: false,
   isFail: null,
+  theme: undefined,
 };
+
+export const selectTheme = (state: any) => state.app.theme;
 
 const appSlice = createSlice({
   name: "app",
@@ -33,8 +37,20 @@ const appSlice = createSlice({
       state.isLoading = false;
       state.isFail = action.payload;
     },
+    setDarkTheme(state) {
+      state.theme = "dark";
+    },
+    setLightTheme(state) {
+      state.theme = "light";
+    },
+    setSystemTheme(state) {
+      state.theme = "system";
+    },
+    setTheme(state, action: PayloadAction<{ theme: "light" | "dark" | "system" }>) {
+      state.theme = action.payload.theme;
+    }
   },
 });
 
-export const { loading, loaded, fail } = appSlice.actions;
+export const { loading, loaded, fail, setDarkTheme, setLightTheme, setSystemTheme, setTheme } = appSlice.actions;
 export default appSlice.reducer;

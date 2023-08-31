@@ -1,4 +1,4 @@
-import { StyleSheet, Pressable } from "react-native";
+import { StyleSheet, Appearance, useColorScheme } from "react-native";
 import { Link, Tabs } from "expo-router";
 import { View } from "react-native";
 import { useTranslation } from "react-i18next";
@@ -8,12 +8,14 @@ import { selectUserToken } from "../../store/authSlice";
 import { selectAuthStatus } from "../../store/authSlice";
 import { AppDispatch } from "../../store";
 import { Button, Text } from "react-native-paper";
+import { setDarkTheme, setLightTheme, setSystemTheme } from "../../store/appSlice";
 
 export default function TabOneScreen() {
   const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
   const token = useSelector(selectUserToken);
   const authStatus = useSelector(selectAuthStatus);
+  const colorScheme = useColorScheme();
 
   return (
     <View style={styles.container}>
@@ -51,6 +53,20 @@ export default function TabOneScreen() {
           Go Register
         </Button>
       </Link>
+      <Text variant="headlineMedium">Color Scheme</Text>
+      <Text>Color Scheme: {colorScheme}</Text>
+      <Button mode="contained" onPress={() => {
+        dispatch(setLightTheme())
+      }}>
+        Light
+      </Button>
+      <Button mode="contained" onPress={() => dispatch(setDarkTheme())}>
+        Dark
+      </Button>
+      <Button mode="contained" onPress={() => dispatch(setSystemTheme())}>
+        Follow System
+      </Button>
+
     </View>
   );
 }
