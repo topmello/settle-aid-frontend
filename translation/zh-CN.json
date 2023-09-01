@@ -43,7 +43,16 @@
     "Sign up successful": "注册成功",
     "Sign up failed": "注册失败"
   },
-  "route": {},
+  "route": {
+    "First": "首先",
+    "Let us know which": "告诉我们",
+    "activities you want to do": "您希望安排什么活动",
+    "Dining": "餐饮",
+    "Shopping": "购物",
+    "Relaxing": "休闲",
+    "Travelling": "旅行",
+    "Health": "健康"
+  },
   "home": {
     "Discover Melbourne": "发现墨尔本",
     "Start Here": "从这里开始",

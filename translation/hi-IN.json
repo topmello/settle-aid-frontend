@@ -43,7 +43,16 @@
     "Sign up successful": "साइन अप सफल हुआ",
     "Sign up failed": "साइन अप विफल हुआ"
   },
-  "route": {},
+  "route": {
+    "First": "सबसे पहले",
+    "Let us know which": "हमें बताएं कि कौन सा",
+    "activities you want to do": "गतिविधियां आप करना चाहते हैं",
+    "Dining": "भोजन",
+    "Shopping": "खरीदारी",
+    "Relaxing": "आराम करना",
+    "Travelling": "यात्रा",
+    "Health": "स्वास्थ्य"
+  },
   "home": {
     "Discover Melbourne": "मेलबर्न खोजें",
     "Start Here": "यहां शुरू करें",

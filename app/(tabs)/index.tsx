@@ -23,25 +23,8 @@ import { useTheme } from "react-native-paper";
 import LightCloudyIcon from "../../assets/images/weather/light_cloudy.svg";
 
 export default function HomeScreen() {
-    const {t} = useTranslation();
-
-  const scaleAnim = useRef(new Animated.Value(1)).current;
-
+  const {t} = useTranslation();
   const theme = useTheme();
-
-  //animation scale.
-  const onPressIn = () => {
-    Animated.spring(scaleAnim, {
-      toValue: 0.95,
-      useNativeDriver: true,
-    }).start();
-  };
-  const onPressOut = () => {
-    Animated.spring(scaleAnim, {
-      toValue: 1,
-      useNativeDriver: true,
-    }).start();
-  };
   //onclick for startCard
   const handleStartClick = () => {
     console.log("Rectangle clicked!");

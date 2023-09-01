@@ -43,7 +43,15 @@
     "Sign up successful": "Sign up successful",
     "Sign up failed": "Sign up failed"
   },
-  "route": {},
+  "route": {
+    "First": "First",
+    "Let us know which": "Let us know which",
+    "activities you want to do": "activities you want to do",
+    "Dining": "Dining",
+    "Shopping": "Shopping",
+    "Travelling": "Travelling",
+    "Health": "Health"
+  },
   "home": {
     "title": "Discover Melbourne",
     "startTitle": "Start Here",

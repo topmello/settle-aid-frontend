@@ -1,13 +1,17 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+export type LocationType = "landmark" | "restaurant" | "grocery" | "pharmacy";
+
+export type RouteType = "driving" | "walking" | "cycling";
+
 export interface RouteState {
-  location_type: ("landmark" | "restaurant" | "grocery" | "pharmacy")[];
+  location_type: LocationType[];
   query: string[];
   longitude: number;
   latitude: number;
   distance_threshold: number; //This is actually distance between each location in meters
   similarity_threshold: number; //0-1
-  route_type: "driving" | "walking" | "cycling";
+  route_type: RouteType;
 }
 
 const initialState: RouteState = {
@@ -24,10 +28,13 @@ const routeSlice = createSlice({
   name: "route",
   initialState,
   reducers: {
+    setLocationType(state, action: PayloadAction<LocationType[]>) {
+      state.location_type = action.payload;
+    },
     setQueryWithLocationType(
       state,
       action: PayloadAction<{
-        location_type: ("landmark" | "restaurant" | "grocery" | "pharmacy")[];
+        location_type: LocationType[];
         query: string[];
       }>
     ) {
@@ -61,16 +68,14 @@ const routeSlice = createSlice({
         state.similarity_threshold = action.payload.similarity_threshold;
       }
     },
-    setRouteType(
-      state,
-      action: PayloadAction<{ route_type: "driving" | "walking" | "cycling" }>
-    ) {
+    setRouteType(state, action: PayloadAction<{ route_type: RouteType }>) {
       state.route_type = action.payload.route_type;
     },
   },
 });
 
 export const {
+  setLocationType,
   setQueryWithLocationType,
   setLonLat,
   setDistanceThreshold,
