@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { router } from "expo-router";
 import MapView, { Marker } from "react-native-maps";
@@ -8,8 +8,9 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   Pressable,
+  Image,
 } from "react-native";
-import { Text, Card, List, Button, useTheme } from "react-native-paper";
+import { Text, Card, Button, useTheme, Banner } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Slider from "@react-native-community/slider";
 import { Link } from "expo-router";
@@ -31,6 +32,8 @@ import useCurrentLocation from "../../hooks/useCurrentLocation";
 export default function RouteGenLocation() {
   const theme = useTheme();
   const dispatch = useDispatch<AppDispatch>();
+
+  const [bannerVisible, setBannerVisible] = useState(true);
 
   const { isLoading, isFail } = useSelector((state: RootState) => state.app);
 
@@ -64,6 +67,23 @@ export default function RouteGenLocation() {
             width: "100%",
           }}
         >
+          <Banner
+            style={{
+              borderRadius: 20,
+            }}
+            visible={bannerVisible}
+            actions={[
+              {
+                label: "Understand",
+                onPress: () => setBannerVisible(false),
+              },
+            ]}
+          >
+            <Text variant="titleMedium">
+              Your privacy matters: We store your information and location data
+              securely and confidentially.
+            </Text>
+          </Banner>
           <View
             style={{
               marginTop: 32,
