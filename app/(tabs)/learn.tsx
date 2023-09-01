@@ -130,5 +130,5 @@ const styles = StyleSheet.create({
   }
 });
 
-const iconList = ["airplane-outline", "flag-outline", "restaurant-outline", "sunny-outline", "call-outline", "medkit-outline", "wallet-outline", "people-outline"]
+const iconList = ["airplane-outline", "flag-outline", "restaurant-outline", "bag-handle-outline", "sunny-outline", "call-outline", "medkit-outline", "wallet-outline", "people-outline"]
 

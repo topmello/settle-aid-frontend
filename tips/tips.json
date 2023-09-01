@@ -759,6 +759,107 @@
             ]
         },
         {
+            "title": "Grocery",
+            "description": "Grocery Shopping",
+            "tips": [
+                {
+                    "mode": "Store Selection",
+                    "type": [
+                        {
+                            "description": "Local Markets",
+                            "content": "Visit local markets such as Queen Victoria Market for fresh produce, artisanal foods, and unique finds.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Convenience Stores",
+                            "content": "Visit convenience stores for quick purchases and essentials, but be mindful of pricing.",
+                            "link": ""
+                        }
+                    ]
+                },
+                {
+                    "mode": "Shopping Tips",
+                    "type": [
+                        {
+                            "description": "Shopping List",
+                            "content": "Prepare a shopping list to stay organized and focused on items you need.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Seasonal Produce",
+                            "content": "Opt for seasonal fruits and vegetables to enjoy fresher and potentially cheaper options.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Compare Prices",
+                            "content": "Compare prices and brands to find the best value for your preferred items.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Bulk Buying",
+                            "content": "Consider buying non-perishables in bulk to save money in the long run.",
+                            "link": ""
+                        }
+                    ]
+                },
+                {
+                    "mode": "Payment and Rewards",
+                    "type": [
+                        {
+                            "description": "Payment Options",
+                            "content": "Use cash or cards for payment, and consider using reward cards for discounts or points accumulation.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Price Matching",
+                            "content": "Check if stores offer price matching to ensure you get the best deal.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Rewards Programs",
+                            "content": "Enroll in loyalty programs to earn rewards, discounts, and special offers.",
+                            "link": ""
+                        }
+                    ]
+                },
+                {
+                    "mode": "Environment and Sustainability",
+                    "type": [
+                        {
+                            "description": "Reusable Bags",
+                            "content": "Bring reusable bags for your groceries to reduce plastic waste. Most stores charge for disposable and recycling bags",
+                            "link": ""
+                        },
+                        {
+                            "description": "Eco-Friendly Packaging",
+                            "content": "Opt for products with minimal packaging or eco-friendly packaging options.",
+                            "link": ""
+                        }
+                    ]
+                },
+                {
+                    "mode": "Food Safety and Storage",
+                    "type": [
+                        {
+                            "description": "Check Expiry Dates",
+                            "content": "Inspect expiry dates to ensure the freshness and quality of products.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Proper Storage",
+                            "content": "Follow storage instructions to maintain the quality and safety of perishable items.",
+                            "link": ""
+                        },
+                        {
+                            "description": "Refrigerated and Frozen Items",
+                            "content": "Pick up refrigerated and frozen items last to maintain their optimal temperature.",
+                            "link": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "title": "Outdoor Activities",
             "description": "Outdoor Activities and Entertainment Tips in Melbourne City",
             "tips": [
@@ -928,7 +1029,7 @@
                         },
                         {
                             "description": "Travel Companions",
-                            "content": "Stay in touch with your travel family and establish home return time in case you get lost.",
+                            "content": "Stay in touch with your family and establish home return time in case you get lost.",
                             "link": ""
                         }
                     ]
