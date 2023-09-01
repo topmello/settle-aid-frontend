@@ -9,7 +9,8 @@ import {
 } from "react-native";
 import { Text, Card, List, Button, useTheme } from "react-native-paper";
 import Slider from "@react-native-community/slider";
-import * as Location from "expo-location";
+import { Link } from "expo-router";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useTranslation } from "react-i18next";
 
 import { AppDispatch, RootState } from "../../store";
@@ -20,6 +21,8 @@ import {
   RouteState,
 } from "../../store/routeSlice";
 
+import useCurrentLocation from "../../hooks/useCurrentLocation";
+
 export default function RouteGenLocation() {
   const theme = useTheme();
   const dispatch = useDispatch<AppDispatch>();
@@ -28,25 +31,19 @@ export default function RouteGenLocation() {
 
   const routeState: RouteState = useSelector((state: RootState) => state.route);
 
+  const fetchLocation = useCurrentLocation((coords) => {
+    dispatch(
+      setLonLat({
+        longitude: coords.longitude,
+        latitude: coords.latitude,
+      })
+    );
+    dispatch(loaded());
+  });
+
   useEffect(() => {
     dispatch(loading());
-    (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        dispatch(loaded()); // Set loading to false if permission denied
-        return;
-      }
-
-      let location = await Location.getCurrentPositionAsync({});
-      dispatch(
-        setLonLat({
-          longitude: location.coords.longitude,
-          latitude: location.coords.latitude,
-        })
-      );
-      dispatch(loaded()); // Set loading to false once location is obtained
-    })();
-  }, []);
+  }, [dispatch]);
 
   return (
     <View style={styles.container}>
@@ -123,12 +120,13 @@ export default function RouteGenLocation() {
                 padding: 10,
               }}
             >
-              <Text>This is your current location</Text>
+              <Text variant="titleLarge">Your current location</Text>
             </View>
             <View
               style={{
                 flexDirection: "row",
                 justifyContent: "flex-end",
+                paddingRight: 10,
               }}
             >
               <TouchableOpacity
@@ -137,8 +135,9 @@ export default function RouteGenLocation() {
                   justifyContent: "center",
                   alignItems: "center",
                 }}
+                onPress={fetchLocation}
               >
-                <Text>Relocate</Text>
+                <Text variant="bodyLarge">Relocate</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={{
@@ -147,7 +146,7 @@ export default function RouteGenLocation() {
                   alignItems: "center",
                 }}
               >
-                <Text>Edit</Text>
+                <Text variant="bodyLarge">Edit</Text>
               </TouchableOpacity>
             </View>
           </Card>
@@ -164,10 +163,13 @@ export default function RouteGenLocation() {
             <View
               style={{
                 width: "80%",
-                margin: 10,
+                marginTop: 10,
+                marginBottom: 10,
               }}
             >
-              <Text>Distance you want to travel between each location</Text>
+              <Text variant="titleMedium">
+                Distance you want to travel between each location
+              </Text>
             </View>
 
             <Slider
@@ -178,10 +180,22 @@ export default function RouteGenLocation() {
               onValueChange={(value) => {
                 dispatch(setDistanceThreshold({ distance_threshold: value }));
               }}
-              minimumTrackTintColor="#000000"
-              maximumTrackTintColor="#000000"
+              minimumTrackTintColor={theme.colors.primary}
+              maximumTrackTintColor={theme.colors.surfaceVariant}
+              tapToSeek={true}
             />
+            <Text variant="bodyLarge">
+              {new Intl.NumberFormat().format(
+                Math.round(routeState.distance_threshold)
+              )}{" "}
+              Meters
+            </Text>
           </Card>
+          <Link href={"/route/result"} style={{ margin: 10 }}>
+            <Button mode="contained">
+              Done <FontAwesome name="check" size={15} color="black" />
+            </Button>
+          </Link>
         </View>
       )}
     </View>
