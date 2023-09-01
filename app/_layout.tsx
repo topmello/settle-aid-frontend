@@ -107,6 +107,7 @@ export function RootLayout() {
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="route/activity" options={{ headerShown: false }} />
+        <Stack.Screen name="route/prompt" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: "modal" }} />
       </Stack>
     </PaperProvider>

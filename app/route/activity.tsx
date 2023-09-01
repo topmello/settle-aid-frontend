@@ -14,7 +14,7 @@ import PharmacyIcon from "../../assets/images/icons/pharmacy.svg";
 import { useDispatch } from "react-redux";
 import { LocationType, setLocationType } from "../../store/routeSlice";
 
-type ActivityOption = {
+export type ActivityOption = {
   id: LocationType;
   name: string;
   logo: any;
@@ -95,7 +95,7 @@ export default function RouteActivityScreen() {
           <Text variant="headlineMedium" style={{ fontWeight: "900" }}>
             1
           </Text>
-          <Text variant="headlineMedium">/3</Text>
+          <Text variant="headlineMedium">/2</Text>
         </View>
       </View>
       <View style={{ paddingStart: 8 }}>
@@ -142,7 +142,7 @@ export default function RouteActivityScreen() {
                   : theme.colors.background,
                 borderRadius: 16,
                 width: "42%",
-                height: 150,
+                height: 128,
                 zIndex: 1,
                 elevation: optionExists(option) ? 8 : 0,
                 borderWidth: optionExists(option) ? 3 : 0,
@@ -186,6 +186,7 @@ export default function RouteActivityScreen() {
             dispatch(
               setLocationType(selectedOptions.map((option) => option.id))
             );
+            router.push("/route/prompt");
           }}
         >
           {t("comm:Done")}
