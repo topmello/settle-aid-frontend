@@ -74,6 +74,13 @@ export default function RouteGenLocation() {
             visible={bannerVisible}
             actions={[
               {
+                label: "Not Allow",
+                onPress: () => {
+                  setBannerVisible(false);
+                  router.replace("/common/language");
+                },
+              },
+              {
                 label: "Understand",
                 onPress: () => setBannerVisible(false),
               },
@@ -252,11 +259,13 @@ export default function RouteGenLocation() {
                 Meters
               </Text>
             </Card>
-            <Link href={"/route/result"} style={{ margin: 10 }}>
-              <Button mode="contained">
-                Done <FontAwesome name="check" size={15} color="black" />
-              </Button>
-            </Link>
+            {!bannerVisible && (
+              <Link href={"/route/result"} style={{ margin: 10 }}>
+                <Button mode="contained">
+                  Done <FontAwesome name="check" size={15} color="black" />
+                </Button>
+              </Link>
+            )}
           </View>
         </SafeAreaView>
       )}
