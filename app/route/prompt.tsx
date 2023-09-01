@@ -1,6 +1,17 @@
 import * as React from "react";
 import { KeyboardAvoidingView, Platform, Pressable, View } from "react-native";
-import { Card, RadioButton, Text, useTheme, Button, List, Chip, Portal, Modal, TextInput } from "react-native-paper";
+import {
+  Card,
+  RadioButton,
+  Text,
+  useTheme,
+  Button,
+  List,
+  Chip,
+  Portal,
+  Modal,
+  TextInput,
+} from "react-native-paper";
 import { router } from "expo-router";
 import ArrowBackIcon from "../../assets/images/icons/arrow_back.svg";
 import GroupAddIcon from "../../assets/images/icons/group_add.svg";
@@ -12,7 +23,12 @@ import ParkBirdsIcon from "../../assets/images/icons/park_birds.svg";
 import MountainTreesIcon from "../../assets/images/icons/mountain_trees.svg";
 import PharmacyIcon from "../../assets/images/icons/pharmacy.svg";
 import { useDispatch, useSelector } from "react-redux";
-import { LocationType, selectLocationType, setLocationType, setQueryWithLocationType } from "../../store/routeSlice";
+import {
+  LocationType,
+  selectLocationType,
+  setLocationType,
+  setQueryWithLocationType,
+} from "../../store/routeSlice";
 import { ActivityOption } from "./activity";
 
 type ActivityPrompt = {
@@ -20,7 +36,7 @@ type ActivityPrompt = {
   name: string;
   logo: any;
   prompt: string[];
-}
+};
 
 const activityOptions: ActivityOption[] = [
   {
@@ -57,31 +73,33 @@ export default function RouteActivityScreen() {
   const [tempPrompt, setTempPrompt] = React.useState<string>("");
 
   React.useEffect(() => {
-    console.log(activities)
-    setActivityPrompts([...activities.map((activity) => {
-      switch (activity) {
-        case "grocery":
-          return {
-            ...activityOptions[0],
-            prompt: []
-          }
-        case "restaurant":
-          return {
-            ...activityOptions[1],
-            prompt: []
-          }
-        case "landmark":
-          return {
-            ...activityOptions[2],
-            prompt: []
-          }
-        case "pharmacy":
-          return {
-            ...activityOptions[3],
-            prompt: []
-          }
-      }
-    })]);
+    console.log(activities);
+    setActivityPrompts([
+      ...activities.map((activity) => {
+        switch (activity) {
+          case "grocery":
+            return {
+              ...activityOptions[0],
+              prompt: [],
+            };
+          case "restaurant":
+            return {
+              ...activityOptions[1],
+              prompt: [],
+            };
+          case "landmark":
+            return {
+              ...activityOptions[2],
+              prompt: [],
+            };
+          case "pharmacy":
+            return {
+              ...activityOptions[3],
+              prompt: [],
+            };
+        }
+      }),
+    ]);
     if (activities.length === 0) {
       setActivityPrompts([
         {
@@ -100,7 +118,8 @@ export default function RouteActivityScreen() {
     }
   }, [activities]);
 
-  const [selectedActivity, setSelectedActivity] = React.useState<ActivityPrompt | null>(null);
+  const [selectedActivity, setSelectedActivity] =
+    React.useState<ActivityPrompt | null>(null);
 
   const addPromptToActivity = React.useCallback(
     (id: LocationType, prompt: string) => {
@@ -110,7 +129,8 @@ export default function RouteActivityScreen() {
       } else {
         console.error("Activity not found for prompt: ", prompt);
       }
-    }, [activityPrompts]
+    },
+    [activityPrompts]
   );
 
   const removePromptFromActivity = React.useCallback(
@@ -121,7 +141,8 @@ export default function RouteActivityScreen() {
       } else {
         console.error("Activity not found for prompt: ", prompt);
       }
-    }, [activityPrompts]
+    },
+    [activityPrompts]
   );
 
   return (
@@ -151,7 +172,7 @@ export default function RouteActivityScreen() {
           <Text variant="headlineMedium" style={{ fontWeight: "900" }}>
             2
           </Text>
-          <Text variant="headlineMedium">/2</Text>
+          <Text variant="headlineMedium">/3</Text>
         </View>
       </View>
       <View style={{ paddingStart: 8 }}>
@@ -182,12 +203,18 @@ export default function RouteActivityScreen() {
             flexDirection: "column",
           }}
         >
-          <TextInput mode="outlined" label="Enter prompt for locations" value={tempPrompt} onTextInput={text => {
-            setTempPrompt(text.nativeEvent.text);
-          }} style={{
-            backgroundColor: theme.colors.primaryContainer,
-            height: 50,
-          }} />
+          <TextInput
+            mode="outlined"
+            label="Enter prompt for locations"
+            value={tempPrompt}
+            onChangeText={(text) => {
+              setTempPrompt(text);
+            }}
+            style={{
+              backgroundColor: theme.colors.primaryContainer,
+              height: 50,
+            }}
+          />
           {/* {activityPrompts.map((activity) => (
             <List.Accordion
               key={activity.id}
@@ -218,10 +245,13 @@ export default function RouteActivityScreen() {
           mode="contained"
           style={{ width: 150 }}
           onPress={() => {
-            dispatch(setQueryWithLocationType({
-              location_type: activityPrompts.map((activity) => activity.id),
-              query: activityPrompts.map((activity) => tempPrompt),
-            }));
+            dispatch(
+              setQueryWithLocationType({
+                location_type: activityPrompts.map((activity) => activity.id),
+                query: activityPrompts.map((activity) => tempPrompt),
+              })
+            );
+            router.replace("/route/location");
           }}
         >
           {t("comm:Done")}

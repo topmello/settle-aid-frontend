@@ -9,6 +9,7 @@ import { RouteState } from "../store/routeSlice";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 import { Tip } from "../tips/tipsTyped";
+import { router } from "expo-router";
 
 interface RouteResult {
   locations: string[];
@@ -88,23 +89,14 @@ const ResultOverlay: React.FC<OverlayProps> = ({
         <ScrollView>
           <List.Section>
             {data?.locations.map((location: string, index: number) => {
-              var LocationType: string =
-                body?.location_type[index].charAt(0).toUpperCase() +
-                body?.location_type[index].slice(1);
               return (
                 <List.Item
-                  key={location}
+                  key={index}
                   title={location}
-                  description={LocationType}
+                  //description={body?.location_type[index]}
                   left={(props) => (
                     <View style={{ justifyContent: "center", paddingLeft: 10 }}>
-                      {React.createElement(
-                        location_type_icon[body?.location_type[index]],
-                        {
-                          width: 30,
-                          height: 30,
-                        }
-                      )}
+                      <Text>{index}</Text>
                     </View>
                   )}
                   right={() => (
@@ -176,7 +168,13 @@ const ResultOverlay: React.FC<OverlayProps> = ({
               padding: 10,
             }}
           >
-            <Button mode="contained" style={[styles.button]}>
+            <Button
+              mode="contained"
+              style={[styles.button]}
+              onPress={() => {
+                router.replace("/route/location");
+              }}
+            >
               {t("comm:Back")}
             </Button>
             <Button

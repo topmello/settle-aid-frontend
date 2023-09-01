@@ -41,6 +41,15 @@ interface RouteResult {
   instructions: string[];
   duration: number;
 }
+const body: RouteState = {
+  query: ["Museum", "Indian", "Spicy", "Park"],
+  location_type: ["landmark", "restaurant", "restaurant", "landmark"],
+  longitude: 144.9549,
+  latitude: -37.81803,
+  distance_threshold: 1000,
+  similarity_threshold: 0,
+  route_type: "walking",
+};
 
 const location_type_icon: { [key: string]: any } = {
   landmark: ShoppingCartIcon,
@@ -76,12 +85,14 @@ export default function MapScreen() {
     return {
       method: "POST",
       url: "/search/route/",
-      data: routeState,
+      data: body,
       token: token,
     };
   }, [routeState, triggerFetch]);
 
   const data: RouteResult = useFetch(req, [triggerFetch]);
+
+  //console.log(data);
 
   const mapRef = useRef<MapView>(null);
 

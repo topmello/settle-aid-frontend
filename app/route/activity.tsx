@@ -95,7 +95,7 @@ export default function RouteActivityScreen() {
           <Text variant="headlineMedium" style={{ fontWeight: "900" }}>
             1
           </Text>
-          <Text variant="headlineMedium">/2</Text>
+          <Text variant="headlineMedium">/3</Text>
         </View>
       </View>
       <View style={{ paddingStart: 8 }}>

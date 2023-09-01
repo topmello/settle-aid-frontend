@@ -1,5 +1,11 @@
 import * as React from "react";
-import { Pressable, View, KeyboardAvoidingView, Platform, SafeAreaView } from "react-native";
+import {
+  Pressable,
+  View,
+  KeyboardAvoidingView,
+  Platform,
+  SafeAreaView,
+} from "react-native";
 import { router } from "expo-router";
 import {
   Card,
@@ -55,18 +61,21 @@ export default function RegisterPage() {
       if (response.status === 200) {
         setGeneratedUsername(response.data.username);
       }
-    } catch(error) {
+    } catch (error) {
       console.error("Failed to generate username ", error);
     }
     setGenerating(false);
   }, []);
 
-  const getGenUsername = React.useCallback((isRegenerate: boolean = false) => {
-    generateUsername();
-    if (username === "" || isRegenerate) {
-      setUsername(generatedUsername);
-    }
-  }, [generateUsername, generatedUsername, username]);
+  const getGenUsername = React.useCallback(
+    (isRegenerate: boolean = false) => {
+      generateUsername();
+      if (username === "" || isRegenerate) {
+        setUsername(generatedUsername);
+      }
+    },
+    [generateUsername, generatedUsername, username]
+  );
 
   React.useEffect(() => {
     getGenUsername();
@@ -77,7 +86,7 @@ export default function RegisterPage() {
     try {
       const response = await fetch({
         method: "POST",
-        url: "/user",
+        url: "/user/",
         data: {
           username,
           password,
@@ -87,7 +96,7 @@ export default function RegisterPage() {
         router.replace("/(tabs)");
         pushNotification(t("Sign up successful", { ns: "acc" }));
       }
-    } catch(error) {
+    } catch (error) {
       console.error("Failed to register user ", error);
       pushNotification(t("Sign up failed", { ns: "acc" }));
     }
@@ -248,7 +257,11 @@ export default function RegisterPage() {
           {t("comm:Done")}
         </Button>
       </View>
-      <Snackbar style={{marginLeft: 32}} visible={!!notification} onDismiss={onDissmissNotification}>
+      <Snackbar
+        style={{ marginLeft: 32 }}
+        visible={!!notification}
+        onDismiss={onDissmissNotification}
+      >
         {notification}
       </Snackbar>
     </SafeAreaView>

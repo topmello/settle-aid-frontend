@@ -65,9 +65,9 @@ export function RootLayout() {
 
   useEffect(() => {
     if (colorScheme === "dark") {
-      dispatch(setTheme({ theme: "dark"}));
+      dispatch(setTheme({ theme: "dark" }));
     } else {
-      dispatch(setTheme({ theme: "dark"}));
+      dispatch(setTheme({ theme: "dark" }));
     }
   }, [colorScheme]);
 
@@ -108,6 +108,12 @@ export function RootLayout() {
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="route/activity" options={{ headerShown: false }} />
         <Stack.Screen name="route/prompt" options={{ headerShown: false }} />
+        <Stack.Screen name="common/language" options={{ headerShown: false }} />
+        <Stack.Screen name="auth/access" options={{ headerShown: false }} />
+        <Stack.Screen name="auth/login" options={{ headerShown: false }} />
+        <Stack.Screen name="auth/register" options={{ headerShown: false }} />
+        <Stack.Screen name="route/location" options={{ headerShown: false }} />
+        <Stack.Screen name="route/result" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: "modal" }} />
       </Stack>
     </PaperProvider>

@@ -1,5 +1,5 @@
 //@ts-nocheck
-import React, {useRef, useState, useEffect} from "react";
+import React, { useRef, useState, useEffect } from "react";
 
 import {
   SafeAreaView,
@@ -23,10 +23,13 @@ import { AnimatedButton } from "../../components/AnimatedButton";
 import { useTheme } from "react-native-paper";
 import LightCloudyIcon from "../../assets/images/weather/light_cloudy.svg";
 import { router } from "expo-router";
+import { selectUserToken } from "../../store/authSlice";
+import { useSelector } from "react-redux";
 
 export default function HomeScreen() {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const theme = useTheme();
+  const token = useSelector(selectUserToken);
   //onclick for startCard
   const handleStartClick = () => {
     console.log("Rectangle clicked!");
@@ -45,6 +48,14 @@ export default function HomeScreen() {
 
     return `${dayName} ${day} ${monthName}`;
   };
+
+  useEffect(() => {
+    if (!token) {
+      setTimeout(() => {
+        router.replace("/common/language");
+      }, 1000);
+    }
+  }, [token]);
 
   useEffect(() => {
     const updateDate = () => {
@@ -254,33 +265,42 @@ export default function HomeScreen() {
           </View>
 
           <View>
-            <Text variant="titleMedium" style={{
-              marginHorizontal: 16,
-              marginTop: 12,
-              marginBottom: 16,
-              fontWeight: "bold",
-              color: theme.colors.onSurfaceVariant
-            // }}>{t("Wednesday", {ns: "home"})} 13 {t("July", {ns:"home"})}</Text>
-            }}>{translatedDate}</Text>
+            <Text
+              variant="titleMedium"
+              style={{
+                marginHorizontal: 16,
+                marginTop: 12,
+                marginBottom: 16,
+                fontWeight: "bold",
+                color: theme.colors.onSurfaceVariant,
+                // }}>{t("Wednesday", {ns: "home"})} 13 {t("July", {ns:"home"})}</Text>
+              }}
+            >
+              {translatedDate}
+            </Text>
             <AnimatedButton
               height={100}
               color={theme.colors.successContainer}
               onPress={handleStartClick}
             >
-              <View style={{
-                flex: 1,
-                flexDirection: "row",
-                alignItems: "center",
-              }}>
-                <View style={{
-                  width: 46,
-                  height: 46,
-                  borderRadius: 25,
-                  backgroundColor: theme.colors.onSuccessContainer,
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: "row",
                   alignItems: "center",
-                  justifyContent: "center",
-                  marginLeft: 20,
-                }}>
+                }}
+              >
+                <View
+                  style={{
+                    width: 46,
+                    height: 46,
+                    borderRadius: 25,
+                    backgroundColor: theme.colors.onSuccessContainer,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginLeft: 20,
+                  }}
+                >
                   <RestaurantIcon
                     width={36}
                     height={36}
@@ -289,22 +309,29 @@ export default function HomeScreen() {
                     }}
                   />
                 </View>
-                <View style={{
-                  flexDirection: "column",
-                  flex: 1,
-                  alignItems: "flex-start",
-                  paddingHorizontal: 20
-                }}>
-                  <Text variant="titleLarge" style={{
-                    color: theme.colors.onSuccessContainer,
-                    fontWeight: "bold",
-                  }}>
+                <View
+                  style={{
+                    flexDirection: "column",
+                    flex: 1,
+                    alignItems: "flex-start",
+                    paddingHorizontal: 20,
+                  }}
+                >
+                  <Text
+                    variant="titleLarge"
+                    style={{
+                      color: theme.colors.onSuccessContainer,
+                      fontWeight: "bold",
+                    }}
+                  >
                     {/* {t("Dining", {ns: "home"})} */}
-                    {t('History Function Coming Soon', {ns: "home"})}
+                    {t("History Function Coming Soon", { ns: "home" })}
                   </Text>
-                  <Text style={{
-                    color: theme.colors.onSuccessContainer,
-                  }}>
+                  <Text
+                    style={{
+                      color: theme.colors.onSuccessContainer,
+                    }}
+                  >
                     {/* #india #relax #culture */}
                   </Text>
                 </View>
@@ -352,7 +379,7 @@ export default function HomeScreen() {
               </View>
             </TouchableOpacity>
           </View>
-          </View>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -421,107 +448,106 @@ const styles = StyleSheet.create({
     fill: "#5B4E77",
   },
 
-    // Text Styles
-    title: {
-        marginTop: 30,
-        marginLeft: 30,
-        marginBottom: 0,
-        flex: 3,
-        fontSize: FONTS.Large,
-        fontWeight: "bold",
-        margin: 10,
-    },
-    titleSecond: {
-        marginTop: 20,
-        marginLeft: 20,
-        marginBottom: 0,
-        height: 30,
-        fontSize: FONTS.Mid,
-        fontWeight: "bold",
-        margin: 10,
-    },
-    textStartCard: {
-        marginTop: 40,
-        marginLeft: 20,
-        height: 30,
-        fontSize: FONTS.Large,
-        flex: 3,
-        fontWeight: "bold",
-    },
-    textBelovedCard: {
-        marginTop: 20,
-        marginLeft: 20,
-        height: 30,
-        fontSize: FONTS.Large,
-        fontWeight: "bold",
-    },
-    textStartCardInfo: {
-        marginBottom: 30,
-        marginLeft: 20,
-        color: "#5B4E77",
-    },
-    textDate: {
-        marginTop: 0,
-        marginLeft: 20,
-        marginBottom: 5,
-        height: 20,
-        fontSize: FONTS.Mid,
-        fontWeight: "bold",
-        color: "#46464F",
-    },
-    textMore: {
-        color: "#1436B8",
-        marginTop: 12,
-        textAlign: "right",
-        height: 30,
-        fontSize: FONTS.Small,
-        fontWeight: "bold",
-    },
+  // Text Styles
+  title: {
+    marginTop: 30,
+    marginLeft: 30,
+    marginBottom: 0,
+    flex: 3,
+    fontSize: FONTS.Large,
+    fontWeight: "bold",
+    margin: 10,
+  },
+  titleSecond: {
+    marginTop: 20,
+    marginLeft: 20,
+    marginBottom: 0,
+    height: 30,
+    fontSize: FONTS.Mid,
+    fontWeight: "bold",
+    margin: 10,
+  },
+  textStartCard: {
+    marginTop: 40,
+    marginLeft: 20,
+    height: 30,
+    fontSize: FONTS.Large,
+    flex: 3,
+    fontWeight: "bold",
+  },
+  textBelovedCard: {
+    marginTop: 20,
+    marginLeft: 20,
+    height: 30,
+    fontSize: FONTS.Large,
+    fontWeight: "bold",
+  },
+  textStartCardInfo: {
+    marginBottom: 30,
+    marginLeft: 20,
+    color: "#5B4E77",
+  },
+  textDate: {
+    marginTop: 0,
+    marginLeft: 20,
+    marginBottom: 5,
+    height: 20,
+    fontSize: FONTS.Mid,
+    fontWeight: "bold",
+    color: "#46464F",
+  },
+  textMore: {
+    color: "#1436B8",
+    marginTop: 12,
+    textAlign: "right",
+    height: 30,
+    fontSize: FONTS.Small,
+    fontWeight: "bold",
+  },
 
-    // Icon Styles
-    iconAccount: {
-        marginTop: 30,
-        marginRight: 30,
-        marginLeft: 20,
-        marginBottom: 18,
-        width: 40,
-        height: 40,
-    },
-    iconNav: {
-        width: 50,
-        height: 50,
-        fill: "#5B4E77",
-        marginLeft: 20,
-    },
-    iconHistory: {
-        width: 35,
-        height: 35,
-        fill: "#5B4E77",
-    },
-    iconArrow: {
-        alignSelf: "top",
-        marginTop: 10,
-        width: 20,
-        height: 20,
-        fill: "#1436B8",
-        resizeMode: "contain",
-    },
-    iconHistoryWrapper: {
-        width: 40,
-        height: 40,
-        borderRadius: 25,
-        backgroundColor: "#FFFFCC",
-        alignItems: "center",
-        justifyContent: "center",
-        marginLeft: 30,
-    },
+  // Icon Styles
+  iconAccount: {
+    marginTop: 30,
+    marginRight: 30,
+    marginLeft: 20,
+    marginBottom: 18,
+    width: 40,
+    height: 40,
+  },
+  iconNav: {
+    width: 50,
+    height: 50,
+    fill: "#5B4E77",
+    marginLeft: 20,
+  },
+  iconHistory: {
+    width: 35,
+    height: 35,
+    fill: "#5B4E77",
+  },
+  iconArrow: {
+    alignSelf: "top",
+    marginTop: 10,
+    width: 20,
+    height: 20,
+    fill: "#1436B8",
+    resizeMode: "contain",
+  },
+  iconHistoryWrapper: {
+    width: 40,
+    height: 40,
+    borderRadius: 25,
+    backgroundColor: "#FFFFCC",
+    alignItems: "center",
+    justifyContent: "center",
+    marginLeft: 30,
+  },
 
-    // Color Styles
-    colorViolet: {
-        backgroundColor: "#DEE1FF",
-    },
-    colorYellow: {
-        backgroundColor: "#FFEB3B",
-    },
+  // Color Styles
+  colorViolet: {
+    backgroundColor: "#DEE1FF",
+  },
+  colorYellow: {
+    backgroundColor: "#FFEB3B",
+  },
 });
-
