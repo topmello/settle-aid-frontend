@@ -6,16 +6,26 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { tips } from "../../tips/tips.json";
 import { Ionicons } from "@expo/vector-icons";
 
-const iconList = [
+type IconName =
+  | "airplane-outline"
+  | "flag-outline"
+  | "restaurant-outline"
+  | "cart-outline"
+  | "sunny-outline"
+  | "call-outline"
+  | "medkit-outline"
+  | "wallet-outline"
+  | "people-outline";
+const iconList: IconName[] = [
   "airplane-outline",
   "flag-outline",
   "restaurant-outline",
+  "cart-outline",
   "sunny-outline",
   "call-outline",
   "medkit-outline",
   "wallet-outline",
   "people-outline",
-  "chatbubble-outline",
 ];
 
 export default function LearnScreen() {
@@ -49,9 +59,13 @@ export default function LearnScreen() {
                 color={theme.colors.primary}
                 name={iconList[cateIndex]}
               />
-              <List.Section title={category.title} key={`${cateIndex}`} style={{
-                flex: 1,
-              }}>
+              <List.Section
+                title={category.title}
+                key={`${cateIndex}`}
+                style={{
+                  flex: 1,
+                }}
+              >
                 {category.tips.map((subcate, subcateIndex) => {
                   return (
                     <List.Accordion
