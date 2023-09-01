@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Pressable, View } from "react-native";
-import { Card, RadioButton, Text, useTheme, Button } from "react-native-paper";
+import { Card, RadioButton, Text, useTheme, Button, List } from "react-native-paper";
 import { router } from "expo-router";
 import ArrowBackIcon from "../../assets/images/icons/arrow_back.svg";
 import GroupAddIcon from "../../assets/images/icons/group_add.svg";
@@ -11,14 +11,16 @@ import FastfoodIcon from "../../assets/images/icons/fastfood.svg";
 import ParkBirdsIcon from "../../assets/images/icons/park_birds.svg";
 import MountainTreesIcon from "../../assets/images/icons/mountain_trees.svg";
 import PharmacyIcon from "../../assets/images/icons/pharmacy.svg";
-import { useDispatch } from "react-redux";
-import { LocationType, setLocationType } from "../../store/routeSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { LocationType, selectLocationType, setLocationType } from "../../store/routeSlice";
+import { ActivityOption } from "./activity";
 
-type ActivityOption = {
+type ActivityPrompt = {
   id: LocationType;
   name: string;
   logo: any;
-};
+  prompt: string[];
+}
 
 const activityOptions: ActivityOption[] = [
   {
@@ -46,28 +48,62 @@ const activityOptions: ActivityOption[] = [
 export default function RouteActivityScreen() {
   const { t } = useTranslation();
   const theme = useTheme();
-  const [selectedOptions, setActivityOptions] = React.useState<
-    ActivityOption[]
+  const [activityPrompts, setActivityPrompts] = React.useState<
+    ActivityPrompt[]
   >([]);
   const dispatch = useDispatch();
+  const activities = useSelector(selectLocationType);
 
-  const optionExists = React.useCallback(
-    (selected: ActivityOption) => {
-      return selectedOptions.find((option) => option.id === selected.id);
-    },
-    [selectedOptions]
-  );
-
-  const addOrRemoveOption = React.useCallback(
-    (option: ActivityOption) => {
-      if (optionExists(option)) {
-        setActivityOptions(selectedOptions.filter((o) => o.id !== option.id));
-      } else {
-        setActivityOptions([...selectedOptions, option]);
+  React.useEffect(() => {
+    setActivityPrompts([...activities.map((activity) => {
+      switch (activity) {
+        case "grocery":
+          return {
+            ...activityOptions[0],
+            prompt: []
+          }
+        case "restaurant":
+          return {
+            ...activityOptions[1],
+            prompt: []
+          }
+        case "landmark":
+          return {
+            ...activityOptions[2],
+            prompt: []
+          }
+        case "pharmacy":
+          return {
+            ...activityOptions[3],
+            prompt: []
+          }
       }
-    },
-    [selectedOptions]
+    })]);
+  }, [activities]);
+
+  const addPromptToActivity = React.useCallback(
+    (id: LocationType, prompt: string) => {
+      const activity = activityPrompts.find((activity) => activity.id === id);
+      if (activity) {
+        activity.prompt.push(prompt);
+      } else {
+        console.error("Activity not found for prompt: ", prompt);
+      }
+    }, [activityPrompts]
   );
+
+  const removePromptFromActivity = React.useCallback(
+    (id: LocationType, prompt: string) => {
+      const activity = activityPrompts.find((activity) => activity.id === id);
+      if (activity) {
+        activity.prompt = activity.prompt.filter((p) => p !== prompt);
+      } else {
+        console.error("Activity not found for prompt: ", prompt);
+      }
+    }, [activityPrompts]
+  );
+        
+
   return (
     <SafeAreaView
       style={{
@@ -93,26 +129,20 @@ export default function RouteActivityScreen() {
         </Pressable>
         <View style={{ flexDirection: "row", paddingEnd: 8 }}>
           <Text variant="headlineMedium" style={{ fontWeight: "900" }}>
-            1
+            2
           </Text>
           <Text variant="headlineMedium">/3</Text>
         </View>
       </View>
       <View style={{ paddingStart: 8 }}>
         <Text variant="headlineMedium" style={{ marginTop: 38 }}>
-          {t("First", { ns: "route" })}
+          {t("Second", { ns: "route" })}
         </Text>
         <Text
           variant="headlineMedium"
           style={{ color: theme.colors.onPrimaryContainer }}
         >
-          {t("Let us know which", { ns: "route" })}
-        </Text>
-        <Text
-          variant="headlineMedium"
-          style={{ color: theme.colors.onPrimaryContainer, fontWeight: "900" }}
-        >
-          {t("activities you want to do", { ns: "route" })}
+          {t("Tell us more about your preferences", { ns: "route" })}
         </Text>
       </View>
       <View
@@ -131,44 +161,13 @@ export default function RouteActivityScreen() {
             flexDirection: "row",
           }}
         >
-          {activityOptions.map((option) => (
-            <Card
-              key={option.id}
-              mode={optionExists(option) ? "elevated" : "contained"}
-              onPress={() => addOrRemoveOption(option)}
-              style={{
-                backgroundColor: optionExists(option)
-                  ? theme.colors.surface
-                  : theme.colors.background,
-                borderRadius: 16,
-                width: "42%",
-                height: 150,
-                zIndex: 1,
-                elevation: optionExists(option) ? 8 : 0,
-                borderWidth: optionExists(option) ? 3 : 0,
-                borderColor: theme.colors.primary,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <View
-                style={{
-                  flex: 1,
-                  width: "100%",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                {React.createElement(option.logo, {
-                  width: 60,
-                  height: 60,
-                })}
-                <Text variant="bodyLarge" style={{ marginTop: 6 }}>
-                  {t(option.name, { ns: "route" })}
-                </Text>
-              </View>
-            </Card>
+          {activityPrompts.map((activity) => (
+            <List.Accordion
+              title="Uncontrolled Accordion"
+              left={props => <List.Icon {...props} icon="folder" />}>
+              <List.Item title="First item" />
+              <List.Item title="Second item" />
+            </List.Accordion>
           ))}
         </View>
       </View>

@@ -24,6 +24,10 @@ const initialState: RouteState = {
   route_type: "walking",
 };
 
+export const selectLocationType = (state: { route: RouteState }) =>
+  state.route.location_type;
+export const selectQuery = (state: { route: RouteState }) => state.route.query;
+
 const routeSlice = createSlice({
   name: "route",
   initialState,

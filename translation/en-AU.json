@@ -50,7 +50,11 @@
     "Dining": "Dining",
     "Shopping": "Shopping",
     "Travelling": "Travelling",
-    "Health": "Health"
+    "Health": "Health",
+    "Second": "Second",
+    "Tell us more about your preferences": "Tell us more about your preferences",
+    "Add things you love": "Add things you love",
+    "Add things to avoid": "Add things to avoid"
   },
   "home": {
     "title": "Discover Melbourne",

@@ -51,7 +51,11 @@
     "Shopping": "购物",
     "Relaxing": "休闲",
     "Travelling": "旅行",
-    "Health": "健康"
+    "Health": "健康",
+    "Second": "其次",
+    "Tell us more about your preferences": "告诉我们更多您的偏好",
+    "Add things you love": "添加您喜欢的事物",
+    "Add things to avoid": "添加您不喜欢的事物"
   },
   "home": {
     "Discover Melbourne": "发现墨尔本",

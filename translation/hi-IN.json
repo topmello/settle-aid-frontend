@@ -51,7 +51,11 @@
     "Shopping": "खरीदारी",
     "Relaxing": "आराम करना",
     "Travelling": "यात्रा",
-    "Health": "स्वास्थ्य"
+    "Health": "स्वास्थ्य",
+    "Second": "दूसरा",
+    "Tell us more about your preferences": "हमें अपनी पसंद के बारे में और बताएं",
+    "Add things you love": "वे चीजें जो आप प्यार करते हैं जोड़ें",
+    "Add things to avoid": "बचने के लिए चीजें जोड़ें"
   },
   "home": {
     "Discover Melbourne": "मेलबर्न खोजें",

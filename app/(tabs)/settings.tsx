@@ -31,8 +31,7 @@ export default function SettingsScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={{ flex: 1, alignItems: "center" }}>
-        <Text variant="headlineMedium">Tab One</Text>
+      <ScrollView contentContainerStyle={{ alignItems: "center" }}>
         <Text>Translation: {t("test:helloWorld")}</Text>
         <Link href="/Location">
           <Button icon="routes" mode="contained">
@@ -55,7 +54,7 @@ export default function SettingsScreen() {
         <Button mode="contained" onPress={() => dispatch(logoutUser())}>
           Logout
         </Button>
-        {/*
+        
         <Link href={"/common/language"}>
           <Button mode="contained">Go Language</Button>
         </Link>
@@ -84,7 +83,7 @@ export default function SettingsScreen() {
         <Button mode="contained" onPress={() => dispatch(setSystemTheme())}>
           Follow System
         </Button>
-        */}
+       
         <Text variant="headlineMedium">Result Page</Text>
         <Link href={"/route/result"}>
           <Button mode="contained">Go Result</Button>
@@ -95,6 +94,9 @@ export default function SettingsScreen() {
         <Text variant="headlineMedium">Route Gen</Text>
         <Link href={"/route/activity"}>
           <Button mode="contained">Go Activity</Button>
+        </Link>
+        <Link href={"/route/prompt"}>
+          <Button mode="contained">Go Prompt</Button>
         </Link>
       </ScrollView>
     </SafeAreaView>
