@@ -106,6 +106,7 @@ export function RootLayout() {
       <StatusBar style={theme.dark ? "light" : "dark"} />
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="route/activity" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: "modal" }} />
       </Stack>
     </PaperProvider>

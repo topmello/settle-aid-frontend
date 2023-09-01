@@ -21,6 +21,7 @@ import RestaurantIcon from "../../assets/images/icons/restaurant_menu.svg";
 import { AnimatedButton } from "../../components/AnimatedButton";
 import { useTheme } from "react-native-paper";
 import LightCloudyIcon from "../../assets/images/weather/light_cloudy.svg";
+import { router } from "expo-router";
 
 export default function HomeScreen() {
   const {t} = useTranslation();
@@ -127,7 +128,9 @@ export default function HomeScreen() {
           >
             <AnimatedButton
               color={theme.colors.purpleContainer}
-              onPress={handleStartClick}
+              onPress={() => {
+                router.push("/route/activity");
+              }}
             >
               <View
                 style={{
