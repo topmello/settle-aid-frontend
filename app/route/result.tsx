@@ -141,7 +141,7 @@ export default function MapScreen() {
             );
           }
         )}
-        {region && <Marker coordinate={region} />}
+        {region && <Marker coordinate={region} pinColor="blue" />}
         <Polyline
           coordinates={data?.route}
           strokeWidth={3}
