@@ -1,16 +1,14 @@
 import React from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  FlatList,
-  ScrollView,
-} from "react-native";
-import { Card, List, Button } from "react-native-paper";
+import { View, TouchableOpacity, FlatList, ScrollView } from "react-native";
+import { Text, Card, List, Button, useTheme } from "react-native-paper";
+import { Link } from "expo-router";
+import { useTranslation } from "react-i18next";
 
 import { RouteState } from "../store/routeSlice";
 
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+
+import { Tip } from "../tips/tipsTyped";
 
 interface RouteResult {
   locations: string[];
@@ -27,6 +25,7 @@ interface RouteResult {
 }
 
 type OverlayProps = {
+  tipList: Tip[];
   data: RouteResult;
   body: RouteState;
   handleTriggerFetch: () => void;
@@ -39,6 +38,7 @@ type OverlayProps = {
 };
 
 const ResultOverlay: React.FC<OverlayProps> = ({
+  tipList,
   data,
   body,
   handleTriggerFetch,
@@ -49,25 +49,35 @@ const ResultOverlay: React.FC<OverlayProps> = ({
   styles,
   location_type_icon,
 }) => {
+  const theme = useTheme();
+  const { t } = useTranslation();
+
   return (
     <View>
-      <Card style={styles.card}>
+      <Card style={[styles.card]}>
         <FlatList
-          data={[1, 2, 3]}
+          data={tipList}
           renderItem={({ item }) => (
-            <Card style={styles.flatListCard}>
+            <Card
+              style={[
+                styles.flatListCard,
+                { backgroundColor: theme.colors.primaryContainer },
+              ]}
+            >
               <Card.Title
-                title={`Tips ${item}`}
-                subtitle="Subtitle"
+                title={`${item.description}`}
+                subtitle={`${item.content}`}
                 right={() => (
-                  <TouchableOpacity>
-                    <Text>Learn</Text>
-                  </TouchableOpacity>
+                  <Link href="/learn">
+                    <TouchableOpacity>
+                      <Text>{t("comm:Learn")}</Text>
+                    </TouchableOpacity>
+                  </Link>
                 )}
               />
             </Card>
           )}
-          keyExtractor={(item) => item?.toString()}
+          keyExtractor={(tip) => tip?.description}
           contentContainerStyle={{
             columnGap: 10,
             margin: 14,
@@ -164,8 +174,8 @@ const ResultOverlay: React.FC<OverlayProps> = ({
               padding: 10,
             }}
           >
-            <Button mode="contained" style={styles.button}>
-              Back
+            <Button mode="contained" style={[styles.button]}>
+              {t("comm:Back")}
             </Button>
             <Button
               mode="contained"
