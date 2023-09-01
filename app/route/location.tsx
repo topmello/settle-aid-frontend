@@ -1,16 +1,21 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { router } from "expo-router";
 import MapView, { Marker } from "react-native-maps";
 import {
   StyleSheet,
   View,
   ActivityIndicator,
   TouchableOpacity,
+  Pressable,
 } from "react-native";
 import { Text, Card, List, Button, useTheme } from "react-native-paper";
+import { SafeAreaView } from "react-native-safe-area-context";
 import Slider from "@react-native-community/slider";
 import { Link } from "expo-router";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import ArrowBackIcon from "../../assets/images/icons/arrow_back.svg";
+
 import { useTranslation } from "react-i18next";
 
 import { AppDispatch, RootState } from "../../store";
@@ -50,58 +55,76 @@ export default function RouteGenLocation() {
       {isLoading ? ( // Render a loading indicator while obtaining location
         <ActivityIndicator style={styles.loading} size="large" />
       ) : (
-        <View
-          style={[
-            styles.container,
-            { backgroundColor: theme.colors.secondaryContainer },
-          ]}
+        <SafeAreaView
+          style={{
+            backgroundColor: theme.colors.primaryContainer,
+            flex: 1,
+            flexDirection: "column",
+            padding: 20,
+            width: "100%",
+          }}
         >
-          <Card
+          <View
             style={{
-              height: 300,
-              width: "80%",
-              borderRadius: 20,
-              backgroundColor: theme.colors.surfaceVariant,
-              margin: 10,
+              marginTop: 32,
+              flexDirection: "row",
+              justifyContent: "space-between",
             }}
           >
-            <View
+            <Pressable onPress={() => router.replace("/common/language")}>
+              <ArrowBackIcon
+                fill={theme.colors.onPrimaryContainer}
+                width={34}
+                height={34}
+              />
+            </Pressable>
+            <View style={{ flexDirection: "row", paddingEnd: 8 }}>
+              <Text variant="headlineMedium" style={{ fontWeight: "900" }}>
+                3
+              </Text>
+              <Text variant="headlineMedium">/3</Text>
+            </View>
+          </View>
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+              marginTop: 32,
+              padding: 8,
+              gap: 16,
+              flexWrap: "wrap",
+              flexDirection: "row",
+            }}
+          >
+            <Card
               style={{
-                height: 200,
+                height: 250,
                 width: "100%",
-                borderTopLeftRadius: 20,
-                borderTopRightRadius: 20,
-                overflow: "hidden",
+                borderRadius: 20,
+                backgroundColor: theme.colors.surfaceVariant,
+                margin: 10,
               }}
             >
-              <MapView
-                style={styles.map}
-                initialRegion={{
-                  latitude: routeState.latitude,
-                  longitude: routeState.longitude,
-                  latitudeDelta: 0.0922,
-                  longitudeDelta: 0.0421,
-                }}
-                showsUserLocation={true}
-                onUserLocationChange={(e) => {
-                  if (e.nativeEvent.coordinate) {
-                    dispatch(
-                      setLonLat({
-                        longitude: e.nativeEvent.coordinate.longitude,
-                        latitude: e.nativeEvent.coordinate.latitude,
-                      })
-                    );
-                  }
+              <View
+                style={{
+                  height: 150,
+                  width: "100%",
+                  borderTopLeftRadius: 20,
+                  borderTopRightRadius: 20,
+                  overflow: "hidden",
                 }}
               >
-                <Marker
-                  coordinate={{
+                <MapView
+                  style={styles.map}
+                  initialRegion={{
                     latitude: routeState.latitude,
                     longitude: routeState.longitude,
+                    latitudeDelta: 0.0922,
+                    longitudeDelta: 0.0421,
                   }}
-                  title="Your Location"
-                  draggable={true}
-                  onDragEnd={(e) => {
+                  showsUserLocation={true}
+                  onUserLocationChange={(e) => {
                     if (e.nativeEvent.coordinate) {
                       dispatch(
                         setLonLat({
@@ -111,92 +134,111 @@ export default function RouteGenLocation() {
                       );
                     }
                   }}
-                />
-              </MapView>
-            </View>
-            <View
+                >
+                  <Marker
+                    coordinate={{
+                      latitude: routeState.latitude,
+                      longitude: routeState.longitude,
+                    }}
+                    title="Your Location"
+                    draggable={true}
+                    onDragEnd={(e) => {
+                      if (e.nativeEvent.coordinate) {
+                        dispatch(
+                          setLonLat({
+                            longitude: e.nativeEvent.coordinate.longitude,
+                            latitude: e.nativeEvent.coordinate.latitude,
+                          })
+                        );
+                      }
+                    }}
+                  />
+                </MapView>
+              </View>
+              <View
+                style={{
+                  height: 50,
+                  padding: 10,
+                }}
+              >
+                <Text variant="titleLarge">Your current location</Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "flex-end",
+                  paddingRight: 10,
+                }}
+              >
+                <TouchableOpacity
+                  style={{
+                    padding: 10,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                  onPress={fetchLocation}
+                >
+                  <Text variant="bodyLarge">Relocate</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    padding: 10,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Text variant="bodyLarge">Edit</Text>
+                </TouchableOpacity>
+              </View>
+            </Card>
+            <Card
               style={{
-                height: 50,
+                height: 150,
+                width: "100%",
+                borderRadius: 20,
+                backgroundColor: theme.colors.surfaceVariant,
+                margin: 10,
                 padding: 10,
               }}
             >
-              <Text variant="titleLarge">Your current location</Text>
-            </View>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "flex-end",
-                paddingRight: 10,
-              }}
-            >
-              <TouchableOpacity
+              <View
                 style={{
-                  padding: 10,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-                onPress={fetchLocation}
-              >
-                <Text variant="bodyLarge">Relocate</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{
-                  padding: 10,
-                  justifyContent: "center",
-                  alignItems: "center",
+                  width: "90%",
+                  marginTop: 10,
+                  marginBottom: 10,
                 }}
               >
-                <Text variant="bodyLarge">Edit</Text>
-              </TouchableOpacity>
-            </View>
-          </Card>
-          <Card
-            style={{
-              height: 150,
-              width: "80%",
-              borderRadius: 20,
-              backgroundColor: theme.colors.surfaceVariant,
-              margin: 10,
-              padding: 10,
-            }}
-          >
-            <View
-              style={{
-                width: "80%",
-                marginTop: 10,
-                marginBottom: 10,
-              }}
-            >
-              <Text variant="titleMedium">
-                Distance you want to travel between each location
-              </Text>
-            </View>
+                <Text variant="titleMedium">
+                  Distance you want to travel between each location
+                </Text>
+              </View>
 
-            <Slider
-              style={{ width: "100%", height: 40 }}
-              minimumValue={0}
-              maximumValue={2000}
-              value={routeState.distance_threshold}
-              onValueChange={(value) => {
-                dispatch(setDistanceThreshold({ distance_threshold: value }));
-              }}
-              minimumTrackTintColor={theme.colors.primary}
-              maximumTrackTintColor={theme.colors.surfaceVariant}
-              tapToSeek={true}
-            />
-            <Text variant="bodyLarge">
-              {new Intl.NumberFormat().format(
-                Math.round(routeState.distance_threshold)
-              )}{" "}
-              Meters
-            </Text>
-          </Card>
-          <Link href={"/route/result"} style={{ margin: 10 }}>
-            <Button mode="contained">
-              Done <FontAwesome name="check" size={15} color="black" />
-            </Button>
-          </Link>
-        </View>
+              <Slider
+                style={{ width: "100%", height: 40 }}
+                minimumValue={0}
+                maximumValue={2000}
+                value={routeState.distance_threshold}
+                onValueChange={(value) => {
+                  dispatch(setDistanceThreshold({ distance_threshold: value }));
+                }}
+                minimumTrackTintColor={theme.colors.primary}
+                maximumTrackTintColor={theme.colors.surfaceVariant}
+                tapToSeek={true}
+              />
+              <Text variant="bodyLarge">
+                {new Intl.NumberFormat().format(
+                  Math.round(routeState.distance_threshold)
+                )}{" "}
+                Meters
+              </Text>
+            </Card>
+            <Link href={"/route/result"} style={{ margin: 10 }}>
+              <Button mode="contained">
+                Done <FontAwesome name="check" size={15} color="black" />
+              </Button>
+            </Link>
+          </View>
+        </SafeAreaView>
       )}
     </View>
   );

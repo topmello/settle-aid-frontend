@@ -55,7 +55,7 @@ export default function SettingsScreen() {
         <Button mode="contained" onPress={() => dispatch(logoutUser())}>
           Logout
         </Button>
-        <Text style={styles.title}>Login Button</Text>
+        {/*
         <Link href={"/common/language"}>
           <Button mode="contained">Go Language</Button>
         </Link>
@@ -84,13 +84,14 @@ export default function SettingsScreen() {
         <Button mode="contained" onPress={() => dispatch(setSystemTheme())}>
           Follow System
         </Button>
+        */}
         <Text variant="headlineMedium">Result Page</Text>
         <Link href={"/route/result"}>
           <Button mode="contained">Go Result</Button>
         </Link>
         <Link href={"/route/location"}>
-        <Button mode="contained">Go Route Gen current location</Button>
-      </Link>
+          <Button mode="contained">Go Route Gen current location</Button>
+        </Link>
         <Text variant="headlineMedium">Route Gen</Text>
         <Link href={"/route/activity"}>
           <Button mode="contained">Go Activity</Button>

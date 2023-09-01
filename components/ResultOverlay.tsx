@@ -97,13 +97,15 @@ const ResultOverlay: React.FC<OverlayProps> = ({
                   title={location}
                   description={LocationType}
                   left={(props) => (
-                    <List.Icon
-                      {...props}
-                      icon={
-                        location_type_icon[body?.location_type[index]] ||
-                        "folder"
-                      }
-                    />
+                    <View style={{ justifyContent: "center", paddingLeft: 10 }}>
+                      {React.createElement(
+                        location_type_icon[body?.location_type[index]],
+                        {
+                          width: 30,
+                          height: 30,
+                        }
+                      )}
+                    </View>
                   )}
                   right={() => (
                     <TouchableOpacity

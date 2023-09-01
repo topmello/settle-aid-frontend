@@ -20,6 +20,11 @@ import { Text } from "react-native-paper";
 
 import MapView, { Marker, Polyline } from "react-native-maps";
 
+import ShoppingCartIcon from "../../assets/images/icons/shopping_cart.svg";
+import FastfoodIcon from "../../assets/images/icons/fastfood.svg";
+import ParkBirdsIcon from "../../assets/images/icons/park_birds.svg";
+import PharmacyIcon from "../../assets/images/icons/pharmacy.svg";
+
 import tips, { Tip, Tips, TipArray } from "../../tips/tipsTyped";
 import findTipsForModes from "../../tips/tipFinder";
 
@@ -48,11 +53,11 @@ interface RouteResult {
   duration: number;
 }
 
-const location_type_icon: { [key: string]: string } = {
-  landmark: "city-variant",
-  restaurant: "silverware-fork-knife",
-  grocery: "cart",
-  pharmacy: "medical-bag",
+const location_type_icon: { [key: string]: any } = {
+  landmark: ShoppingCartIcon,
+  restaurant: FastfoodIcon,
+  grocery: ParkBirdsIcon,
+  pharmacy: PharmacyIcon,
 };
 
 export default function MapScreen() {
@@ -105,7 +110,7 @@ export default function MapScreen() {
     return (
       <View style={styles.container}>
         <Text>
-          Loading...
+          Loading... Please login
           {isLoading}
         </Text>
       </View>
