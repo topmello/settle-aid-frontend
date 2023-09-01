@@ -28,17 +28,6 @@ import PharmacyIcon from "../../assets/images/icons/pharmacy.svg";
 import tips, { Tip, Tips, TipArray } from "../../tips/tipsTyped";
 import findTipsForModes from "../../tips/tipFinder";
 
-//Mock data
-const body: RouteState = {
-  query: ["Museum", "Indian", "Spicy", "Park"],
-  location_type: ["landmark", "restaurant", "restaurant", "landmark"],
-  longitude: 144.9549,
-  latitude: -37.81803,
-  distance_threshold: 1000,
-  similarity_threshold: 0,
-  route_type: "walking",
-};
-
 interface RouteResult {
   locations: string[];
   locations_coordinates: {
@@ -61,8 +50,6 @@ const location_type_icon: { [key: string]: any } = {
 };
 
 export default function MapScreen() {
-  const dispatch = useDispatch<AppDispatch>();
-
   const token = useSelector(selectUserToken);
 
   const routeState: RouteState = useSelector((state: RootState) => state.route);
@@ -89,10 +76,10 @@ export default function MapScreen() {
     return {
       method: "POST",
       url: "/search/route/",
-      data: body,
+      data: routeState,
       token: token,
     };
-  }, [body, triggerFetch]);
+  }, [routeState, triggerFetch]);
 
   const data: RouteResult = useFetch(req, [triggerFetch]);
 
@@ -100,7 +87,7 @@ export default function MapScreen() {
 
   const { region, handleLocationSelect, handlePressRoute } = useMapRegion(
     data,
-    body,
+    routeState,
     mapRef
   );
 
@@ -153,7 +140,7 @@ export default function MapScreen() {
       <ResultOverlay
         tipList={tipList}
         data={data}
-        body={body}
+        body={routeState}
         handleTriggerFetch={handleTriggerFetch}
         handleLocationSelect={handleLocationSelect}
         handlePressRoute={handlePressRoute}
