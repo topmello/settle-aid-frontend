@@ -89,14 +89,19 @@ const ResultOverlay: React.FC<OverlayProps> = ({
         <ScrollView>
           <List.Section>
             {data?.locations.map((location: string, index: number) => {
+              const description = body?.location_type[index];
+              const capitalizedDescription =
+                description.charAt(0).toUpperCase() + description.slice(1);
+
+              const Icon = location_type_icon[body?.location_type[index]];
               return (
                 <List.Item
                   key={index}
                   title={location}
-                  //description={body?.location_type[index]}
+                  description={capitalizedDescription}
                   left={(props) => (
                     <View style={{ justifyContent: "center", paddingLeft: 10 }}>
-                      <Text>{index}</Text>
+                      <Icon width={30} height={30} />
                     </View>
                   )}
                   right={() => (

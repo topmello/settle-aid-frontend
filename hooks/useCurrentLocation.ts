@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback } from "react";
 import * as Location from "expo-location";
 
 type Coords = {
@@ -7,7 +7,7 @@ type Coords = {
 };
 
 const useCurrentLocation = (onLocationObtained: (coords: Coords) => void) => {
-  const fetchLocation = async () => {
+  const fetchLocation = useCallback(async () => {
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
       return;
@@ -15,10 +15,6 @@ const useCurrentLocation = (onLocationObtained: (coords: Coords) => void) => {
 
     let location = await Location.getCurrentPositionAsync({});
     onLocationObtained(location.coords);
-  };
-
-  useEffect(() => {
-    fetchLocation();
   }, [onLocationObtained]);
 
   return fetchLocation;

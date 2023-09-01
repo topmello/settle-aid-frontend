@@ -24,7 +24,8 @@ import { loading, loaded, fail } from "../../store/appSlice";
 import {
   setLonLat,
   setDistanceThreshold,
-  RouteState,
+  selectLonLat,
+  selectDistanceThres,
 } from "../../store/routeSlice";
 
 import useCurrentLocation from "../../hooks/useCurrentLocation";
@@ -37,7 +38,10 @@ export default function RouteGenLocation() {
 
   const { isLoading, isFail } = useSelector((state: RootState) => state.app);
 
-  const routeState: RouteState = useSelector((state: RootState) => state.route);
+  const locationState = useSelector(selectLonLat);
+  console.log(locationState);
+
+  const distanceThres = useSelector(selectDistanceThres);
 
   const fetchLocation = useCurrentLocation((coords) => {
     dispatch(
@@ -48,10 +52,6 @@ export default function RouteGenLocation() {
     );
     dispatch(loaded());
   });
-
-  useEffect(() => {
-    dispatch(loading());
-  }, [dispatch]);
 
   return (
     <View style={styles.container}>
@@ -98,7 +98,7 @@ export default function RouteGenLocation() {
               justifyContent: "space-between",
             }}
           >
-            <Pressable onPress={() => router.replace("/common/language")}>
+            <Pressable onPress={() => router.replace("/route/prompt")}>
               <ArrowBackIcon
                 fill={theme.colors.onPrimaryContainer}
                 width={34}
@@ -145,27 +145,17 @@ export default function RouteGenLocation() {
                 <MapView
                   style={styles.map}
                   initialRegion={{
-                    latitude: routeState.latitude,
-                    longitude: routeState.longitude,
+                    latitude: locationState.latitude,
+                    longitude: locationState.longitude,
                     latitudeDelta: 0.0922,
                     longitudeDelta: 0.0421,
                   }}
                   showsUserLocation={true}
-                  onUserLocationChange={(e) => {
-                    if (e.nativeEvent.coordinate) {
-                      dispatch(
-                        setLonLat({
-                          longitude: e.nativeEvent.coordinate.longitude,
-                          latitude: e.nativeEvent.coordinate.latitude,
-                        })
-                      );
-                    }
-                  }}
                 >
                   <Marker
                     coordinate={{
-                      latitude: routeState.latitude,
-                      longitude: routeState.longitude,
+                      latitude: locationState.latitude,
+                      longitude: locationState.longitude,
                     }}
                     title="Your Location"
                     draggable={true}
@@ -205,7 +195,7 @@ export default function RouteGenLocation() {
                   }}
                   onPress={fetchLocation}
                 >
-                  <Text variant="bodyLarge">Relocate</Text>
+                  <Text variant="bodyLarge">Get current location</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={{
@@ -244,7 +234,7 @@ export default function RouteGenLocation() {
                 style={{ width: "100%", height: 40 }}
                 minimumValue={0}
                 maximumValue={2000}
-                value={routeState.distance_threshold}
+                value={distanceThres}
                 onValueChange={(value) => {
                   dispatch(setDistanceThreshold({ distance_threshold: value }));
                 }}
@@ -253,9 +243,7 @@ export default function RouteGenLocation() {
                 tapToSeek={true}
               />
               <Text variant="bodyLarge">
-                {new Intl.NumberFormat().format(
-                  Math.round(routeState.distance_threshold)
-                )}{" "}
+                {new Intl.NumberFormat().format(Math.round(distanceThres))}{" "}
                 Meters
               </Text>
             </Card>

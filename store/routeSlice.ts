@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSelector } from "reselect";
 
 export type LocationType = "landmark" | "restaurant" | "grocery" | "pharmacy";
 
@@ -17,16 +18,36 @@ export interface RouteState {
 const initialState: RouteState = {
   location_type: [],
   query: [],
-  longitude: 0,
-  latitude: 0,
+  longitude: 144.9631, // Melbourne Location
+  latitude: -37.8136, // Melbourne Location
   distance_threshold: 1000,
   similarity_threshold: 0,
   route_type: "walking",
 };
 
-export const selectLocationType = (state: { route: RouteState }) =>
-  state.route.location_type;
-export const selectQuery = (state: { route: RouteState }) => state.route.query;
+const selectRoute = (state: { route: RouteState }) => state.route;
+
+export const selectLocationType = createSelector(
+  [selectRoute],
+  (route) => route.location_type
+);
+
+export const selectQuery = createSelector(
+  [selectRoute],
+  (route) => route.query
+);
+
+export const selectLonLat = createSelector([selectRoute], (route) => ({
+  longitude: route.longitude,
+  latitude: route.latitude,
+}));
+
+export const selectDistanceThres = createSelector(
+  [selectRoute],
+  (route) => route.distance_threshold
+);
+
+export const selectRouteState = createSelector([selectRoute], (route) => route);
 
 const routeSlice = createSlice({
   name: "route",

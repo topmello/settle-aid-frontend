@@ -10,9 +10,8 @@ import useCheckedList from "../../hooks/useCheckList";
 
 import { RequestOptions } from "../../api/fetch";
 
-import { AppDispatch } from "../../store";
-import { selectUserToken, loginUser } from "../../store/authSlice";
-import { RouteState } from "../../store/routeSlice";
+import { selectUserToken } from "../../store/authSlice";
+import { RouteState, selectRouteState } from "../../store/routeSlice";
 
 import { StyleSheet, Dimensions, TouchableOpacity } from "react-native";
 import { View } from "react-native";
@@ -25,7 +24,7 @@ import FastfoodIcon from "../../assets/images/icons/fastfood.svg";
 import ParkBirdsIcon from "../../assets/images/icons/park_birds.svg";
 import PharmacyIcon from "../../assets/images/icons/pharmacy.svg";
 
-import tips, { Tip, Tips, TipArray } from "../../tips/tipsTyped";
+import tips, { Tip } from "../../tips/tipsTyped";
 import findTipsForModes from "../../tips/tipFinder";
 
 interface RouteResult {
@@ -41,15 +40,6 @@ interface RouteResult {
   instructions: string[];
   duration: number;
 }
-const body: RouteState = {
-  query: ["Museum", "Indian", "Spicy", "Park"],
-  location_type: ["landmark", "restaurant", "restaurant", "landmark"],
-  longitude: 144.9549,
-  latitude: -37.81803,
-  distance_threshold: 1000,
-  similarity_threshold: 0,
-  route_type: "walking",
-};
 
 const location_type_icon: { [key: string]: any } = {
   landmark: ShoppingCartIcon,
@@ -61,9 +51,11 @@ const location_type_icon: { [key: string]: any } = {
 export default function MapScreen() {
   const token = useSelector(selectUserToken);
 
-  const routeState: RouteState = useSelector((state: RootState) => state.route);
-
   const { isLoading, isFail } = useSelector((state: RootState) => state.app);
+
+  const routeState: RouteState = useSelector(selectRouteState);
+
+  console.log(routeState);
 
   const modes: Array<string> = [
     "Walk",
@@ -85,14 +77,12 @@ export default function MapScreen() {
     return {
       method: "POST",
       url: "/search/route/",
-      data: body,
+      data: routeState,
       token: token,
     };
-  }, [routeState, triggerFetch]);
+  }, [JSON.stringify(routeState), triggerFetch]);
 
   const data: RouteResult = useFetch(req, [triggerFetch]);
-
-  //console.log(data);
 
   const mapRef = useRef<MapView>(null);
 
@@ -104,7 +94,7 @@ export default function MapScreen() {
 
   const { checked, handlePress } = useCheckedList(data);
 
-  if (isLoading || token === null) {
+  if (isLoading || token === null || data === null) {
     return (
       <View style={styles.container}>
         <Text>
@@ -126,20 +116,22 @@ export default function MapScreen() {
         rotateEnabled={true}
         mapPadding={{ top: 0, left: 0, right: 0, bottom: 150 }}
       >
-        {data?.locations_coordinates.map(
-          (location: Coordinates, index: number) => {
+        {data?.locations_coordinates
+          .filter((_, index) => index !== 0)
+          .map((location: Coordinates, index: number) => {
             return (
               <Marker
                 key={index}
                 coordinate={location}
-                title={index === 0 ? "You are here" : data.locations[index - 1]}
-                pinColor={index === 0 ? "blue" : "red"}
+                title={data.locations[index]}
+                pinColor={"red"}
                 description=""
               />
             );
-          }
+          })}
+        {region && (
+          <Marker coordinate={region} pinColor="blue" title="You are here" />
         )}
-        {region && <Marker coordinate={region} pinColor="blue" />}
         <Polyline
           coordinates={data?.route}
           strokeWidth={3}
