@@ -203,18 +203,12 @@ export default function RouteActivityScreen() {
             flexDirection: "column",
           }}
         >
-          <TextInput
-            mode="outlined"
-            label="Enter prompt for locations"
-            value={tempPrompt}
-            onChangeText={(text) => {
-              setTempPrompt(text);
-            }}
-            style={{
-              backgroundColor: theme.colors.primaryContainer,
-              height: 50,
-            }}
-          />
+          <TextInput mode="outlined" label="Enter prompt for locations" onChangeText={text => {
+            setTempPrompt(text);
+          }} style={{
+            backgroundColor: theme.colors.primaryContainer,
+            height: 50,
+          }} />
           {/* {activityPrompts.map((activity) => (
             <List.Accordion
               key={activity.id}
