@@ -62,7 +62,7 @@ export default function RegisterPage() {
         setGeneratedUsername(response.data.username);
       }
     } catch (error) {
-      console.error("Failed to generate username ", error);
+      console.log("Failed to generate username ", error);
     }
     setGenerating(false);
   }, []);
@@ -96,11 +96,13 @@ export default function RegisterPage() {
         router.replace("/(tabs)");
         pushNotification(t("Sign up successful", { ns: "acc" }));
       }
+      return true;
     } catch (error) {
-      console.error("Failed to register user ", error);
+      console.log("Failed to register user ", error);
+      setRegistering(false);
       pushNotification(t("Sign up failed", { ns: "acc" }));
+      return false;
     }
-    setRegistering(false);
   }, [username, password]);
 
   const loginUser = React.useCallback(async () => {
@@ -248,8 +250,9 @@ export default function RegisterPage() {
           style={{ width: 150 }}
           onPress={async () => {
             if (validateUsername(username) && validatePassword(password)) {
-              await registerUser();
-              loginUser();
+              if (await registerUser()) {
+                loginUser();
+              }
             }
           }}
           loading={registering}

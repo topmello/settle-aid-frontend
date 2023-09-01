@@ -77,7 +77,7 @@ export default function RouteGenLocation() {
                 label: "Not Allow",
                 onPress: () => {
                   setBannerVisible(false);
-                  router.replace("/common/language");
+                  router.replace("/route/prompt");
                 },
               },
               {
