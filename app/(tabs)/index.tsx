@@ -1,5 +1,6 @@
 //@ts-nocheck
-import React, {useRef} from "react";
+import React, {useRef, useState, useEffect} from "react";
+
 import {
   SafeAreaView,
   StyleSheet,
@@ -30,6 +31,42 @@ export default function HomeScreen() {
   const handleStartClick = () => {
     console.log("Rectangle clicked!");
   };
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [translatedDate, setTranslatedDate] = useState("");
+
+  const getTranslatedDate = (date) => {
+    const dayName = t(date.toLocaleDateString("en-US", { weekday: "long" }), {
+      ns: "home",
+    });
+    const day = date.getDate();
+    const monthName = t(date.toLocaleDateString("en-US", { month: "long" }), {
+      ns: "home",
+    });
+
+    return `${dayName} ${day} ${monthName}`;
+  };
+
+  useEffect(() => {
+    const updateDate = () => {
+      setCurrentDate(new Date());
+      setTranslatedDate(getTranslatedDate(currentDate)); // Update the translated date
+    };
+
+    // Update the date initially
+    updateDate();
+
+    // Schedule the next update for the next day
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(0, 0, 0, 0);
+    const timeUntilTomorrow = tomorrow - new Date();
+    const timerId = setTimeout(updateDate, timeUntilTomorrow);
+
+    // Clean up the timer when the component unmounts
+    return () => {
+      clearTimeout(timerId);
+    };
+  }, []);
 
   return (
     <SafeAreaView
@@ -223,7 +260,8 @@ export default function HomeScreen() {
               marginBottom: 16,
               fontWeight: "bold",
               color: theme.colors.onSurfaceVariant
-            }}>{t("Wednesday", {ns: "home"})} 13 {t("July", {ns:"home"})}</Text>
+            // }}>{t("Wednesday", {ns: "home"})} 13 {t("July", {ns:"home"})}</Text>
+            }}>{translatedDate}</Text>
             <AnimatedButton
               height={100}
               color={theme.colors.successContainer}
@@ -261,12 +299,13 @@ export default function HomeScreen() {
                     color: theme.colors.onSuccessContainer,
                     fontWeight: "bold",
                   }}>
-                    {t("Dining", {ns: "home"})}
+                    {/* {t("Dining", {ns: "home"})} */}
+                    {t('History Function Coming Soon', {ns: "home"})}
                   </Text>
                   <Text style={{
                     color: theme.colors.onSuccessContainer,
                   }}>
-                    #india #relax #culture
+                    {/* #india #relax #culture */}
                   </Text>
                 </View>
               </View>
@@ -290,7 +329,7 @@ export default function HomeScreen() {
                 marginHorizontal: 16,
               }}
             >
-              {t("Beloved Routes", { ns: "home" })}
+              {/* {t("Beloved Routes", { ns: "home" })} */}
             </Text>
             <TouchableOpacity
               activeOpacity={0.6}
@@ -307,9 +346,9 @@ export default function HomeScreen() {
                 <Text
                   style={{ color: theme.colors.primary, fontWeight: "bold" }}
                 >
-                  {t("comm:More")}
+                  {/* {t("comm:More")} */}
                 </Text>
-                <ArrowIcon width={22} height={22} fill={theme.colors.primary} />
+                {/* <ArrowIcon width={22} height={22} fill={theme.colors.primary} /> */}
               </View>
             </TouchableOpacity>
           </View>

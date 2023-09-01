@@ -37,9 +37,11 @@ export default function LearnScreen() {
         flexDirection: "column",
         padding: 20,
       }}
+      
     >
       <Text variant="titleLarge">Cultural Tips</Text>
       <ScrollView
+        showsVerticalScrollIndicator={false}
         style={{
           paddingTop: 20,
         }}

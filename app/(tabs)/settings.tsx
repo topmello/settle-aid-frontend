@@ -31,8 +31,8 @@ export default function SettingsScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={{ alignItems: "center" }}>
-        <Text>Translation: {t("test:helloWorld")}</Text>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ alignItems: "center" }}>
+        {/* <Text>Translation: {t("test:helloWorld")}</Text> */}
         <Link href="/Location">
           <Button icon="routes" mode="contained">
             Start Planning
