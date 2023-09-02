@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { router } from "expo-router";
 import MapView, { Marker } from "react-native-maps";
@@ -20,7 +20,14 @@ import ArrowBackIcon from "../../assets/images/icons/arrow_back.svg";
 import { useTranslation } from "react-i18next";
 
 import { AppDispatch, RootState } from "../../store";
-import { loading, loaded, fail } from "../../store/appSlice";
+import {
+  loading,
+  loaded,
+  fail,
+  setPrivacyChecked,
+  setPrivacyUnchecked,
+  selectPrivacyChecked,
+} from "../../store/appSlice";
 import {
   setLonLat,
   setDistanceThreshold,
@@ -34,12 +41,11 @@ export default function RouteGenLocation() {
   const theme = useTheme();
   const dispatch = useDispatch<AppDispatch>();
 
-  const [bannerVisible, setBannerVisible] = useState(true);
+  const privacyChecked = useSelector(selectPrivacyChecked);
 
   const { isLoading, isFail } = useSelector((state: RootState) => state.app);
 
   const locationState = useSelector(selectLonLat);
-  console.log(locationState);
 
   const distanceThres = useSelector(selectDistanceThres);
 
@@ -71,18 +77,18 @@ export default function RouteGenLocation() {
             style={{
               borderRadius: 20,
             }}
-            visible={bannerVisible}
+            visible={!privacyChecked}
             actions={[
               {
                 label: "Not Allow",
                 onPress: () => {
-                  setBannerVisible(false);
+                  dispatch(setPrivacyUnchecked());
                   router.replace("/route/prompt");
                 },
               },
               {
                 label: "Understand",
-                onPress: () => setBannerVisible(false),
+                onPress: () => dispatch(setPrivacyChecked()),
               },
             ]}
           >
@@ -126,7 +132,7 @@ export default function RouteGenLocation() {
           >
             <Card
               style={{
-                height: 250,
+                height: 330,
                 width: "100%",
                 borderRadius: 20,
                 backgroundColor: theme.colors.surfaceVariant,
@@ -135,7 +141,7 @@ export default function RouteGenLocation() {
             >
               <View
                 style={{
-                  height: 150,
+                  height: 200,
                   width: "100%",
                   borderTopLeftRadius: 20,
                   borderTopRightRadius: 20,
@@ -150,14 +156,14 @@ export default function RouteGenLocation() {
                     latitudeDelta: 0.0922,
                     longitudeDelta: 0.0421,
                   }}
-                  showsUserLocation={true}
+                  showsUserLocation={false}
                 >
                   <Marker
                     coordinate={{
                       latitude: locationState.latitude,
                       longitude: locationState.longitude,
                     }}
-                    title="Your Location"
+                    title="Search Location"
                     draggable={true}
                     onDragEnd={(e) => {
                       if (e.nativeEvent.coordinate) {
@@ -174,38 +180,25 @@ export default function RouteGenLocation() {
               </View>
               <View
                 style={{
-                  height: 50,
+                  height: 70,
                   padding: 10,
                 }}
               >
-                <Text variant="titleLarge">Your current location</Text>
+                <Text variant="titleLarge">Searching Area</Text>
+                <Text variant="titleSmall">
+                  Drag the pin to change location
+                </Text>
               </View>
               <View
                 style={{
                   flexDirection: "row",
-                  justifyContent: "flex-end",
+                  justifyContent: "center",
                   paddingRight: 10,
                 }}
               >
-                <TouchableOpacity
-                  style={{
-                    padding: 10,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                  onPress={fetchLocation}
-                >
-                  <Text variant="bodyLarge">Get current location</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={{
-                    padding: 10,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <Text variant="bodyLarge">Edit</Text>
-                </TouchableOpacity>
+                <Button mode="contained" onPress={fetchLocation}>
+                  Get current location
+                </Button>
               </View>
             </Card>
             <Card
@@ -247,7 +240,7 @@ export default function RouteGenLocation() {
                 Meters
               </Text>
             </Card>
-            {!bannerVisible && (
+            {privacyChecked && (
               <Link href={"/route/result"} style={{ margin: 10 }}>
                 <Button mode="contained">
                   Done <FontAwesome name="check" size={15} color="black" />

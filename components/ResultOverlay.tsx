@@ -69,11 +69,13 @@ const ResultOverlay: React.FC<OverlayProps> = ({
                 title={`${item.description}`}
                 subtitle={`${item.content}`}
                 right={() => (
-                  <Link href="/learn">
-                    <TouchableOpacity>
-                      <Text>{t("comm:Learn")}</Text>
-                    </TouchableOpacity>
-                  </Link>
+                  <TouchableOpacity
+                    onPress={() => {
+                      router.replace("/(tabs)/learn");
+                    }}
+                  >
+                    <Text>{t("comm:Learn")}</Text>
+                  </TouchableOpacity>
                 )}
               />
             </Card>
@@ -172,24 +174,7 @@ const ResultOverlay: React.FC<OverlayProps> = ({
               backgroundColor: "transparent",
               padding: 10,
             }}
-          >
-            <Button
-              mode="contained"
-              style={[styles.button]}
-              onPress={() => {
-                router.replace("/route/location");
-              }}
-            >
-              {t("comm:Back")}
-            </Button>
-            <Button
-              mode="contained"
-              style={styles.button}
-              onPress={handleTriggerFetch}
-            >
-              Reroute
-            </Button>
-          </View>
+          ></View>
         </ScrollView>
       </Card>
     </View>

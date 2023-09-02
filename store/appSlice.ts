@@ -14,17 +14,20 @@ interface AppState {
   } | null;
   theme: "light" | "dark" | "system" | undefined;
   language: "en-AU" | "zh-CN" | "hi-IN";
+  privacyChecked: boolean;
 }
 
 const initialState: AppState = {
   isLoading: false,
   isFail: null,
   theme: undefined,
-  language: "en-AU"
+  language: "en-AU",
+  privacyChecked: false,
 };
 
 export const selectTheme = (state: any) => state.app.theme;
 export const selectLanguage = (state: any) => state.app.language;
+export const selectPrivacyChecked = (state: any) => state.app.privacyChecked;
 
 const appSlice = createSlice({
   name: "app",
@@ -49,14 +52,37 @@ const appSlice = createSlice({
     setSystemTheme(state) {
       state.theme = "system";
     },
-    setTheme(state, action: PayloadAction<{ theme: "light" | "dark" | "system" }>) {
+    setTheme(
+      state,
+      action: PayloadAction<{ theme: "light" | "dark" | "system" }>
+    ) {
       state.theme = action.payload.theme;
     },
-    setLanguage(state, action: PayloadAction<{ language: "en-AU" | "zh-CN" | "hi-IN" }>) {
+    setLanguage(
+      state,
+      action: PayloadAction<{ language: "en-AU" | "zh-CN" | "hi-IN" }>
+    ) {
       state.language = action.payload.language;
+    },
+    setPrivacyChecked(state) {
+      state.privacyChecked = true;
+    },
+    setPrivacyUnchecked(state) {
+      state.privacyChecked = false;
     },
   },
 });
 
-export const { loading, loaded, fail, setDarkTheme, setLightTheme, setSystemTheme, setTheme, setLanguage } = appSlice.actions;
+export const {
+  loading,
+  loaded,
+  fail,
+  setDarkTheme,
+  setLightTheme,
+  setSystemTheme,
+  setTheme,
+  setLanguage,
+  setPrivacyChecked,
+  setPrivacyUnchecked,
+} = appSlice.actions;
 export default appSlice.reducer;

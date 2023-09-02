@@ -1,5 +1,6 @@
 import { useState, useMemo, useRef } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { router } from "expo-router";
 
 import ResultOverlay from "../../components/ResultOverlay";
 import { RootState } from "../../store";
@@ -13,12 +14,13 @@ import { RequestOptions } from "../../api/fetch";
 import { selectUserToken } from "../../store/authSlice";
 import { RouteState, selectRouteState } from "../../store/routeSlice";
 
-import { StyleSheet, Dimensions, TouchableOpacity } from "react-native";
-import { View } from "react-native";
-import { Text } from "react-native-paper";
+import { StyleSheet, Dimensions, SafeAreaView } from "react-native";
+import { View, Pressable } from "react-native";
+import { Text, useTheme, Button, ActivityIndicator } from "react-native-paper";
 
 import MapView, { Marker, Polyline } from "react-native-maps";
 
+import ArrowBackIcon from "../../assets/images/icons/arrow_back.svg";
 import ShoppingCartIcon from "../../assets/images/icons/shopping_cart.svg";
 import FastfoodIcon from "../../assets/images/icons/fastfood.svg";
 import ParkBirdsIcon from "../../assets/images/icons/park_birds.svg";
@@ -42,20 +44,19 @@ interface RouteResult {
 }
 
 const location_type_icon: { [key: string]: any } = {
-  landmark: ShoppingCartIcon,
+  landmark: ParkBirdsIcon,
   restaurant: FastfoodIcon,
-  grocery: ParkBirdsIcon,
+  grocery: ShoppingCartIcon,
   pharmacy: PharmacyIcon,
 };
 
 export default function MapScreen() {
+  const theme = useTheme();
   const token = useSelector(selectUserToken);
 
   const { isLoading, isFail } = useSelector((state: RootState) => state.app);
 
   const routeState: RouteState = useSelector(selectRouteState);
-
-  console.log(routeState);
 
   const modes: Array<string> = [
     "Walk",
@@ -94,19 +95,74 @@ export default function MapScreen() {
 
   const { checked, handlePress } = useCheckedList(data);
 
-  if (isLoading || token === null || data === null) {
+  if (isLoading && data === null) {
     return (
-      <View style={styles.container}>
-        <Text>
-          Loading... Please login
-          {isLoading}
-        </Text>
-      </View>
+      <SafeAreaView style={styles.container}>
+        <ActivityIndicator size="large" />
+      </SafeAreaView>
+    );
+  }
+
+  if (isFail) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <Text variant="titleLarge">Failed to fetch</Text>
+        <Button
+          mode="contained"
+          style={[styles.button]}
+          onPress={handleTriggerFetch}
+        >
+          Retry
+        </Button>
+      </SafeAreaView>
+    );
+  }
+
+  if (token === null) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <Text variant="titleLarge">Please login</Text>
+        <Button
+          mode="contained"
+          style={[styles.button]}
+          onPress={() => {
+            router.replace("/auth/login");
+          }}
+        >
+          Login
+        </Button>
+      </SafeAreaView>
+    );
+  }
+
+  if (data === null) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <Text variant="titleLarge">No location found</Text>
+        <Button
+          mode="contained"
+          style={[styles.button]}
+          onPress={() => {
+            router.replace("/route/location");
+          }}
+        >
+          Back
+        </Button>
+        <Button
+          mode="contained"
+          style={[styles.button]}
+          onPress={() => {
+            router.replace("/(tabs)");
+          }}
+        >
+          Home
+        </Button>
+      </SafeAreaView>
     );
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <MapView
         ref={mapRef}
         style={styles.map}
@@ -139,7 +195,33 @@ export default function MapScreen() {
           lineDashPattern={[1, 5]}
         />
       </MapView>
+
+      <View
+        style={{
+          marginTop: 32,
+          width: "100%",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          padding: 20,
+        }}
+      >
+        <Pressable onPress={() => router.replace("/route/location")}>
+          <ArrowBackIcon
+            fill={theme.colors.onPrimaryContainer}
+            width={34}
+            height={34}
+          />
+        </Pressable>
+        <Button
+          mode="contained"
+          style={styles.button}
+          onPress={handleTriggerFetch}
+        >
+          Re-plan
+        </Button>
+      </View>
       <View style={{ flex: 1 }} />
+      <ActivityIndicator animating={isLoading} size="large" />
       <ResultOverlay
         tipList={tipList}
         data={data}
@@ -152,7 +234,7 @@ export default function MapScreen() {
         styles={styles}
         location_type_icon={location_type_icon}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -169,8 +251,7 @@ const styles = StyleSheet.create({
   },
   card: {
     width: width * 0.99,
-    height: height * 0.4,
-    marginBottom: 10,
+    height: height * 0.5,
     padding: 0,
     margin: 0,
     borderRadius: 20,
