@@ -103,21 +103,6 @@ export default function MapScreen() {
     );
   }
 
-  if (isFail) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <Text variant="titleLarge">Failed to fetch</Text>
-        <Button
-          mode="contained"
-          style={[styles.button]}
-          onPress={handleTriggerFetch}
-        >
-          Retry
-        </Button>
-      </SafeAreaView>
-    );
-  }
-
   if (token === null) {
     return (
       <SafeAreaView style={styles.container}>
