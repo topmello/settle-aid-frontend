@@ -49,7 +49,7 @@ export default function LoginPage() {
   React.useEffect(() => {
     // This will redirect to home page if login success
     if (selectAuth.status === "loginSuccess") {
-      router.replace("/(tabs)");
+      router.replace("/(tabs)/");
       pushNotification(t("Sign in successful", { ns: "acc" }));
     } else if (selectAuth.status === "loginFailed") {
       pushNotification(t("Sign in failed", { ns: "acc" }));

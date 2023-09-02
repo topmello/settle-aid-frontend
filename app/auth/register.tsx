@@ -237,13 +237,12 @@ export default function RegisterPage() {
       >
         <Button
           mode="outlined"
-          style={{ width: 260 }}
           onPress={() => {
             getGenUsername(true);
           }}
           loading={generating}
         >
-          {t("I don't like this username", { ns: "acc" })}
+          {t("Generate a username", { ns: "acc" })}
         </Button>
         <Button
           mode="contained"

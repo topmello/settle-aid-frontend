@@ -11,13 +11,13 @@ const accessOptions = [
   {
     id: "create-account",
     name: "Create an account",
-    desc: "Sign in",
+    desc: "Sign up",
   },
-  {
-    id: "continue-without-account",
-    name: "Continue without an account",
-    desc: "Go to home page",
-  },
+  // {
+  //   id: "continue-without-account",
+  //   name: "Continue without an account",
+  //   desc: "Go to home page",
+  // },
   {
     id: "already-have-account",
     name: "Already have an account",
@@ -60,13 +60,13 @@ export default function AccessPage() {
       </View>
       <Text
         variant="titleLarge"
-        style={{ marginTop: 38, color: theme.colors.onSurfaceVariant }}
+        style={{ marginTop: 16, color: theme.colors.onSurfaceVariant }}
       >
         {t("Just one more step", { ns: "acc" })}
       </Text>
       <Text
         variant="headlineLarge"
-        style={{ marginTop: 16, color: theme.colors.onPrimaryContainer }}
+        style={{ marginTop: 8, color: theme.colors.onPrimaryContainer, lineHeight: 34 }}
       >
         {t("Do you want to create an account", { ns: "acc" })}
       </Text>
@@ -127,21 +127,21 @@ export default function AccessPage() {
         </Card>
       ))}
       </View>
-      <View style={{ height: 120, justifyContent: "flex-start", alignItems: "center" }}>
+      <View style={{ height: 100, justifyContent: "flex-start", alignItems: "center" }}>
         <Button mode="contained" style={{width:150}} onPress={() => {
           switch(accessOption) {
             case "create-account":
               router.replace("/auth/register");
               break;
             case "continue-without-account":
-              router.replace("/(tabs)");
+              router.replace("/(tabs)/");
               break;
             case "already-have-account":
               router.replace("/auth/login");
               break;
           }
         }}>
-          {t("comm:Done")}
+          {t("comm:Next")}
         </Button>
       </View>
     </SafeAreaView>

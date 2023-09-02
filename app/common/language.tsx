@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 import { selectLanguage } from "../../store/appSlice";
 import { useSelector } from "react-redux";
 import { router } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const languages = [
   {
@@ -48,7 +49,7 @@ export default function LanguageScreen() {
   }, [currentLanguage]);
 
   return (
-    <View
+    <SafeAreaView
       style={{
         backgroundColor: theme.colors.primaryContainer,
         flex: 1,
@@ -61,7 +62,7 @@ export default function LanguageScreen() {
         height={64}
         fill={theme.colors.onPrimaryContainer}
         style={{
-          marginTop: 34,
+          marginTop: 16,
         }}
       />
       <Text variant="headlineLarge" style={{ marginTop: 34 }}>
@@ -110,23 +111,50 @@ export default function LanguageScreen() {
                   justifyContent: "center",
                 }}
               >
-                <Text variant="bodyLarge" style={{fontWeight: "900"}}>{language.name}</Text>
+                <Text variant="bodyLarge" style={{ fontWeight: "900" }}>
+                  {language.name}
+                </Text>
                 <Text variant="bodyMedium">{language.desc}</Text>
               </View>
-              <View style={{ justifyContent: "center", alignItems: "center", width: 80, height: 80 }}>
-                <RadioButton value={language.code} onPress={() => {
+              <View
+                style={{
+                  justifyContent: "center",
+                  alignItems: "center",
+                  width: 80,
+                  height: 80,
+                }}
+              >
+                <RadioButton
+                  value={language.code}
+                  onPress={() => {
                     setCurrentLanguage(language.code);
-                  }} status={language.code === currentLanguage ? "checked" : "unchecked"} />
+                  }}
+                  status={
+                    language.code === currentLanguage ? "checked" : "unchecked"
+                  }
+                />
               </View>
             </View>
           </Card>
         ))}
       </View>
-      <View style={{ height: 120, justifyContent: "flex-start", alignItems: "center" }}>
-        <Button mode="contained" style={{width:150}} onPress={() => {router.replace("/auth/access")}}>
+      <View
+        style={{
+          height: 100,
+          justifyContent: "flex-start",
+          alignItems: "center",
+        }}
+      >
+        <Button
+          mode="contained"
+          style={{ width: 150 }}
+          onPress={() => {
+            router.replace("/auth/access");
+          }}
+        >
           {t("comm:Next")}
         </Button>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }

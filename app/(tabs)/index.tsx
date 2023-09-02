@@ -49,13 +49,14 @@ export default function HomeScreen() {
     return `${dayName} ${day} ${monthName}`;
   };
 
-  useEffect(() => {
-    if (!token) {
-      setTimeout(() => {
-        router.replace("/common/language");
-      }, 1000);
-    }
-  }, [token]);
+  // remove the login restriction for now
+  // useEffect(() => {
+  //   if (!token) {
+  //     setTimeout(() => {
+  //       router.replace("/common/language");
+  //     }, 1000);
+  //   }
+  // }, [token]);
 
   useEffect(() => {
     const updateDate = () => {
