@@ -10,7 +10,7 @@ export interface RouteState {
   query: string[];
   longitude: number;
   latitude: number;
-  distance_threshold: number; //This is actually distance between each location in meters
+  distance_threshold: number; //This is distance between each location in meters
   similarity_threshold: number; //0-1
   route_type: RouteType;
 }

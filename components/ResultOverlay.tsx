@@ -1,7 +1,6 @@
 import React from "react";
 import { View, TouchableOpacity, FlatList, ScrollView } from "react-native";
 import { Text, Card, List, Button, useTheme } from "react-native-paper";
-import { Link } from "expo-router";
 import { useTranslation } from "react-i18next";
 
 import { RouteState } from "../store/routeSlice";
@@ -11,44 +10,30 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Tip } from "../tips/tipsTyped";
 import { router } from "expo-router";
 
-interface RouteResult {
-  locations: string[];
-  locations_coordinates: {
-    latitude: number;
-    longitude: number;
-  }[];
-  route: {
-    latitude: number;
-    longitude: number;
-  }[];
-  instructions: string[];
-  duration: number;
-}
+import { RouteResult } from "../types/route";
 
 type OverlayProps = {
   tipList: Tip[];
   data: RouteResult;
   body: RouteState;
-  handleTriggerFetch: () => void;
   handleLocationSelect: (location: any) => void;
   handlePressRoute: (index: number) => void;
   handlePress: (index: number) => void;
   checked: boolean[];
   styles: any;
-  location_type_icon: any;
+  locationIcons: any;
 };
 
 const ResultOverlay: React.FC<OverlayProps> = ({
   tipList,
   data,
   body,
-  handleTriggerFetch,
   handleLocationSelect,
   handlePressRoute,
   handlePress,
   checked,
   styles,
-  location_type_icon,
+  locationIcons,
 }) => {
   const theme = useTheme();
   const { t } = useTranslation();
@@ -71,7 +56,7 @@ const ResultOverlay: React.FC<OverlayProps> = ({
                 right={() => (
                   <TouchableOpacity
                     onPress={() => {
-                      router.replace("/(tabs)/learn");
+                      router.replace("/learn");
                     }}
                   >
                     <Text>{t("comm:Learn")}</Text>
@@ -95,7 +80,7 @@ const ResultOverlay: React.FC<OverlayProps> = ({
               const capitalizedDescription =
                 description.charAt(0).toUpperCase() + description.slice(1);
 
-              const Icon = location_type_icon[body?.location_type[index]];
+              const Icon = locationIcons[body?.location_type[index]];
               return (
                 <List.Item
                   key={index}

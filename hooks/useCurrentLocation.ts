@@ -1,21 +1,29 @@
 import { useCallback } from "react";
 import * as Location from "expo-location";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../store";
+import { loading, loaded, fail } from "../store/appSlice";
+import { setLonLat } from "../store/routeSlice";
 
-type Coords = {
-  longitude: number;
-  latitude: number;
-};
+const useCurrentLocation = () => {
+  const dispatch = useDispatch<AppDispatch>();
 
-const useCurrentLocation = (onLocationObtained: (coords: Coords) => void) => {
   const fetchLocation = useCallback(async () => {
+    dispatch(loading());
     let { status } = await Location.requestForegroundPermissionsAsync();
+
     if (status !== "granted") {
+      dispatch(fail({ message: "not granted" }));
       return;
     }
 
     let location = await Location.getCurrentPositionAsync({});
-    onLocationObtained(location.coords);
-  }, [onLocationObtained]);
+
+    const { longitude, latitude } = location.coords;
+    dispatch(setLonLat({ longitude, latitude }));
+
+    dispatch(loaded());
+  }, [dispatch]);
 
   return fetchLocation;
 };

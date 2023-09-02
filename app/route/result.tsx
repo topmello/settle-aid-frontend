@@ -1,6 +1,10 @@
 import { useState, useMemo, useRef } from "react";
 import { useSelector } from "react-redux";
 import { router } from "expo-router";
+import { StyleSheet, Dimensions, SafeAreaView } from "react-native";
+import { View, Pressable } from "react-native";
+import { Text, useTheme, Button, ActivityIndicator } from "react-native-paper";
+import MapView, { Marker, Polyline } from "react-native-maps";
 
 import ResultOverlay from "../../components/ResultOverlay";
 import { RootState } from "../../store";
@@ -14,41 +18,13 @@ import { RequestOptions } from "../../api/fetch";
 import { selectUserToken } from "../../store/authSlice";
 import { RouteState, selectRouteState } from "../../store/routeSlice";
 
-import { StyleSheet, Dimensions, SafeAreaView } from "react-native";
-import { View, Pressable } from "react-native";
-import { Text, useTheme, Button, ActivityIndicator } from "react-native-paper";
-
-import MapView, { Marker, Polyline } from "react-native-maps";
-
 import ArrowBackIcon from "../../assets/images/icons/arrow_back.svg";
-import ShoppingCartIcon from "../../assets/images/icons/shopping_cart.svg";
-import FastfoodIcon from "../../assets/images/icons/fastfood.svg";
-import ParkBirdsIcon from "../../assets/images/icons/park_birds.svg";
-import PharmacyIcon from "../../assets/images/icons/pharmacy.svg";
 
 import tips, { Tip } from "../../tips/tipsTyped";
 import findTipsForModes from "../../tips/tipFinder";
 
-interface RouteResult {
-  locations: string[];
-  locations_coordinates: {
-    latitude: number;
-    longitude: number;
-  }[];
-  route: {
-    latitude: number;
-    longitude: number;
-  }[];
-  instructions: string[];
-  duration: number;
-}
-
-const location_type_icon: { [key: string]: any } = {
-  landmark: ParkBirdsIcon,
-  restaurant: FastfoodIcon,
-  grocery: ShoppingCartIcon,
-  pharmacy: PharmacyIcon,
-};
+import { RouteResult } from "../../types/route";
+import { locationIcons } from "../../constants/icons";
 
 export default function MapScreen() {
   const theme = useTheme();
@@ -211,13 +187,12 @@ export default function MapScreen() {
         tipList={tipList}
         data={data}
         body={routeState}
-        handleTriggerFetch={handleTriggerFetch}
         handleLocationSelect={handleLocationSelect}
         handlePressRoute={handlePressRoute}
         handlePress={handlePress}
         checked={checked}
         styles={styles}
-        location_type_icon={location_type_icon}
+        locationIcons={locationIcons}
       />
     </SafeAreaView>
   );
