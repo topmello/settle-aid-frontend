@@ -189,7 +189,7 @@ export default function RouteActivityScreen() {
             router.push("/route/prompt");
           }}
         >
-          {t("comm:Done")}
+          {t("comm:Next")}
         </Button>
       </View>
     </SafeAreaView>
