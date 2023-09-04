@@ -13,9 +13,10 @@ import {
   useDispatch,
   useSelector,
 } from "react-redux";
-import store, { AppDispatch } from "../store";
-import { selectTheme, setTheme } from "../store/appSlice";
+import store, { AppDispatch, persistor } from "../store";
+import { selectLanguage, selectTheme, setTheme } from "../store/appSlice";
 import { StatusBar } from "expo-status-bar";
+import { PersistGate } from "redux-persist/integration/react";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -41,14 +42,17 @@ i18n.use(initReactI18next).init({
   },
 });
 
+
 /**
  * redux wrapper for the root layout
  * for making the child component able to access the redux store
  */
-export default function RootLayoutStore() {
+export default function RootLayoutWithStore() {
   return (
     <StoreProvider store={store}>
-      <RootLayout />
+      <PersistGate loading={null} persistor={persistor}>
+        <RootLayout />
+      </PersistGate>
     </StoreProvider>
   );
 }
@@ -61,13 +65,26 @@ export function RootLayout() {
 
   const colorScheme = useColorScheme();
   const appTheme = useSelector(selectTheme);
+  const appLang = useSelector(selectLanguage);
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     if (colorScheme === "dark") {
-      dispatch(setTheme({ theme: "dark" }));
+      dispatch(setTheme({ theme: "light" }));
     } else {
       dispatch(setTheme({ theme: "dark" }));
+    }
+    switch (appLang) {
+      case "en-AU":
+        i18n.changeLanguage("en-AU");
+        break;
+      case "zh-CN":
+        i18n.changeLanguage("zh-CN");
+        break;
+      case "hi-IN":
+        i18n.changeLanguage("hi-IN");
+      default:
+        i18n.changeLanguage("en-AU");
     }
   }, [colorScheme]);
 

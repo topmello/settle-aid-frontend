@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { View } from "react-native";
 import { Card, RadioButton, Text, useTheme, Button } from "react-native-paper";
 import TranslateIcon from "../../assets/images/icons/translate.svg";
@@ -6,12 +6,21 @@ import AustraliaFlagIcon from "../../assets/images/flags/australia-flag.svg";
 import ChinaFlagIcon from "../../assets/images/flags/china-flag.svg";
 import IndiaFlagIcon from "../../assets/images/flags/india-flag.svg";
 import { useTranslation } from "react-i18next";
-import { selectLanguage } from "../../store/appSlice";
-import { useSelector } from "react-redux";
+import { selectLanguage, setLanguage } from "../../store/appSlice";
+import { useDispatch, useSelector } from "react-redux";
 import { router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { AppDispatch } from "../../store";
+import { LanguageCode } from "../../translation";
 
-const languages = [
+type Language = {
+  name: string;
+  code: LanguageCode,
+  desc: string;
+  icon: JSX.Element;
+};
+
+const languages:Language[] = [
   {
     name: "English",
     code: "en-AU",
@@ -36,17 +45,14 @@ export default function LanguageScreen() {
   const theme = useTheme();
   const { t, i18n } = useTranslation();
 
-  const [currentLanguage, setCurrentLanguage] = React.useState("en-AU");
-
   const appLanguage = useSelector(selectLanguage);
 
-  useEffect(() => {
-    setCurrentLanguage(appLanguage);
-  }, []);
+  const dispatch = useDispatch<AppDispatch>();
 
-  useEffect(() => {
-    i18n.changeLanguage(currentLanguage);
-  }, [currentLanguage]);
+  const changeLanguage = useCallback((language: "en-AU" | "hi-IN" | "zh-CN") => {
+    dispatch(setLanguage({ language }));
+    i18n.changeLanguage(language);
+  }, []);
 
   return (
     <SafeAreaView
@@ -77,14 +83,14 @@ export default function LanguageScreen() {
       <View style={{ flex: 1, justifyContent: "center", gap: 16 }}>
         {languages.map((language, index) => (
           <Card
-            mode={language.code === currentLanguage ? "elevated" : "contained"}
+            mode={language.code === appLanguage ? "elevated" : "contained"}
             key={index}
             onPressIn={() => {
-              setCurrentLanguage(language.code);
+              changeLanguage(language.code);
             }}
             style={{
               backgroundColor:
-                language.code === currentLanguage
+                language.code === appLanguage
                   ? theme.colors.surface
                   : theme.colors.background,
               borderRadius: 12,
@@ -127,10 +133,10 @@ export default function LanguageScreen() {
                 <RadioButton
                   value={language.code}
                   onPress={() => {
-                    setCurrentLanguage(language.code);
+                    changeLanguage(language.code);
                   }}
                   status={
-                    language.code === currentLanguage ? "checked" : "unchecked"
+                    language.code === appLanguage ? "checked" : "unchecked"
                   }
                 />
               </View>

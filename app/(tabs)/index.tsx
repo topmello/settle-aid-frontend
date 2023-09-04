@@ -50,13 +50,13 @@ export default function HomeScreen() {
   };
 
   // remove the login restriction for now
-  // useEffect(() => {
-  //   if (!token) {
-  //     setTimeout(() => {
-  //       router.replace("/common/language");
-  //     }, 1000);
-  //   }
-  // }, [token]);
+  useEffect(() => {
+    if (!token) {
+      setTimeout(() => {
+        router.replace("/common/language");
+      }, 1000);
+    }
+  }, [token]);
 
   useEffect(() => {
     const updateDate = () => {
