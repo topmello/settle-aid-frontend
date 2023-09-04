@@ -47,6 +47,34 @@ Frontend Tech stack we use:
 
 ### Additional Resources
 
+### Deployment
+
+- Official Doc: https://docs.expo.dev/build-reference/apk/
+
+Login:
+
+```bash
+expo login
+```
+
+Build:
+
+```bash
+eas build -p android --profile preview
+```
+
+Global install:
+
+```bash
+npm install --global eas-cli
+```
+
+Link the code base to project:
+
+```bash
+eas init --id 714abc65-7237-4be7-8349-feffeae9f93d
+```
+
 #### Icons
 
 - [Material Design Icons](https://pictogrammers.com/library/mdi/) - Material Community Icons Search Engine, could be used to find the names of certain icon
