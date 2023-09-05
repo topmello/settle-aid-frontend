@@ -51,28 +51,26 @@ Frontend Tech stack we use:
 
 - Official Doc: https://docs.expo.dev/build-reference/apk/
 
-Login:
+#### Login:
 
 ```bash
 expo login
 ```
-
-Build:
-
-```bash
-eas build -p android --profile preview
-```
-
-Global install:
+> If console throw "verify that the path is correct and try again" when using the commands, add "npx" before each command except "npm" one would help.  
+#### Install EAS Cli:
 
 ```bash
 npm install --global eas-cli
 ```
-
-Link the code base to project:
+#### Link the code base to project:
 
 ```bash
 eas init --id 714abc65-7237-4be7-8349-feffeae9f93d
+```
+#### Build:
+
+```bash
+eas build -p android --profile preview
 ```
 
 #### Icons
