@@ -1,6 +1,8 @@
 # Settle-Aid-Frontend
 
-Frontend project for SettleAid
+Frontend project for SettleAid  
+
+👉 [Frontend Dev Doc](https://topmello.github.io/docs/frontend/introduction)
 
 ## User Manual
 
@@ -17,7 +19,7 @@ npm start
 
 and then scan the QR code in the terminal (you may need to scroll up to see them)
 
-## Development Manual
+## Development Overview
 
 ### Tech Stack
 
@@ -31,6 +33,16 @@ Frontend Tech stack we use:
 - [Redux](https://redux.js.org/) - Global state management for React app
 - [Redux Persist](https://github.com/rt2zz/redux-persist) - Data persistance for Redux
 - [React i18next](https://react.i18next.com/) - Internalization for React
+- [Expo Location](https://docs.expo.dev/versions/latest/sdk/location/) - Providing access to Geolocation
+- [React Native Maps](https://www.npmjs.com/package/react-native-maps?activeTab=readme) - Cross-platform map component
+
+🆕 New In Iteration 2
+- [Expo Calendar](https://docs.expo.dev/versions/latest/sdk/calendar/) - Provides an API for interacting with the device's system calendars
+- [Expo KeepAwake](https://docs.expo.dev/versions/latest/sdk/keep-awake/) - A React component that prevents the screen from sleeping when rendered.
+- [Expo Localization](https://docs.expo.dev/versions/latest/sdk/localization/) - A library that provides an interface for native user localization information.
+- [Expo Print](https://docs.expo.dev/versions/latest/sdk/print/) - A library that provides printing functionality for Android and iOS (AirPrint).
+- [React Native Share](https://reactnative.dev/docs/share) - Provide access to system share API
+- [Socket.io Client](https://www.npmjs.com/package/socket.io-client) - For realtime messaging
 
 ### Directory Descrioption
 
