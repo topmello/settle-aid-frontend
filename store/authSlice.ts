@@ -12,23 +12,38 @@ export type RegisterData = {
 }
 
 export interface AuthState {
-  username: string | null;
-  token: string | null;
-  status: 'idle' | 'login' | 'loginSuccess' | 'loginFail' | 'logout' | 'registering' | 'registerSuccess' | 'registerFail';
+  username?: string;
+  token?: string;
+  tokenExpiresAt?: string;
+  refreshToken?: string;
+  refreshTokenExpiresAt?: string;
+  status: 'idle' | 'login' | 'loginSuccess' | 'loginFail' | 'logout' | 'registering' | 'registerSuccess' | 'registerFail' | 'refreshing' | 'refreshSuccess' | 'refreshFail' | 'logout';
 }
 
 export const selectUserToken = (state: any) => state.auth?.token;
 export const selectAuthStatus = (state: any) => state.auth?.status;
+export const selectTokenExpiresAt = (state: any) => state.auth?.tokenExpiresAt;
+export const selectRefreshToken = (state: any) => state.auth?.refreshToken;
+export const selectRefreshTokenExpiresAt = (state: any) => state.auth?.refreshTokenExpiresAt;
 
 // login user thunk (action)
 export const loginUser = createAsyncThunk('auth/loginUser', async (data: LoginData) => {
   const response = await fetch({
     method: 'POST',
-    url: '/login',
+    url: '/login/v2',
     data,
   });
   return response.data;
 });
+
+export const refreshToken = createAsyncThunk('auth/refreshToken', async () => {
+  const response = await fetch({
+    method: 'POST',
+    url: '/login/v2/refresh',
+  });
+  return response.data;
+});
+
 
 // register user thunk (action)
 export const registerUser = createAsyncThunk('auth/registerUser', async (data: RegisterData) => {
@@ -42,8 +57,6 @@ export const registerUser = createAsyncThunk('auth/registerUser', async (data: R
 
 
 const initialState: AuthState = {
-  username: null,
-  token: null,
   status: 'idle'
 }
 
@@ -52,9 +65,12 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     logoutUser: (state) => {
-      state.username = null;
-      state.token = null;
-      state.status = 'idle';
+      delete state.username;
+      delete state.token;
+      delete state.tokenExpiresAt;
+      delete state.refreshToken;
+      delete state.refreshTokenExpiresAt;
+      state.status = 'logout';
     }
   },
   extraReducers: (builder) => {
@@ -65,6 +81,9 @@ const authSlice = createSlice({
       state.status = 'loginSuccess';
       state.username = action.payload.username;
       state.token = action.payload.access_token;
+      state.tokenExpiresAt = action.payload.access_token_expire;
+      state.refreshToken = action.payload.refresh_token;
+      state.refreshTokenExpiresAt = action.payload.refresh_token_expire;
     });
     builder.addCase(loginUser.rejected, (state, action) => {
       console.log(process.env.EXPO_PUBLIC_API_URL, action.error, action.meta);
@@ -81,6 +100,17 @@ const authSlice = createSlice({
     builder.addCase(registerUser.rejected, (state, action) => {
       console.log(process.env.EXPO_PUBLIC_API_URL, action.error.message, action.meta);
       state.status = 'registerFail';
+    });
+    builder.addCase(refreshToken.fulfilled, (state, action) => {
+      state.token = action.payload.access_token;
+      state.tokenExpiresAt = action.payload.access_token_expire;
+      state.refreshToken = action.payload.refresh_token;
+      state.refreshTokenExpiresAt = action.payload.refresh_token_expire;
+      state.status = 'refreshSuccess';
+    });
+    builder.addCase(refreshToken.rejected, (state, action) => {
+      console.log(process.env.EXPO_PUBLIC_API_URL, action.error.message, action.meta);
+      state.status = 'refreshFail';
     });
   }
 });

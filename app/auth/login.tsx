@@ -14,7 +14,6 @@ import {
 import ArrowBackIcon from "../../assets/images/icons/arrow_back.svg";
 import WavingHandIcon from "../../assets/images/icons/waving_hand.svg";
 import { useTranslation } from "react-i18next";
-import { fetch } from "../../api/fetch";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../store";
 import { loginUser as loginUserThunk } from "../../store/authSlice";
@@ -39,22 +38,18 @@ export default function LoginPage() {
     }, 3000);
   }, []);
 
-  const selectAuth = useSelector((state: any) => state.auth);
   const dispatch = useDispatch<AppDispatch>();
 
   const loginUser = React.useCallback(async () => {
-    dispatch(loginUserThunk({ username, password }));
+    dispatch(loginUserThunk({ username, password }))
+      .unwrap()
+      .then(() => {
+        router.replace("/(tabs)");
+      })
+      .catch((err) => {
+        pushNotification(err.message);
+      })
   }, [username, password]);
-
-  React.useEffect(() => {
-    // This will redirect to home page if login success
-    if (selectAuth.status === "loginSuccess") {
-      router.replace("/(tabs)/");
-      pushNotification(t("Sign in successful", { ns: "acc" }));
-    } else if (selectAuth.status === "loginFailed") {
-      pushNotification(t("Sign in failed", { ns: "acc" }));
-    }
-  }, [selectAuth.status]);
 
   return (
     <SafeAreaView

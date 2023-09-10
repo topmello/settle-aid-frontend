@@ -14,7 +14,6 @@ import {
 } from "react-native";
 import { Button, Text } from "react-native-paper";
 import { useTranslation } from "react-i18next"; // <-- Import the hook
-import { FONTS } from "../../assets/constant/constant";
 import AccountCircleIcon from "../../assets/images/icons/account_circle.svg";
 import RouteIcon from "../../assets/images/icons/route.svg";
 import ArrowIcon from "../../assets/images/icons/navigate_next.svg";
@@ -23,13 +22,11 @@ import { AnimatedButton } from "../../components/AnimatedButton";
 import { useTheme } from "react-native-paper";
 import LightCloudyIcon from "../../assets/images/weather/light_cloudy.svg";
 import { router } from "expo-router";
-import { selectUserToken } from "../../store/authSlice";
-import { useSelector } from "react-redux";
 
 export default function HomeScreen() {
   const { t } = useTranslation();
   const theme = useTheme();
-  const token = useSelector(selectUserToken);
+
   //onclick for startCard
   const handleStartClick = () => {
     console.log("Rectangle clicked!");
@@ -48,15 +45,6 @@ export default function HomeScreen() {
 
     return `${dayName} ${day} ${monthName}`;
   };
-
-  // remove the login restriction for now
-  useEffect(() => {
-    if (!token) {
-      setTimeout(() => {
-        router.replace("/common/language");
-      }, 1000);
-    }
-  }, [token]);
 
   useEffect(() => {
     const updateDate = () => {
@@ -88,7 +76,10 @@ export default function HomeScreen() {
         paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
       }}
     >
-      <ScrollView contentContainerStyle={styles.scrollViewContent}>
+      <ScrollView contentContainerStyle={{
+        flexGrow: 1,
+        flexDirection: "column",
+      }}>
         <View
           style={{
             paddingHorizontal: 16,
@@ -250,10 +241,9 @@ export default function HomeScreen() {
               }}
             >
               <View
-                style={[
-                  styles.flexRow,
-                  { alignItems: "center", marginRight: 30, marginTop: 10 },
-                ]}
+                style={
+                  { alignItems: "center", marginRight: 30, marginTop: 10, flexDirection: "row" }
+                }
               >
                 <Text
                   style={{ color: theme.colors.primary, fontWeight: "bold" }}
@@ -366,10 +356,8 @@ export default function HomeScreen() {
               }}
             >
               <View
-                style={[
-                  styles.flexRow,
-                  { alignItems: "center", marginRight: 30, marginTop: 10 },
-                ]}
+                style={
+                  { alignItems: "center", marginRight: 30, marginTop: 10, flexDirection: "row"  }}
               >
                 <Text
                   style={{ color: theme.colors.primary, fontWeight: "bold" }}
@@ -385,170 +373,3 @@ export default function HomeScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  scrollViewContent: {
-    flexGrow: 1,
-    flexDirection: "column",
-  },
-  title: {
-    marginTop: 30,
-    marginLeft: 30,
-    marginBottom: 0,
-    flex: 3,
-    fontSize: FONTS.Large,
-    fontWeight: "bold",
-    margin: 10,
-  },
-  iconAccount: {
-    marginTop: 30,
-    marginRight: 30,
-    marginLeft: 20,
-    marginBottom: 18,
-    width: 40,
-    height: 40,
-  },
-  titleSecond: {
-    marginTop: 20,
-    marginLeft: 20,
-    marginBottom: 0,
-    height: 30,
-    fontSize: FONTS.Mid,
-    fontWeight: "bold",
-    margin: 10,
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
-  },
-  rowHistory: {
-    marginVertical: 10,
-  },
-  colorViolet: {
-    backgroundColor: "#DEE1FF",
-  },
-  colorYellow: {
-    backgroundColor: "#FFEB3B",
-  },
-  flexRow: {
-    flexDirection: "row",
-  },
-  flexColumn: {
-    flexDirection: "column",
-  },
-  iconNav: {
-    width: 50,
-    height: 50,
-    fill: "#5B4E77",
-    marginLeft: 20,
-  },
-  iconHistory: {
-    width: 35,
-    height: 35,
-    fill: "#5B4E77",
-  },
-
-  // Text Styles
-  title: {
-    marginTop: 30,
-    marginLeft: 30,
-    marginBottom: 0,
-    flex: 3,
-    fontSize: FONTS.Large,
-    fontWeight: "bold",
-    margin: 10,
-  },
-  titleSecond: {
-    marginTop: 20,
-    marginLeft: 20,
-    marginBottom: 0,
-    height: 30,
-    fontSize: FONTS.Mid,
-    fontWeight: "bold",
-    margin: 10,
-  },
-  textStartCard: {
-    marginTop: 40,
-    marginLeft: 20,
-    height: 30,
-    fontSize: FONTS.Large,
-    flex: 3,
-    fontWeight: "bold",
-  },
-  textBelovedCard: {
-    marginTop: 20,
-    marginLeft: 20,
-    height: 30,
-    fontSize: FONTS.Large,
-    fontWeight: "bold",
-  },
-  textStartCardInfo: {
-    marginBottom: 30,
-    marginLeft: 20,
-    color: "#5B4E77",
-  },
-  textDate: {
-    marginTop: 0,
-    marginLeft: 20,
-    marginBottom: 5,
-    height: 20,
-    fontSize: FONTS.Mid,
-    fontWeight: "bold",
-    color: "#46464F",
-  },
-  textMore: {
-    color: "#1436B8",
-    marginTop: 12,
-    textAlign: "right",
-    height: 30,
-    fontSize: FONTS.Small,
-    fontWeight: "bold",
-  },
-
-  // Icon Styles
-  iconAccount: {
-    marginTop: 30,
-    marginRight: 30,
-    marginLeft: 20,
-    marginBottom: 18,
-    width: 40,
-    height: 40,
-  },
-  iconNav: {
-    width: 50,
-    height: 50,
-    fill: "#5B4E77",
-    marginLeft: 20,
-  },
-  iconHistory: {
-    width: 35,
-    height: 35,
-    fill: "#5B4E77",
-  },
-  iconArrow: {
-    alignSelf: "top",
-    marginTop: 10,
-    width: 20,
-    height: 20,
-    fill: "#1436B8",
-    resizeMode: "contain",
-  },
-  iconHistoryWrapper: {
-    width: 40,
-    height: 40,
-    borderRadius: 25,
-    backgroundColor: "#FFFFCC",
-    alignItems: "center",
-    justifyContent: "center",
-    marginLeft: 30,
-  },
-
-  // Color Styles
-  colorViolet: {
-    backgroundColor: "#DEE1FF",
-  },
-  colorYellow: {
-    backgroundColor: "#FFEB3B",
-  },
-});

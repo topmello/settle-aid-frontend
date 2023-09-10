@@ -121,16 +121,13 @@ export function RootLayout() {
   return (
     <PaperProvider theme={theme}>
       <StatusBar style={theme.dark ? "light" : "dark"} />
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="route/activity" options={{ headerShown: false }} />
-        <Stack.Screen name="route/prompt" options={{ headerShown: false }} />
-        <Stack.Screen name="common/language" options={{ headerShown: false }} />
-        <Stack.Screen name="auth/access" options={{ headerShown: false }} />
-        <Stack.Screen name="auth/login" options={{ headerShown: false }} />
-        <Stack.Screen name="auth/register" options={{ headerShown: false }} />
-        <Stack.Screen name="route/location" options={{ headerShown: false }} />
-        <Stack.Screen name="route/result" options={{ headerShown: false }} />
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="(tabs)"/>
+        <Stack.Screen name="common/language"/>
+        <Stack.Screen name="auth/access"/>
+        <Stack.Screen name="auth/login"/>
+        <Stack.Screen name="auth/register"/>
+        <Stack.Screen name="route"/>
         <Stack.Screen name="modal" options={{ presentation: "modal" }} />
       </Stack>
     </PaperProvider>

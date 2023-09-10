@@ -29,7 +29,7 @@ import {
   setLocationType,
   setQueryWithLocationType,
 } from "../../store/routeSlice";
-import { ActivityOption } from "./activity";
+import { ActivityOption } from ".";
 
 type ActivityPrompt = {
   id: LocationType;

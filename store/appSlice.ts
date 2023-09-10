@@ -15,6 +15,11 @@ interface AppState {
   theme: "light" | "dark" | "system" | undefined;
   language: "en-AU" | "zh-CN" | "hi-IN";
   privacyChecked: boolean;
+  notification: {
+    message: string;
+    type: "success" | "error" | "warning" | "info";
+    timeout?: number;
+  }
 }
 
 const initialState: AppState = {
@@ -23,6 +28,11 @@ const initialState: AppState = {
   theme: undefined,
   language: "en-AU",
   privacyChecked: false,
+  notification: {
+    message: "",
+    type: "success",
+    timeout: 4000,
+  }
 };
 
 export const selectTheme = (state: any) => state.app.theme;
@@ -69,6 +79,15 @@ const appSlice = createSlice({
     },
     setPrivacyUnchecked(state) {
       state.privacyChecked = false;
+    },
+    pushNotification(state, action: PayloadAction<{ message: string, type: "success" | "error" | "warning" | "info", timeout?:number }>) {
+      state.notification = action.payload;
+      setTimeout(() => {
+        state.notification = {
+          message: "",
+          type: "success",
+        }
+      }, state.notification.timeout || 4000);
     },
   },
 });

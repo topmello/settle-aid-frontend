@@ -41,35 +41,36 @@ axios.defaults.baseURL = process.env.EXPO_PUBLIC_API_URL;
  *  }
  * });
  */
-export const fetch = async (options: RequestOptions) => {
+export const fetch = (options: RequestOptions) => {
   const token = options.token;
   switch (options.method) {
     case "GET" || "get":
-      return await axios.get(options.url, {
+      return axios.get(options.url, {
         params: options.params,
         headers: token ? { Authorization: `Bearer ${token}` } : undefined,
       });
     case "POST" || "post":
-      return await axios.post(options.url, options.data, {
+      console.log(options.url, options.data, token);
+      return axios.post(options.url, options.data, {
         headers: {
           "Content-Type": "application/json",
           Authorization: token ? `Bearer ${token}` : undefined,
         },
       });
     case "PUT" || "put":
-      return await axios.put(options.url, options.data, {
+      return axios.put(options.url, options.data, {
         headers: {
           "Content-Type": "application/json",
           Authorization: token ? `Bearer ${token}` : undefined,
         },
       });
     case "DELETE" || "delete":
-      return await axios.delete(options.url, {
+      return axios.delete(options.url, {
         params: options.params,
         headers: token ? { Authorization: `Bearer ${token}` } : undefined,
       });
     default:
-      return await axios.get(options.url, {
+      return axios.get(options.url, {
         params: options.params,
         headers: token ? { Authorization: `Bearer ${token}` } : undefined,
       });
