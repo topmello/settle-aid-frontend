@@ -30,7 +30,7 @@ export const selectRefreshTokenExpiresAt = (state: any) => state.auth?.refreshTo
 export const loginUser = createAsyncThunk('auth/loginUser', async (data: LoginData) => {
   const response = await fetch({
     method: 'POST',
-    url: '/login/v2',
+    url: '/login/v2/',
     data,
   });
   return response.data;
@@ -39,7 +39,7 @@ export const loginUser = createAsyncThunk('auth/loginUser', async (data: LoginDa
 export const refreshToken = createAsyncThunk('auth/refreshToken', async () => {
   const response = await fetch({
     method: 'POST',
-    url: '/login/v2/refresh',
+    url: '/login/v2/refresh/',
   });
   return response.data;
 });
@@ -49,7 +49,7 @@ export const refreshToken = createAsyncThunk('auth/refreshToken', async () => {
 export const registerUser = createAsyncThunk('auth/registerUser', async (data: RegisterData) => {
   const response = await fetch({
     method: 'POST',
-    url: '/user',
+    url: '/user/',
     data,
   });
   return response.data;

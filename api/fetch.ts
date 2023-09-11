@@ -43,6 +43,7 @@ axios.defaults.baseURL = process.env.EXPO_PUBLIC_API_URL;
  */
 export const fetch = (options: RequestOptions) => {
   const token = options.token;
+
   switch (options.method) {
     case "GET" || "get":
       return axios.get(options.url, {
