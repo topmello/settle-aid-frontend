@@ -155,7 +155,7 @@ export default function LanguageScreen() {
           mode="contained"
           style={{ width: 150 }}
           onPress={() => {
-            router.replace("/auth/access");
+            router.push("/auth/access");
           }}
         >
           {t("comm:Next")}

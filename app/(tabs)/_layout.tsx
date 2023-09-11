@@ -7,11 +7,14 @@ import { useRootNavigationState, router, useNavigation } from "expo-router";
 import HomeScreen from ".";
 import LearnScreen from "./learn";
 import SettingsScreen from "./settings";
+import { selectLanguage } from "../../store/appSlice";
+import { useSelector } from "react-redux";
 
 export default function TabLayout() {
   const { t } = useTranslation();
   const { authenticated } = useSession();
   const rootNativationState = useRootNavigationState();
+  const language = useSelector(selectLanguage);
 
   const Tab = createMaterialBottomTabNavigator();
 
@@ -20,13 +23,16 @@ export default function TabLayout() {
   // FIXME Remove after API works 
   // useEffect(() => {
   //   if (!rootNativationState?.key) return;
+  //   if (!language) {
+  //     router.replace("/common/language");
+  //   }
   //   if (!authenticated) {
   //     router.replace("/auth/login");
   //   }
   // }, [authenticated, rootNativationState?.key]);
 
   return (
-    <Tab.Navigator initialRouteName="Home">
+    <Tab.Navigator initialRouteName="home">
       <Tab.Screen name="home" component={HomeScreen} options={{
         tabBarLabel: t("comm:Home"),
         tabBarIcon: ({ color }) => 

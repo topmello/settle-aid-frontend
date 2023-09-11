@@ -25,6 +25,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../store";
 import { loginUser as loginUserThunk } from "../../store/authSlice";
 
+// for default route to home screen
+export const unstable_settings = {
+  initialRouteName: 'index',
+};
+
 export default function RegisterPage() {
   const { t } = useTranslation();
   const theme = useTheme();

@@ -7,6 +7,11 @@ import GroupAddIcon from "../../assets/images/icons/group_add.svg";
 import { useTranslation } from "react-i18next";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+// for default route to home screen
+export const unstable_settings = {
+  initialRouteName: 'index',
+};
+
 const accessOptions = [
   {
     id: "create-account",
@@ -131,13 +136,13 @@ export default function AccessPage() {
         <Button mode="contained" style={{width:150}} onPress={() => {
           switch(accessOption) {
             case "create-account":
-              router.replace("/auth/register");
+              router.push("/auth/register");
               break;
             case "continue-without-account":
-              router.replace("/(tabs)/");
+              router.replace("/learn");
               break;
             case "already-have-account":
-              router.replace("/auth/login");
+              router.push("/auth/login");
               break;
           }
         }}>

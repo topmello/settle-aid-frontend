@@ -69,10 +69,12 @@ export function RootLayout() {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    if (colorScheme === "dark") {
-      dispatch(setTheme({ theme: "light" }));
-    } else {
-      dispatch(setTheme({ theme: "dark" }));
+    if (!appTheme) {
+      if (colorScheme === "dark") {
+        dispatch(setTheme({ theme: "dark" }));
+      } else {
+        dispatch(setTheme({ theme: "light" }));
+      }
     }
     switch (appLang) {
       case "en-AU":
@@ -86,7 +88,7 @@ export function RootLayout() {
       default:
         i18n.changeLanguage("en-AU");
     }
-  }, [colorScheme]);
+  }, [colorScheme, appLang, appTheme]);
 
   const theme = useMemo(() => {
     switch (appTheme) {
@@ -127,7 +129,10 @@ export function RootLayout() {
         <Stack.Screen name="auth/access"/>
         <Stack.Screen name="auth/login"/>
         <Stack.Screen name="auth/register"/>
-        <Stack.Screen name="route"/>
+        <Stack.Screen name="route/activity"/>
+        <Stack.Screen name="route/location"/>
+        <Stack.Screen name="route/prompt"/>
+        <Stack.Screen name="route/result"/>
         <Stack.Screen name="modal" options={{ presentation: "modal" }} />
       </Stack>
     </PaperProvider>

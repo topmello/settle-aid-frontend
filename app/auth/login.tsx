@@ -19,6 +19,10 @@ import { AppDispatch } from "../../store";
 import { loginUser as loginUserThunk } from "../../store/authSlice";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+// for default route to home screen
+export const unstable_settings = {
+  initialRouteName: 'index',
+};
 
 export default function LoginPage() {
   const { t } = useTranslation();
@@ -48,7 +52,7 @@ export default function LoginPage() {
       })
       .catch((err) => {
         pushNotification(err.message);
-      })
+      });
   }, [username, password]);
 
   return (
@@ -67,13 +71,19 @@ export default function LoginPage() {
           justifyContent: "space-between",
         }}
       >
-        <Pressable onPress={() => router.replace("/auth/access")}>
-          <ArrowBackIcon
-            fill={theme.colors.onPrimaryContainer}
-            width={34}
-            height={34}
-          />
-        </Pressable>
+        {router.canGoBack() ? (
+          <Pressable onPress={() => {
+            router.back();
+          }}>
+            <ArrowBackIcon
+              fill={theme.colors.onPrimaryContainer}
+              width={34}
+              height={34}
+            />
+          </Pressable>
+        ) : (
+          <View></View>
+        )}
         <WavingHandIcon
           fill={theme.colors.onPrimaryContainer}
           width={64}
@@ -163,7 +173,11 @@ export default function LoginPage() {
           {t("Log in", { ns: "acc" })}
         </Button>
       </View>
-      <Snackbar style={{marginLeft: 32}} visible={!!notification} onDismiss={onDissmissNotification}>
+      <Snackbar
+        style={{ marginLeft: 32 }}
+        visible={!!notification}
+        onDismiss={onDissmissNotification}
+      >
         {notification}
       </Snackbar>
     </SafeAreaView>

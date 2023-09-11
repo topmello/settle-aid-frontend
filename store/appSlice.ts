@@ -13,7 +13,7 @@ interface AppState {
     message: string;
   } | null;
   theme: "light" | "dark" | "system" | undefined;
-  language: "en-AU" | "zh-CN" | "hi-IN";
+  language: "en-AU" | "zh-CN" | "hi-IN" | undefined;
   privacyChecked: boolean;
   notification: {
     message: string;
@@ -26,7 +26,7 @@ const initialState: AppState = {
   isLoading: false,
   isFail: null,
   theme: undefined,
-  language: "en-AU",
+  language: undefined,
   privacyChecked: false,
   notification: {
     message: "",
