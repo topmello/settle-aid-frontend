@@ -51,7 +51,11 @@ export const fetch = (options: RequestOptions) => {
         headers: token ? { Authorization: `Bearer ${token}` } : undefined,
       });
     case "POST" || "post":
-      console.log(options.url, options.data, token);
+      console.log(JSON.stringify({
+        "Content-Type": "application/json",
+        Authorization: token ? `Bearer ${token}` : undefined,
+      }));
+      
       return axios.post(options.url, options.data, {
         headers: {
           "Content-Type": "application/json",

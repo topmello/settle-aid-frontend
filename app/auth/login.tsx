@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../store";
 import { loginUser as loginUserThunk } from "../../store/authSlice";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useNotification } from "../../hooks/useNotification";
 
 // for default route to home screen
 export const unstable_settings = {
@@ -30,17 +31,7 @@ export default function LoginPage() {
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
 
-  const [notification, setNotification] = React.useState("");
-  const onDissmissNotification = React.useCallback(() => {
-    setNotification("");
-  }, []);
-
-  const pushNotification = React.useCallback((message: string) => {
-    setNotification(message);
-    setTimeout(() => {
-      setNotification("");
-    }, 3000);
-  }, []);
+  const { pushNotification } = useNotification();
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -51,7 +42,10 @@ export default function LoginPage() {
         router.replace("/(tabs)");
       })
       .catch((err) => {
-        pushNotification(err.message);
+        pushNotification({
+          message: err.message,
+          type: "error",
+        });
       });
   }, [username, password]);
 
@@ -173,13 +167,6 @@ export default function LoginPage() {
           {t("Log in", { ns: "acc" })}
         </Button>
       </View>
-      <Snackbar
-        style={{ marginLeft: 32 }}
-        visible={!!notification}
-        onDismiss={onDissmissNotification}
-      >
-        {notification}
-      </Snackbar>
     </SafeAreaView>
   );
 }

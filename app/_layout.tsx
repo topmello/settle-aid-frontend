@@ -4,7 +4,7 @@ import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
 import { useEffect, useMemo } from "react";
 import { useColorScheme } from "react-native";
-import { PaperProvider } from "react-native-paper";
+import { PaperProvider, Portal, Snackbar } from "react-native-paper";
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import translations from "../translation";
@@ -17,6 +17,7 @@ import store, { AppDispatch, persistor } from "../store";
 import { selectLanguage, selectTheme, setTheme } from "../store/appSlice";
 import { StatusBar } from "expo-status-bar";
 import { PersistGate } from "redux-persist/integration/react";
+import { useNotification } from "../hooks/useNotification";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -67,6 +68,7 @@ export function RootLayout() {
   const appTheme = useSelector(selectTheme);
   const appLang = useSelector(selectLanguage);
   const dispatch = useDispatch<AppDispatch>();
+  const { notification, clearNotificaiton } = useNotification();
 
   useEffect(() => {
     if (!appTheme) {
@@ -135,6 +137,13 @@ export function RootLayout() {
         <Stack.Screen name="route/result"/>
         <Stack.Screen name="modal" options={{ presentation: "modal" }} />
       </Stack>
+      <Portal>
+        <Snackbar style={{marginBottom: 20}} visible={!!notification.message} onDismiss={
+          () => notification.onDismiss?.()
+        }>
+          {notification.message}
+        </Snackbar>
+      </Portal>
     </PaperProvider>
   );
 }
