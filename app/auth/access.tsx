@@ -9,7 +9,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 // for default route to home screen
 export const unstable_settings = {
-  initialRouteName: 'index',
+  initialRouteName: "index",
 };
 
 const accessOptions = [
@@ -50,13 +50,18 @@ export default function AccessPage() {
           justifyContent: "space-between",
         }}
       >
-        <Pressable onPress={() => router.replace("/common/language")}>
-          <ArrowBackIcon
-            fill={theme.colors.onPrimaryContainer}
-            width={34}
-            height={34}
-          />
-        </Pressable>
+        {router.canGoBack() ? (
+          <Pressable onPress={() => router.back()}>
+            <ArrowBackIcon
+              fill={theme.colors.onPrimaryContainer}
+              width={34}
+              height={34}
+            />
+          </Pressable>
+        ) : (
+          <View></View>
+        )}
+
         <GroupAddIcon
           fill={theme.colors.onPrimaryContainer}
           width={64}
@@ -71,81 +76,97 @@ export default function AccessPage() {
       </Text>
       <Text
         variant="headlineLarge"
-        style={{ marginTop: 8, color: theme.colors.onPrimaryContainer, lineHeight: 34 }}
+        style={{
+          marginTop: 8,
+          color: theme.colors.onPrimaryContainer,
+          lineHeight: 34,
+        }}
       >
         {t("Do you want to create an account", { ns: "acc" })}
       </Text>
       <View style={{ flex: 1, justifyContent: "center", gap: 16 }}>
-      {accessOptions.map((option) => (
-        <Card
-          key={option.id}
-          mode={option.id === accessOption ? "elevated" : "contained"}
-          onPress={() => setAccessOption(option.id)}
-          style={{
-            backgroundColor:
-              accessOption === option.id
-                ? theme.colors.surface
-                : theme.colors.background,
-            borderRadius: 12,
-            width: "100%",
-            height: 80,
-            flexDirection: "row",
-          }}
-        >
-          <View
+        {accessOptions.map((option) => (
+          <Card
+            key={option.id}
+            mode={option.id === accessOption ? "elevated" : "contained"}
+            onPress={() => setAccessOption(option.id)}
             style={{
-              flex: 1,
+              backgroundColor:
+                accessOption === option.id
+                  ? theme.colors.surface
+                  : theme.colors.background,
+              borderRadius: 12,
+              width: "100%",
+              height: 80,
               flexDirection: "row",
-              justifyContent: "space-between",
-              width: "100%"
             }}
           >
             <View
               style={{
-                flexDirection: "column",
-                justifyContent: "center",
-                paddingStart: 18,
+                flex: 1,
+                flexDirection: "row",
+                justifyContent: "space-between",
+                width: "100%",
               }}
             >
-              <Text variant="bodyLarge" style={{ fontWeight: "900" }}>
-                {t(option.name, { ns: "acc" })}
-              </Text>
-              <Text variant="bodyMedium">{t(option.desc, { ns: "acc" })}</Text>
-            </View>
-            <View
-              style={{
-                justifyContent: "center",
-                alignItems: "center",
-                width: 80,
-                height: 80,
-              }}
-            >
-              <RadioButton
-                value={option.id}
-                onPress={() => {
-                  setAccessOption(option.id);
+              <View
+                style={{
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  paddingStart: 18,
                 }}
-                status={option.id === accessOption ? "checked" : "unchecked"}
-              />
+              >
+                <Text variant="bodyLarge" style={{ fontWeight: "900" }}>
+                  {t(option.name, { ns: "acc" })}
+                </Text>
+                <Text variant="bodyMedium">
+                  {t(option.desc, { ns: "acc" })}
+                </Text>
+              </View>
+              <View
+                style={{
+                  justifyContent: "center",
+                  alignItems: "center",
+                  width: 80,
+                  height: 80,
+                }}
+              >
+                <RadioButton
+                  value={option.id}
+                  onPress={() => {
+                    setAccessOption(option.id);
+                  }}
+                  status={option.id === accessOption ? "checked" : "unchecked"}
+                />
+              </View>
             </View>
-          </View>
-        </Card>
-      ))}
+          </Card>
+        ))}
       </View>
-      <View style={{ height: 100, justifyContent: "flex-start", alignItems: "center" }}>
-        <Button mode="contained" style={{width:150}} onPress={() => {
-          switch(accessOption) {
-            case "create-account":
-              router.push("/auth/register");
-              break;
-            case "continue-without-account":
-              router.replace("/learn");
-              break;
-            case "already-have-account":
-              router.push("/auth/login");
-              break;
-          }
-        }}>
+      <View
+        style={{
+          height: 100,
+          justifyContent: "flex-start",
+          alignItems: "center",
+        }}
+      >
+        <Button
+          mode="contained"
+          style={{ width: 150 }}
+          onPress={() => {
+            switch (accessOption) {
+              case "create-account":
+                router.push("/auth/register");
+                break;
+              case "continue-without-account":
+                router.replace("/learn");
+                break;
+              case "already-have-account":
+                router.push("/auth/login");
+                break;
+            }
+          }}
+        >
           {t("comm:Next")}
         </Button>
       </View>
