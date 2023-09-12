@@ -23,9 +23,11 @@ import {
   setDistanceThreshold,
   selectLonLat,
   selectDistanceThres,
+  RouteState,
 } from "../../store/routeSlice";
 
 import useCurrentLocation from "../../hooks/useCurrentLocation";
+import useCurrentLocationRealtime from "../../hooks/useCurrentLocationRealtime";
 
 export default function RouteGenLocation() {
   const theme = useTheme();
@@ -41,8 +43,14 @@ export default function RouteGenLocation() {
 
   const fetchLocation = useCurrentLocation();
 
+  const routeState: RouteState = useSelector((state: RootState) => state.route);
+
+  const location = useCurrentLocationRealtime();
+
+  //console.log("location", Date.now(), location);
+
   const melbCBD = {
-    description: 'City',
+    description: "City",
     geometry: { location: { lat: -37.840935, lng: 144.946457 } },
   };
 
@@ -80,7 +88,7 @@ export default function RouteGenLocation() {
           securely and confidentially.
         </Text>
       </Banner>
-      
+
       <View
         style={{
           marginTop: 32,
@@ -103,8 +111,6 @@ export default function RouteGenLocation() {
         </View>
       </View>
 
-
-
       <View
         style={{
           flex: 1,
@@ -118,7 +124,7 @@ export default function RouteGenLocation() {
         }}
       >
         <GooglePlacesAutocomplete
-          placeholder='Search'
+          placeholder="Search"
           fetchDetails={true}
           GooglePlacesDetailsQuery={{ fields: "geometry" }}
           onPress={(data, details = null) => {
@@ -128,11 +134,11 @@ export default function RouteGenLocation() {
             console.log(JSON.stringify(details?.geometry?.location));
           }}
           query={{
-            key: 'AIzaSyDRCFeHN0Z_yftUs5FKP6nv3XAm_Ex8cbc',
-            language: 'en',
-            location: '-37.840935, 144.946457',
-            radius: '20000',
-            components: 'country:aus',
+            key: "AIzaSyDRCFeHN0Z_yftUs5FKP6nv3XAm_Ex8cbc",
+            language: "en",
+            location: "-37.840935, 144.946457",
+            radius: "20000",
+            components: "country:aus",
             strictbounds: true,
           }}
         />
