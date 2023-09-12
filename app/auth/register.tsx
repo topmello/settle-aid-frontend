@@ -24,10 +24,12 @@ import { fetch } from "../../api/fetch";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../store";
 import { loginUser as loginUserThunk } from "../../store/authSlice";
+import { registerUser as registerUserThunk } from "../../store/authSlice";
+import { useNotification } from "../../hooks/useNotification";
 
 // for default route to home screen
 export const unstable_settings = {
-  initialRouteName: 'index',
+  initialRouteName: "index",
 };
 
 export default function RegisterPage() {
@@ -41,19 +43,8 @@ export default function RegisterPage() {
   const [generating, setGenerating] = React.useState(false);
   const [registering, setRegistering] = React.useState(false);
 
-  const [notification, setNotification] = React.useState("");
-  const onDissmissNotification = React.useCallback(() => {
-    setNotification("");
-  }, []);
+  const { pushNotification } = useNotification();
 
-  const pushNotification = React.useCallback((message: string) => {
-    setNotification(message);
-    setTimeout(() => {
-      setNotification("");
-    }, 3000);
-  }, []);
-
-  const selectAuth = useSelector((state: any) => state.auth);
   const dispatch = useDispatch<AppDispatch>();
 
   const generateUsername = React.useCallback(async () => {
@@ -86,42 +77,42 @@ export default function RegisterPage() {
     getGenUsername();
   }, []);
 
-  const registerUser = React.useCallback(async () => {
+  const registerUser = React.useCallback(() => {
     setRegistering(true);
-    try {
-      const response = await fetch({
-        method: "POST",
-        url: "/user/",
-        data: {
-          username,
-          password,
-        },
+    return dispatch(registerUserThunk({ username, password }))
+      .unwrap()
+      .then(() => {
+        pushNotification({
+          message: t("Sign up successful", { ns: "acc" }),
+          type: "error",
+        });
+        return true;
+      })
+      .catch((err) => {
+        pushNotification({
+          message: t("Sign up failed", { ns: "acc" }) + ": " + err.message,
+          type: "error",
+        });
+        setRegistering(false);
+        return false;
       });
-      if (response.status === 200) {
+  }, [username, password]);
+
+  const loginUser = React.useCallback(() => {
+    dispatch(loginUserThunk({ username, password }))
+      .unwrap()
+      .then(() => {
+        setRegistering(false);
         router.replace("/(tabs)");
-        pushNotification(t("Sign up successful", { ns: "acc" }));
-      }
-      return true;
-    } catch (error) {
-      console.log("Failed to register user ", error);
-      setRegistering(false);
-      pushNotification(t("Sign up failed", { ns: "acc" }));
-      return false;
-    }
+      })
+      .catch((err) => {
+        setRegistering(false);
+        pushNotification({
+          message: t("Sign in failed", { ns: "acc" }),
+          type: "error",
+        });
+      });
   }, [username, password]);
-
-  const loginUser = React.useCallback(async () => {
-    dispatch(loginUserThunk({ username, password }));
-  }, [username, password]);
-
-  React.useEffect(() => {
-    if (selectAuth.status === "loginSuccess") {
-      router.replace("/(tabs)");
-      pushNotification(t("Sign in successful", { ns: "acc" }));
-    } else if (selectAuth.status === "loginFailed") {
-      pushNotification(t("Sign in failed", { ns: "acc" }));
-    }
-  }, [selectAuth.status]);
 
   const validateUsername = (text: string) => {
     if (text.length < 3) {
@@ -158,13 +149,17 @@ export default function RegisterPage() {
           justifyContent: "space-between",
         }}
       >
-        <Pressable onPress={() => router.replace("/auth/access")}>
-          <ArrowBackIcon
-            fill={theme.colors.onPrimaryContainer}
-            width={34}
-            height={34}
-          />
-        </Pressable>
+        {router.canGoBack() ? (
+          <Pressable onPress={() => router.back()}>
+            <ArrowBackIcon
+              fill={theme.colors.onPrimaryContainer}
+              width={34}
+              height={34}
+            />
+          </Pressable>
+        ) : (
+          <View></View>
+        )}
         <PersonAddIcon
           fill={theme.colors.onPrimaryContainer}
           width={64}
@@ -264,13 +259,6 @@ export default function RegisterPage() {
           {t("comm:Done")}
         </Button>
       </View>
-      <Snackbar
-        style={{ marginLeft: 32 }}
-        visible={!!notification}
-        onDismiss={onDissmissNotification}
-      >
-        {notification}
-      </Snackbar>
     </SafeAreaView>
   );
 }

@@ -29,7 +29,7 @@ import {
   setLocationType,
   setQueryWithLocationType,
 } from "../../store/routeSlice";
-import { ActivityOption } from ".";
+import { ActivityOption } from "./activity";
 
 type ActivityPrompt = {
   id: LocationType;
@@ -100,22 +100,6 @@ export default function RouteActivityScreen() {
         }
       }),
     ]);
-    if (activities.length === 0) {
-      setActivityPrompts([
-        {
-          id: "grocery",
-          name: "Shopping",
-          logo: ShoppingCartIcon,
-          prompt: [],
-        },
-        {
-          id: "restaurant",
-          name: "Dining",
-          logo: FastfoodIcon,
-          prompt: [],
-        },
-      ]);
-    }
   }, [activities]);
 
   const [selectedActivity, setSelectedActivity] =
@@ -203,18 +187,7 @@ export default function RouteActivityScreen() {
             flexDirection: "column",
           }}
         >
-          <TextInput
-            mode="outlined"
-            label="Enter prompt for locations"
-            onChangeText={(text) => {
-              setTempPrompt(text);
-            }}
-            style={{
-              backgroundColor: theme.colors.primaryContainer,
-              height: 50,
-            }}
-          />
-          {/* {activityPrompts.map((activity) => (
+          {activityPrompts.map((activity) => (
             <List.Accordion
               key={activity.id}
               style={{ width: "100%" }}
@@ -230,7 +203,7 @@ export default function RouteActivityScreen() {
               })}>
                 
             </List.Accordion>
-          ))} */}
+          ))}
         </View>
       </KeyboardAvoidingView>
       <View
