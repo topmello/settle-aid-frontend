@@ -19,8 +19,6 @@ export default function TabLayout() {
   const Tab = createMaterialBottomTabNavigator();
 
   // authentication guard
-
-  // FIXME Remove after API works 
   useEffect(() => {
     if (!rootNativationState?.key) return;
     if (!language) {

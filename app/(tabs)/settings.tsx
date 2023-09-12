@@ -20,6 +20,8 @@ import {
   setSystemTheme,
 } from "../../store/appSlice";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useNotification } from "../../hooks/useNotification"
+
 
 export default function SettingsScreen() {
   const { t } = useTranslation();
@@ -28,7 +30,7 @@ export default function SettingsScreen() {
   const username = useSelector((state: any) => state.auth.username);
   const authStatus = useSelector(selectAuthStatus);
   const colorScheme = useColorScheme();
-
+  const { notification, pushNotification } = useNotification();
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ alignItems: "center" }}>
@@ -98,6 +100,14 @@ export default function SettingsScreen() {
         <Link href={"/route/prompt"}>
           <Button mode="contained">Go Prompt</Button>
         </Link>
+
+        <Text variant="headlineMedium">Notification</Text>
+        <Button onPress={() => {
+          pushNotification({
+            message: "Hello",
+            type: "info",
+          })
+        }}>Show Notification</Button>
       </ScrollView>
     </SafeAreaView>
   );

@@ -25,7 +25,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../store";
 import { loginUser as loginUserThunk } from "../../store/authSlice";
 import { registerUser as registerUserThunk } from "../../store/authSlice";
-import { useNotification } from "../../hooks/useNotification";
+import { useNotification } from "../../hooks/useNotification"
+
 
 // for default route to home screen
 export const unstable_settings = {
