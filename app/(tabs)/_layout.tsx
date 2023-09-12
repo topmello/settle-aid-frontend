@@ -21,15 +21,15 @@ export default function TabLayout() {
   // authentication guard
 
   // FIXME Remove after API works 
-  // useEffect(() => {
-  //   if (!rootNativationState?.key) return;
-  //   if (!language) {
-  //     router.replace("/common/language");
-  //   }
-  //   if (!authenticated) {
-  //     router.replace("/auth/login");
-  //   }
-  // }, [authenticated, rootNativationState?.key]);
+  useEffect(() => {
+    if (!rootNativationState?.key) return;
+    if (!language) {
+      router.replace("/common/language");
+    }
+    if (!authenticated) {
+      router.replace("/auth/login");
+    }
+  }, [authenticated, rootNativationState?.key]);
 
   return (
     <Tab.Navigator initialRouteName="home">

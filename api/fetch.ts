@@ -1,5 +1,4 @@
 import axios, { Method } from "axios";
-import { requestForegroundPermissionsAsync } from "expo-location";
 
 /**
  * Axios request wrapper
@@ -23,6 +22,16 @@ export type RequestOptions = {
 };
 
 axios.defaults.baseURL = process.env.EXPO_PUBLIC_API_URL;
+
+axios.interceptors.request.use(request => {
+  console.log(JSON.stringify(request));
+  return request
+});
+
+axios.interceptors.response.use(response => {
+  console.log(JSON.stringify(response));
+  return response
+});
 
 /**
  * Wrapper for axios requests
@@ -50,12 +59,7 @@ export const fetch = (options: RequestOptions) => {
         params: options.params,
         headers: token ? { Authorization: `Bearer ${token}` } : undefined,
       });
-    case "POST" || "post":
-      console.log(JSON.stringify({
-        "Content-Type": "application/json",
-        Authorization: token ? `Bearer ${token}` : undefined,
-      }));
-      
+    case "POST" || "post":      
       return axios.post(options.url, options.data, {
         headers: {
           "Content-Type": "application/json",

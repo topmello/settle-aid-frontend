@@ -86,7 +86,6 @@ const authSlice = createSlice({
       state.refreshTokenExpiresAt = action.payload.refresh_token_expire;
     });
     builder.addCase(loginUser.rejected, (state, action) => {
-      console.log(process.env.EXPO_PUBLIC_API_URL, action.error, action.meta);
       state.status = 'loginFail';
     });
     builder.addCase(registerUser.pending, (state) => {
@@ -98,7 +97,6 @@ const authSlice = createSlice({
       state.token = action.payload.token;
     });
     builder.addCase(registerUser.rejected, (state, action) => {
-      console.log(process.env.EXPO_PUBLIC_API_URL, action.error.message, action.meta);
       state.status = 'registerFail';
     });
     builder.addCase(refreshToken.fulfilled, (state, action) => {
@@ -109,7 +107,6 @@ const authSlice = createSlice({
       state.status = 'refreshSuccess';
     });
     builder.addCase(refreshToken.rejected, (state, action) => {
-      console.log(process.env.EXPO_PUBLIC_API_URL, action.error.message, action.meta);
       state.status = 'refreshFail';
     });
   }
