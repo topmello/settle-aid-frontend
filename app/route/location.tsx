@@ -8,6 +8,7 @@ import Slider from "@react-native-community/slider";
 import { Link } from "expo-router";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import ArrowBackIcon from "../../assets/images/icons/arrow_back.svg";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 
 import { useTranslation } from "react-i18next";
 
@@ -74,7 +75,7 @@ export default function RouteGenLocation() {
           securely and confidentially.
         </Text>
       </Banner>
-
+      
       <View
         style={{
           marginTop: 32,
@@ -96,6 +97,9 @@ export default function RouteGenLocation() {
           <Text variant="headlineMedium">/3</Text>
         </View>
       </View>
+
+
+
       <View
         style={{
           flex: 1,
@@ -108,6 +112,17 @@ export default function RouteGenLocation() {
           flexDirection: "row",
         }}
       >
+        <GooglePlacesAutocomplete
+          placeholder='Search'
+          onPress={(data, details = null) => {
+            // 'details' is provided when fetchDetails = true
+            console.log(data, details);
+          }}
+          query={{
+            key: 'AIzaSyDRCFeHN0Z_yftUs5FKP6nv3XAm_Ex8cbc',
+            language: 'en',
+          }}
+        />
         <Card
           style={{
             height: 330,
