@@ -24,12 +24,12 @@ export type RequestOptions = {
 axios.defaults.baseURL = process.env.EXPO_PUBLIC_API_URL;
 
 axios.interceptors.request.use(request => {
-  console.log(JSON.stringify(request));
+  // console.log(JSON.stringify(request));
   return request
 });
 
 axios.interceptors.response.use(response => {
-  console.log(JSON.stringify(response));
+  // console.log(JSON.stringify(response));
   return response
 });
 

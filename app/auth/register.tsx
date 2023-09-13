@@ -39,6 +39,7 @@ export default function RegisterPage() {
   const [username, setUsername] = React.useState("");
   const [usernameError, setUsernameError] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [showPassword, setShowPassword] = React.useState(false);
   const [passwordError, setPasswordError] = React.useState("");
   const [generatedUsername, setGeneratedUsername] = React.useState("");
   const [generating, setGenerating] = React.useState(false);
@@ -215,6 +216,16 @@ export default function RegisterPage() {
             mode="outlined"
             label={t("Password", { ns: "acc" })}
             style={{ backgroundColor: "transparent", height: 56 }}
+            secureTextEntry={!showPassword}
+            right={
+              <TextInput.Icon
+                style={{ marginTop: 12 }}
+                icon={showPassword ? "eye-off" : "eye"}
+                onPress={() => {
+                  setShowPassword(!showPassword);
+                }}
+              />
+            }
             value={password}
             onChangeText={(text) => {
               validatePassword(text);
@@ -230,10 +241,10 @@ export default function RegisterPage() {
       </KeyboardAvoidingView>
       <View
         style={{
-          height: 160,
+          height: 190,
           justifyContent: "flex-start",
           alignItems: "center",
-          gap: 28,
+          gap: 16,
         }}
       >
         <Button
@@ -244,6 +255,15 @@ export default function RegisterPage() {
           loading={generating}
         >
           {t("Generate a username", { ns: "acc" })}
+        </Button>
+        <Button
+          mode="text"
+          style={{ margin: 0 }}
+          onPress={() => {
+            router.replace("/auth/login");
+          }}
+        >
+          {t("Already have an account", { ns: "acc" })}
         </Button>
         <Button
           mode="contained"

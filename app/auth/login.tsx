@@ -30,6 +30,7 @@ export default function LoginPage() {
   const theme = useTheme();
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [showPassword, setShowPassword] = React.useState(false);
 
   const { pushNotification } = useNotification();
 
@@ -143,6 +144,16 @@ export default function LoginPage() {
             label={t("Password", { ns: "acc" })}
             style={{ backgroundColor: "transparent", height: 56 }}
             value={password}
+            secureTextEntry={!showPassword}
+            right={
+              <TextInput.Icon
+                style={{ marginTop: 12 }}
+                icon={showPassword ? "eye-off" : "eye"}
+                onPress={() => {
+                  setShowPassword(!showPassword);
+                }}
+              />
+            }
             onChangeText={(text) => {
               setPassword(text);
             }}
@@ -158,7 +169,7 @@ export default function LoginPage() {
         }}
       >
         <Button
-          mode="outlined"
+          mode="text"
           style={{ width: 220 }}
           onPress={() => {
             router.replace("/auth/register");
