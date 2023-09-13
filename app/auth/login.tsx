@@ -31,17 +31,20 @@ export default function LoginPage() {
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [showPassword, setShowPassword] = React.useState(false);
+  const [logining, setLogining] = React.useState(false);
 
   const { pushNotification } = useNotification();
 
   const dispatch = useDispatch<AppDispatch>();
 
   const loginUser = React.useCallback(async () => {
+    setLogining(true);
     if (username === "" || password === "") {
       pushNotification({
         message: t("Please fill in all fields", { ns: "acc" }),
         type: "warning",
       });
+      setLogining(false);
     } else {
       dispatch(loginUserThunk({ username, password }))
         .unwrap()
@@ -49,13 +52,24 @@ export default function LoginPage() {
           router.replace("/(tabs)");
         })
         .catch((err) => {
-          if (err.code === "ERR_BAD_REQUEST") {
-            pushNotification({
-              message: t("Invalid username or password", { ns: "acc" }),
-              type: "error",
-            });
+          switch(err.code) {
+            case "ERR_BAD_REQUEST":
+              pushNotification({
+                message: t("Invalid username or password", { ns: "acc" }),
+                type: "error",
+              });
+              break;
+            case "ERR_NETWORK":
+              pushNotification({
+                message: t("Network Error", { ns: "comm" }),
+                type: "error",
+              });
+              break;
+            default:
+              console.error(err);
           }
         });
+      setLogining(false);
     }
   }, [username, password]);
 
@@ -182,6 +196,8 @@ export default function LoginPage() {
         <Button
           mode="contained"
           style={{ width: 150 }}
+          loading={logining}
+          disabled={logining}
           onPress={() => {
             loginUser();
           }}

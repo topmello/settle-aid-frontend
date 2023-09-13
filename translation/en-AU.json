@@ -12,7 +12,8 @@
     "Search": "Search",
     "Home": "Home",
     "Settings": "Settings",
-    "Learn": "Learn"
+    "Learn": "Learn",
+    "Network Error": "Network Error: URL may blocked"
   },
   "trans": {
     "Choose your language": "Choose your Language to get started"
@@ -43,7 +44,8 @@
     "Sign up successful": "Sign up successful",
     "Sign up failed": "Sign up failed",
     "Invalid username or password": "Invalid username or password",
-    "Username already exists": "Username already exists"
+    "Username already exists": "Username already exists",
+    "Generating Failed": "Generating Failed"
   },
   "route": {
     "First": "First",

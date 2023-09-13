@@ -12,7 +12,8 @@
     "Search": "搜索",
     "Home": "首页",
     "Settings": "设置",
-    "Learn": "学习"
+    "Learn": "学习",
+    "Network Error": "网络错误"
   },
   "trans": {
     "Choose your language": "请选择您习惯使用的语言"
@@ -43,7 +44,8 @@
     "Sign up successful": "注册成功",
     "Sign up failed": "注册失败",
     "Invalid username or password": "用户名或密码错误",
-    "Username already exists": "用户名已存在"
+    "Username already exists": "用户名已存在",
+    "Generating Failed": "生成失败"
   },
   "route": {
     "First": "首先",

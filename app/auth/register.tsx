@@ -25,8 +25,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../store";
 import { loginUser as loginUserThunk } from "../../store/authSlice";
 import { registerUser as registerUserThunk } from "../../store/authSlice";
-import { useNotification } from "../../hooks/useNotification"
-
+import { useNotification } from "../../hooks/useNotification";
 
 // for default route to home screen
 export const unstable_settings = {
@@ -59,8 +58,11 @@ export default function RegisterPage() {
       if (response.status === 200) {
         setGeneratedUsername(response.data.username);
       }
-    } catch (error) {
-      console.log("Failed to generate username ", error);
+    } catch (err) {
+      pushNotification({
+        message: t("Generating Failed", { ns: "acc" }),
+        type: "error",
+      });
     }
     setGenerating(false);
   }, []);
@@ -91,10 +93,22 @@ export default function RegisterPage() {
         return true;
       })
       .catch((err) => {
-        pushNotification({
-          message: t("Sign up failed", { ns: "acc" }) + ": " + err.message,
-          type: "error",
-        });
+        switch (err.code) {
+          case "ERR_BAD_REQUEST":
+            pushNotification({
+              message: t("Sign up failed", { ns: "acc" }),
+              type: "error",
+            });
+            break;
+          case "ERR_NETWORK":
+            pushNotification({
+              message: t("Network Error", { ns: "comm" }),
+              type: "error",
+            });
+            break;
+          default:
+            console.error(err);
+        }
         setRegistering(false);
         return false;
       });

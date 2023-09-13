@@ -12,7 +12,8 @@
     "Search": "खोजें",
     "Home": "होम",
     "Settings": "सेटिंग्स",
-    "Learn": "सीखें"
+    "Learn": "सीखें",
+    "Network Error": "नेटवर्क त्रुटि"
   },
   "trans": {
     "Choose your language": "अपनी भाषा चुनें"
@@ -43,7 +44,8 @@
     "Sign up successful": "साइन अप सफल हुआ",
     "Sign up failed": "साइन अप विफल हुआ",
     "Invalid username or password": "अमान्य उपयोगकर्ता नाम या पासवर्ड",
-    "Username already exists": "उपयोगकर्ता नाम पहले से मौजूद है"
+    "Username already exists": "उपयोगकर्ता नाम पहले से मौजूद है",
+    "Generating Failed": "उत्पन्न विफल"
   },
   "route": {
     "First": "सबसे पहले",
