@@ -55,12 +55,12 @@ export default function RouteGenLocation() {
   };
 
   return (
-    <ScrollView
+      <ScrollView
       style={{
         backgroundColor: theme.colors.primaryContainer,
         flex: 1,
-        flexDirection: "column",
         padding: 20,
+        flexDirection: "column",
         width: "100%",
       }}
     >
@@ -92,12 +92,12 @@ export default function RouteGenLocation() {
 
         <View
           style={{
-            marginTop: 32,
+            marginTop: 16,
             flexDirection: "row",
             justifyContent: "space-between",
           }}
         >
-          <Pressable onPress={() => router.replace("/route/prompt")}>
+          <Pressable onPress={() => router.back()}>
             <ArrowBackIcon
               fill={theme.colors.onPrimaryContainer}
               width={34}
@@ -120,6 +120,7 @@ export default function RouteGenLocation() {
             marginTop: 32,
             padding: 8,
             gap: 16,
+            marginBottom: 48,
             flexWrap: "wrap",
             flexDirection: "row",
           }}

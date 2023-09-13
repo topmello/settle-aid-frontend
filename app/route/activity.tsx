@@ -79,7 +79,7 @@ export default function RouteActivityScreen() {
     >
       <View
         style={{
-          marginTop: 32,
+          marginTop: 16,
           flexDirection: "row",
           justifyContent: "space-between",
         }}

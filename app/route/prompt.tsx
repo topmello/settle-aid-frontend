@@ -73,7 +73,6 @@ export default function RouteActivityScreen() {
   const [tempPrompt, setTempPrompt] = React.useState<string>("");
 
   React.useEffect(() => {
-    console.log(activities);
     setActivityPrompts([
       ...activities.map((activity) => {
         switch (activity) {
@@ -140,7 +139,7 @@ export default function RouteActivityScreen() {
     >
       <View
         style={{
-          marginTop: 32,
+          marginTop: 16,
           flexDirection: "row",
           justifyContent: "space-between",
         }}

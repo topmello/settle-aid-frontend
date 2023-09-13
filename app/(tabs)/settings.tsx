@@ -9,9 +9,8 @@ import { useTranslation } from "react-i18next";
 import { loginUser, logoutUser } from "../../store/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUserToken } from "../../store/authSlice";
-import { selectAuthStatus } from "../../store/authSlice";
 import { AppDispatch } from "../../store";
-import { Button, List, Menu } from "react-native-paper";
+import { Button, List, Menu, Text, useTheme } from "react-native-paper";
 import {
   selectTheme,
   setDarkTheme,
@@ -29,7 +28,10 @@ export default function SettingsScreen() {
   const token = useSelector(selectUserToken);
   const colorScheme = useColorScheme();
   const theme = useSelector(selectTheme);
+  const paperTheme = useTheme();
   const [themeInputVisible, setThemeInputVisible] = useState(false);
+
+  const [adminAuthStatus, setAdminAuthStatus] = useState("Idle");
   const { pushNotification } = useNotification();
   return (
     <SafeAreaView style={styles.container}>
@@ -38,6 +40,9 @@ export default function SettingsScreen() {
         contentContainerStyle={{ alignItems: "center" }}
         style={{ width: "100%" }}
       >
+        <Text style={{ fontSize: 24, fontWeight: "bold", width: "100%", padding: 16, paddingTop: 48, color: paperTheme.colors.onBackground }}>
+          {t("Settings", { ns: "common" })}
+        </Text>
         <List.Section
           style={{
             width: "100%",
@@ -47,48 +52,46 @@ export default function SettingsScreen() {
           <List.Item
             title="Color Scheme"
             description={colorScheme}
-            right={() => {
-              return (
-                <Menu
-                  visible={themeInputVisible}
-                  onDismiss={() => setThemeInputVisible(false)}
-                  anchor={
-                    <Button
-                      mode="contained"
-                      onPress={() => setThemeInputVisible(true)}
-                    >
-                      {theme === "light"
-                        ? "Light"
-                        : theme === "dark"
-                        ? "Dark"
-                        : "Follow System"}
-                    </Button>
-                  }
-                >
-                  <Menu.Item
-                    onPress={() => {
-                      dispatch(setLightTheme());
-                      setThemeInputVisible(false);
-                    }}
-                    title="Light"
-                  />
-                  <Menu.Item
-                    onPress={() => {
-                      dispatch(setDarkTheme());
-                      setThemeInputVisible(false);
-                    }}
-                    title="Dark"
-                  />
-                  <Menu.Item
-                    onPress={() => {
-                      dispatch(setSystemTheme());
-                      setThemeInputVisible(false);
-                    }}
-                    title="Follow System"
-                  />
-                </Menu>
-              );
-            }}
+            right={() => (
+              <Menu
+                visible={themeInputVisible}
+                onDismiss={() => setThemeInputVisible(false)}
+                anchor={
+                  <Button
+                    mode="contained"
+                    onPress={() => setThemeInputVisible(true)}
+                  >
+                    {theme === "light"
+                      ? "Light"
+                      : theme === "dark"
+                      ? "Dark"
+                      : "Follow System"}
+                  </Button>
+                }
+              >
+                <Menu.Item
+                  onPress={() => {
+                    dispatch(setLightTheme());
+                    setThemeInputVisible(false);
+                  }}
+                  title="Light"
+                />
+                <Menu.Item
+                  onPress={() => {
+                    dispatch(setDarkTheme());
+                    setThemeInputVisible(false);
+                  }}
+                  title="Dark"
+                />
+                <Menu.Item
+                  onPress={() => {
+                    dispatch(setSystemTheme());
+                    setThemeInputVisible(false);
+                  }}
+                  title="Follow System"
+                />
+              </Menu>
+            )}
             left={(props) => <List.Icon {...props} icon="palette" />}
           />
           <List.Item
@@ -131,13 +134,22 @@ export default function SettingsScreen() {
           <List.Subheader>Development</List.Subheader>
           <List.Item
             title="Test Admin Login"
+            description={adminAuthStatus}
             left={(props) => <List.Icon {...props} icon="security" />}
             right={() => (
               <Button
                 mode="contained"
-                onPress={() =>
+                onPress={() => {
+                  setAdminAuthStatus("Loading");
                   dispatch(loginUser({ username: "admin", password: "admin" }))
-                }
+                    .unwrap()
+                    .then(() => {
+                      setAdminAuthStatus("Success");
+                    })
+                    .catch(() => {
+                      setAdminAuthStatus("Failed");
+                    });
+                }}
               >
                 Test
               </Button>
@@ -164,6 +176,7 @@ export default function SettingsScreen() {
           <List.Item
             title="Test Notificaiton"
             description="Send a test notification"
+            style={{ marginBottom: 16 }}
             left={(props) => <List.Icon {...props} icon="bell" />}
             right={() => {
               return (
