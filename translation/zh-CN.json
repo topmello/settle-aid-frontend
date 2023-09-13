@@ -47,6 +47,7 @@
     "Invalid username or password": "用户名或密码错误",
     "Username already exists": "用户名已存在",
     "Generating Failed": "生成失败",
+    "Please fill in all fields": "请填写所有字段"
   },
   "route": {
     "First": "首先",
@@ -62,7 +63,11 @@
     "Add things you love": "添加您喜欢的事物",
     "Add things to avoid": "添加您不喜欢的事物",
     "Please select at least one activity": "请至少选择一项活动",
-    "Get my route": "生成我的路线"
+    "Get my route": "生成我的路线",
+    "Love": "喜欢",
+    "Avoid": "避开",
+    "You have already added this": "您已经添加过这个了",
+    "Please enter a prompt": "请输入提示"
   },
   "home": {
     "Discover Melbourne": "发现墨尔本",

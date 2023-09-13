@@ -46,7 +46,8 @@
     "Sign up failed": "Sign up failed",
     "Invalid username or password": "Invalid username or password",
     "Username already exists": "Username already exists",
-    "Generating Failed": "Generating Failed"
+    "Generating Failed": "Generating Failed",
+    "Please fill in all fields": "Please fill in all fields"
   },
   "route": {
     "First": "First",
@@ -61,7 +62,11 @@
     "Add things you love": "Add things you love",
     "Add things to avoid": "Add things to avoid",
     "Please select at least one activity": "Please select at least one activity",
-    "Get my route": "Get my route"
+    "Get my route": "Get my route",
+    "Love": "Love",
+    "Avoid": "Avoid",
+    "You have already added this": "You have already added this",
+    "Please enter a prompt": "Please enter a prompt"
   },
   "home": {
     "title": "Discover Melbourne",

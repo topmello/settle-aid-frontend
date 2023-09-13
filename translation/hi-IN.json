@@ -46,7 +46,8 @@
     "Sign up failed": "साइन अप विफल हुआ",
     "Invalid username or password": "अमान्य उपयोगकर्ता नाम या पासवर्ड",
     "Username already exists": "उपयोगकर्ता नाम पहले से मौजूद है",
-    "Generating Failed": "उत्पन्न विफल"
+    "Generating Failed": "उत्पन्न विफल",
+    "Please fill in all fields": "कृपया सभी फ़ील्ड भरें"
   },
   "route": {
     "First": "सबसे पहले",
@@ -62,7 +63,11 @@
     "Add things you love": "वे चीजें जो आप प्यार करते हैं जोड़ें",
     "Add things to avoid": "बचने के लिए चीजें जोड़ें",
     "Please select at least one activity": "कृपया कम से कम एक गतिविधि का चयन करें",
-    "Get my route": "मेरी रूट प्राप्त करें"
+    "Get my route": "मेरी रूट प्राप्त करें",
+    "Love": "प्यार",
+    "Avoid": "बचना",
+    "You have already added this": "आपने पहले से ही यह जोड़ दिया है",
+    "Please enter a prompt": "कृपया एक प्रॉम्प्ट दर्ज करें"
   },
   "home": {
     "Discover Melbourne": "मेलबर्न खोजें",

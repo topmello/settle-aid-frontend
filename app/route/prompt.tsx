@@ -242,7 +242,7 @@ export default function RouteActivityScreen() {
             <List.Accordion
               key={activity.id}
               style={{ width: "100%", paddingVertical: 0 }}
-              title={activity.name}
+              title={t(activity.name, { ns: "route" })}
               titleStyle={{
                 color: theme.colors.onPrimaryContainer,
                 fontWeight: "bold",
@@ -326,7 +326,7 @@ export default function RouteActivityScreen() {
                       icon="heart-outline"
                     />}
                     mode="outlined"
-                    placeholder="Add things you love"
+                    placeholder={t("Add things you love", { ns: "route" })}
                     value={tempPositivePrompt}
                     onChangeText={setTempPositivePrompt}
                     dense
@@ -340,13 +340,13 @@ export default function RouteActivityScreen() {
                         setTempPositivePrompt("");
                       } else {
                         pushNotification({
-                          message: "Please enter a prompt",
+                          message: t("Please enter a prompt", { ns: "route" }),
                           type: "error",
                         })
                       }
                     }}
                   >
-                    Love
+                    {t("Love", { ns: "route" })}
                   </Button>
                 </View>
                 <View style={style.promptRow}>
@@ -360,7 +360,7 @@ export default function RouteActivityScreen() {
                       icon="cancel"
                     />}
                     mode="outlined"
-                    placeholder="Add things to avoid"
+                    placeholder={t("Add things to avoid", { ns: "route"})}
                     value={tempNegativePrompt}
                     onChangeText={setTempNegativePrompt}
                     dense
@@ -378,13 +378,13 @@ export default function RouteActivityScreen() {
                         setTempNegativePrompt("");
                       } else {
                         pushNotification({
-                          message: "Please enter a prompt",
+                          message: t("Please enter a prompt", { ns: "route" }),
                           type: "error",
                         })
                       }
                     }}
                   >
-                    Avoid
+                    {t("Avoid", { ns: "route" })}
                   </Button>
                 </View>
               </View>
