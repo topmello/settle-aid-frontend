@@ -99,7 +99,7 @@ export default function RouteActivityScreen() {
         </View>
       </View>
       <View style={{ paddingStart: 8 }}>
-        <Text variant="headlineMedium" style={{ marginTop: 38 }}>
+        <Text variant="headlineMedium" style={{ marginTop: 18 }}>
           {t("First", { ns: "route" })}
         </Text>
         <Text
@@ -174,7 +174,7 @@ export default function RouteActivityScreen() {
       </View>
       <View
         style={{
-          height: 120,
+          height: 100,
           justifyContent: "flex-start",
           alignItems: "center",
         }}

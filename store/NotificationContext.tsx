@@ -73,9 +73,16 @@ export function NotificationProvider({ children }:{ children: React.ReactNode })
           style={{ marginBottom: 20 }}
           visible={!!notification.message}
           onDismiss={() => notification.onDismiss?.()}
-          action={notification.action}
+          action={notification.action?.label?{
+            label: notification.action?.label,
+            onPress: () => {
+              notification.action?.onPress();
+              clearNotification();
+            },
+          }:undefined}
           theme={{
             colors: {
+              inversePrimary: notification.type?NotificationColors[notification.type].inverseOnSurface:undefined,
               inverseSurface: notification.type?NotificationColors[notification.type].inverseSurface:undefined,
               inverseOnSurface: notification.type?NotificationColors[notification.type].inverseOnSurface:undefined,
             }
