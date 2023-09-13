@@ -41,7 +41,9 @@
     "Log in successful": "Log in successful",
     "Log in failed": "Log in failed",
     "Sign up successful": "Sign up successful",
-    "Sign up failed": "Sign up failed"
+    "Sign up failed": "Sign up failed",
+    "Invalid username or password": "Invalid username or password",
+    "Username already exists": "Username already exists"
   },
   "route": {
     "First": "First",

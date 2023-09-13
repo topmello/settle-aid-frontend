@@ -41,7 +41,9 @@
     "Log in successful": "登录成功",
     "Log in failed": "登录失败",
     "Sign up successful": "注册成功",
-    "Sign up failed": "注册失败"
+    "Sign up failed": "注册失败",
+    "Invalid username or password": "用户名或密码错误",
+    "Username already exists": "用户名已存在"
   },
   "route": {
     "First": "首先",

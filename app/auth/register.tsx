@@ -85,7 +85,7 @@ export default function RegisterPage() {
       .then(() => {
         pushNotification({
           message: t("Sign up successful", { ns: "acc" }),
-          type: "error",
+          type: "success",
         });
         return true;
       })

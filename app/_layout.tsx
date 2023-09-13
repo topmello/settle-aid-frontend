@@ -4,7 +4,7 @@ import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
 import { useEffect, useMemo } from "react";
 import { useColorScheme } from "react-native";
-import { PaperProvider, Portal, Snackbar } from "react-native-paper";
+import { PaperProvider } from "react-native-paper";
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import translations from "../translation";
@@ -17,7 +17,7 @@ import store, { AppDispatch, persistor } from "../store";
 import { selectLanguage, selectTheme, setTheme } from "../store/appSlice";
 import { StatusBar } from "expo-status-bar";
 import { PersistGate } from "redux-persist/integration/react";
-import { useNotification } from "../hooks/useNotification"
+import { useNotification } from "../hooks/useNotification";
 import { NotificationProvider } from "../store/NotificationContext";
 
 export {
@@ -43,7 +43,6 @@ i18n.use(initReactI18next).init({
     escapeValue: false,
   },
 });
-
 /**
  * redux wrapper for the root layout
  * for making the child component able to access the redux store
@@ -52,9 +51,7 @@ export default function RootLayoutWithStore() {
   return (
     <StoreProvider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <NotificationProvider>
-          <RootLayout />
-        </NotificationProvider>
+        <RootLayout />
       </PersistGate>
     </StoreProvider>
   );
@@ -70,8 +67,6 @@ export function RootLayout() {
   const appTheme = useSelector(selectTheme);
   const appLang = useSelector(selectLanguage);
   const dispatch = useDispatch<AppDispatch>();
-  const { notification } = useNotification();
-  console.log("notification", notification);
 
   useEffect(() => {
     if (!appTheme) {
@@ -110,6 +105,7 @@ export function RootLayout() {
     }
   }, [appTheme, colorScheme]);
 
+
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
     if (error) throw error;
@@ -127,28 +123,21 @@ export function RootLayout() {
 
   return (
     <PaperProvider theme={theme}>
-      <StatusBar style={theme.dark ? "light" : "dark"} />
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="(tabs)" />
-        <Stack.Screen name="common/language" />
-        <Stack.Screen name="auth/access" />
-        <Stack.Screen name="auth/login" />
-        <Stack.Screen name="auth/register" />
-        <Stack.Screen name="route/activity" />
-        <Stack.Screen name="route/location" />
-        <Stack.Screen name="route/prompt" />
-        <Stack.Screen name="route/result" />
-        <Stack.Screen name="modal" options={{ presentation: "modal" }} />
-      </Stack>
-      <Portal>
-        <Snackbar
-          style={{ marginBottom: 20 }}
-          visible={!!notification.message}
-          onDismiss={() => notification.onDismiss?.()}
-        >
-          {notification.message}
-        </Snackbar>
-      </Portal>
+      <NotificationProvider>
+        <StatusBar style={theme.dark ? "light" : "dark"} />
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="(tabs)" />
+          <Stack.Screen name="common/language" />
+          <Stack.Screen name="auth/access" />
+          <Stack.Screen name="auth/login" />
+          <Stack.Screen name="auth/register" />
+          <Stack.Screen name="route/activity" />
+          <Stack.Screen name="route/location" />
+          <Stack.Screen name="route/prompt" />
+          <Stack.Screen name="route/result" />
+          <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+        </Stack>
+      </NotificationProvider>
     </PaperProvider>
   );
 }

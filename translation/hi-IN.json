@@ -41,7 +41,9 @@
     "Log in successful": "लॉग इन सफल हुआ",
     "Log in failed": "लॉग इन विफल हुआ",
     "Sign up successful": "साइन अप सफल हुआ",
-    "Sign up failed": "साइन अप विफल हुआ"
+    "Sign up failed": "साइन अप विफल हुआ",
+    "Invalid username or password": "अमान्य उपयोगकर्ता नाम या पासवर्ड",
+    "Username already exists": "उपयोगकर्ता नाम पहले से मौजूद है"
   },
   "route": {
     "First": "सबसे पहले",

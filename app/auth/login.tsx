@@ -36,17 +36,26 @@ export default function LoginPage() {
   const dispatch = useDispatch<AppDispatch>();
 
   const loginUser = React.useCallback(async () => {
-    dispatch(loginUserThunk({ username, password }))
-      .unwrap()
-      .then(() => {
-        router.replace("/(tabs)");
-      })
-      .catch((err) => {
-        pushNotification({
-          message: err.message,
-          type: "error",
-        });
+    if (username === "" || password === "") {
+      pushNotification({
+        message: t("Please fill in all fields", { ns: "acc" }),
+        type: "warning",
       });
+    } else {
+      dispatch(loginUserThunk({ username, password }))
+        .unwrap()
+        .then(() => {
+          router.replace("/(tabs)");
+        })
+        .catch((err) => {
+          if (err.code === "ERR_BAD_REQUEST") {
+            pushNotification({
+              message: t("Invalid username or password", { ns: "acc" }),
+              type: "error",
+            });
+          }
+        });
+    }
   }, [username, password]);
 
   return (

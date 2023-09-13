@@ -44,6 +44,9 @@ Frontend Tech stack we use:
 - [React Native Share](https://reactnative.dev/docs/share) - Provide access to system share API
 - [Socket.io Client](https://www.npmjs.com/package/socket.io-client) - For realtime messaging
 
+### Custom Hooks
+* useAppTheme() - get a theme object that provides custom app theme colors
+
 ### Directory Descrioption
 
 - api - fetch method wrapper for api requests
