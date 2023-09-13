@@ -194,15 +194,23 @@ export default function HomeScreen() {
                     alignItems: "flex-start",
                   }}
                 >
-                  <Text
+                  <View style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}>
+                    <Text
                     variant="titleLarge"
                     style={{
                       color: theme.colors.onPurpleContainer,
                       fontWeight: "bold",
                     }}
                   >
-                    {t("Embrace Melbourne", { ns: "home" })}
+                    {t("Plan my route", { ns: "home" })}
                   </Text>
+                  <ArrowIcon style={{
+                    marginLeft: 8
+                  }} fill={theme.colors.onPurpleContainer} />
+                  </View>
                   <Text
                     style={{
                       color: theme.colors.onPurpleContainer,
