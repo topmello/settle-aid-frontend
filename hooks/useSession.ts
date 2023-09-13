@@ -7,7 +7,7 @@ import {
   registerUser,
   selectUserToken,
 } from "../store/authSlice";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 import { refreshToken as refreshTokenThunk } from "../store/authSlice";
 import { fetch } from "../api/fetch";
 import { AppDispatch } from "../store";

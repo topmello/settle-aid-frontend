@@ -104,7 +104,7 @@ export default function MapScreen() {
           mode="contained"
           style={[styles.button]}
           onPress={() => {
-            router.replace("/route/location");
+            router.back();
           }}
         >
           Back
@@ -166,13 +166,25 @@ export default function MapScreen() {
           padding: 20,
         }}
       >
-        <Pressable onPress={() => router.replace("/route/location")}>
-          <ArrowBackIcon
-            fill={theme.colors.onPrimaryContainer}
-            width={34}
-            height={34}
-          />
-        </Pressable>
+        {router.canGoBack() ? (
+          <Pressable onPress={() => router.back()} style={{
+            backgroundColor: theme.colors.primaryContainer,
+            borderRadius: 20,
+            width: 40,
+            height: 40,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}>
+            <ArrowBackIcon
+              fill={theme.colors.onPrimaryContainer}
+              width={34}
+              height={34}
+            />
+          </Pressable>
+        ) : (
+          <View></View>
+        )}
         <Button
           mode="contained"
           style={styles.button}

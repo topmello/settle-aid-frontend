@@ -223,7 +223,7 @@ export default function RouteActivityScreen() {
                 query: activityPrompts.map((activity) => tempPrompt),
               })
             );
-            router.replace("/route/location");
+            router.push("/route/location");
           }}
         >
           {t("comm:Next")}
