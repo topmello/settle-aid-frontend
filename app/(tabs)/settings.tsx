@@ -16,20 +16,37 @@ import {
   setDarkTheme,
   setLightTheme,
   setSystemTheme,
+  selectLanguage,
+  setLanguage
 } from "../../store/appSlice";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNotification } from "../../hooks/useNotification";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { router } from "expo-router";
+import { languages } from "../common/language";
 
 export default function SettingsScreen() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
   const token = useSelector(selectUserToken);
   const colorScheme = useColorScheme();
   const theme = useSelector(selectTheme);
   const paperTheme = useTheme();
+  const appLanguage = useSelector(selectLanguage);
+  const changeLanguage = useCallback((language: "en-AU" | "hi-IN" | "zh-CN") => {
+    dispatch(setLanguage({ language }));
+    i18n.changeLanguage(language);
+  }, []);
+
+  const getLanguageDisplayName = useCallback((lang) => {
+    const language = languages.find((l) => l.code === lang);
+    if (language) {
+      return language.name;
+    }
+    return "Unknown";
+  }, [languages]);
   const [themeInputVisible, setThemeInputVisible] = useState(false);
+  const [languageInputVisible, setLanguageInputVisible] = useState(false);
 
   const [adminAuthStatus, setAdminAuthStatus] = useState("Idle");
   const { pushNotification } = useNotification();
@@ -99,12 +116,33 @@ export default function SettingsScreen() {
             description="Set your language"
             left={(props) => <List.Icon {...props} icon="translate" />}
             right={() => (
-              <Button
-                mode="contained"
-                onPress={() => router.push("/common/language")}
+              <Menu
+                visible={languageInputVisible}
+                onDismiss={() => setLanguageInputVisible(false)}
+                anchor={
+                  <Button
+                    mode="contained"
+                    onPress={() => setLanguageInputVisible(true)}
+                  >
+                    {
+                      getLanguageDisplayName(appLanguage)
+                    }
+                  </Button>
+                }
               >
-                Change
-              </Button>
+                {
+                  languages.map((language) => (
+                    <Menu.Item
+                      key={language.code}
+                      onPress={() => {
+                        changeLanguage(language.code);
+                        setLanguageInputVisible(false);
+                      }}
+                      title={language.name}
+                    />
+                  ))
+                }
+              </Menu>
             )}
           />
         </List.Section>
