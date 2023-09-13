@@ -61,8 +61,7 @@
     "Add things you love": "Add things you love",
     "Add things to avoid": "Add things to avoid",
     "Please select at least one activity": "Please select at least one activity",
-    "Get my route": "Get my route",
-    "Plan my route": "Plan my route"
+    "Get my route": "Get my route"
   },
   "home": {
     "title": "Discover Melbourne",
@@ -72,7 +71,7 @@
     "historyTitle": "Routine History",
     "more": "More",
     "belovedRoutine": "Beloved Routine",
-
+    "Plan my route": "Plan my route",
     "History Function Coming Soon": "History Function Coming Soon",
     "Discover Melbourne": "Discover Melbourne",
     "Start Here": "Start Here",
@@ -108,6 +107,20 @@
     "Shopping": "Shopping",
     "Relaxing": "Relaxing",
     "Travelling": "Travelling"
+  },
+  "settings": {
+    "Settings": "Settings",
+    "Appearance": "Appearance",
+    "Language": "Language",
+    "Color Scheme": "Color Scheme",
+    "Set your color scheme": "Set your color scheme",
+    "Set your language": "Set your language",
+    "Light": "Light",
+    "Dark": "Dark",
+    "Follow System": "Follow System",
+    "Account": "Account",
+    "Logout": "Logout",
+    "Development": "Development"
   },
   "tip": {}
 }

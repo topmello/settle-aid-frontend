@@ -58,17 +58,17 @@ export default function SettingsScreen() {
         style={{ width: "100%" }}
       >
         <Text style={{ fontSize: 24, fontWeight: "bold", width: "100%", padding: 16, paddingTop: 48, color: paperTheme.colors.onBackground }}>
-          {t("Settings", { ns: "common" })}
+          {t("Settings", { ns: "settings" })}
         </Text>
         <List.Section
           style={{
             width: "100%",
           }}
         >
-          <List.Subheader>Appearance</List.Subheader>
+          <List.Subheader>{t("Appearance", { ns: "settings"} )}</List.Subheader>
           <List.Item
-            title="Color Scheme"
-            description={colorScheme}
+            title={t("Color Scheme", { ns: "settings" })}
+            description={t("Set your color scheme", { ns: "settings" })}
             right={() => (
               <Menu
                 visible={themeInputVisible}
@@ -79,10 +79,10 @@ export default function SettingsScreen() {
                     onPress={() => setThemeInputVisible(true)}
                   >
                     {theme === "light"
-                      ? "Light"
+                      ? t("Light", { ns: "settings" })
                       : theme === "dark"
-                      ? "Dark"
-                      : "Follow System"}
+                      ? t("Dark", { ns: "settings" })
+                      : t("Follow System", { ns: "settings" })}
                   </Button>
                 }
               >
@@ -91,29 +91,29 @@ export default function SettingsScreen() {
                     dispatch(setLightTheme());
                     setThemeInputVisible(false);
                   }}
-                  title="Light"
+                  title={t("Light", { ns: "settings" })}
                 />
                 <Menu.Item
                   onPress={() => {
                     dispatch(setDarkTheme());
                     setThemeInputVisible(false);
                   }}
-                  title="Dark"
+                  title={t("Dark", { ns: "settings" })}
                 />
                 <Menu.Item
                   onPress={() => {
                     dispatch(setSystemTheme());
                     setThemeInputVisible(false);
                   }}
-                  title="Follow System"
+                  title={t("Follow System", { ns: "settings" })}
                 />
               </Menu>
             )}
             left={(props) => <List.Icon {...props} icon="palette" />}
           />
           <List.Item
-            title="Language"
-            description="Set your language"
+            title={t("Language", { ns: "settings" })}
+            description={t("Set your language", { ns: "settings" })}
             left={(props) => <List.Icon {...props} icon="translate" />}
             right={() => (
               <Menu
@@ -151,13 +151,13 @@ export default function SettingsScreen() {
             width: "100%",
           }}
         >
-          <List.Subheader>Account</List.Subheader>
+          <List.Subheader>{t("Account", { ns: "settings"})}</List.Subheader>
           <List.Item
-            title="Logout"
+            title={t("Logout", { ns: "settings" })}
             right={() => {
               return (
                 <Button mode="contained" onPress={() => dispatch(logoutUser())}>
-                  Logout
+                  {t("Logout", { ns: "settings" })}
                 </Button>
               );
             }}
@@ -169,7 +169,7 @@ export default function SettingsScreen() {
             width: "100%",
           }}
         >
-          <List.Subheader>Development</List.Subheader>
+          <List.Subheader>{t("Development", {ns: "settings"})}</List.Subheader>
           <List.Item
             title="Test Admin Login"
             description={adminAuthStatus}
