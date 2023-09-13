@@ -119,6 +119,7 @@ export default function LoginPage() {
       >
         <View>
           <TextInput
+            autoComplete="username"
             theme={{
               colors: {
                 background: theme.colors.primaryContainer,
@@ -135,6 +136,7 @@ export default function LoginPage() {
         </View>
         <View>
           <TextInput
+            autoComplete="password"
             theme={{
               colors: {
                 background: theme.colors.primaryContainer,
