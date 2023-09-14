@@ -37,7 +37,7 @@ import session from "redux-persist/lib/storage/session";
 export default function MapScreen() {
   const theme = useTheme();
   const { t } = useTranslation();
-  const { token, authenticated, sessionRefreshing } = useSession();
+  const { token, isLoggedIn, sessionRefreshing } = useSession();
   const currentTheme = useSelector(selectTheme);
   const routeState: RouteState = useSelector(selectRouteState);
   const { pushNotification } = useNotification();
@@ -61,7 +61,7 @@ export default function MapScreen() {
   const tipList: Array<Tip> = findTipsForModes(tips, modes);
 
   const fetchRoute = useCallback(async () => {
-    if (!authenticated && !sessionRefreshing) {
+    if (!isLoggedIn || sessionRefreshing) {
       return;
     } else {
       setLoading(true);
@@ -90,11 +90,13 @@ export default function MapScreen() {
         setLoading(false);
       }
     }
-  }, [routeState, sessionRefreshing]);
+  }, [routeState, sessionRefreshing, isLoggedIn, token]);
 
   // fetch route
   useEffect(() => {
-    fetchRoute();
+    if (isLoggedIn && !sessionRefreshing) {
+      fetchRoute();
+    }
   }, []);
 
   // loading screen

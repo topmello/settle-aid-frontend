@@ -1,14 +1,11 @@
-import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  LoginData,
-  RegisterData,
-  loginUser,
-  logoutUser,
-  registerUser,
+  selectRefreshToken,
+  selectRefreshTokenExpiresAt,
+  selectTokenExpiresAt,
   selectUserToken,
 } from "../store/authSlice";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { refreshToken as refreshTokenThunk } from "../store/authSlice";
 import { AppDispatch } from "../store";
 import { router } from "expo-router";
@@ -29,83 +26,61 @@ import { useTranslation } from "react-i18next";
  * }
  */
 export const useSession = () => {
-  const [sessionRefreshing, setSessionRefreshing] = useState(false);
   const { t } = useTranslation();
-  const token = useSelector(selectUserToken);
   const dispatch = useDispatch<AppDispatch>();
   const { pushNotification } = useNotification();
-  const tokenExpiresAt = useSelector(
-    (state: any) => state.auth?.tokenExpiresAt
-  );
-  const refreshToken = useSelector((state: any) => state.auth?.refreshToken);
-  const refreshTokenExpiresAt = useSelector(
-    (state: any) => state.auth?.refreshTokenExpiresAt
-  );
 
-  const redirectToLogin = useCallback(() => {
+  const token = useSelector(selectUserToken);
+  const tokenExpiresAt = useSelector(selectTokenExpiresAt);
+  const refreshToken = useSelector(selectRefreshToken);
+  const refreshTokenExpiresAt = useSelector(selectRefreshTokenExpiresAt);
+
+  const [isLoggedIn, setIsLoggedIn] = useState(!!token);
+  const [sessionRefreshing, setSessionRefreshing] = useState(false);
+
+  const doRefreshToken = useCallback(() => {
+    setSessionRefreshing(true);
+    dispatch(refreshTokenThunk())
+      .unwrap()
+      .catch((err) => {
+        console.error(err);
+        doRedirectToLogin();
+      })
+      .finally(() => {
+        setSessionRefreshing(false);
+      });
+  }, [dispatch]);
+  
+  const doRedirectToLogin = useCallback(() => {
     router.replace("/auth/login");
     pushNotification({
       message: t("Session expired, please login again", { ns: "acc" }),
-      type: "error",
+      type: "warning",
     });
-  }, []);
+  }, [pushNotification, t]);
 
-  const authenticated = () => {
-    let authenticated = true;
-    if (!token || !tokenExpiresAt) {
-      return false;
+  useEffect(() => {
+    if (!token) {
+      setIsLoggedIn(false);
+      doRedirectToLogin();
+      return;
     }
-    if (Date.now() > new Date(tokenExpiresAt).getTime()) {
-      if (!refreshToken || !refreshTokenExpiresAt) {
-        redirectToLogin();
-        return false;
-      }
-      if (Date.now() > new Date(refreshTokenExpiresAt).getTime()) {
-        redirectToLogin();
-        return false;
+    if (new Date().getUTCMilliseconds() > new Date(tokenExpiresAt).getTime()) {
+      if (refreshToken && new Date().getUTCMilliseconds() < new Date(refreshTokenExpiresAt).getTime()) {
+        console.log("refreshing token");
+        doRefreshToken();
       } else {
-        if (!sessionRefreshing) {
-          setSessionRefreshing(true);
-          dispatch(refreshTokenThunk()).unwrap()
-            .catch((err) => {
-              redirectToLogin();
-            })
-            .finally(() => {
-              setSessionRefreshing(false);
-            });
-            return false;
-        }
+        doRedirectToLogin();
+        return;
       }
+    } else {
+      setIsLoggedIn(true);
     }
-    return true;
-  };
-
-  const refreshSession = useCallback(() => {
-    setSessionRefreshing(true);
-    dispatch(refreshTokenThunk()).finally(() => {
-      setSessionRefreshing(false);
-    });
-  }, []);
-
-  const login = useCallback((data: LoginData) => {
-    dispatch(loginUser(data));
-  }, []);
-
-  const logout = useCallback(() => {
-    dispatch(logoutUser());
-  }, []);
-
-  const register = useCallback((data: RegisterData) => {
-    dispatch(registerUser(data));
-  }, []);
+  }, [token, tokenExpiresAt, refreshTokenExpiresAt, doRefreshToken, doRedirectToLogin]);
 
   return {
     token,
-    authenticated,
-    login,
-    logout,
-    register,
-    refreshSession,
+    isLoggedIn,
     sessionRefreshing,
   };
 };

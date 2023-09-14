@@ -13,7 +13,7 @@ import { useNotification } from "../../hooks/useNotification";
 
 export default function TabLayout() {
   const { t } = useTranslation();
-  const { authenticated, sessionRefreshing } = useSession();
+  const { isLoggedIn, sessionRefreshing } = useSession();
   const rootNativationState = useRootNavigationState();
   const language = useSelector(selectLanguage);
   const { pushNotification } = useNotification();
@@ -26,10 +26,10 @@ export default function TabLayout() {
     if (!language) {
       router.replace("/common/language");
     }
-    if (!authenticated && !sessionRefreshing) {
+    if (!isLoggedIn && !sessionRefreshing) {
       router.replace("/auth/login");
     }
-  }, [authenticated, rootNativationState?.key, sessionRefreshing, language]);
+  }, [isLoggedIn, rootNativationState?.key, sessionRefreshing, language]);
 
   return (
     <Tab.Navigator initialRouteName="home">
