@@ -48,6 +48,7 @@ export default function MapScreen() {
   const [handleLocationSelect, setHandleLocationSelect] = useState<any>(null);
   const [handlePressRoute, setHandlePressRoute] = useState<any>(null);
   const mapRef = useRef<MapView>(null);
+  const { checked, handlePress } = useCheckedList(data);
 
   const modes: Array<string> = [
     "Walk",
@@ -60,7 +61,6 @@ export default function MapScreen() {
   const tipList: Array<Tip> = findTipsForModes(tips, modes);
 
   const fetchRoute = useCallback(async () => {
-    console.log(routeState);
     if (!authenticated && sessionRefreshing) {
       return;
     } else {
@@ -109,8 +109,7 @@ export default function MapScreen() {
     fetchRoute();
   }, []);
 
-  const { checked, handlePress } = useCheckedList(data);
-
+  // loading screen
   if (loading) {
     return (
       <SafeAreaView
@@ -118,6 +117,8 @@ export default function MapScreen() {
           styles.container,
           {
             backgroundColor: theme.colors.primaryContainer,
+            justifyContent: "center",
+            alignItems: "center",
           },
         ]}
       >
@@ -126,6 +127,7 @@ export default function MapScreen() {
     );
   }
 
+  // no location found screen
   if (
     data === null ||
     region === undefined ||
@@ -133,7 +135,12 @@ export default function MapScreen() {
     handlePressRoute === null
   ) {
     return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={[styles.container, {
+        backgroundColor: theme.colors.primaryContainer,
+        justifyContent: "center",
+        alignItems: "center",
+        gap: 16,
+      },]}>
         <Text variant="titleLarge">No location found</Text>
         <Button
           mode="contained"
@@ -157,6 +164,7 @@ export default function MapScreen() {
     );
   }
 
+  // main screen
   return (
     <SafeAreaView style={styles.container}>
       <View
@@ -171,7 +179,7 @@ export default function MapScreen() {
         {router.canGoBack() ? (
           <Pressable
             onPress={() => router.back()}
-            style={{
+            style={[styles.above, {
               backgroundColor: theme.colors.primaryContainer,
               borderRadius: 20,
               width: 40,
@@ -179,7 +187,7 @@ export default function MapScreen() {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-            }}
+            }]}
           >
             <ArrowBackIcon
               fill={theme.colors.onPrimaryContainer}
@@ -190,7 +198,7 @@ export default function MapScreen() {
         ) : (
           <View></View>
         )}
-        <Button mode="contained" style={styles.button} onPress={fetchRoute}>
+        <Button mode="contained" style={[styles.above, styles.button]} onPress={fetchRoute}>
           Re-plan
         </Button>
       </View>
@@ -250,19 +258,12 @@ const { width, height } = Dimensions.get("window");
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
   },
   map: {
     ...StyleSheet.absoluteFillObject,
-    zIndex: -1,
   },
-  flatListCard: {
-    width: width * 0.7,
-    marginTop: 10,
-    marginBottom: 20,
-    padding: 0,
-    paddingRight: 20,
+  above: {
+    zIndex: 1,
   },
   button: {
     width: width * 0.3,
