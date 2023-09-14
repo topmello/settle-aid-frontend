@@ -25,6 +25,8 @@ import findTipsForModes from "../../tips/tipFinder";
 
 import { RouteResult } from "../../types/route";
 import { locationIcons } from "../../constants/icons";
+import { mapDarkTheme } from "../../theme/map";
+import { selectTheme } from "../../store/appSlice";
 
 export default function MapScreen() {
   const theme = useTheme();
@@ -33,6 +35,8 @@ export default function MapScreen() {
   const { isLoading, isFail } = useSelector((state: RootState) => state.app);
 
   const routeState: RouteState = useSelector(selectRouteState);
+  const currentTheme = useSelector(selectTheme);
+
 
   const modes: Array<string> = [
     "Walk",
@@ -51,19 +55,16 @@ export default function MapScreen() {
   };
 
   const req: RequestOptions = useMemo(() => {
+    console.log("requested");
     return {
       method: "POST",
       url: "/search/route/",
       data: routeState,
       token: token,
     };
-  }, [JSON.stringify(routeState), triggerFetch]);
-
-  console.log("req", req)
+  }, [routeState, triggerFetch]);
 
   const data: RouteResult = useFetch(req, [triggerFetch]);
-  console.log("data", data)
-
   const mapRef = useRef<MapView>(null);
 
   const { region, handleLocationSelect, handlePressRoute } = useMapRegion(
@@ -128,6 +129,7 @@ export default function MapScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <MapView
+        customMapStyle={currentTheme === "dark" ? mapDarkTheme : []}
         ref={mapRef}
         style={styles.map}
         initialRegion={region}

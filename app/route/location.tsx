@@ -14,7 +14,6 @@ import {
   Text,
   Card,
   Button,
-  useTheme,
   Banner,
   Portal,
   Modal,
@@ -32,6 +31,7 @@ import {
   setPrivacyChecked,
   setPrivacyUnchecked,
   selectPrivacyChecked,
+  selectTheme,
 } from "../../store/appSlice";
 import {
   setLonLat,
@@ -44,10 +44,14 @@ import {
 import useCurrentLocation from "../../hooks/useCurrentLocation";
 import useCurrentLocationRealtime from "../../hooks/useCurrentLocationRealtime";
 import { useNotification } from "../../hooks/useNotification";
+import { useAppTheme } from "../../theme/theme";
+import { mapDarkTheme } from "../../theme/map";
 
 export default function RouteGenLocation() {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const dispatch = useDispatch<AppDispatch>();
+
+  const currentTheme = useSelector(selectTheme);
 
   const privacyChecked = useSelector(selectPrivacyChecked);
 
@@ -255,12 +259,13 @@ export default function RouteGenLocation() {
             style={{
               height: 230,
               width: "100%",
-              borderTopLeftRadius: 20,
-              borderTopRightRadius: 20,
+              borderTopLeftRadius: 5,
+              borderTopRightRadius: 5,
               overflow: "hidden",
             }}
           >
             <MapView
+              customMapStyle={currentTheme === "dark" ? mapDarkTheme : []}
               style={styles.map}
               initialRegion={{
                 latitude: locationState.latitude,
