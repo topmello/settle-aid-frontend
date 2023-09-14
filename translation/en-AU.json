@@ -58,6 +58,8 @@
     "Travelling": "Travelling",
     "Health": "Health",
     "Second": "Second",
+    "Third": "Finally",
+    "Select your starting point and ideal travel range": "Select your starting point and ideal travel range",
     "Tell us more about your preferences": "Tell us more about your preferences",
     "Add things you love": "Add things you love",
     "Add things to avoid": "Add things to avoid",
@@ -66,7 +68,10 @@
     "Love": "Love",
     "Avoid": "Avoid",
     "You have already added this": "You have already added this",
-    "Please enter a prompt": "Please enter a prompt"
+    "Please enter a prompt": "Please enter a prompt",
+    "Please understood privacy policy first" : "Please understood privacy policy first",
+    "Location not found": "Location not found",
+    "Privacy Policy": "Your privacy matters: We store your information and location data securely and confidentially"
   },
   "home": {
     "title": "Discover Melbourne",

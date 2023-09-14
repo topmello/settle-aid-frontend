@@ -59,6 +59,8 @@
     "Travelling": "यात्रा",
     "Health": "स्वास्थ्य",
     "Second": "दूसरा",
+    "Third": "तीसरा",
+    "Select your starting point and ideal travel range": "अपना शुरुआती बिंदु और आदर्श यात्रा सीमा चुनें",
     "Tell us more about your preferences": "हमें अपनी पसंद के बारे में और बताएं",
     "Add things you love": "वे चीजें जो आप प्यार करते हैं जोड़ें",
     "Add things to avoid": "बचने के लिए चीजें जोड़ें",
@@ -67,7 +69,10 @@
     "Love": "प्यार",
     "Avoid": "बचना",
     "You have already added this": "आपने पहले से ही यह जोड़ दिया है",
-    "Please enter a prompt": "कृपया एक प्रॉम्प्ट दर्ज करें"
+    "Please enter a prompt": "कृपया एक प्रॉम्प्ट दर्ज करें",
+    "Location not found": "स्थान नहीं मिला",
+    "Please understood privacy policy first": "कृपया पहले गोपनीयता नीति समझें",
+    "Privacy Policy": "आपकी गोपनीयता मायने रखती है: हम आपकी जानकारी और स्थान डेटा को सुरक्षित और गोपनीयता के साथ संग्रहीत करते हैं"
   },
   "home": {
     "Discover Melbourne": "मेलबर्न खोजें",

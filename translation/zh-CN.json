@@ -59,6 +59,8 @@
     "Travelling": "旅行",
     "Health": "健康",
     "Second": "其次",
+    "Third": "最后",
+    "Select your starting point and ideal travel range": "选择您的起点和理想旅行范围",
     "Tell us more about your preferences": "告诉我们更多您的偏好",
     "Add things you love": "添加您喜欢的事物",
     "Add things to avoid": "添加您不喜欢的事物",
@@ -67,7 +69,10 @@
     "Love": "喜欢",
     "Avoid": "避开",
     "You have already added this": "您已经添加过这个了",
-    "Please enter a prompt": "请输入提示"
+    "Please enter a prompt": "请输入提示",
+    "Location not found": "未找到位置",
+    "Please understood privacy policy first": "请先阅读并同意隐私政策",
+    "Privacy Policy": "您的隐私很重要：我们会安全、保密地存储您的信息和位置数据"
   },
   "home": {
     "Discover Melbourne": "发现墨尔本",

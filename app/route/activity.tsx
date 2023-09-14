@@ -164,7 +164,7 @@ export default function RouteActivityScreen() {
                   width: 60,
                   height: 60,
                 })}
-                <Text variant="bodyLarge" style={{ marginTop: 6 }}>
+                <Text variant="bodyLarge" style={{ marginTop: 6, fontWeight: "bold", color: theme.colors.onSurfaceVariant }}>
                   {t(option.name, { ns: "route" })}
                 </Text>
               </View>

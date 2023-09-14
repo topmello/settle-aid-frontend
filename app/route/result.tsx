@@ -59,7 +59,10 @@ export default function MapScreen() {
     };
   }, [JSON.stringify(routeState), triggerFetch]);
 
+  console.log("req", req)
+
   const data: RouteResult = useFetch(req, [triggerFetch]);
+  console.log("data", data)
 
   const mapRef = useRef<MapView>(null);
 
