@@ -9,12 +9,14 @@ import LearnScreen from "./learn";
 import SettingsScreen from "./settings";
 import { selectLanguage } from "../../store/appSlice";
 import { useSelector } from "react-redux";
+import { useNotification } from "../../hooks/useNotification";
 
 export default function TabLayout() {
   const { t } = useTranslation();
-  const { authenticated } = useSession();
+  const { authenticated, sessionRefreshing } = useSession();
   const rootNativationState = useRootNavigationState();
   const language = useSelector(selectLanguage);
+  const { pushNotification } = useNotification();
 
   const Tab = createMaterialBottomTabNavigator();
 
@@ -24,10 +26,10 @@ export default function TabLayout() {
     if (!language) {
       router.replace("/common/language");
     }
-    if (!authenticated) {
+    if (!authenticated && !sessionRefreshing) {
       router.replace("/auth/login");
     }
-  }, [authenticated, rootNativationState?.key]);
+  }, [authenticated, rootNativationState?.key, sessionRefreshing, language]);
 
   return (
     <Tab.Navigator initialRouteName="home">

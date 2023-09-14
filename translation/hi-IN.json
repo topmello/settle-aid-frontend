@@ -48,7 +48,8 @@
     "Username already exists": "उपयोगकर्ता नाम पहले से मौजूद है",
     "Generating Failed": "उत्पन्न विफल",
     "Please fill in all fields": "कृपया सभी फ़ील्ड भरें",
-    "Login required": "लॉगिन आवश्यक"
+    "Login required": "लॉगिन आवश्यक",
+    "Session expired, please login again": "सत्र समाप्त हो गया, कृपया फिर से लॉगिन करें"
   },
   "route": {
     "First": "सबसे पहले",

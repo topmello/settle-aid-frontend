@@ -11,6 +11,9 @@ import {
 import { useCallback, useMemo, useState } from "react";
 import { refreshToken as refreshTokenThunk } from "../store/authSlice";
 import { AppDispatch } from "../store";
+import { router } from "expo-router";
+import { useNotification } from "./useNotification";
+import { useTranslation } from "react-i18next";
 
 /**
  * Authenticated user session hook
@@ -22,13 +25,15 @@ import { AppDispatch } from "../store";
  * logout: () => void,
  * register: (data: RegisterData) => void,
  * getSessionAuthenticated: () => Promise<boolean>,
- * getSessionToken: () => Promise<string>, 
+ * getSessionToken: () => Promise<string>,
  * }
  */
 export const useSession = () => {
   const [sessionRefreshing, setSessionRefreshing] = useState(false);
+  const { t } = useTranslation();
   const token = useSelector(selectUserToken);
   const dispatch = useDispatch<AppDispatch>();
+  const { pushNotification } = useNotification();
   const tokenExpiresAt = useSelector(
     (state: any) => state.auth?.tokenExpiresAt
   );
@@ -37,31 +42,49 @@ export const useSession = () => {
     (state: any) => state.auth?.refreshTokenExpiresAt
   );
 
-  const authenticated = useMemo(() => {
-    if (!token || !tokenExpiresAt) return false;
+  const redirectToLogin = useCallback(() => {
+    router.replace("/auth/login");
+    pushNotification({
+      message: t("Session expired, please login again", { ns: "acc" }),
+      type: "error",
+    });
+  }, []);
+
+  const authenticated = () => {
+    let authenticated = true;
+    if (!token || !tokenExpiresAt) {
+      return false;
+    }
     if (Date.now() > new Date(tokenExpiresAt).getTime()) {
-      if (!refreshToken || !refreshTokenExpiresAt) return false;
+      if (!refreshToken || !refreshTokenExpiresAt) {
+        redirectToLogin();
+        return false;
+      }
       if (Date.now() > new Date(refreshTokenExpiresAt).getTime()) {
+        redirectToLogin();
         return false;
       } else {
         if (!sessionRefreshing) {
           setSessionRefreshing(true);
-          dispatch(refreshTokenThunk())
+          dispatch(refreshTokenThunk()).unwrap()
+            .catch((err) => {
+              redirectToLogin();
+            })
             .finally(() => {
               setSessionRefreshing(false);
             });
+            return false;
         }
       }
     }
     return true;
-  }, [token, tokenExpiresAt, refreshToken, refreshTokenExpiresAt]);
+  };
 
   const refreshSession = useCallback(() => {
     setSessionRefreshing(true);
-    dispatch(refreshTokenThunk())
-      .finally(() => {
-        setSessionRefreshing(false);
-      });
+    dispatch(refreshTokenThunk()).finally(() => {
+      setSessionRefreshing(false);
+    });
   }, []);
 
   const login = useCallback((data: LoginData) => {
@@ -83,6 +106,6 @@ export const useSession = () => {
     logout,
     register,
     refreshSession,
-    sessionRefreshing
+    sessionRefreshing,
   };
 };

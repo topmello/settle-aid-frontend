@@ -48,7 +48,8 @@
     "Username already exists": "Username already exists",
     "Generating Failed": "Generating Failed",
     "Please fill in all fields": "Please fill in all fields",
-    "Login required": "Login required"
+    "Login required": "Login required",
+    "Session expired, please login again": "Session expired, please login again"
   },
   "route": {
     "First": "First",
