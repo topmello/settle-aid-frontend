@@ -83,7 +83,7 @@ export default function RouteGenLocation() {
       <SafeAreaView>
         <Banner
           style={{
-            borderRadius: 5,
+            borderRadius: 10,
             backgroundColor: theme.colors.errorContainer,
           }}
           theme={{
@@ -249,7 +249,7 @@ export default function RouteGenLocation() {
         <Card
           style={{
             width: "100%",
-            borderRadius: 5,
+            borderRadius: 10,
             backgroundColor: theme.colors.surface,
             marginTop: 24,
             marginBottom: 16,
@@ -259,8 +259,8 @@ export default function RouteGenLocation() {
             style={{
               height: 230,
               width: "100%",
-              borderTopLeftRadius: 5,
-              borderTopRightRadius: 5,
+              borderTopLeftRadius: 10,
+              borderTopRightRadius: 10,
               overflow: "hidden",
             }}
           >
@@ -359,7 +359,7 @@ export default function RouteGenLocation() {
         <Card
           style={{
             width: "100%",
-            borderRadius: 5,
+            borderRadius: 10,
             backgroundColor: theme.colors.surface,
             padding: 16,
             marginBottom: 32,

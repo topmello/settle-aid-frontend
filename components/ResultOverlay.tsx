@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { View, TouchableOpacity, FlatList, ScrollView } from "react-native";
 import { Text, Card, List, Button, useTheme } from "react-native-paper";
 import { useTranslation } from "react-i18next";
@@ -11,6 +11,7 @@ import { Tip } from "../tips/tipsTyped";
 import { router } from "expo-router";
 
 import { RouteResult } from "../types/route";
+import BottomSheet from "@gorhom/bottom-sheet";
 
 type OverlayProps = {
   tipList: Tip[];
@@ -38,9 +39,13 @@ const ResultOverlay: React.FC<OverlayProps> = ({
   const theme = useTheme();
   const { t } = useTranslation();
 
+  const bottomSheetRef = React.useRef<BottomSheet>(null);
+  const snapPoints = useMemo(() => ["25%", "50%"], []);
+
   return (
     <View>
-      <Card style={[styles.card]}>
+      <BottomSheet ref={bottomSheetRef} index={1} snapPoints={snapPoints}>
+        <Card>
         <FlatList
           data={tipList}
           renderItem={({ item }) => (
@@ -161,7 +166,8 @@ const ResultOverlay: React.FC<OverlayProps> = ({
             }}
           ></View>
         </ScrollView>
-      </Card>
+        </Card>
+      </BottomSheet>
     </View>
   );
 };

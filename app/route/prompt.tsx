@@ -407,10 +407,10 @@ export default function RouteActivityScreen() {
               setQueryWithLocationType({
                 location_type: activityPrompts.map((activity) => activity.id),
                 query: activityPrompts.map((activity) =>
-                  activity.positivePrompts.join(",")
+                  activity.positivePrompts.join(",") || ""
                 ),
                 negative_query: activityPrompts.map((activity) =>
-                  activity.negativePrompts.join(",")
+                  activity.negativePrompts.join(",") || ""
                 ),
               })
             );

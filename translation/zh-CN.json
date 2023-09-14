@@ -47,7 +47,8 @@
     "Invalid username or password": "用户名或密码错误",
     "Username already exists": "用户名已存在",
     "Generating Failed": "生成失败",
-    "Please fill in all fields": "请填写所有字段"
+    "Please fill in all fields": "请填写所有字段",
+    "Login required": "需要登录"
   },
   "route": {
     "First": "首先",

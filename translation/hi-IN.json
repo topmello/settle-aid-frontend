@@ -47,7 +47,8 @@
     "Invalid username or password": "अमान्य उपयोगकर्ता नाम या पासवर्ड",
     "Username already exists": "उपयोगकर्ता नाम पहले से मौजूद है",
     "Generating Failed": "उत्पन्न विफल",
-    "Please fill in all fields": "कृपया सभी फ़ील्ड भरें"
+    "Please fill in all fields": "कृपया सभी फ़ील्ड भरें",
+    "Login required": "लॉगिन आवश्यक"
   },
   "route": {
     "First": "सबसे पहले",

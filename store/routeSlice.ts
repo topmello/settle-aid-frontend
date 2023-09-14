@@ -13,6 +13,7 @@ export interface RouteState {
   latitude: number;
   distance_threshold: number; //This is distance between each location in meters
   similarity_threshold: number; //0-1
+  negative_similarity_threshold: number; // 0-1
   route_type: RouteType;
 }
 
@@ -25,6 +26,7 @@ const initialState: RouteState = {
   distance_threshold: 1000,
   similarity_threshold: 0,
   route_type: "walking",
+  negative_similarity_threshold: 0
 };
 
 const selectRoute = (state: { route: RouteState }) => state.route;
@@ -69,10 +71,10 @@ const routeSlice = createSlice({
       if (action.payload.location_type.length === action.payload.query.length) {
         state.location_type = action.payload.location_type;
         state.query = action.payload.query;
+        state.negative_query = action.payload.negative_query;
       } else {
         console.error("location_type and query must be of the same length");
       }
-      console.log(action.payload);
     },
     setLonLat(
       state,

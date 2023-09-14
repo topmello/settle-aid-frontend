@@ -47,7 +47,8 @@
     "Invalid username or password": "Invalid username or password",
     "Username already exists": "Username already exists",
     "Generating Failed": "Generating Failed",
-    "Please fill in all fields": "Please fill in all fields"
+    "Please fill in all fields": "Please fill in all fields",
+    "Login required": "Login required"
   },
   "route": {
     "First": "First",
