@@ -26,6 +26,7 @@ import findTipsForModes from "../../tips/tipFinder";
 import { RouteResult } from "../../types/route";
 import { locationIcons } from "../../constants/icons";
 
+
 export default function MapScreen() {
   const theme = useTheme();
   const token = useSelector(selectUserToken);
@@ -71,6 +72,9 @@ export default function MapScreen() {
 
   const { checked, handlePress } = useCheckedList(data);
 
+
+
+
   if (isLoading && data === null) {
     return (
       <SafeAreaView style={styles.container}>
@@ -99,6 +103,10 @@ export default function MapScreen() {
   if (data === null) {
     return (
       <SafeAreaView style={styles.container}>
+        
+        
+        
+
         <Text variant="titleLarge">No location found</Text>
         <Button
           mode="contained"
@@ -173,6 +181,7 @@ export default function MapScreen() {
             height={34}
           />
         </Pressable>
+        
         <Button
           mode="contained"
           style={styles.button}

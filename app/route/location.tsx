@@ -126,12 +126,13 @@ export default function RouteGenLocation() {
             console.log("data", data);
             console.log("details", details);
             console.log(JSON.stringify(details?.geometry?.location));
+            
           }}
           query={{
             key: 'AIzaSyDRCFeHN0Z_yftUs5FKP6nv3XAm_Ex8cbc',
             language: 'en',
             location: '-37.840935, 144.946457',
-            radius: '20000',
+            radius: '2000',
             components: 'country:aus',
             strictbounds: true,
           }}

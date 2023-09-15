@@ -88,3 +88,4 @@ export const {
   setPrivacyUnchecked,
 } = appSlice.actions;
 export default appSlice.reducer;
+
