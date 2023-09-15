@@ -28,11 +28,20 @@ interface RouteResult {
 }
 
 export function getMapRegion(data: RouteResult, body: any, mapRef: any) {
+  let centerLat = 0, centerLon = 0, deltaLat = 0, deltaLon = 0;
+  data["locations_coordinates"].forEach((location) => {
+    centerLat += location.latitude;
+    centerLon += location.longitude;
+    deltaLat = Math.max(deltaLat, Math.abs(location.latitude - body.latitude));
+    deltaLon = Math.max(deltaLon, Math.abs(location.longitude - body.longitude));
+  });
+  centerLat /= data["locations_coordinates"].length;
+  centerLon /= data["locations_coordinates"].length;
   let region = {
     latitude: body.latitude,
     longitude: body.longitude,
-    latitudeDelta: 0.01,
-    longitudeDelta: 0.03,
+    latitudeDelta: deltaLat * 2,
+    longitudeDelta: deltaLon * 2,
   };
 
   const handleLocationSelect = (location: Coordinates) => {

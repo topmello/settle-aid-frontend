@@ -38,6 +38,12 @@ export const useSession = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(!!token);
   const [sessionRefreshing, setSessionRefreshing] = useState(false);
 
+  const [triggerRefresh, setTriggerRefresh] = useState(0);
+
+  const triggerTokenStatusRefresh = useCallback(() => {
+    setTriggerRefresh((prev) => prev + 1);
+  }, []);
+
   const doRefreshToken = useCallback(() => {
     setSessionRefreshing(true);
     dispatch(refreshTokenThunk())
@@ -76,11 +82,12 @@ export const useSession = () => {
     } else {
       setIsLoggedIn(true);
     }
-  }, [token, tokenExpiresAt, refreshTokenExpiresAt, doRefreshToken, doRedirectToLogin]);
+  }, [token, tokenExpiresAt, refreshTokenExpiresAt, doRefreshToken, doRedirectToLogin, triggerRefresh]);
 
   return {
     token,
     isLoggedIn,
     sessionRefreshing,
+    triggerTokenStatusRefresh
   };
 };
