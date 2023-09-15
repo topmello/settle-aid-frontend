@@ -1,4 +1,5 @@
 {
+  "lang": "English(AU)",
   "comm": {
     "Next": "Next",
     "Done": "Done",
@@ -12,7 +13,8 @@
     "Search": "Search",
     "Home": "Home",
     "Settings": "Settings",
-    "Learn": "Learn"
+    "Learn": "Learn",
+    "Network Error": "Network Error: URL may blocked"
   },
   "trans": {
     "Choose your language": "Choose your Language to get started"
@@ -41,7 +43,13 @@
     "Log in successful": "Log in successful",
     "Log in failed": "Log in failed",
     "Sign up successful": "Sign up successful",
-    "Sign up failed": "Sign up failed"
+    "Sign up failed": "Sign up failed",
+    "Invalid username or password": "Invalid username or password",
+    "Username already exists": "Username already exists",
+    "Generating Failed": "Generating Failed",
+    "Please fill in all fields": "Please fill in all fields",
+    "Login required": "Login required",
+    "Session expired, please login again": "Session expired, please login again"
   },
   "route": {
     "First": "First",
@@ -52,9 +60,20 @@
     "Travelling": "Travelling",
     "Health": "Health",
     "Second": "Second",
+    "Third": "Finally",
+    "Select your starting point and ideal travel range": "Select your starting point and ideal travel range",
     "Tell us more about your preferences": "Tell us more about your preferences",
     "Add things you love": "Add things you love",
-    "Add things to avoid": "Add things to avoid"
+    "Add things to avoid": "Add things to avoid",
+    "Please select at least one activity": "Please select at least one activity",
+    "Get my route": "Get my route",
+    "Love": "Love",
+    "Avoid": "Avoid",
+    "You have already added this": "You have already added this",
+    "Please enter a prompt": "Please enter a prompt",
+    "Please understood privacy policy first" : "Please understood privacy policy first",
+    "Location not found": "Location not found",
+    "Privacy Policy": "Your privacy matters: We store your information and location data securely and confidentially"
   },
   "home": {
     "title": "Discover Melbourne",
@@ -64,7 +83,7 @@
     "historyTitle": "Routine History",
     "more": "More",
     "belovedRoutine": "Beloved Routine",
-
+    "Plan my route": "Plan my route",
     "History Function Coming Soon": "History Function Coming Soon",
     "Discover Melbourne": "Discover Melbourne",
     "Start Here": "Start Here",
@@ -100,6 +119,20 @@
     "Shopping": "Shopping",
     "Relaxing": "Relaxing",
     "Travelling": "Travelling"
+  },
+  "settings": {
+    "Settings": "Settings",
+    "Appearance": "Appearance",
+    "Language": "Language",
+    "Color Scheme": "Color Scheme",
+    "Set your color scheme": "Set your color scheme",
+    "Set your language": "Set your language",
+    "Light": "Light",
+    "Dark": "Dark",
+    "Follow System": "Follow System",
+    "Account": "Account",
+    "Logout": "Logout",
+    "Development": "Development"
   },
   "tip": {}
 }

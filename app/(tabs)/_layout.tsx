@@ -9,27 +9,27 @@ import LearnScreen from "./learn";
 import SettingsScreen from "./settings";
 import { selectLanguage } from "../../store/appSlice";
 import { useSelector } from "react-redux";
+import { useNotification } from "../../hooks/useNotification";
 
 export default function TabLayout() {
   const { t } = useTranslation();
-  const { authenticated } = useSession();
+  const { isLoggedIn, sessionRefreshing } = useSession();
   const rootNativationState = useRootNavigationState();
   const language = useSelector(selectLanguage);
+  const { pushNotification } = useNotification();
 
   const Tab = createMaterialBottomTabNavigator();
 
   // authentication guard
-
-  // FIXME Remove after API works 
   useEffect(() => {
     if (!rootNativationState?.key) return;
     if (!language) {
       router.replace("/common/language");
     }
-    if (!authenticated) {
+    if (!isLoggedIn && !sessionRefreshing) {
       router.replace("/auth/login");
     }
-  }, [authenticated, rootNativationState?.key]);
+  }, [isLoggedIn, rootNativationState?.key, sessionRefreshing, language]);
 
   return (
     <Tab.Navigator initialRouteName="home">

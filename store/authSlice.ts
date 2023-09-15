@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { fetch } from "../api/fetch";
+import store from ".";
 
 export type LoginData = {
   username: string;
@@ -36,10 +37,14 @@ export const loginUser = createAsyncThunk('auth/loginUser', async (data: LoginDa
   return response.data;
 });
 
-export const refreshToken = createAsyncThunk('auth/refreshToken', async () => {
+export const refreshToken = createAsyncThunk('auth/refreshToken', async (arg, {getState}) => {
+  const state = getState() as any;
   const response = await fetch({
     method: 'POST',
     url: '/login/v2/refresh/',
+    data: {
+      refresh_token: state.auth.refreshToken,
+    }
   });
   return response.data;
 });

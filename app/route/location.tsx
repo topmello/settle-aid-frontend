@@ -1,161 +1,271 @@
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { router } from "expo-router";
 import MapView, { Marker } from "react-native-maps";
-import { StyleSheet, View, ActivityIndicator, Pressable } from "react-native";
-import { Text, Card, Button, useTheme, Banner } from "react-native-paper";
+import {
+  StyleSheet,
+  View,
+  ActivityIndicator,
+  Pressable,
+  ScrollView,
+  KeyboardAvoidingView,
+} from "react-native";
+import {
+  Text,
+  Card,
+  Button,
+  Banner,
+  Portal,
+  Modal,
+  Surface,
+} from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Slider from "@react-native-community/slider";
 import { Link } from "expo-router";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import ArrowBackIcon from "../../assets/images/icons/arrow_back.svg";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-
 import { useTranslation } from "react-i18next";
-
 import { AppDispatch, RootState } from "../../store";
 import {
   setPrivacyChecked,
   setPrivacyUnchecked,
   selectPrivacyChecked,
+  selectTheme,
 } from "../../store/appSlice";
 import {
   setLonLat,
   setDistanceThreshold,
   selectLonLat,
   selectDistanceThres,
+  RouteState,
 } from "../../store/routeSlice";
 
 import useCurrentLocation from "../../hooks/useCurrentLocation";
+import useCurrentLocationRealtime from "../../hooks/useCurrentLocationRealtime";
+import { useNotification } from "../../hooks/useNotification";
+import { useAppTheme } from "../../theme/theme";
+import { mapDarkTheme } from "../../theme/map";
 
 export default function RouteGenLocation() {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const dispatch = useDispatch<AppDispatch>();
+
+  const currentTheme = useSelector(selectTheme);
 
   const privacyChecked = useSelector(selectPrivacyChecked);
 
   const { isLoading, isFail } = useSelector((state: RootState) => state.app);
-
   const locationState = useSelector(selectLonLat);
-
   const distanceThres = useSelector(selectDistanceThres);
-
   const fetchLocation = useCurrentLocation();
+  const routeState: RouteState = useSelector((state: RootState) => state.route);
+  const [searchedLocation, setSearchedLocation] = useState<{
+    description: string;
+    geometry: { location: { lat: number; lng: number } };
+  } | null>(null);
+  const location = useCurrentLocationRealtime();
+  const { t } = useTranslation();
+  const { pushNotification } = useNotification();
 
-  const melbCBD = {
-    description: 'City',
-    geometry: { location: { lat: -37.840935, lng: 144.946457 } },
-  };
+  const [showLocationInput, setShowLocationInput] = useState(false);
 
   return (
-    <SafeAreaView
+    <ScrollView
       style={{
         backgroundColor: theme.colors.primaryContainer,
         flex: 1,
-        flexDirection: "column",
         padding: 20,
+        flexDirection: "column",
         width: "100%",
       }}
     >
-      <Banner
-        style={{
-          borderRadius: 20,
-        }}
-        visible={!privacyChecked}
-        actions={[
-          {
-            label: "Not Allow",
-            onPress: () => {
-              dispatch(setPrivacyUnchecked());
-              router.replace("/route/prompt");
+      <SafeAreaView>
+        <Banner
+          style={{
+            borderRadius: 10,
+            backgroundColor: theme.colors.errorContainer,
+          }}
+          theme={{
+            colors: {
+              onSurface: theme.colors.onErrorContainer,
             },
-          },
-          {
-            label: "Understood",
-            onPress: () => dispatch(setPrivacyChecked()),
-          },
-        ]}
-      >
-        <Text variant="titleMedium">
-          Your privacy matters: We store your information and location data
-          securely and confidentially.
-        </Text>
-      </Banner>
-      
-      <View
-        style={{
-          marginTop: 32,
-          flexDirection: "row",
-          justifyContent: "space-between",
-        }}
-      >
-        <Pressable onPress={() => router.replace("/route/prompt")}>
-          <ArrowBackIcon
-            fill={theme.colors.onPrimaryContainer}
-            width={34}
-            height={34}
-          />
-        </Pressable>
-        <View style={{ flexDirection: "row", paddingEnd: 8 }}>
-          <Text variant="headlineMedium" style={{ fontWeight: "900" }}>
-            3
+          }}
+          visible={!privacyChecked}
+          icon="shield-check-outline"
+          actions={[
+            {
+              label: "Not Allow",
+              onPress: () => {
+                dispatch(setPrivacyUnchecked());
+                router.back();
+              },
+              textColor: theme.colors.error,
+            },
+            {
+              label: "Understood",
+              onPress: () => dispatch(setPrivacyChecked()),
+              mode: "contained",
+              buttonColor: theme.colors.error,
+              textColor: theme.colors.onError,
+            },
+          ]}
+        >
+          <Text variant="titleMedium">
+            {t("Privacy Policy", { ns: "route" })}
           </Text>
-          <Text variant="headlineMedium">/3</Text>
+        </Banner>
+
+        <Portal>
+          <Modal
+            visible={showLocationInput}
+            onDismiss={() => {
+              setShowLocationInput(false);
+            }}
+            contentContainerStyle={{
+              flex: 1,
+              paddingTop: 100,
+              justifyContent: "flex-start",
+            }}
+          >
+            <View style={{
+              position: "absolute",
+              width: "100%",
+              padding: 20,
+              bottom: "5%",
+            }}>
+            <Button mode="contained-tonal" onPress={() => setShowLocationInput(false)}>
+              Cancel
+            </Button>
+            </View>
+               <GooglePlacesAutocomplete
+              styles={{
+                container:{
+                  marginHorizontal: 20,
+                },
+                textInput: {
+                  backgroundColor: theme.colors.surface,
+                  color: theme.colors.onSurface,
+                  borderRadius: 5,
+                  fontSize: 16,
+                  height: 54,
+                  borderColor: theme.colors.primary,
+                  borderWidth: 2,
+                },
+                listView: {
+                  color: theme.colors.onSurface,
+                  borderRadius: 5,
+                  overflow: "hidden",
+                  fontSize: 16,
+                },
+                row: {
+                  backgroundColor: theme.colors.surface,
+                  color: theme.colors.onSurface,
+                },
+                description: {
+                  color: theme.colors.onSurface,
+                  fontSize: 16,
+                },
+                predefinedPlacesDescription: {
+                  color: theme.colors.onSurface,
+                  fontSize: 16,
+                },
+                poweredContainer: {
+                  backgroundColor: theme.colors.surface,
+                  color: theme.colors.onSurface,
+                }
+              }}
+              placeholder="Search"
+              fetchDetails={true}
+              GooglePlacesDetailsQuery={{ fields: "geometry" }}
+              onPress={(data, details = null) => {
+                if (details) {
+                  setSearchedLocation({
+                    description: data.description,
+                    geometry: details.geometry,
+                  });
+                  dispatch(setLonLat({
+                    longitude: details.geometry.location.lng,
+                    latitude: details.geometry.location.lat,
+                  }))
+                } else {
+                  pushNotification({
+                    message: t("Location not found", { ns: "route" }),
+                    type: "error",
+                  })
+                }
+                setShowLocationInput(false);
+              }}
+              query={{
+                key: "AIzaSyDRCFeHN0Z_yftUs5FKP6nv3XAm_Ex8cbc",
+                language: "en",
+                location: "-37.840935, 144.946457",
+                radius: "20000",
+                components: "country:aus",
+                strictbounds: true,
+              }}
+            />
+          </Modal>
+        </Portal>
+
+        <View
+          style={{
+            marginTop: 16,
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <Pressable onPress={() => router.back()}>
+            <ArrowBackIcon
+              fill={theme.colors.onPrimaryContainer}
+              width={34}
+              height={34}
+            />
+          </Pressable>
+          <View style={{ flexDirection: "row", paddingEnd: 8 }}>
+            <Text variant="headlineMedium" style={{ fontWeight: "900" }}>
+              3
+            </Text>
+            <Text variant="headlineMedium">/3</Text>
+          </View>
         </View>
-      </View>
+        <View style={{ paddingStart: 8 }}>
+          <Text variant="headlineMedium" style={{ marginTop: 12 }}>
+            {t("Third", { ns: "route" })}
+          </Text>
+          <Text
+            variant="headlineMedium"
+            style={{
+              color: theme.colors.onPrimaryContainer,
+              fontWeight: "bold",
+            }}
+          >
+            {t("Select your starting point and ideal travel range", {
+              ns: "route",
+            })}
+          </Text>
+        </View>
 
-
-
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-          marginTop: 32,
-          padding: 8,
-          gap: 16,
-          flexWrap: "wrap",
-          flexDirection: "row",
-        }}
-      >
-        <GooglePlacesAutocomplete
-          placeholder='Search'
-          fetchDetails={true}
-          GooglePlacesDetailsQuery={{ fields: "geometry" }}
-          onPress={(data, details = null) => {
-            // 'details' is provided when fetchDetails = true
-            console.log("data", data);
-            console.log("details", details);
-            console.log(JSON.stringify(details?.geometry?.location));
-            
-          }}
-          query={{
-            key: 'AIzaSyDRCFeHN0Z_yftUs5FKP6nv3XAm_Ex8cbc',
-            language: 'en',
-            location: '-37.840935, 144.946457',
-            radius: '2000',
-            components: 'country:aus',
-            strictbounds: true,
-          }}
-        />
         <Card
           style={{
-            height: 330,
             width: "100%",
-            borderRadius: 20,
-            backgroundColor: theme.colors.surfaceVariant,
-            margin: 10,
+            borderRadius: 10,
+            backgroundColor: theme.colors.surface,
+            marginTop: 24,
+            marginBottom: 16,
           }}
         >
           <View
             style={{
-              height: 200,
+              height: 230,
               width: "100%",
-              borderTopLeftRadius: 20,
-              borderTopRightRadius: 20,
+              borderTopLeftRadius: 10,
+              borderTopRightRadius: 10,
               overflow: "hidden",
             }}
           >
             <MapView
+              customMapStyle={currentTheme === "dark" ? mapDarkTheme : []}
               style={styles.map}
               initialRegion={{
                 latitude: locationState.latitude,
@@ -188,90 +298,145 @@ export default function RouteGenLocation() {
 
           <View
             style={{
-              height: 70,
-              padding: 10,
+              padding: 16,
             }}
           >
-            <Text variant="titleLarge">Searching Area</Text>
-            <Text variant="titleSmall">Drag the pin to change location</Text>
+            <Text variant="titleLarge">Set your starting point</Text>
+            <Text
+              variant="bodyMedium"
+              style={{
+                color: theme.colors.onSurfaceVariant,
+              }}
+            >
+              Hint: Press and Drag the pin to change location
+            </Text>
+            {
+              searchedLocation && (
+                <Text
+                  variant="bodyLarge"
+                  style={{
+                    marginTop: 12,
+                  }}
+                >
+                  {searchedLocation.description}
+                </Text>
+              )
+            }
           </View>
           <View
             style={{
               flexDirection: "row",
-              justifyContent: "center",
-              paddingRight: 10,
+              justifyContent: "flex-end",
+              paddingRight: 16,
+              paddingTop: 6,
+              paddingBottom: 12,
+              gap: 8,
             }}
           >
-            <Button mode="contained" onPress={fetchLocation}>
-              Get current location
+            <Button
+              icon="map-search-outline"
+              onPress={() => {
+                setShowLocationInput(!showLocationInput);
+              }}
+            >
+              Search
+            </Button>
+            <Button
+              mode="contained"
+              icon="map-marker"
+              loading={isLoading}
+              disabled={isLoading}
+              onPress={() => {
+                fetchLocation();
+                setSearchedLocation(null);
+              }}
+            >
+              Locate
             </Button>
           </View>
         </Card>
-        {isLoading && (
-          <View
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <ActivityIndicator size="large" />
-          </View>
-        )}
+
         <Card
           style={{
-            height: 150,
             width: "100%",
-            borderRadius: 20,
-            backgroundColor: theme.colors.surfaceVariant,
-            margin: 10,
-            padding: 10,
+            borderRadius: 10,
+            backgroundColor: theme.colors.surface,
+            padding: 16,
+            marginBottom: 32,
           }}
         >
           <View
             style={{
-              width: "90%",
-              marginTop: 10,
+              marginTop: 4,
               marginBottom: 10,
             }}
           >
-            <Text variant="titleMedium">
-              Distance you want to travel between each location
+            <Text variant="titleLarge">Distance between destinations</Text>
+            <Text
+              variant="bodyLarge"
+              style={{
+                color: theme.colors.onSurfaceVariant,
+              }}
+            >
+              Drag the slider to change the distance
             </Text>
           </View>
 
-          <Slider
-            style={{ width: "100%", height: 40 }}
-            minimumValue={0}
-            maximumValue={2000}
-            value={distanceThres}
-            onValueChange={(value) => {
-              dispatch(setDistanceThreshold({ distance_threshold: value }));
-            }}
-            minimumTrackTintColor={theme.colors.primary}
-            maximumTrackTintColor={theme.colors.surfaceVariant}
-            tapToSeek={true}
-          />
-          <Text variant="bodyLarge">
+          <Text style={{
+            fontSize: 20,
+            textAlign: "center",
+          }}>
             {new Intl.NumberFormat().format(
               parseFloat((distanceThres / 1000).toFixed(2))
             )}{" "}
             KM
           </Text>
+
+          <Slider
+            style={{ width: "100%", marginTop: 16, marginBottom: 8 }}
+            minimumValue={100}
+            maximumValue={3000}
+            step={100}
+            value={distanceThres}
+            onValueChange={(value) => {
+              dispatch(setDistanceThreshold({ distance_threshold: value }));
+            }}
+            minimumTrackTintColor={theme.colors.primary}
+            maximumTrackTintColor={theme.colors.outline}
+            thumbTintColor={theme.colors.primary}
+            tapToSeek={true}
+          />
         </Card>
-        {privacyChecked && (
-          <Link href={"/route/result"} style={{ margin: 10 }}>
-            <Button mode="contained">
-              Done <FontAwesome name="check" size={15} color="black" />
-            </Button>
-          </Link>
-        )}
-      </View>
-    </SafeAreaView>
+        <View
+          style={{
+            height: 100,
+            width: "100%",
+            alignItems: "center",
+          }}
+        >
+          <Button
+            mode="contained"
+            icon={isLoading ? undefined : "routes"}
+            disabled={isLoading}
+            style={{
+              width: 150,
+            }}
+            onPress={() => {
+              if (!privacyChecked) {
+                pushNotification({
+                  message: t("Please understood privacy policy first"),
+                  type: "error",
+                });
+              } else {
+                router.push("/route/result");
+              }
+            }}
+          >
+            {t("Get my route", { ns: "route" })}
+          </Button>
+        </View>
+      </SafeAreaView>
+    </ScrollView>
   );
 }
 

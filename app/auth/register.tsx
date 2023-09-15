@@ -38,6 +38,7 @@ export default function RegisterPage() {
   const [username, setUsername] = React.useState("");
   const [usernameError, setUsernameError] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [showPassword, setShowPassword] = React.useState(false);
   const [passwordError, setPasswordError] = React.useState("");
   const [generatedUsername, setGeneratedUsername] = React.useState("");
   const [generating, setGenerating] = React.useState(false);
@@ -57,8 +58,11 @@ export default function RegisterPage() {
       if (response.status === 200) {
         setGeneratedUsername(response.data.username);
       }
-    } catch (error) {
-      console.log("Failed to generate username ", error);
+    } catch (err) {
+      pushNotification({
+        message: t("Generating Failed", { ns: "acc" }),
+        type: "error",
+      });
     }
     setGenerating(false);
   }, []);
@@ -84,15 +88,27 @@ export default function RegisterPage() {
       .then(() => {
         pushNotification({
           message: t("Sign up successful", { ns: "acc" }),
-          type: "error",
+          type: "success",
         });
         return true;
       })
       .catch((err) => {
-        pushNotification({
-          message: t("Sign up failed", { ns: "acc" }) + ": " + err.message,
-          type: "error",
-        });
+        switch (err.code) {
+          case "ERR_BAD_REQUEST":
+            pushNotification({
+              message: t("Sign up failed", { ns: "acc" }),
+              type: "error",
+            });
+            break;
+          case "ERR_NETWORK":
+            pushNotification({
+              message: t("Network Error", { ns: "comm" }),
+              type: "error",
+            });
+            break;
+          default:
+            console.error(err);
+        }
         setRegistering(false);
         return false;
       });
@@ -182,6 +198,7 @@ export default function RegisterPage() {
       >
         <View>
           <TextInput
+            autoComplete="username"
             theme={{
               colors: {
                 background: theme.colors.primaryContainer,
@@ -205,6 +222,7 @@ export default function RegisterPage() {
         </View>
         <View>
           <TextInput
+            autoComplete="password"
             theme={{
               colors: {
                 background: theme.colors.primaryContainer,
@@ -214,6 +232,16 @@ export default function RegisterPage() {
             mode="outlined"
             label={t("Password", { ns: "acc" })}
             style={{ backgroundColor: "transparent", height: 56 }}
+            secureTextEntry={!showPassword}
+            right={
+              <TextInput.Icon
+                style={{ marginTop: 12 }}
+                icon={showPassword ? "eye-off" : "eye"}
+                onPress={() => {
+                  setShowPassword(!showPassword);
+                }}
+              />
+            }
             value={password}
             onChangeText={(text) => {
               validatePassword(text);
@@ -229,10 +257,10 @@ export default function RegisterPage() {
       </KeyboardAvoidingView>
       <View
         style={{
-          height: 160,
+          height: 190,
           justifyContent: "flex-start",
           alignItems: "center",
-          gap: 28,
+          gap: 16,
         }}
       >
         <Button
@@ -243,6 +271,15 @@ export default function RegisterPage() {
           loading={generating}
         >
           {t("Generate a username", { ns: "acc" })}
+        </Button>
+        <Button
+          mode="text"
+          style={{ margin: 0 }}
+          onPress={() => {
+            router.replace("/auth/login");
+          }}
+        >
+          {t("Already have an account", { ns: "acc" })}
         </Button>
         <Button
           mode="contained"

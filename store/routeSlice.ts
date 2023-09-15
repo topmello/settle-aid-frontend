@@ -8,21 +8,25 @@ export type RouteType = "driving" | "walking" | "cycling";
 export interface RouteState {
   location_type: LocationType[];
   query: string[];
+  negative_query: string[];
   longitude: number;
   latitude: number;
   distance_threshold: number; //This is distance between each location in meters
   similarity_threshold: number; //0-1
+  negative_similarity_threshold: number; // 0-1
   route_type: RouteType;
 }
 
 const initialState: RouteState = {
   location_type: [],
   query: [],
+  negative_query: [],
   longitude: 144.9631, // Melbourne Location
   latitude: -37.8136, // Melbourne Location
   distance_threshold: 1000,
   similarity_threshold: 0,
   route_type: "walking",
+  negative_similarity_threshold: 0
 };
 
 const selectRoute = (state: { route: RouteState }) => state.route;
@@ -61,11 +65,13 @@ const routeSlice = createSlice({
       action: PayloadAction<{
         location_type: LocationType[];
         query: string[];
+        negative_query: string[];
       }>
     ) {
       if (action.payload.location_type.length === action.payload.query.length) {
         state.location_type = action.payload.location_type;
         state.query = action.payload.query;
+        state.negative_query = action.payload.negative_query;
       } else {
         console.error("location_type and query must be of the same length");
       }

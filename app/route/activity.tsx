@@ -3,16 +3,15 @@ import { Pressable, View } from "react-native";
 import { Card, RadioButton, Text, useTheme, Button } from "react-native-paper";
 import { router } from "expo-router";
 import ArrowBackIcon from "../../assets/images/icons/arrow_back.svg";
-import GroupAddIcon from "../../assets/images/icons/group_add.svg";
 import { useTranslation } from "react-i18next";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ShoppingCartIcon from "../../assets/images/icons/shopping_cart.svg";
 import FastfoodIcon from "../../assets/images/icons/fastfood.svg";
 import ParkBirdsIcon from "../../assets/images/icons/park_birds.svg";
-import MountainTreesIcon from "../../assets/images/icons/mountain_trees.svg";
 import PharmacyIcon from "../../assets/images/icons/pharmacy.svg";
 import { useDispatch } from "react-redux";
 import { LocationType, setLocationType } from "../../store/routeSlice";
+import { useNotification } from "../../hooks/useNotification"
 
 export type ActivityOption = {
   id: LocationType;
@@ -46,6 +45,7 @@ const activityOptions: ActivityOption[] = [
 export default function RouteActivityScreen() {
   const { t } = useTranslation();
   const theme = useTheme();
+  const { pushNotification } = useNotification();
   const [selectedOptions, setActivityOptions] = React.useState<
     ActivityOption[]
   >([]);
@@ -79,7 +79,7 @@ export default function RouteActivityScreen() {
     >
       <View
         style={{
-          marginTop: 32,
+          marginTop: 16,
           flexDirection: "row",
           justifyContent: "space-between",
         }}
@@ -99,7 +99,7 @@ export default function RouteActivityScreen() {
         </View>
       </View>
       <View style={{ paddingStart: 8 }}>
-        <Text variant="headlineMedium" style={{ marginTop: 38 }}>
+        <Text variant="headlineMedium" style={{ marginTop: 18 }}>
           {t("First", { ns: "route" })}
         </Text>
         <Text
@@ -164,7 +164,7 @@ export default function RouteActivityScreen() {
                   width: 60,
                   height: 60,
                 })}
-                <Text variant="bodyLarge" style={{ marginTop: 6 }}>
+                <Text variant="bodyLarge" style={{ marginTop: 6, fontWeight: "bold", color: theme.colors.onSurfaceVariant }}>
                   {t(option.name, { ns: "route" })}
                 </Text>
               </View>
@@ -174,7 +174,7 @@ export default function RouteActivityScreen() {
       </View>
       <View
         style={{
-          height: 120,
+          height: 100,
           justifyContent: "flex-start",
           alignItems: "center",
         }}
@@ -183,10 +183,19 @@ export default function RouteActivityScreen() {
           mode="contained"
           style={{ width: 150 }}
           onPress={() => {
-            dispatch(
-              setLocationType(selectedOptions.map((option) => option.id))
-            );
-            router.push("/route/prompt");
+            if (selectedOptions.length === 0) {
+              pushNotification({
+                message: t("Please select at least one activity", {
+                  ns: "route",
+                }),
+                type: "error",
+              });
+            } else {
+              dispatch(
+                setLocationType(selectedOptions.map((option) => option.id))
+              );
+              router.push("/route/prompt");
+            }
           }}
         >
           {t("comm:Next")}

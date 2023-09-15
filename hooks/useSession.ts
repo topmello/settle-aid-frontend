@@ -1,58 +1,93 @@
 import { useDispatch, useSelector } from "react-redux";
 import {
-  LoginData,
-  RegisterData,
-  loginUser,
-  logoutUser,
-  registerUser,
+  selectRefreshToken,
+  selectRefreshTokenExpiresAt,
+  selectTokenExpiresAt,
   selectUserToken,
 } from "../store/authSlice";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { refreshToken as refreshTokenThunk } from "../store/authSlice";
-import { fetch } from "../api/fetch";
 import { AppDispatch } from "../store";
+import { router } from "expo-router";
+import { useNotification } from "./useNotification";
+import { useTranslation } from "react-i18next";
 
+/**
+ * Authenticated user session hook
+ * @description This hook is used to get the latest token and auth status
+ * @returns {
+ * token: string,
+ * authenticated: boolean,
+ * login: (data: LoginData) => void,
+ * logout: () => void,
+ * register: (data: RegisterData) => void,
+ * getSessionAuthenticated: () => Promise<boolean>,
+ * getSessionToken: () => Promise<string>,
+ * }
+ */
 export const useSession = () => {
-  const token = useSelector(selectUserToken);
-  const tokenExpiresAt = useSelector(
-    (state: any) => state.auth?.tokenExpiresAt
-  );
-  const refreshToken = useSelector((state: any) => state.auth?.refreshToken);
-  const refreshTokenExpiresAt = useSelector(
-    (state: any) => state.auth?.refreshTokenExpiresAt
-  );
+  const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
+  const { pushNotification } = useNotification();
 
-  const authenticated = useMemo(() => {
-    if (!token || !tokenExpiresAt) return false;
-    if (Date.now() > new Date(tokenExpiresAt).getTime()) {
-      if (!refreshToken || !refreshTokenExpiresAt) return false;
-      if (Date.now() > new Date(refreshTokenExpiresAt).getTime()) {
-        return false;
-      } else {
-        dispatch(refreshTokenThunk());
-      }
+  const token = useSelector(selectUserToken);
+  const tokenExpiresAt = useSelector(selectTokenExpiresAt);
+  const refreshToken = useSelector(selectRefreshToken);
+  const refreshTokenExpiresAt = useSelector(selectRefreshTokenExpiresAt);
+
+  const [isLoggedIn, setIsLoggedIn] = useState(!!token);
+  const [sessionRefreshing, setSessionRefreshing] = useState(false);
+
+  const [triggerRefresh, setTriggerRefresh] = useState(0);
+
+  const triggerTokenStatusRefresh = useCallback(() => {
+    setTriggerRefresh((prev) => prev + 1);
+  }, []);
+
+  const doRefreshToken = useCallback(() => {
+    setSessionRefreshing(true);
+    dispatch(refreshTokenThunk())
+      .unwrap()
+      .catch((err) => {
+        console.error(err);
+        doRedirectToLogin();
+      })
+      .finally(() => {
+        setSessionRefreshing(false);
+      });
+  }, [dispatch]);
+  
+  const doRedirectToLogin = useCallback(() => {
+    router.replace("/auth/login");
+    pushNotification({
+      message: t("Session expired, please login again", { ns: "acc" }),
+      type: "warning",
+    });
+  }, [pushNotification, t]);
+
+  useEffect(() => {
+    if (!token) {
+      setIsLoggedIn(false);
+      doRedirectToLogin();
+      return;
     }
-    return true;
-  }, [token, tokenExpiresAt, refreshToken, refreshTokenExpiresAt]);
-
-  const login = useCallback((data: LoginData) => {
-    dispatch(loginUser(data));
-  }, []);
-
-  const logout = useCallback(() => {
-    dispatch(logoutUser());
-  }, []);
-
-  const register = useCallback((data: RegisterData) => {
-    dispatch(registerUser(data));
-  }, []);
+    if (new Date().getUTCMilliseconds() > new Date(tokenExpiresAt).getTime()) {
+      if (refreshToken && new Date().getUTCMilliseconds() < new Date(refreshTokenExpiresAt).getTime()) {
+        console.log("refreshing token");
+        doRefreshToken();
+      } else {
+        doRedirectToLogin();
+        return;
+      }
+    } else {
+      setIsLoggedIn(true);
+    }
+  }, [token, tokenExpiresAt, refreshTokenExpiresAt, doRefreshToken, doRedirectToLogin, triggerRefresh]);
 
   return {
     token,
-    authenticated,
-    login,
-    logout,
-    register,
+    isLoggedIn,
+    sessionRefreshing,
+    triggerTokenStatusRefresh
   };
 };

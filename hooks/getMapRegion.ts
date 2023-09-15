@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 
 export type MapRegion = {
   latitude: number;
@@ -26,37 +27,53 @@ interface RouteResult {
   duration: number;
 }
 
-function useMapRegion(data: RouteResult, body: any, mapRef: any) {
-  const [region, setRegion] = useState<MapRegion>({
+export function getMapRegion(data: RouteResult, body: any, mapRef: any) {
+  let centerLat = 0, centerLon = 0, deltaLat = 0, deltaLon = 0;
+  data["locations_coordinates"].forEach((location) => {
+    centerLat += location.latitude;
+    centerLon += location.longitude;
+    deltaLat = Math.max(deltaLat, Math.abs(location.latitude - body.latitude));
+    deltaLon = Math.max(deltaLon, Math.abs(location.longitude - body.longitude));
+  });
+  centerLat /= data["locations_coordinates"].length;
+  centerLon /= data["locations_coordinates"].length;
+  let region = {
     latitude: body.latitude,
     longitude: body.longitude,
-    latitudeDelta: 0.01,
-    longitudeDelta: 0.03,
-  });
+    latitudeDelta: deltaLat * 2,
+    longitudeDelta: deltaLon * 2,
+  };
 
   const handleLocationSelect = (location: Coordinates) => {
+    if (location === undefined || mapRef.current === undefined || location === null ||
+      location.latitude === undefined || location.longitude === undefined) {
+      return;
+    }
     const newRegion = {
       ...region,
-      latitude: location.latitude,
-      longitude: location.longitude,
+      latitude: location?.latitude,
+      longitude: location?.longitude,
     };
-
-    mapRef.current!.animateCamera(
+    
+    mapRef.current?.animateCamera(
       {
         center: newRegion,
       },
       { duration: 1000 }
     );
 
-    setRegion(newRegion);
+    region = {
+      ...region,
+      ...newRegion,
+    }
   };
 
   const handlePressRoute = async (index: number) => {
-    if (index < 0 || index >= data.route.length) {
+    if (index < 0 || index >= data.route.length || data.route.length === 0) {
       return;
     }
-    const lat1 = data.route[index].latitude;
-    const lon1 = data.route[index].longitude;
+    const lat1 = data.route[index]?.latitude;
+    const lon1 = data.route[index]?.longitude;
     const lat2 = data.route[index + 1]?.latitude;
     const lon2 = data.route[index + 1]?.longitude;
 
@@ -76,7 +93,10 @@ function useMapRegion(data: RouteResult, body: any, mapRef: any) {
         { duration: 1000 }
       );
     }
-    setRegion(newRegion);
+    region = {
+      ...region,
+      ...newRegion,
+    }
   };
 
   function degreesToRadians(degrees: number): number {
@@ -109,5 +129,3 @@ function useMapRegion(data: RouteResult, body: any, mapRef: any) {
     handlePressRoute,
   };
 }
-
-export default useMapRegion;

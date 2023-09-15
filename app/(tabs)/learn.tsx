@@ -1,10 +1,11 @@
-import React, { useState } from "react";
-import { ScrollView, StyleSheet, TouchableOpacity } from "react-native";
+import { ScrollView } from "react-native";
 import { View } from "react-native";
 import { Button, List, Text, useTheme } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { tips } from "../../tips/tips.json";
 import { Ionicons } from "@expo/vector-icons";
+import { useTip } from "../../store/TipContext";
+import { router } from "expo-router";
 
 type IconName =
   | "airplane-outline"
@@ -30,6 +31,7 @@ const iconList: IconName[] = [
 
 export default function LearnScreen() {
   const theme = useTheme();
+  const { setCategory } = useTip();
   return (
     <SafeAreaView
       style={{
@@ -70,20 +72,14 @@ export default function LearnScreen() {
               >
                 {category.tips.map((subcate, subcateIndex) => {
                   return (
-                    <List.Accordion
+                    <List.Item
                       key={`${cateIndex}-${subcateIndex}`}
                       title={subcate.mode}
-                    >
-                      {subcate.type.map((tip, itemIndex) => {
-                        return (
-                          <List.Item
-                            title={tip.description}
-                            description={tip.content}
-                            key={`${cateIndex}-${subcateIndex}-${itemIndex}`}
-                          />
-                        );
-                      })}
-                    </List.Accordion>
+                      onPress={() => {
+                        setCategory(subcate);
+                        router.push("/learn/detail");
+                      }}
+                    />
                   );
                 })}
               </List.Section>

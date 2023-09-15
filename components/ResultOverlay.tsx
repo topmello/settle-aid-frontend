@@ -1,6 +1,14 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { View, TouchableOpacity, FlatList, ScrollView } from "react-native";
-import { Text, Card, List, Button, useTheme } from "react-native-paper";
+import {
+  Text,
+  Card,
+  List,
+  Button,
+  useTheme,
+  Surface,
+  IconButton,
+} from "react-native-paper";
 import { useTranslation } from "react-i18next";
 
 import { RouteState } from "../store/routeSlice";
@@ -11,6 +19,10 @@ import { Tip } from "../tips/tipsTyped";
 import { router } from "expo-router";
 
 import { RouteResult } from "../types/route";
+import BottomSheet, {
+  BottomSheetFlatList,
+  BottomSheetScrollView,
+} from "@gorhom/bottom-sheet";
 
 type OverlayProps = {
   tipList: Tip[];
@@ -38,42 +50,91 @@ const ResultOverlay: React.FC<OverlayProps> = ({
   const theme = useTheme();
   const { t } = useTranslation();
 
+  const bottomSheetRef = React.useRef<BottomSheet>(null);
+  const snapPoints = useMemo(() => ["15%", "50%", "100%"], []);
+
   return (
-    <View>
-      <Card style={[styles.card]}>
-        <FlatList
-          data={tipList}
-          renderItem={({ item }) => (
-            <Card
-              style={[
-                styles.flatListCard,
-                { backgroundColor: theme.colors.primaryContainer },
-              ]}
-            >
-              <Card.Title
-                title={`${item.description}`}
-                subtitle={`${item.content}`}
-                right={() => (
-                  <TouchableOpacity
-                    onPress={() => {
-                      router.replace("/learn");
+    <View
+      pointerEvents="box-none"
+      style={{
+        flex: 1,
+      }}
+    >
+      <BottomSheet
+        ref={bottomSheetRef}
+        index={1}
+        snapPoints={snapPoints}
+        style={{
+          zIndex: 1,
+          elevation: 5,
+        }}
+        animateOnMount={true}
+        backgroundStyle={{
+          backgroundColor: theme.colors.surface,
+        }}
+        handleIndicatorStyle={{
+          backgroundColor: theme.colors.onSurfaceVariant,
+        }}
+      >
+        <BottomSheetScrollView
+          style={{
+            flex: 1,
+          }}
+        >
+          <View
+            style={{
+              height: 138,
+              width: "100%",
+            }}
+          >
+            <BottomSheetFlatList
+              data={tipList}
+              renderItem={({ item }) => (
+                <Surface
+                  style={{
+                    backgroundColor: theme.colors.primaryContainer,
+                    borderRadius: 8,
+                    width: 300,
+                    marginVertical: 4,
+                    padding: 16,
+                    flexDirection: "row",
+                  }}
+                >
+                  <View
+                    style={{
+                      flex: 1,
                     }}
                   >
-                    <Text>{t("comm:Learn")}</Text>
-                  </TouchableOpacity>
-                )}
-              />
-            </Card>
-          )}
-          keyExtractor={(tip) => tip?.description}
-          contentContainerStyle={{
-            columnGap: 10,
-            margin: 14,
-            marginBottom: 30,
-          }}
-          horizontal={true}
-        />
-        <ScrollView>
+                    <Text variant="bodyLarge" style={{ fontWeight: "bold" }}>
+                      {item.description}
+                    </Text>
+                    <Text
+                      variant="bodyMedium"
+                      numberOfLines={2}
+                      ellipsizeMode="tail"
+                    >
+                      {item.content}
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      width: 30,
+                      height: "100%",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <IconButton icon="chevron-right" onPress={() => {}} />
+                  </View>
+                </Surface>
+              )}
+              keyExtractor={(tip) => tip?.description}
+              contentContainerStyle={{
+                columnGap: 10,
+                margin: 14,
+              }}
+              horizontal={true}
+            />
+          </View>
           <List.Section>
             {data?.locations.map((location: string, index: number) => {
               const description = body?.location_type[index];
@@ -94,7 +155,7 @@ const ResultOverlay: React.FC<OverlayProps> = ({
                   right={() => (
                     <TouchableOpacity
                       style={{
-                        backgroundColor: "#000",
+                        backgroundColor: theme.colors.primaryContainer,
                         borderRadius: 24,
                         height: 48,
                         width: 48,
@@ -109,8 +170,8 @@ const ResultOverlay: React.FC<OverlayProps> = ({
                     >
                       <FontAwesome
                         name="location-arrow"
-                        size={32}
-                        color="white"
+                        size={30}
+                        color={theme.colors.onPrimaryContainer}
                       />
                     </TouchableOpacity>
                   )}
@@ -160,8 +221,8 @@ const ResultOverlay: React.FC<OverlayProps> = ({
               padding: 10,
             }}
           ></View>
-        </ScrollView>
-      </Card>
+        </BottomSheetScrollView>
+      </BottomSheet>
     </View>
   );
 };

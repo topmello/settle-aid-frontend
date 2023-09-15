@@ -5,99 +5,234 @@ import {
   useColorScheme,
   ScrollView,
 } from "react-native";
-import { Link, Tabs } from "expo-router";
-import { View } from "react-native";
 import { useTranslation } from "react-i18next";
 import { loginUser, logoutUser } from "../../store/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUserToken } from "../../store/authSlice";
-import { selectAuthStatus } from "../../store/authSlice";
 import { AppDispatch } from "../../store";
-import { Button, Text } from "react-native-paper";
+import { Button, List, Menu, Text, useTheme } from "react-native-paper";
 import {
+  selectTheme,
   setDarkTheme,
   setLightTheme,
   setSystemTheme,
+  selectLanguage,
+  setLanguage
 } from "../../store/appSlice";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useNotification } from "../../hooks/useNotification";
+import { useCallback, useState } from "react";
+import { router } from "expo-router";
+import { languages } from "../common/language";
 
 export default function SettingsScreen() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
   const token = useSelector(selectUserToken);
-  const username = useSelector((state: any) => state.auth.username);
-  const authStatus = useSelector(selectAuthStatus);
   const colorScheme = useColorScheme();
+  const theme = useSelector(selectTheme);
+  const paperTheme = useTheme();
+  const appLanguage = useSelector(selectLanguage);
+  const changeLanguage = useCallback((language: "en-AU" | "hi-IN" | "zh-CN") => {
+    dispatch(setLanguage({ language }));
+    i18n.changeLanguage(language);
+  }, []);
 
+  const getLanguageDisplayName = useCallback((lang) => {
+    const language = languages.find((l) => l.code === lang);
+    if (language) {
+      return language.name;
+    }
+    return "Unknown";
+  }, [languages]);
+  const [themeInputVisible, setThemeInputVisible] = useState(false);
+  const [languageInputVisible, setLanguageInputVisible] = useState(false);
+
+  const [adminAuthStatus, setAdminAuthStatus] = useState("Idle");
+  const { pushNotification } = useNotification();
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ alignItems: "center" }}>
-        {/* <Text>Translation: {t("test:helloWorld")}</Text> */}
-        <Link href="/Location">
-          <Button icon="routes" mode="contained">
-            Start Planning
-          </Button>
-        </Link>
-        <Text style={styles.title}>Authentication</Text>
-        <Text>Username here: {username ? username : ""}</Text>
-        <Text>
-          Token here: {token ? token : ""}, Status: {authStatus}
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ alignItems: "center" }}
+        style={{ width: "100%" }}
+      >
+        <Text style={{ fontSize: 24, fontWeight: "bold", width: "100%", padding: 16, paddingTop: 48, color: paperTheme.colors.onBackground }}>
+          {t("Settings", { ns: "settings" })}
         </Text>
-        <Button
-          mode="contained"
-          onPress={() =>
-            dispatch(loginUser({ username: "admin", password: "admin" }))
-          }
-        >
-          Test Admin Token
-        </Button>
-        <Button mode="contained" onPress={() => dispatch(logoutUser())}>
-          Logout
-        </Button>
-        
-        <Link href={"/common/language"}>
-          <Button mode="contained">Go Language</Button>
-        </Link>
-        <Link href={"/auth/access"}>
-          <Button mode="contained">Go Access</Button>
-        </Link>
-        <Link href={"/auth/login"}>
-          <Button mode="contained">Go Login</Button>
-        </Link>
-        <Link href={"/auth/register"}>
-          <Button mode="contained">Go Register</Button>
-        </Link>
-        <Text variant="headlineMedium">Color Scheme</Text>
-        <Text>Color Scheme: {colorScheme}</Text>
-        <Button
-          mode="contained"
-          onPress={() => {
-            dispatch(setLightTheme());
+        <List.Section
+          style={{
+            width: "100%",
           }}
         >
-          Light
-        </Button>
-        <Button mode="contained" onPress={() => dispatch(setDarkTheme())}>
-          Dark
-        </Button>
-        <Button mode="contained" onPress={() => dispatch(setSystemTheme())}>
-          Follow System
-        </Button>
-       
-        <Text variant="headlineMedium">Result Page</Text>
-        <Link href={"/route/result"}>
-          <Button mode="contained">Go Result</Button>
-        </Link>
-        <Link href={"/route/location"}>
-          <Button mode="contained">Go Route Gen current location</Button>
-        </Link>
-        <Text variant="headlineMedium">Route Gen</Text>
-        <Link href={"/route/activity"}>
-          <Button mode="contained">Go Activity</Button>
-        </Link>
-        <Link href={"/route/prompt"}>
-          <Button mode="contained">Go Prompt</Button>
-        </Link>
+          <List.Subheader>{t("Appearance", { ns: "settings"} )}</List.Subheader>
+          <List.Item
+            title={t("Color Scheme", { ns: "settings" })}
+            description={t("Set your color scheme", { ns: "settings" })}
+            right={() => (
+              <Menu
+                visible={themeInputVisible}
+                onDismiss={() => setThemeInputVisible(false)}
+                anchor={
+                  <Button
+                    mode="contained"
+                    onPress={() => setThemeInputVisible(true)}
+                  >
+                    {theme === "light"
+                      ? t("Light", { ns: "settings" })
+                      : theme === "dark"
+                      ? t("Dark", { ns: "settings" })
+                      : t("Follow System", { ns: "settings" })}
+                  </Button>
+                }
+              >
+                <Menu.Item
+                  onPress={() => {
+                    dispatch(setLightTheme());
+                    setThemeInputVisible(false);
+                  }}
+                  title={t("Light", { ns: "settings" })}
+                />
+                <Menu.Item
+                  onPress={() => {
+                    dispatch(setDarkTheme());
+                    setThemeInputVisible(false);
+                  }}
+                  title={t("Dark", { ns: "settings" })}
+                />
+                <Menu.Item
+                  onPress={() => {
+                    dispatch(setSystemTheme());
+                    setThemeInputVisible(false);
+                  }}
+                  title={t("Follow System", { ns: "settings" })}
+                />
+              </Menu>
+            )}
+            left={(props) => <List.Icon {...props} icon="palette" />}
+          />
+          <List.Item
+            title={t("Language", { ns: "settings" })}
+            description={t("Set your language", { ns: "settings" })}
+            left={(props) => <List.Icon {...props} icon="translate" />}
+            right={() => (
+              <Menu
+                visible={languageInputVisible}
+                onDismiss={() => setLanguageInputVisible(false)}
+                anchor={
+                  <Button
+                    mode="contained"
+                    onPress={() => setLanguageInputVisible(true)}
+                  >
+                    {
+                      getLanguageDisplayName(appLanguage)
+                    }
+                  </Button>
+                }
+              >
+                {
+                  languages.map((language) => (
+                    <Menu.Item
+                      key={language.code}
+                      onPress={() => {
+                        changeLanguage(language.code);
+                        setLanguageInputVisible(false);
+                      }}
+                      title={language.name}
+                    />
+                  ))
+                }
+              </Menu>
+            )}
+          />
+        </List.Section>
+        <List.Section
+          style={{
+            width: "100%",
+          }}
+        >
+          <List.Subheader>{t("Account", { ns: "settings"})}</List.Subheader>
+          <List.Item
+            title={t("Logout", { ns: "settings" })}
+            right={() => {
+              return (
+                <Button mode="contained" onPress={() => dispatch(logoutUser())}>
+                  {t("Logout", { ns: "settings" })}
+                </Button>
+              );
+            }}
+            left={(props) => <List.Icon {...props} icon="logout" />}
+          />
+        </List.Section>
+        <List.Section
+          style={{
+            width: "100%",
+          }}
+        >
+          <List.Subheader>{t("Development", {ns: "settings"})}</List.Subheader>
+          <List.Item
+            title="Test Admin Login"
+            description={adminAuthStatus}
+            left={(props) => <List.Icon {...props} icon="security" />}
+            right={() => (
+              <Button
+                mode="contained"
+                onPress={() => {
+                  setAdminAuthStatus("Loading");
+                  dispatch(loginUser({ username: "admin", password: "admin" }))
+                    .unwrap()
+                    .then(() => {
+                      setAdminAuthStatus("Success");
+                    })
+                    .catch(() => {
+                      setAdminAuthStatus("Failed");
+                    });
+                }}
+              >
+                Test
+              </Button>
+            )}
+          />
+
+          <List.Item
+            title="Current Token"
+            description={token}
+            left={(props) => <List.Icon {...props} icon="key" />}
+          />
+          <List.Item
+            title="Go Access Page"
+            left={(props) => <List.Icon {...props} icon="key" />}
+            right={() => (
+              <Button
+                mode="contained"
+                onPress={() => router.push("/auth/access")}
+              >
+                Access
+              </Button>
+            )}
+          />
+          <List.Item
+            title="Test Notificaiton"
+            description="Send a test notification"
+            style={{ marginBottom: 16 }}
+            left={(props) => <List.Icon {...props} icon="bell" />}
+            right={() => {
+              return (
+                <Button
+                  mode="contained"
+                  onPress={() => {
+                    pushNotification({
+                      message: "Hello",
+                      type: "info",
+                    });
+                  }}
+                >
+                  Test
+                </Button>
+              );
+            }}
+          />
+        </List.Section>
       </ScrollView>
     </SafeAreaView>
   );

@@ -2,7 +2,12 @@ import * as React from "react";
 import {
   MD3LightTheme as DefaultLightTheme,
   MD3DarkTheme as DefaultDarkTheme,
+  useTheme,
 } from "react-native-paper";
+
+export type AppTheme = typeof lightTheme | typeof darkTheme;
+
+export const useAppTheme = () => useTheme<AppTheme>();
 
 export const lightTheme = {
   ...DefaultLightTheme,

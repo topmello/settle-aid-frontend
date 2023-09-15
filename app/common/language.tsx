@@ -20,9 +20,9 @@ type Language = {
   icon: JSX.Element;
 };
 
-const languages:Language[] = [
+export const languages:Language[] = [
   {
-    name: "English",
+    name: "English(AU)",
     code: "en-AU",
     desc: "English (Australia)",
     icon: <AustraliaFlagIcon height={110} width={110} />,

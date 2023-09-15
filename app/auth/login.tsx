@@ -18,7 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../store";
 import { loginUser as loginUserThunk } from "../../store/authSlice";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useNotification } from "../../hooks/useNotification";
+import { useNotification } from "../../hooks/useNotification"
 
 // for default route to home screen
 export const unstable_settings = {
@@ -30,23 +30,47 @@ export default function LoginPage() {
   const theme = useTheme();
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [showPassword, setShowPassword] = React.useState(false);
+  const [logining, setLogining] = React.useState(false);
 
   const { pushNotification } = useNotification();
 
   const dispatch = useDispatch<AppDispatch>();
 
   const loginUser = React.useCallback(async () => {
-    dispatch(loginUserThunk({ username, password }))
-      .unwrap()
-      .then(() => {
-        router.replace("/(tabs)");
-      })
-      .catch((err) => {
-        pushNotification({
-          message: err.message,
-          type: "error",
-        });
+    setLogining(true);
+    if (username === "" || password === "") {
+      pushNotification({
+        message: t("Please fill in all fields", { ns: "acc" }),
+        type: "warning",
       });
+      setLogining(false);
+    } else {
+      dispatch(loginUserThunk({ username, password }))
+        .unwrap()
+        .then(() => {
+          router.replace("/(tabs)");
+        })
+        .catch((err) => {
+          switch(err.code) {
+            case "ERR_BAD_REQUEST":
+              pushNotification({
+                message: t("Invalid username or password", { ns: "acc" }),
+                type: "error",
+              });
+              break;
+            case "ERR_NETWORK":
+              pushNotification({
+                message: t("Network Error", { ns: "comm" }),
+                type: "error",
+              });
+              break;
+            default:
+              console.error(err);
+          }
+        });
+      setLogining(false);
+    }
   }, [username, password]);
 
   return (
@@ -109,6 +133,7 @@ export default function LoginPage() {
       >
         <View>
           <TextInput
+            autoComplete="username"
             theme={{
               colors: {
                 background: theme.colors.primaryContainer,
@@ -125,6 +150,7 @@ export default function LoginPage() {
         </View>
         <View>
           <TextInput
+            autoComplete="password"
             theme={{
               colors: {
                 background: theme.colors.primaryContainer,
@@ -134,6 +160,16 @@ export default function LoginPage() {
             label={t("Password", { ns: "acc" })}
             style={{ backgroundColor: "transparent", height: 56 }}
             value={password}
+            secureTextEntry={!showPassword}
+            right={
+              <TextInput.Icon
+                style={{ marginTop: 12 }}
+                icon={showPassword ? "eye-off" : "eye"}
+                onPress={() => {
+                  setShowPassword(!showPassword);
+                }}
+              />
+            }
             onChangeText={(text) => {
               setPassword(text);
             }}
@@ -149,7 +185,7 @@ export default function LoginPage() {
         }}
       >
         <Button
-          mode="outlined"
+          mode="text"
           style={{ width: 220 }}
           onPress={() => {
             router.replace("/auth/register");
@@ -160,6 +196,8 @@ export default function LoginPage() {
         <Button
           mode="contained"
           style={{ width: 150 }}
+          loading={logining}
+          disabled={logining}
           onPress={() => {
             loginUser();
           }}
