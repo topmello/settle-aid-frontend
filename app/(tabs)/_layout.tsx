@@ -20,6 +20,7 @@ export default function TabLayout() {
 
   const Tab = createMaterialBottomTabNavigator();
 
+
   // authentication guard
   useEffect(() => {
     if (!rootNativationState?.key) return;

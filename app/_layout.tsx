@@ -1,7 +1,7 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { lightTheme, darkTheme } from "../theme/theme";
 import { useFonts } from "expo-font";
-import { SplashScreen, Stack } from "expo-router";
+import { SplashScreen, Stack, useRootNavigationState } from "expo-router";
 import { useEffect, useMemo } from "react";
 import { useColorScheme } from "react-native";
 import { PaperProvider } from "react-native-paper";

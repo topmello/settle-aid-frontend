@@ -8,7 +8,7 @@ import {
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { refreshToken as refreshTokenThunk } from "../store/authSlice";
 import { AppDispatch } from "../store";
-import { router } from "expo-router";
+import { router, useRootNavigationState } from "expo-router";
 import { useNotification } from "./useNotification";
 import { useTranslation } from "react-i18next";
 
@@ -37,6 +37,7 @@ export const useSession = () => {
 
   const [isLoggedIn, setIsLoggedIn] = useState(!!token);
   const [sessionRefreshing, setSessionRefreshing] = useState(false);
+  const rootNativationState = useRootNavigationState();
 
   const [triggerRefresh, setTriggerRefresh] = useState(0);
 
@@ -58,12 +59,13 @@ export const useSession = () => {
   }, [dispatch]);
   
   const doRedirectToLogin = useCallback(() => {
+    if (!rootNativationState?.key) return;
     router.replace("/auth/login");
     pushNotification({
       message: t("Session expired, please login again", { ns: "acc" }),
       type: "warning",
     });
-  }, [pushNotification, t]);
+  }, [pushNotification, t, rootNativationState?.key]);
 
   useEffect(() => {
     if (!token) {
