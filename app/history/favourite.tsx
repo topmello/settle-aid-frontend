@@ -1,5 +1,3 @@
-//@ts-nocheck
-
 import { useCallback, useState, useEffect } from "react";
 import {
   SafeAreaView,
@@ -22,10 +20,11 @@ import { useSelector } from "react-redux";
 import { selectUserId, selectToken } from "../../store/authSlice";
 import RouteCard from "../../components/RouteCard";
 import { fetch } from "../../api/fetch";
-import { RouteHistoryList } from "../../types/route";
+import { RouteHistory } from "../../types/route";
+import { ErrorResponse, CustomError } from "../../types/errorResponse";
 import { use } from "i18next";
 
-export default function FavScreen() {
+export default function HistoryOverviewScreen() {
   const { t } = useTranslation();
   const theme = useTheme();
   const userID = useSelector(selectUserId);
@@ -33,10 +32,10 @@ export default function FavScreen() {
 
   const { favRouteJSON } = useLocalSearchParams();
   // const {routeList} = params;
-  const routeList = JSON.parse(favRouteJSON);
+  const routeList: RouteHistory[] = JSON.parse(favRouteJSON as string);
   console.log(routeList);
 
-  const handleFavRoute = async (route_id: string) => {
+  const handleFavRoute = async (route_id: number) => {
     try {
       const res = await fetch({
         method: "POST",
@@ -47,10 +46,20 @@ export default function FavScreen() {
       console.log("Voted");
 
       // Handle success response if needed
-    } catch (initialError) {
+    } catch (error) {
+      const initialError = error as CustomError;
       // Check if error is from Axios and has a response property
-      if (initialError.response) {
-        if (initialError.response.data.details.type === "already_voted") {
+      if (
+        initialError &&
+        typeof initialError === "object" &&
+        "response" in initialError
+      ) {
+        const response = initialError.response;
+        if (
+          response &&
+          response.data &&
+          response.data.details.type === "already_voted"
+        ) {
           // If user has already voted, send another request to "unvote"
           try {
             const unvoteResponse = await fetch({
@@ -60,7 +69,8 @@ export default function FavScreen() {
               token: token,
             });
             console.log("Unvoted");
-          } catch (unvoteError) {
+          } catch (error) {
+            const unvoteError = error as CustomError;
             console.error("Error while unvoting:", unvoteError.message);
             // Handle any errors from the unvote request
           }
@@ -92,7 +102,7 @@ export default function FavScreen() {
       fontSize: 28,
     },
     card: {
-      backgroundColor: theme.colors.infoContainer,
+      backgroundColor: (theme.colors as any).infoContainer,
       // height: 200,
       borderRadius: 15,
       marginHorizontal: 20,
@@ -102,7 +112,7 @@ export default function FavScreen() {
       fontSize: 28,
       marginTop: 20,
       marginLeft: 20,
-      color: theme.colors.info,
+      color: (theme.colors as any).info,
     },
     card_description: {
       fontSize: 20,
@@ -137,7 +147,7 @@ export default function FavScreen() {
       width: 44,
       height: 44,
       borderRadius: 42,
-      backgroundColor: theme.colors.info,
+      backgroundColor: (theme.colors as any).info,
     },
     button: {
       marginLeft: 8,

@@ -12,11 +12,11 @@ export interface RouteResult {
   duration: number;
 }
 
-export interface RouteHistory extends RouteResult {
-  route_id: string;
-  num_votes: number;
+export interface Route extends RouteResult {
+  route_id: number;
 }
 
-export interface RouteHistoryList {
-  routes: RouteHistory[];
+export interface RouteHistory {
+  num_votes: number;
+  route: Route;
 }

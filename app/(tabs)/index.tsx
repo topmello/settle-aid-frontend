@@ -1,4 +1,3 @@
-//@ts-nocheck
 import React, { useRef, useState, useEffect } from "react";
 
 import {
@@ -21,13 +20,14 @@ import ArrowIcon from "../../assets/images/icons/navigate_next.svg";
 import RestaurantIcon from "../../assets/images/icons/restaurant_menu.svg";
 import { AnimatedButton } from "../../components/AnimatedButton";
 import { useTheme } from "react-native-paper";
+import { AppTheme } from "../../theme/theme";
 import LightCloudyIcon from "../../assets/images/weather/light_cloudy.svg";
-import { Link, router } from "expo-router";
+import { Link, router, useLocalSearchParams } from "expo-router";
 import { useSelector } from "react-redux";
 import { selectToken, selectUserId } from "../../store/authSlice";
 import RouteCard from "../../components/RouteCard";
 import useFetch from "../../hooks/useFetch";
-import { RouteHistoryList } from "../../types/route";
+import { RouteHistory } from "../../types/route";
 
 export default function HomeScreen() {
   const { t } = useTranslation();
@@ -41,7 +41,7 @@ export default function HomeScreen() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [translatedDate, setTranslatedDate] = useState("");
 
-  const getTranslatedDate = (date) => {
+  const getTranslatedDate = (date: Date) => {
     const dayName = t(date.toLocaleDateString("en-US", { weekday: "long" }), {
       ns: "home",
     });
@@ -53,17 +53,23 @@ export default function HomeScreen() {
     return `${dayName} ${day} ${monthName}`;
   };
 
-  const routeList: RouteHistoryList = useFetch({
-    method: "GET",
-    url: `/route/user/${userID}/?limit=5`,
-    token: token,
-  });
+  const routeList: RouteHistory[] = useFetch(
+    {
+      method: "GET",
+      url: `/route/user/${userID}/?limit=5`,
+      token: token,
+    },
+    []
+  );
 
-  const favRouteList: RouteHistoryList = useFetch({
-    method: "GET",
-    url: `/route/user/fav/${userID}/?limit=5`,
-    token: token,
-  });
+  const favRouteList: RouteHistory[] = useFetch(
+    {
+      method: "GET",
+      url: `/route/user/fav/${userID}/?limit=5`,
+      token: token,
+    },
+    []
+  );
 
   useEffect(() => {
     const updateDate = () => {
@@ -78,7 +84,7 @@ export default function HomeScreen() {
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     tomorrow.setHours(0, 0, 0, 0);
-    const timeUntilTomorrow = tomorrow - new Date();
+    const timeUntilTomorrow = tomorrow.getTime() - new Date().getTime();
     const timerId = setTimeout(updateDate, timeUntilTomorrow);
     // Clean up the timer when the component unmounts
     return () => {
@@ -126,13 +132,14 @@ export default function HomeScreen() {
         </View>
         <View>
           <AnimatedButton
-            color={theme.colors.amberContainer}
+            color={(theme.colors as any).amberContainer}
             height={80}
             style={{
               marginHorizontal: 16,
               paddingHorizontal: 20,
               alignItems: "flex-end",
             }}
+            onPress={() => {}}
           >
             <LightCloudyIcon
               style={{
@@ -187,7 +194,7 @@ export default function HomeScreen() {
             }}
           >
             <AnimatedButton
-              color={theme.colors.purpleContainer}
+              color={(theme.colors as any).onPurpleContainer}
               onPress={() => {
                 router.push("/route/activity");
               }}
@@ -200,12 +207,14 @@ export default function HomeScreen() {
                 }}
               >
                 <RouteIcon
-                  style={{
-                    marginHorizontal: 18,
-                  }}
+                  style={
+                    {
+                      marginHorizontal: 18,
+                    } as any
+                  }
                   height={40}
                   width={40}
-                  fill={theme.colors.onPurpleContainer}
+                  fill={(theme.colors as any).onPurpleContainer}
                 />
                 <View
                   style={{
@@ -223,7 +232,7 @@ export default function HomeScreen() {
                     <Text
                       variant="titleLarge"
                       style={{
-                        color: theme.colors.onPurpleContainer,
+                        color: (theme.colors as any).onPurpleContainer,
                         fontWeight: "bold",
                       }}
                     >
@@ -233,12 +242,12 @@ export default function HomeScreen() {
                       style={{
                         marginLeft: 8,
                       }}
-                      fill={theme.colors.onPurpleContainer}
+                      fill={(theme.colors as any).onPurpleContainer}
                     />
                   </View>
                   <Text
                     style={{
-                      color: theme.colors.onPurpleContainer,
+                      color: (theme.colors as any).onPurpleContainer,
                     }}
                   >
                     {t("Plan your trip", { ns: "home" })}
@@ -331,7 +340,7 @@ export default function HomeScreen() {
           </View>
         )}
 
-        {favRouteList && Array.isArray(routeList) && (
+        {favRouteList && Array.isArray(favRouteList) && (
           <View>
             <View
               style={{

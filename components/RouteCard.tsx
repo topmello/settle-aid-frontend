@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 interface CardProps {
   routeResult: RouteHistory;
   isSimplified: boolean;
+  handleFavRoute?: (route_id: number) => Promise<void>;
 }
 
 const RouteCard: React.FC<CardProps> = ({
