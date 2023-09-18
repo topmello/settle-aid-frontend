@@ -220,6 +220,28 @@ export default function SettingsScreen() {
               </Button>
             )}
           />
+          <List.Item
+            title="Go Access Page"
+            right={() => (
+              <Button
+                mode="contained"
+                onPress={() => router.push("/auth/access")}
+              >
+                Access
+              </Button>
+            )}
+          />
+          <List.Item
+            title="Go Track Page"
+            right={() => (
+              <Button
+                mode="contained"
+                onPress={() => router.push("/track/track")}
+              >
+                Track
+              </Button>
+            )}
+          />
           <List.Accordion
             title="Authentication States"
             left={(props) => <List.Icon {...props} icon="key" />}
@@ -242,17 +264,7 @@ export default function SettingsScreen() {
               description={refreshTokenExpireAt?.toString()}
             />
           </List.Accordion>
-          <List.Item
-            title="Go Access Page"
-            right={() => (
-              <Button
-                mode="contained"
-                onPress={() => router.push("/auth/access")}
-              >
-                Access
-              </Button>
-            )}
-          />
+          
           <List.Item
             title="Test Notificaiton"
             description="Send a test notification"
