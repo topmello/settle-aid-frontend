@@ -10,16 +10,13 @@ import {
   Surface,
   IconButton,
 } from "react-native-paper";
-import { useTranslation } from "react-i18next";
-
 import { RouteState } from "../store/routeSlice";
-
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-
 import { Tip } from "../tips/tipsTyped";
-
 import { RouteResult } from "../types/route";
 import BottomSheet from "@gorhom/bottom-sheet";
+import { useTip } from "../store/TipContext";
+import { router } from "expo-router";
 
 type OverlayProps = {
   tipList: Tip[];
@@ -46,6 +43,7 @@ const ResultOverlay: React.FC<OverlayProps> = ({
   const theme = useTheme();
   const bottomSheetRef = React.useRef<BottomSheet>(null);
   const snapPoints = useMemo(() => ["20%", "55%"], []);
+  const { resultTip, setResultTip } = useTip();
 
   return (
     <View
@@ -113,7 +111,8 @@ const ResultOverlay: React.FC<OverlayProps> = ({
                   }}
                 >
                   <IconButton icon="chevron-right" onPress={() => {
-                    
+                    setResultTip(item);
+                    router.push("/learn/detail");
                   }} />
                 </View>
               </Surface>

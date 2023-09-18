@@ -11,7 +11,7 @@ import useCheckedList from "../../hooks/useCheckList";
 import { RouteState, selectRouteState } from "../../store/routeSlice";
 import ArrowBackIcon from "../../assets/images/icons/arrow_back.svg";
 import tips, { Tip } from "../../tips/tipsTyped";
-import findTipsForModes from "../../tips/tipFinder";
+import getTipForMode from "../../tips/getTip";
 
 import { locationIcons } from "../../constants/icons";
 import { mapDarkTheme } from "../../theme/map";
@@ -19,60 +19,9 @@ import { selectTheme } from "../../store/appSlice";
 
 import { fetch } from "../../api/fetch";
 import { useSession } from "../../hooks/useSession";
-import { useMapRegion } from "../../hooks/useMapRegion";
+import { useMapRegion, RouteResult, Coordinates } from "../../hooks/useMapRegion";
 import * as Calendar from 'expo-calendar';
 import * as Permissions from 'expo-permissions';
-
-
-function degreesToRadians(degrees: number): number {
-  return (degrees * Math.PI) / 180;
-}
-
-function calculateBearing(
-  lat1: number,
-  lon1: number,
-  lat2: number,
-  lon2: number
-): number {
-  lat1 = degreesToRadians(lat1);
-  lon1 = degreesToRadians(lon1);
-  lat2 = degreesToRadians(lat2);
-  lon2 = degreesToRadians(lon2);
-
-  const dLon = lon2 - lon1;
-  const x = Math.cos(lat2) * Math.sin(dLon);
-  const y =
-    Math.cos(lat1) * Math.sin(lat2) -
-    Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon);
-  const bearing = (Math.atan2(x, y) * 180) / Math.PI;
-  return (bearing + 360) % 360;
-}
-
-export type MapRegion = {
-  latitude: number;
-  longitude: number;
-  latitudeDelta: number;
-  longitudeDelta: number;
-};
-
-export type Coordinates = {
-  latitude: number;
-  longitude: number;
-};
-
-interface RouteResult {
-  locations: string[];
-  locations_coordinates: {
-    latitude: number;
-    longitude: number;
-  }[];
-  route: {
-    latitude: number;
-    longitude: number;
-  }[];
-  instructions: string[];
-  duration: number;
-}
 
 export default function MapScreen() {
   const theme = useTheme();
@@ -137,7 +86,7 @@ export default function MapScreen() {
     "Personal Safety",
   ];
 
-  const tipList: Array<Tip> = findTipsForModes(tips, modes);
+  const tipList: Array<Tip> = getTipForMode(tips, modes);
 
   const fetchRoute = useCallback(async () => {
     setLoading(true);

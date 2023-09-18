@@ -22,6 +22,8 @@ export type TipContextType = {
   canPrev: boolean;
   clearTips: () => void;
   setCategory: (category: TipCategory) => void;
+  resultTip: Tip | undefined;
+  setResultTip: (tip: Tip) => void;
 };
 
 export const TipContext = createContext<TipContextType>({
@@ -41,6 +43,8 @@ export const TipContext = createContext<TipContextType>({
   canPrev: false,
   clearTips: () => {},
   setCategory: () => {},
+  resultTip: undefined,
+  setResultTip: () => {},
 });
 
 export const TipProvider = ({ children }: { children: React.ReactNode }) => {
@@ -48,6 +52,10 @@ export const TipProvider = ({ children }: { children: React.ReactNode }) => {
   const [category, setCategory] = useState<TipCategory>({
     mode: "",
     type: [],
+  });
+  const [resultTip, setResultTip] = useState<Tip>({
+    description: "",
+    content: "",
   });
 
   const tips = useMemo(() => {
@@ -101,6 +109,8 @@ export const TipProvider = ({ children }: { children: React.ReactNode }) => {
         canPrev,
         clearTips,
         currentTip,
+        resultTip,
+        setResultTip
       }}
     >
       {children}

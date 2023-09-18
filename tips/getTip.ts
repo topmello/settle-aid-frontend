@@ -1,6 +1,6 @@
 import { TipArray, Tip } from "./tipsTyped";
 
-function findTipsForModes(tips: TipArray, modes: string[]): Array<Tip> {
+function getTipForMode(tips: TipArray, modes: string[]): Array<Tip> {
   const result: Array<Tip> = [];
 
   if (tips && tips.tips) {
@@ -27,4 +27,4 @@ function findTipsForModes(tips: TipArray, modes: string[]): Array<Tip> {
   return result;
 }
 
-export default findTipsForModes;
+export default getTipForMode;

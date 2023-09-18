@@ -12,7 +12,7 @@ export type Coordinates = {
   longitude: number;
 };
 
-interface RouteResult {
+export interface RouteResult {
   locations: string[];
   locations_coordinates: {
     latitude: number;
