@@ -11,3 +11,12 @@ export interface RouteResult {
   instructions: string[];
   duration: number;
 }
+
+export interface RouteHistory extends RouteResult {
+  route_id: string;
+  num_votes: number;
+}
+
+export interface RouteHistoryList {
+  routes: RouteHistory[];
+}

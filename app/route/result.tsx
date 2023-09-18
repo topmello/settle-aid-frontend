@@ -19,16 +19,19 @@ import { selectTheme } from "../../store/appSlice";
 
 import { fetch } from "../../api/fetch";
 import { useSession } from "../../hooks/useSession";
-import { useMapRegion, RouteResult, Coordinates } from "../../hooks/useMapRegion";
-import * as Calendar from 'expo-calendar';
-import * as Permissions from 'expo-permissions';
+import {
+  useMapRegion,
+  RouteResult,
+  Coordinates,
+} from "../../hooks/useMapRegion";
+import * as Calendar from "expo-calendar";
+import * as Permissions from "expo-permissions";
 
 export default function MapScreen() {
   const theme = useTheme();
   const { token, checkSession } = useSession();
   const currentTheme = useSelector(selectTheme);
   const routeState: RouteState = useSelector(selectRouteState);
-
 
   // add event to calendar
 
@@ -40,41 +43,49 @@ export default function MapScreen() {
       const eventDetails = {
         title: "My Event",
         startDate: new Date(), // Replace with your event's start date
-        endDate: new Date(),   // Replace with your event's end date
-        timeZone: "GMT",      // Set the timezone as needed
+        endDate: new Date(), // Replace with your event's end date
+        timeZone: "GMT", // Set the timezone as needed
         location: "Event Location",
         notes: "Event Description",
       };
 
-      const event = await Calendar.createEventAsync(defaultCalendar.id, eventDetails);
+      const event = await Calendar.createEventAsync(
+        defaultCalendar.id,
+        eventDetails
+      );
 
       console.log(`Event added to calendar with ID: ${event}`);
     } else {
       console.warn("Calendar permissions not granted.");
     }
   };
-  
 
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<RouteResult>({
     locations: [],
-    locations_coordinates: [{
-      latitude: 0,
-      longitude: 0,
-    }],
-    route: [{
-      latitude: 0,
-      longitude: 0,
-    }],
+    locations_coordinates: [
+      {
+        latitude: 0,
+        longitude: 0,
+      },
+    ],
+    route: [
+      {
+        latitude: 0,
+        longitude: 0,
+      },
+    ],
     instructions: [],
     duration: 0,
   });
 
   const mapRef = useRef<MapView>(null);
-  
+
   const { region, handleLocationSelect, handlePressRoute } = useMapRegion({
-    data, routeState, mapRef
-  })
+    data,
+    routeState,
+    mapRef,
+  });
 
   const { checked, handlePress } = useCheckedList(data);
 
@@ -119,7 +130,6 @@ export default function MapScreen() {
   useEffect(() => {
     requestCalendarPermission();
   }, []);
- 
 
   // fetch route
   useEffect(() => {
@@ -210,6 +220,7 @@ export default function MapScreen() {
           flexDirection: "row",
           justifyContent: "space-between",
           padding: 20,
+          zIndex: 1,
         }}
       >
         {router.canGoBack() ? (
@@ -268,11 +279,7 @@ export default function MapScreen() {
               />
             );
           })}
-        <Marker
-          coordinate={region}
-          pinColor="blue"
-          title="You are here"
-        />
+        <Marker coordinate={region} pinColor="blue" title="You are here" />
         <Polyline
           coordinates={data?.route}
           strokeWidth={3}

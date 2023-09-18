@@ -25,15 +25,15 @@ import { fetch } from "../../api/fetch";
 import { RouteHistoryList } from "../../types/route";
 import { use } from "i18next";
 
-export default function HistoryOverviewScreen() {
+export default function FavScreen() {
   const { t } = useTranslation();
   const theme = useTheme();
   const userID = useSelector(selectUserId);
   const token = useSelector(selectToken);
 
-  const { routeJSON } = useLocalSearchParams();
+  const { favRouteJSON } = useLocalSearchParams();
   // const {routeList} = params;
-  const routeList = JSON.parse(routeJSON);
+  const routeList = JSON.parse(favRouteJSON);
   console.log(routeList);
 
   const handleFavRoute = async (route_id: string) => {
