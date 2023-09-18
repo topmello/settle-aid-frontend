@@ -12,6 +12,7 @@ export type RegisterData = {
 }
 
 export interface AuthState {
+  id?: number,
   username?: string;
   token?: string;
   tokenExpiresAt?: string;
@@ -63,6 +64,7 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     logoutUser: (state) => {
+      delete state.id;
       delete state.username;
       delete state.token;
       delete state.tokenExpiresAt;
@@ -77,6 +79,7 @@ const authSlice = createSlice({
     });
     builder.addCase(loginUser.fulfilled, (state, action) => {
       state.status = 'loginSuccess';
+      state.id = action.payload.user_id;
       state.username = action.payload.username;
       state.token = action.payload.access_token;
       state.tokenExpiresAt = action.payload.access_token_expire + "+0000";
@@ -110,6 +113,8 @@ const authSlice = createSlice({
   }
 });
 
+export const selectUserId = (state: any) => state.auth?.id;
+export const selectUsername = (state: any) => state.auth?.username;
 export const selectToken = (state: any) => state.auth?.token;
 export const selectAuthStatus = (state: any) => state.auth?.status;
 export const selectTokenExpiresAt = (state: any) => state.auth?.tokenExpiresAt;
