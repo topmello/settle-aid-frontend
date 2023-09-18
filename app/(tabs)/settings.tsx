@@ -226,7 +226,7 @@ export default function SettingsScreen() {
           >
             <List.Item
               title="Auth Status"
-              description={authStatus}}
+              description={authStatus}
             />
             <List.Item title="Token" description={token} />
             <List.Item title="Id" description={userId} />
