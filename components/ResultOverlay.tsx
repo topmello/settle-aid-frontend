@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
-import { View, TouchableOpacity, FlatList, ScrollView } from "react-native";
+import { View, TouchableOpacity } from "react-native";
+import { ScrollView, FlatList } from "react-native-gesture-handler";
 import {
   Text,
   Card,
@@ -16,13 +17,9 @@ import { RouteState } from "../store/routeSlice";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 import { Tip } from "../tips/tipsTyped";
-import { router } from "expo-router";
 
 import { RouteResult } from "../types/route";
-import BottomSheet, {
-  BottomSheetFlatList,
-  BottomSheetScrollView,
-} from "@gorhom/bottom-sheet";
+import BottomSheet from "@gorhom/bottom-sheet";
 
 type OverlayProps = {
   tipList: Tip[];
@@ -44,14 +41,11 @@ const ResultOverlay: React.FC<OverlayProps> = ({
   handlePressRoute,
   handlePress,
   checked,
-  styles,
   locationIcons,
-}:OverlayProps) => {
+}: OverlayProps) => {
   const theme = useTheme();
-  const { t } = useTranslation();
-
   const bottomSheetRef = React.useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ["15%", "50%", "100%"], []);
+  const snapPoints = useMemo(() => ["20%", "55%"], []);
 
   return (
     <View
@@ -76,65 +70,63 @@ const ResultOverlay: React.FC<OverlayProps> = ({
           backgroundColor: theme.colors.onSurfaceVariant,
         }}
       >
-        <BottomSheetScrollView
-          style={{
-            flex: 1,
-          }}
-        >
-          <View
+        <ScrollView>
+          {/** Horizontal Tips */}
+          <FlatList
             style={{
               height: 138,
               width: "100%",
             }}
-          >
-            <BottomSheetFlatList
-              data={tipList}
-              renderItem={({ item }) => (
-                <Surface
+            data={tipList}
+            renderItem={({ item }) => (
+              <Surface
+                style={{
+                  backgroundColor: theme.colors.primaryContainer,
+                  borderRadius: 8,
+                  width: 300,
+                  marginVertical: 4,
+                  padding: 16,
+                  flexDirection: "row",
+                }}
+              >
+                <View
                   style={{
-                    backgroundColor: theme.colors.primaryContainer,
-                    borderRadius: 8,
-                    width: 300,
-                    marginVertical: 4,
-                    padding: 16,
-                    flexDirection: "row",
+                    flex: 1,
                   }}
                 >
-                  <View
-                    style={{
-                      flex: 1,
-                    }}
+                  <Text variant="bodyLarge" style={{ fontWeight: "bold" }}>
+                    {item.description}
+                  </Text>
+                  <Text
+                    variant="bodyMedium"
+                    numberOfLines={2}
+                    ellipsizeMode="tail"
                   >
-                    <Text variant="bodyLarge" style={{ fontWeight: "bold" }}>
-                      {item.description}
-                    </Text>
-                    <Text
-                      variant="bodyMedium"
-                      numberOfLines={2}
-                      ellipsizeMode="tail"
-                    >
-                      {item.content}
-                    </Text>
-                  </View>
-                  <View
-                    style={{
-                      width: 30,
-                      height: "100%",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <IconButton icon="chevron-right" onPress={() => {}} />
-                  </View>
-                </Surface>
-              )}
-              keyExtractor={(tip) => tip?.description}
-              contentContainerStyle={{
-                columnGap: 10,
-                margin: 14,
-              }}
-              horizontal={true}
-            />
-          </View>
+                    {item.content}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    width: 30,
+                    height: "100%",
+                    justifyContent: "center",
+                  }}
+                >
+                  <IconButton icon="chevron-right" onPress={() => {
+                    
+                  }} />
+                </View>
+              </Surface>
+            )}
+            keyExtractor={(tip) => tip?.description}
+            contentContainerStyle={{
+              columnGap: 10,
+              margin: 14,
+            }}
+            horizontal={true}
+          />
+
+          { /** Destinations */}
           <List.Section>
             {data?.locations.map((location: string, index: number) => {
               const description = body?.location_type[index];
@@ -147,7 +139,7 @@ const ResultOverlay: React.FC<OverlayProps> = ({
                   key={index}
                   title={location}
                   description={capitalizedDescription}
-                  left={(props) => (
+                  left={() => (
                     <View style={{ justifyContent: "center", paddingLeft: 10 }}>
                       <Icon width={30} height={30} />
                     </View>
@@ -179,6 +171,8 @@ const ResultOverlay: React.FC<OverlayProps> = ({
               );
             })}
           </List.Section>
+
+          {/** Instructions */}
           <List.Section>
             <List.Accordion
               title="Instructions"
@@ -190,7 +184,7 @@ const ResultOverlay: React.FC<OverlayProps> = ({
                     key={index}
                     title={instruction}
                     onPress={() => handlePressRoute(index)}
-                    left={(props) => (
+                    left={() => (
                       <TouchableOpacity
                         key={index}
                         onPress={() => handlePress(index)}
@@ -221,7 +215,7 @@ const ResultOverlay: React.FC<OverlayProps> = ({
               padding: 10,
             }}
           ></View>
-        </BottomSheetScrollView>
+        </ScrollView>
       </BottomSheet>
     </View>
   );
