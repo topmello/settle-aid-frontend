@@ -1,95 +1,57 @@
 import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../store";
 import {
+  selectToken,
+  selectTokenExpiresAt,
   selectRefreshToken,
   selectRefreshTokenExpiresAt,
-  selectTokenExpiresAt,
-  selectUserToken,
+  refreshToken as doRefreshToken,
+  logoutUser,
 } from "../store/authSlice";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { refreshToken as refreshTokenThunk } from "../store/authSlice";
-import { AppDispatch } from "../store";
-import { router, useRootNavigationState } from "expo-router";
-import { useNotification } from "./useNotification";
-import { useTranslation } from "react-i18next";
 
-/**
- * Authenticated user session hook
- * @description This hook is used to get the latest token and auth status
- * @returns {
- * token: string,
- * authenticated: boolean,
- * login: (data: LoginData) => void,
- * logout: () => void,
- * register: (data: RegisterData) => void,
- * getSessionAuthenticated: () => Promise<boolean>,
- * getSessionToken: () => Promise<string>,
- * }
- */
+const DEBUG = false;
+
 export const useSession = () => {
-  const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
-  const { pushNotification } = useNotification();
 
-  const token = useSelector(selectUserToken);
-  const tokenExpiresAt = useSelector(selectTokenExpiresAt);
+  const token = useSelector(selectToken);
+  const tokenExpireAt = useSelector(selectTokenExpiresAt);
   const refreshToken = useSelector(selectRefreshToken);
-  const refreshTokenExpiresAt = useSelector(selectRefreshTokenExpiresAt);
+  const refreshTokenExpireAt = useSelector(selectRefreshTokenExpiresAt);
 
-  const [isLoggedIn, setIsLoggedIn] = useState(!!token);
-  const [sessionRefreshing, setSessionRefreshing] = useState(false);
-  const rootNativationState = useRootNavigationState();
-
-  const [triggerRefresh, setTriggerRefresh] = useState(0);
-
-  const triggerTokenStatusRefresh = useCallback(() => {
-    setTriggerRefresh((prev) => prev + 1);
-  }, []);
-
-  const doRefreshToken = useCallback(() => {
-    setSessionRefreshing(true);
-    dispatch(refreshTokenThunk())
-      .unwrap()
-      .catch((err) => {
-        console.error(err);
-        doRedirectToLogin();
-      })
-      .finally(() => {
-        setSessionRefreshing(false);
-      });
-  }, [dispatch]);
-  
-  const doRedirectToLogin = useCallback(() => {
-    if (!rootNativationState?.key) return;
-    router.replace("/auth/login");
-    pushNotification({
-      message: t("Session expired, please login again", { ns: "acc" }),
-      type: "warning",
-    });
-  }, [pushNotification, t, rootNativationState?.key]);
-
-  useEffect(() => {
-    if (!token) {
-      setIsLoggedIn(false);
-      doRedirectToLogin();
-      return;
-    }
-    if (new Date().getUTCMilliseconds() > new Date(tokenExpiresAt).getTime()) {
-      if (refreshToken && new Date().getUTCMilliseconds() < new Date(refreshTokenExpiresAt).getTime()) {
-        console.log("refreshing token");
-        doRefreshToken();
+  const checkSession = async () => {
+    if (!token || !tokenExpireAt || !refreshToken || !refreshTokenExpireAt) {
+      DEBUG && console.log("no token or refresh token");
+      dispatch(logoutUser());
+      return false;
+    } else if (
+      new Date(tokenExpireAt) < new Date()
+    ) {
+      if (
+        new Date(refreshTokenExpireAt) < new Date()
+      ) {
+        DEBUG && console.log("refresh token expired");
+        dispatch(logoutUser());
+        return false;
       } else {
-        doRedirectToLogin();
-        return;
+        try {
+          DEBUG && console.log("refreshing token");
+          await dispatch(doRefreshToken());
+          return true;
+        } catch (e) {
+          DEBUG && console.log("refresh token failed");
+          dispatch(logoutUser());
+          return false;
+        }
       }
     } else {
-      setIsLoggedIn(true);
+      DEBUG && console.log("token is valid");
+      return true;
     }
-  }, [token, tokenExpiresAt, refreshTokenExpiresAt, doRefreshToken, doRedirectToLogin, triggerRefresh]);
+  };
 
   return {
     token,
-    isLoggedIn,
-    sessionRefreshing,
-    triggerTokenStatusRefresh
+    checkSession,
   };
 };

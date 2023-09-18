@@ -1,6 +1,5 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import { createAsyncThunk, createSelector, createSlice } from "@reduxjs/toolkit"
 import { fetch } from "../api/fetch";
-import store from ".";
 
 export type LoginData = {
   username: string;
@@ -20,12 +19,6 @@ export interface AuthState {
   refreshTokenExpiresAt?: string;
   status: 'idle' | 'login' | 'loginSuccess' | 'loginFail' | 'logout' | 'registering' | 'registerSuccess' | 'registerFail' | 'refreshing' | 'refreshSuccess' | 'refreshFail' | 'logout';
 }
-
-export const selectUserToken = (state: any) => state.auth?.token;
-export const selectAuthStatus = (state: any) => state.auth?.status;
-export const selectTokenExpiresAt = (state: any) => state.auth?.tokenExpiresAt;
-export const selectRefreshToken = (state: any) => state.auth?.refreshToken;
-export const selectRefreshTokenExpiresAt = (state: any) => state.auth?.refreshTokenExpiresAt;
 
 // login user thunk (action)
 export const loginUser = createAsyncThunk('auth/loginUser', async (data: LoginData) => {
@@ -86,9 +79,9 @@ const authSlice = createSlice({
       state.status = 'loginSuccess';
       state.username = action.payload.username;
       state.token = action.payload.access_token;
-      state.tokenExpiresAt = action.payload.access_token_expire;
+      state.tokenExpiresAt = action.payload.access_token_expire + "+0000";
       state.refreshToken = action.payload.refresh_token;
-      state.refreshTokenExpiresAt = action.payload.refresh_token_expire;
+      state.refreshTokenExpiresAt = action.payload.refresh_token_expire + "+0000";
     });
     builder.addCase(loginUser.rejected, (state, action) => {
       state.status = 'loginFail';
@@ -106,9 +99,9 @@ const authSlice = createSlice({
     });
     builder.addCase(refreshToken.fulfilled, (state, action) => {
       state.token = action.payload.access_token;
-      state.tokenExpiresAt = action.payload.access_token_expire;
+      state.tokenExpiresAt = action.payload.access_token_expire + "+0000";
       state.refreshToken = action.payload.refresh_token;
-      state.refreshTokenExpiresAt = action.payload.refresh_token_expire;
+      state.refreshTokenExpiresAt = action.payload.refresh_token_expire + "+0000";
       state.status = 'refreshSuccess';
     });
     builder.addCase(refreshToken.rejected, (state, action) => {
@@ -116,6 +109,12 @@ const authSlice = createSlice({
     });
   }
 });
+
+export const selectToken = (state: any) => state.auth?.token;
+export const selectAuthStatus = (state: any) => state.auth?.status;
+export const selectTokenExpiresAt = (state: any) => state.auth?.tokenExpiresAt;
+export const selectRefreshToken = (state: any) => state.auth?.refreshToken;
+export const selectRefreshTokenExpiresAt = (state: any) => state.auth?.refreshTokenExpiresAt;
 
 export const { logoutUser } = authSlice.actions;
 export default authSlice.reducer;

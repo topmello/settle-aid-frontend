@@ -6,9 +6,9 @@ import {
   ScrollView,
 } from "react-native";
 import { useTranslation } from "react-i18next";
-import { loginUser, logoutUser } from "../../store/authSlice";
+import { loginUser, logoutUser, selectRefreshToken, selectRefreshTokenExpiresAt, selectTokenExpiresAt } from "../../store/authSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { selectUserToken } from "../../store/authSlice";
+import { selectToken } from "../../store/authSlice";
 import { AppDispatch } from "../../store";
 import { Button, List, Menu, Text, useTheme } from "react-native-paper";
 import {
@@ -28,7 +28,11 @@ import { languages } from "../common/language";
 export default function SettingsScreen() {
   const { t, i18n } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
-  const token = useSelector(selectUserToken);
+  const token = useSelector(selectToken);
+  const tokenExpireAt = useSelector(selectTokenExpiresAt);
+  const refreshToken = useSelector(selectRefreshToken);
+  const refreshTokenExpireAt = useSelector(selectRefreshTokenExpiresAt);
+  const authStatus = useSelector((state) => state.auth.status);
   const colorScheme = useColorScheme();
   const theme = useSelector(selectTheme);
   const paperTheme = useTheme();
@@ -197,6 +201,26 @@ export default function SettingsScreen() {
           <List.Item
             title="Current Token"
             description={token}
+            left={(props) => <List.Icon {...props} icon="key" />}
+          />
+          <List.Item
+            title="Current Token Expires At"
+            description={tokenExpireAt?.toString()}
+            left={(props) => <List.Icon {...props} icon="key" />}
+          />
+          <List.Item
+            title="Current Refresh Token"
+            description={refreshToken}
+            left={(props) => <List.Icon {...props} icon="key" />}
+          />
+          <List.Item
+            title="Current Refresh Token Expires At"
+            description={refreshTokenExpireAt?.toString()}
+            left={(props) => <List.Icon {...props} icon="key" />}
+          />
+          <List.Item
+            title="Auth Status"
+            description={authStatus}
             left={(props) => <List.Icon {...props} icon="key" />}
           />
           <List.Item

@@ -7,19 +7,10 @@ import { Text, useTheme, Button, ActivityIndicator } from "react-native-paper";
 import MapView, { Marker, Polyline } from "react-native-maps";
 
 import ResultOverlay from "../../components/ResultOverlay";
-import { RootState } from "../../store";
-
-import useFetch from "../../hooks/useFetch";
 import { MapRegion, getMapRegion, Coordinates } from "../../hooks/getMapRegion";
 import useCheckedList from "../../hooks/useCheckList";
-
-import { RequestOptions } from "../../api/fetch";
-
-import { selectUserToken } from "../../store/authSlice";
 import { RouteState, selectRouteState } from "../../store/routeSlice";
-
 import ArrowBackIcon from "../../assets/images/icons/arrow_back.svg";
-
 import tips, { Tip } from "../../tips/tipsTyped";
 import findTipsForModes from "../../tips/tipFinder";
 
@@ -30,17 +21,12 @@ import { selectTheme } from "../../store/appSlice";
 
 import { fetch } from "../../api/fetch";
 import { useSession } from "../../hooks/useSession";
-import { useNotification } from "../../hooks/useNotification";
-import { useTranslation } from "react-i18next";
-import session from "redux-persist/lib/storage/session";
 
 export default function MapScreen() {
   const theme = useTheme();
-  const { t } = useTranslation();
-  const { token, isLoggedIn, sessionRefreshing, triggerTokenStatusRefresh } = useSession();
+  const { token, checkSession } = useSession();
   const currentTheme = useSelector(selectTheme);
   const routeState: RouteState = useSelector(selectRouteState);
-  const { pushNotification } = useNotification();
 
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<RouteResult | null>(null);
@@ -61,44 +47,48 @@ export default function MapScreen() {
   const tipList: Array<Tip> = findTipsForModes(tips, modes);
 
   const fetchRoute = useCallback(async () => {
-    triggerTokenStatusRefresh();
-    if (!isLoggedIn || sessionRefreshing) {
-      return;
-    } else {
-      setLoading(true);
-      let res = null;
-      try {
-        res = await fetch({
-          method: "POST",
-          url: "/search/v2/route/",
-          data: routeState,
-          token: token,
-        });
-      } catch (err) {
-        console.error("here", err);
-      } finally {
-        if (res !== null) {
-          setData(res.data);
-          const { region, handleLocationSelect, handlePressRoute } = getMapRegion(
-            res.data,
-            routeState,
-            mapRef
-          );
-          setRegion(region);
-          setHandleLocationSelect(handleLocationSelect);
-          setHandlePressRoute(handlePressRoute);
-        }
-        setLoading(false);
+    setLoading(true);
+    let res = null;
+    try {
+      res = await fetch({
+        method: "POST",
+        url: "/search/v2/route/",
+        data: routeState,
+        token: token,
+      });
+    } catch (err) {
+      console.error("here", err);
+    } finally {
+      if (res !== null) {
+        setData(res.data);
+        const { region, handleLocationSelect, handlePressRoute } = getMapRegion(
+          res.data,
+          routeState,
+          mapRef
+        );
+        setRegion(region);
+        setHandleLocationSelect(handleLocationSelect);
+        setHandlePressRoute(handlePressRoute);
       }
+      setLoading(false);
     }
-  }, [routeState, sessionRefreshing, isLoggedIn, token]);
+  }, [
+    routeState,
+    token,
+    mapRef,
+    setRegion,
+    setHandleLocationSelect,
+    setHandlePressRoute,
+  ]);
 
   // fetch route
   useEffect(() => {
-    triggerTokenStatusRefresh();
-    if (isLoggedIn && !sessionRefreshing) {
-      fetchRoute();
-    }
+    checkSession().then((isSessionVaild) => {
+      if (!isSessionVaild) {
+        router.replace("/auth/login");
+      }
+    });
+    fetchRoute();
   }, []);
 
   // loading screen
@@ -127,12 +117,17 @@ export default function MapScreen() {
     handlePressRoute === null
   ) {
     return (
-      <SafeAreaView style={[styles.container, {
-        backgroundColor: theme.colors.primaryContainer,
-        justifyContent: "center",
-        alignItems: "center",
-        gap: 16,
-      },]}>
+      <SafeAreaView
+        style={[
+          styles.container,
+          {
+            backgroundColor: theme.colors.primaryContainer,
+            justifyContent: "center",
+            alignItems: "center",
+            gap: 16,
+          },
+        ]}
+      >
         <Text variant="titleLarge">No location found</Text>
         <Button
           mode="contained"
@@ -171,15 +166,18 @@ export default function MapScreen() {
         {router.canGoBack() ? (
           <Pressable
             onPress={() => router.back()}
-            style={[styles.above, {
-              backgroundColor: theme.colors.primaryContainer,
-              borderRadius: 20,
-              width: 40,
-              height: 40,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }]}
+            style={[
+              styles.above,
+              {
+                backgroundColor: theme.colors.primaryContainer,
+                borderRadius: 20,
+                width: 40,
+                height: 40,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              },
+            ]}
           >
             <ArrowBackIcon
               fill={theme.colors.onPrimaryContainer}
@@ -190,7 +188,11 @@ export default function MapScreen() {
         ) : (
           <View></View>
         )}
-        <Button mode="contained" style={[styles.above, styles.button]} onPress={fetchRoute}>
+        <Button
+          mode="contained"
+          style={[styles.above, styles.button]}
+          onPress={fetchRoute}
+        >
           Re-plan
         </Button>
       </View>

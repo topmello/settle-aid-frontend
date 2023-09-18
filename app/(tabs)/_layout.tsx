@@ -13,13 +13,12 @@ import { useNotification } from "../../hooks/useNotification";
 
 export default function TabLayout() {
   const { t } = useTranslation();
-  const { isLoggedIn, sessionRefreshing } = useSession();
   const rootNativationState = useRootNavigationState();
   const language = useSelector(selectLanguage);
   const { pushNotification } = useNotification();
 
   const Tab = createMaterialBottomTabNavigator();
-
+  const { token, checkSession } = useSession();
 
   // authentication guard
   useEffect(() => {
@@ -27,10 +26,13 @@ export default function TabLayout() {
     if (!language) {
       router.replace("/common/language");
     }
-    if (!isLoggedIn && !sessionRefreshing) {
-      router.replace("/auth/login");
-    }
-  }, [isLoggedIn, rootNativationState?.key, sessionRefreshing, language]);
+    checkSession()
+      .then(isSessionVaild => {
+        if (!isSessionVaild) {
+          router.replace("/auth/login");
+        }
+      })
+  }, [rootNativationState?.key, language]);
 
   return (
     <Tab.Navigator initialRouteName="home">
