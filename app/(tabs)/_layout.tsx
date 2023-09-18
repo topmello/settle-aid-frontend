@@ -26,13 +26,17 @@ export default function TabLayout() {
     if (!language) {
       router.replace("/common/language");
     }
+    
+  }, [rootNativationState?.key, language, checkSession]);
+
+  useEffect(() => {
     checkSession()
       .then(isSessionVaild => {
         if (!isSessionVaild) {
           router.replace("/auth/login");
         }
       })
-  }, [rootNativationState?.key, language]);
+    }, [checkSession]);
 
   return (
     <Tab.Navigator initialRouteName="home">

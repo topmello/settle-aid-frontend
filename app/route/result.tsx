@@ -7,20 +7,69 @@ import { Text, useTheme, Button, ActivityIndicator } from "react-native-paper";
 import MapView, { Marker, Polyline } from "react-native-maps";
 
 import ResultOverlay from "../../components/ResultOverlay";
-import { MapRegion, getMapRegion, Coordinates } from "../../hooks/getMapRegion";
 import useCheckedList from "../../hooks/useCheckList";
 import { RouteState, selectRouteState } from "../../store/routeSlice";
 import ArrowBackIcon from "../../assets/images/icons/arrow_back.svg";
 import tips, { Tip } from "../../tips/tipsTyped";
 import findTipsForModes from "../../tips/tipFinder";
 
-import { RouteResult } from "../../types/route";
 import { locationIcons } from "../../constants/icons";
 import { mapDarkTheme } from "../../theme/map";
 import { selectTheme } from "../../store/appSlice";
 
 import { fetch } from "../../api/fetch";
 import { useSession } from "../../hooks/useSession";
+import { useMapRegion } from "../../hooks/useMapRegion";
+
+function degreesToRadians(degrees: number): number {
+  return (degrees * Math.PI) / 180;
+}
+
+function calculateBearing(
+  lat1: number,
+  lon1: number,
+  lat2: number,
+  lon2: number
+): number {
+  lat1 = degreesToRadians(lat1);
+  lon1 = degreesToRadians(lon1);
+  lat2 = degreesToRadians(lat2);
+  lon2 = degreesToRadians(lon2);
+
+  const dLon = lon2 - lon1;
+  const x = Math.cos(lat2) * Math.sin(dLon);
+  const y =
+    Math.cos(lat1) * Math.sin(lat2) -
+    Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon);
+  const bearing = (Math.atan2(x, y) * 180) / Math.PI;
+  return (bearing + 360) % 360;
+}
+
+export type MapRegion = {
+  latitude: number;
+  longitude: number;
+  latitudeDelta: number;
+  longitudeDelta: number;
+};
+
+export type Coordinates = {
+  latitude: number;
+  longitude: number;
+};
+
+interface RouteResult {
+  locations: string[];
+  locations_coordinates: {
+    latitude: number;
+    longitude: number;
+  }[];
+  route: {
+    latitude: number;
+    longitude: number;
+  }[];
+  instructions: string[];
+  duration: number;
+}
 
 export default function MapScreen() {
   const theme = useTheme();
@@ -29,11 +78,26 @@ export default function MapScreen() {
   const routeState: RouteState = useSelector(selectRouteState);
 
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState<RouteResult | null>(null);
-  const [region, setRegion] = useState<MapRegion | undefined>(undefined);
-  const [handleLocationSelect, setHandleLocationSelect] = useState<any>(null);
-  const [handlePressRoute, setHandlePressRoute] = useState<any>(null);
+  const [data, setData] = useState<RouteResult>({
+    locations: [],
+    locations_coordinates: [{
+      latitude: 0,
+      longitude: 0,
+    }],
+    route: [{
+      latitude: 0,
+      longitude: 0,
+    }],
+    instructions: [],
+    duration: 0,
+  });
+
   const mapRef = useRef<MapView>(null);
+  
+  const { region, handleLocationSelect, handlePressRoute } = useMapRegion({
+    data, routeState, mapRef
+  })
+
   const { checked, handlePress } = useCheckedList(data);
 
   const modes: Array<string> = [
@@ -56,30 +120,15 @@ export default function MapScreen() {
         data: routeState,
         token: token,
       });
-    } catch (err) {
-      console.error("here", err);
+    } catch (err: any) {
+      console.error(JSON.stringify(err.response.data));
     } finally {
       if (res !== null) {
         setData(res.data);
-        const { region, handleLocationSelect, handlePressRoute } = getMapRegion(
-          res.data,
-          routeState,
-          mapRef
-        );
-        setRegion(region);
-        setHandleLocationSelect(handleLocationSelect);
-        setHandlePressRoute(handlePressRoute);
       }
       setLoading(false);
     }
-  }, [
-    routeState,
-    token,
-    mapRef,
-    setRegion,
-    setHandleLocationSelect,
-    setHandlePressRoute,
-  ]);
+  }, [routeState, token, mapRef, setData]);
 
   // fetch route
   useEffect(() => {
@@ -111,10 +160,12 @@ export default function MapScreen() {
 
   // no location found screen
   if (
-    data === null ||
-    region === undefined ||
-    handleLocationSelect === null ||
-    handlePressRoute === null
+    !data ||
+    !data.locations_coordinates ||
+    data.locations_coordinates.length < 2 ||
+    !region ||
+    !region.latitude ||
+    !region.longitude
   ) {
     return (
       <SafeAreaView
@@ -219,9 +270,11 @@ export default function MapScreen() {
               />
             );
           })}
-        {region && (
-          <Marker coordinate={region} pinColor="blue" title="You are here" />
-        )}
+        <Marker
+          coordinate={region}
+          pinColor="blue"
+          title="You are here"
+        />
         <Polyline
           coordinates={data?.route}
           strokeWidth={3}
@@ -232,17 +285,19 @@ export default function MapScreen() {
 
       <ActivityIndicator animating={loading} size="large" />
 
-      <ResultOverlay
-        tipList={tipList}
-        data={data}
-        body={routeState}
-        handleLocationSelect={handleLocationSelect}
-        handlePressRoute={handlePressRoute}
-        handlePress={handlePress}
-        checked={checked}
-        styles={styles}
-        locationIcons={locationIcons}
-      />
+      {data && (
+        <ResultOverlay
+          tipList={tipList}
+          data={data}
+          body={routeState}
+          handleLocationSelect={handleLocationSelect}
+          handlePressRoute={handlePressRoute}
+          handlePress={handlePress}
+          checked={checked}
+          styles={styles}
+          locationIcons={locationIcons}
+        />
+      )}
     </SafeAreaView>
   );
 }

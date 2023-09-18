@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../store";
 import {
@@ -48,7 +49,7 @@ export const useSession = () => {
       DEBUG && console.log("token is valid");
       return true;
     }
-  };
+  }
 
   return {
     token,

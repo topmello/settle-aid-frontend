@@ -105,6 +105,7 @@ const authSlice = createSlice({
       state.tokenExpiresAt = action.payload.access_token_expire + "+0000";
       state.refreshToken = action.payload.refresh_token;
       state.refreshTokenExpiresAt = action.payload.refresh_token_expire + "+0000";
+      console.log("new refresh token expire at ", state.refreshTokenExpiresAt)
       state.status = 'refreshSuccess';
     });
     builder.addCase(refreshToken.rejected, (state, action) => {

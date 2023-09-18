@@ -228,6 +228,7 @@ export default function SettingsScreen() {
               title="Auth Status"
               description={authStatus}
             />
+            <List.Item title="Current UTC Time" description={new Date().toISOString()} />
             <List.Item title="Token" description={token} />
             <List.Item title="Id" description={userId} />
             <List.Item title="Username" description={username} />
