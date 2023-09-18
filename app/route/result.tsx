@@ -33,6 +33,8 @@ import { useSession } from "../../hooks/useSession";
 import { useNotification } from "../../hooks/useNotification";
 import { useTranslation } from "react-i18next";
 import session from "redux-persist/lib/storage/session";
+import * as Calendar from 'react-native-add-calendar-event';
+
 
 export default function MapScreen() {
   const theme = useTheme();
@@ -49,6 +51,30 @@ export default function MapScreen() {
   const [handlePressRoute, setHandlePressRoute] = useState<any>(null);
   const mapRef = useRef<MapView>(null);
   const { checked, handlePress } = useCheckedList(data);
+
+  // Function to handle adding the event to the calendar
+  const addToCalendar = () => {
+    const startDate = new Date(); // Replace with your event's start date
+    const endDate = new Date();   // Replace with your event's end date
+
+    const eventConfig = {
+      title: 'Your Event Title',
+      startDate: startDate.toISOString(),
+      endDate: endDate.toISOString(),
+      notes: 'Event description', // Replace with your event description
+    };
+
+    Calendar.presentEventCreatingDialog(eventConfig)
+      .then(eventInfo => {
+        console.log('Event added', eventInfo);
+        // Handle success, e.g., show a success message
+      })
+      .catch(error => {
+        console.error('Error adding event', error);
+        // Handle error, e.g., show an error message
+      });
+  };
+  
 
   const modes: Array<string> = [
     "Walk",
@@ -193,6 +219,8 @@ export default function MapScreen() {
         <Button mode="contained" style={[styles.above, styles.button]} onPress={fetchRoute}>
           Re-plan
         </Button>
+
+        
       </View>
 
       <MapView
