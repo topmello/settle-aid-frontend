@@ -52,7 +52,7 @@ export default function HomeScreen() {
     };
     const getRouteList = async () => {
         try {
-            const response = await fetch(`https://api.settle-aid.tech/route/user/${userID}/?limit=3`, {
+            const response = await fetch(`https://api.settle-aid.tech/route/user/${userID}/?limit=10`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json',
@@ -195,6 +195,12 @@ export default function HomeScreen() {
                     >
                         <AnimatedButton
                             color={theme.colors.purpleContainer}
+
+                            style={{
+                                marginHorizontal: 16,
+                                paddingHorizontal: 20,
+                                alignItems: "flex-end",
+                            }}
                             onPress={() => {
                                 router.push("/route/activity");
                             }}
@@ -309,7 +315,7 @@ export default function HomeScreen() {
                             {translatedDate}
                         </Text>
                         {
-                            routeList.map((result, index) => (
+                            routeList.slice(0,3).map((result, index) => (
                                 <RouteCard
                                     key={index}
                                     routeResult={result}

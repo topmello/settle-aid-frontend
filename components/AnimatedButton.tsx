@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, forwardRef } from "react";
 import {
   SafeAreaView,
   StyleSheet,
@@ -61,6 +61,5 @@ const styles = StyleSheet.create({
   roundedRectangle: {
     height: 120,
     borderRadius: 15,
-    marginHorizontal: 20,
   },
 });

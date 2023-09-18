@@ -9,7 +9,7 @@ import {Menu} from "react-native-popup-menu";
 
 const RouteCard = ({routeResult, isSimplified}) => {
     const theme = useTheme();
-    const [modalVisible, setModalVisible] = useState(false);
+
 
     const styles = StyleSheet.create({
         container: {
@@ -97,8 +97,7 @@ const RouteCard = ({routeResult, isSimplified}) => {
     });
 
     return (
-        <View height={100} style={isSimplified ? styles.cardSim : styles.card} onPress={() => setModalVisible(!modalVisible)}>
-
+        <AnimatedButton height={100} style={isSimplified ? styles.cardSim : styles.card}>
             <Text style={styles.card_title} numberOfLines={1}
                   ellipsizeMode='tail'>{routeResult.route.locations[0]}</Text>
             <View style={styles.tags_container}>
@@ -114,16 +113,7 @@ const RouteCard = ({routeResult, isSimplified}) => {
                     ))
                 }
             </View>
-
-                <View style={styles.button_container}>
-                    <View style={styles.circle}></View>
-                    <Button mode="outlined" textColor={theme.colors.info} onPress={() => console.log('Pressed')}
-                            style={styles.button}>Schedule</Button>
-                    <Button mode="outlined" textColor={theme.colors.info} onPress={() => console.log('Pressed')}
-                            style={styles.button}>Reuse</Button>
-                </View>
-
-        </View>
+        </AnimatedButton>
     );
 
 
