@@ -6,9 +6,17 @@ import {
   ScrollView,
 } from "react-native";
 import { useTranslation } from "react-i18next";
-import { loginUser, logoutUser } from "../../store/authSlice";
+import {
+  loginUser,
+  logoutUser,
+  selectRefreshToken,
+  selectRefreshTokenExpiresAt,
+  selectTokenExpiresAt,
+  selectUserId,
+  selectUsername,
+} from "../../store/authSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { selectUserToken } from "../../store/authSlice";
+import { selectToken } from "../../store/authSlice";
 import { AppDispatch } from "../../store";
 import { Button, List, Menu, Text, useTheme } from "react-native-paper";
 import {
@@ -17,7 +25,7 @@ import {
   setLightTheme,
   setSystemTheme,
   selectLanguage,
-  setLanguage
+  setLanguage,
 } from "../../store/appSlice";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNotification } from "../../hooks/useNotification";
@@ -28,23 +36,35 @@ import { languages } from "../common/language";
 export default function SettingsScreen() {
   const { t, i18n } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
-  const token = useSelector(selectUserToken);
+  const token = useSelector(selectToken);
+  const tokenExpireAt = useSelector(selectTokenExpiresAt);
+  const refreshToken = useSelector(selectRefreshToken);
+  const refreshTokenExpireAt = useSelector(selectRefreshTokenExpiresAt);
+  const authStatus = useSelector((state) => state.auth.status);
+  const userId = useSelector(selectUserId);
+  const username = useSelector(selectUsername);
   const colorScheme = useColorScheme();
   const theme = useSelector(selectTheme);
   const paperTheme = useTheme();
   const appLanguage = useSelector(selectLanguage);
-  const changeLanguage = useCallback((language: "en-AU" | "hi-IN" | "zh-CN") => {
-    dispatch(setLanguage({ language }));
-    i18n.changeLanguage(language);
-  }, []);
+  const changeLanguage = useCallback(
+    (language: "en-AU" | "hi-IN" | "zh-CN") => {
+      dispatch(setLanguage({ language }));
+      i18n.changeLanguage(language);
+    },
+    []
+  );
 
-  const getLanguageDisplayName = useCallback((lang) => {
-    const language = languages.find((l) => l.code === lang);
-    if (language) {
-      return language.name;
-    }
-    return "Unknown";
-  }, [languages]);
+  const getLanguageDisplayName = useCallback(
+    (lang) => {
+      const language = languages.find((l) => l.code === lang);
+      if (language) {
+        return language.name;
+      }
+      return "Unknown";
+    },
+    [languages]
+  );
   const [themeInputVisible, setThemeInputVisible] = useState(false);
   const [languageInputVisible, setLanguageInputVisible] = useState(false);
 
@@ -57,7 +77,16 @@ export default function SettingsScreen() {
         contentContainerStyle={{ alignItems: "center" }}
         style={{ width: "100%" }}
       >
-        <Text style={{ fontSize: 24, fontWeight: "bold", width: "100%", padding: 16, paddingTop: 48, color: paperTheme.colors.onBackground }}>
+        <Text
+          style={{
+            fontSize: 24,
+            fontWeight: "bold",
+            width: "100%",
+            padding: 16,
+            paddingTop: 48,
+            color: paperTheme.colors.onBackground,
+          }}
+        >
           {t("Settings", { ns: "settings" })}
         </Text>
         <List.Section
@@ -65,7 +94,7 @@ export default function SettingsScreen() {
             width: "100%",
           }}
         >
-          <List.Subheader>{t("Appearance", { ns: "settings"} )}</List.Subheader>
+          <List.Subheader>{t("Appearance", { ns: "settings" })}</List.Subheader>
           <List.Item
             title={t("Color Scheme", { ns: "settings" })}
             description={t("Set your color scheme", { ns: "settings" })}
@@ -124,24 +153,20 @@ export default function SettingsScreen() {
                     mode="contained"
                     onPress={() => setLanguageInputVisible(true)}
                   >
-                    {
-                      getLanguageDisplayName(appLanguage)
-                    }
+                    {getLanguageDisplayName(appLanguage)}
                   </Button>
                 }
               >
-                {
-                  languages.map((language) => (
-                    <Menu.Item
-                      key={language.code}
-                      onPress={() => {
-                        changeLanguage(language.code);
-                        setLanguageInputVisible(false);
-                      }}
-                      title={language.name}
-                    />
-                  ))
-                }
+                {languages.map((language) => (
+                  <Menu.Item
+                    key={language.code}
+                    onPress={() => {
+                      changeLanguage(language.code);
+                      setLanguageInputVisible(false);
+                    }}
+                    title={language.name}
+                  />
+                ))}
               </Menu>
             )}
           />
@@ -151,7 +176,7 @@ export default function SettingsScreen() {
             width: "100%",
           }}
         >
-          <List.Subheader>{t("Account", { ns: "settings"})}</List.Subheader>
+          <List.Subheader>{t("Account", { ns: "settings" })}</List.Subheader>
           <List.Item
             title={t("Logout", { ns: "settings" })}
             right={() => {
@@ -169,7 +194,9 @@ export default function SettingsScreen() {
             width: "100%",
           }}
         >
-          <List.Subheader>{t("Development", {ns: "settings"})}</List.Subheader>
+          <List.Subheader>
+            {t("Development", { ns: "settings" })}
+          </List.Subheader>
           <List.Item
             title="Test Admin Login"
             description={adminAuthStatus}
@@ -193,15 +220,30 @@ export default function SettingsScreen() {
               </Button>
             )}
           />
-
-          <List.Item
-            title="Current Token"
-            description={token}
+          <List.Accordion
+            title="Authentication States"
             left={(props) => <List.Icon {...props} icon="key" />}
-          />
+          >
+            <List.Item
+              title="Auth Status"
+              description={authStatus}
+            />
+            <List.Item title="Current UTC Time" description={new Date().toISOString()} />
+            <List.Item title="Token" description={token} />
+            <List.Item title="Id" description={userId} />
+            <List.Item title="Username" description={username} />
+            <List.Item
+              title="Token Expires At"
+              description={tokenExpireAt?.toString()}
+            />
+            <List.Item title="Refresh Token" description={refreshToken} />
+            <List.Item
+              title="Refresh Token Expires At"
+              description={refreshTokenExpireAt?.toString()}
+            />
+          </List.Accordion>
           <List.Item
             title="Go Access Page"
-            left={(props) => <List.Icon {...props} icon="key" />}
             right={() => (
               <Button
                 mode="contained"

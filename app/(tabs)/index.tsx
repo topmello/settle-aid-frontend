@@ -13,7 +13,7 @@ import {
   Platform,
 } from "react-native";
 import { Button, Text } from "react-native-paper";
-import { useTranslation } from "react-i18next"; // <-- Import the hook
+import { useTranslation } from "react-i18next";
 import AccountCircleIcon from "../../assets/images/icons/account_circle.svg";
 import RouteIcon from "../../assets/images/icons/route.svg";
 import ArrowIcon from "../../assets/images/icons/navigate_next.svg";

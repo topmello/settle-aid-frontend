@@ -46,7 +46,7 @@ const ResultOverlay: React.FC<OverlayProps> = ({
   checked,
   styles,
   locationIcons,
-}) => {
+}:OverlayProps) => {
   const theme = useTheme();
   const { t } = useTranslation();
 
