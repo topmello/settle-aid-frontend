@@ -20,6 +20,9 @@ import { selectTheme } from "../../store/appSlice";
 import { fetch } from "../../api/fetch";
 import { useSession } from "../../hooks/useSession";
 import { useMapRegion } from "../../hooks/useMapRegion";
+import * as Calendar from 'expo-calendar';
+import * as Permissions from 'expo-permissions';
+
 
 function degreesToRadians(degrees: number): number {
   return (degrees * Math.PI) / 180;
@@ -77,6 +80,32 @@ export default function MapScreen() {
   const currentTheme = useSelector(selectTheme);
   const routeState: RouteState = useSelector(selectRouteState);
 
+
+  // add event to calendar
+
+  const addToCalendar = async () => {
+    if (calendarPermission) {
+      // Get the default calendar
+      const defaultCalendar = await Calendar.getDefaultCalendarAsync();
+
+      const eventDetails = {
+        title: "My Event",
+        startDate: new Date(), // Replace with your event's start date
+        endDate: new Date(),   // Replace with your event's end date
+        timeZone: "GMT",      // Set the timezone as needed
+        location: "Event Location",
+        notes: "Event Description",
+      };
+
+      const event = await Calendar.createEventAsync(defaultCalendar.id, eventDetails);
+
+      console.log(`Event added to calendar with ID: ${event}`);
+    } else {
+      console.warn("Calendar permissions not granted.");
+    }
+  };
+  
+
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<RouteResult>({
     locations: [],
@@ -129,6 +158,19 @@ export default function MapScreen() {
       setLoading(false);
     }
   }, [routeState, token, mapRef, setData]);
+
+  //calendar permission
+  const [calendarPermission, setCalendarPermission] = useState(false);
+
+  const requestCalendarPermission = async () => {
+    const { status } = await Permissions.askAsync(Permissions.CALENDAR);
+    setCalendarPermission(status === "granted");
+  };
+
+  useEffect(() => {
+    requestCalendarPermission();
+  }, []);
+ 
 
   // fetch route
   useEffect(() => {
@@ -197,6 +239,13 @@ export default function MapScreen() {
           }}
         >
           Home
+        </Button>
+        <Button
+          mode="contained"
+          style={[styles.above, styles.button]}
+          onPress={addToCalendar}
+        >
+          Add to Calendar
         </Button>
       </SafeAreaView>
     );
