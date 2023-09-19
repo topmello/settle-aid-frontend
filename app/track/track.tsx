@@ -150,8 +150,7 @@ export default function TrackScreen() {
         <View
           style={{
             flex: 1,
-          }}
-        ></View>
+          }}></View>
         <View
           style={{
             height: 180,
@@ -186,6 +185,7 @@ export default function TrackScreen() {
               setShowRoomIdInput(false);
             }}
             contentContainerStyle={{
+              height: "100%",
               flex: 1,
               paddingTop: 100,
               justifyContent: "flex-start",
@@ -202,13 +202,14 @@ export default function TrackScreen() {
                 setRoomIdInput(text);
               }}
             />
+            <View style={{flex:1}}></View>
             <View
               style={{
-                position: "absolute",
                 width: "100%",
                 padding: 20,
-                bottom: "5%",
+                marginBottom: 24,
                 gap: 28,
+                alignSelf: 'flex-end'
               }}
             >
               <Button
@@ -258,6 +259,7 @@ export default function TrackScreen() {
           flexDirection: "row",
           justifyContent: "space-between",
           padding: 20,
+          zIndex: 1,
         }}
       >
         <Pressable
