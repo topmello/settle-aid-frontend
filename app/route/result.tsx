@@ -25,6 +25,7 @@ import {
   Coordinates,
 } from "../../hooks/useMapRegion";
 import * as Calendar from "expo-calendar";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 export default function MapScreen() {
   const theme = useTheme();
@@ -32,21 +33,64 @@ export default function MapScreen() {
   const currentTheme = useSelector(selectTheme);
   const routeState: RouteState = useSelector(selectRouteState);
 
+  //calendar permission
+  const [calendarPermission, setCalendarPermission] = useState(false);
+
+  const requestCalendarPermission = async () => {
+    const { status } = await Calendar.requestCalendarPermissionsAsync();
+    setCalendarPermission(status === "granted");
+  };
+
+  useEffect(() => {
+    requestCalendarPermission();
+  }, []);
+
+  // fetch route
+  useEffect(() => {
+    checkSession().then((isSessionVaild) => {
+      if (!isSessionVaild) {
+        router.replace("/auth/login");
+      }
+    });
+    fetchRoute();
+  }, []);
+
+
+  //date picker
+
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirm = (date: Date) => {
+    console.warn("A date has been picked: ", date);
+    hideDatePicker();
+    setSelectedDate(date);
+    addToCalendar(date);
+  };
+
   // add event to calendar
 
-  const addToCalendar = async () => {
+  const addToCalendar = async (date: Date) => {
     if (calendarPermission) {
       // Get the default calendar
       const defaultCalendar = await Calendar.getDefaultCalendarAsync();
 
-      const eventDetails = {
-        title: "My Event",
-        startDate: new Date(), // Replace with your event's start date
-        endDate: new Date(), // Replace with your event's end date
-        timeZone: "GMT", // Set the timezone as needed
-        location: "Event Location",
-        notes: "Event Description",
-      };
+        const eventDetails = {
+          title: "My Event",
+          startDate: date.toISOString(),
+          endDate: date.toISOString(),
+          timeZone: "GMT", // Set the timezone as needed
+          location: "Event Location",
+          notes: "Event Description",
+        };
 
       const event = await Calendar.createEventAsync(
         defaultCalendar.id,
@@ -118,28 +162,7 @@ export default function MapScreen() {
     }
   }, [routeState, token, mapRef, setData]);
 
-  //calendar permission
-  const [calendarPermission, setCalendarPermission] = useState(false);
-
-  const requestCalendarPermission = async () => {
-    const { status } = await Calendar.requestCalendarPermissionsAsync();
-    setCalendarPermission(status === "granted");
-  };
-
-  useEffect(() => {
-    requestCalendarPermission();
-  }, []);
-
-  // fetch route
-  useEffect(() => {
-    checkSession().then((isSessionVaild) => {
-      if (!isSessionVaild) {
-        router.replace("/auth/login");
-      }
-    });
-    fetchRoute();
-  }, []);
-
+  
   // loading screen
   if (loading) {
     return (
@@ -198,13 +221,17 @@ export default function MapScreen() {
         >
           Home
         </Button>
-        <Button
-          mode="contained"
-          style={[styles.above, styles.button]}
-          onPress={addToCalendar}
-        >
-          Add to Calendar
-        </Button>
+        
+
+        <View>
+          <Button mode="contained" style={[styles.above, styles.button]} onPress={showDatePicker}>Show date picker</Button>
+          <DateTimePickerModal
+            isVisible={isDatePickerVisible}
+            mode="date"
+            onConfirm={handleConfirm}
+            onCancel={hideDatePicker}
+          />
+        </View>
       </SafeAreaView>
     );
   }
