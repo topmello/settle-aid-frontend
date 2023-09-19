@@ -22,8 +22,8 @@ interface CardProps {
 const RouteCard: React.FC<CardProps> = ({
   routeResult,
   isSimplified,
+  handleFavRoute,
   onPressCard,
-  onPress,
 }) => {
   const Wrapper = isSimplified ? AnimatedButton : View;
   const theme = useTheme();
