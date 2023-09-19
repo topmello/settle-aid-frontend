@@ -17,6 +17,7 @@ interface AppState {
   theme: "light" | "dark" | "system" | undefined;
   language: "en-AU" | "zh-CN" | "hi-IN" | undefined;
   privacyChecked: boolean;
+  roomId?: string;
 }
 
 const initialState: AppState = {
@@ -30,6 +31,7 @@ const initialState: AppState = {
 export const selectTheme = (state: any) => state.app.theme;
 export const selectLanguage = (state: any) => state.app.language;
 export const selectPrivacyChecked = (state: any) => state.app.privacyChecked;
+export const selectRoomId = (state: any) => state.app.roomId;
 
 const appSlice = createSlice({
   name: "app",
@@ -72,6 +74,9 @@ const appSlice = createSlice({
     setPrivacyUnchecked(state) {
       state.privacyChecked = false;
     },
+    setRoomId(state, action: PayloadAction<{ roomId: string }>) {
+      state.roomId = action.payload.roomId;
+    }
   },
 });
 
@@ -86,6 +91,7 @@ export const {
   setLanguage,
   setPrivacyChecked,
   setPrivacyUnchecked,
+  setRoomId
 } = appSlice.actions;
 export default appSlice.reducer;
 

@@ -28,7 +28,7 @@ const useCurrentLocationRealtime = () => {
       const watcher = await Location.watchPositionAsync(
         {
           accuracy: Location.Accuracy.High,
-          timeInterval: 100,
+          timeInterval: 1000,
           distanceInterval: 10,
         },
         (location) => {
