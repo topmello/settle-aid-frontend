@@ -9,34 +9,34 @@ import LearnScreen from "./learn";
 import SettingsScreen from "./settings";
 import { selectLanguage } from "../../store/appSlice";
 import { useSelector } from "react-redux";
-import { useNotification } from "../../hooks/useNotification";
 
 export default function TabLayout() {
   const { t } = useTranslation();
   const rootNativationState = useRootNavigationState();
   const language = useSelector(selectLanguage);
-  const { pushNotification } = useNotification();
 
   const Tab = createMaterialBottomTabNavigator();
-  const { token, checkSession } = useSession();
+  const { checkSession } = useSession();
 
-  // authentication guard
+  // language check guard
   useEffect(() => {
     if (!rootNativationState?.key) return;
     if (!language) {
       router.replace("/common/language");
     }
     
-  }, [rootNativationState?.key, language, checkSession]);
+  }, [rootNativationState?.key, language]);
 
+  // authentication guard
   useEffect(() => {
+    if (!rootNativationState?.key) return;
     checkSession()
       .then(isSessionVaild => {
         if (!isSessionVaild) {
           router.replace("/auth/login");
         }
       })
-    }, [checkSession]);
+    }, [rootNativationState?.key]);
 
   return (
     <Tab.Navigator initialRouteName="home">

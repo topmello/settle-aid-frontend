@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../store";
 import {
@@ -10,7 +10,7 @@ import {
   logoutUser,
 } from "../store/authSlice";
 
-const DEBUG = false;
+const DEBUG = true;
 
 export const useSession = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -37,7 +37,7 @@ export const useSession = () => {
       } else {
         try {
           DEBUG && console.log("refreshing token");
-          await dispatch(doRefreshToken());
+          await dispatch(doRefreshToken()).unwrap();
           return true;
         } catch (e) {
           DEBUG && console.log("refresh token failed");
@@ -50,7 +50,7 @@ export const useSession = () => {
       return true;
     }
   }
-
+  
   return {
     token,
     checkSession,
