@@ -286,7 +286,7 @@ export default function HomeScreen() {
                         </AnimatedButton>
                     </View>
                 </View>
-                {routeList && Array.isArray(routeList) && (
+                {routeList && (
                     <View>
                         <View style={styles.historySection}>
                             <Text style={styles.titleLarge}>
