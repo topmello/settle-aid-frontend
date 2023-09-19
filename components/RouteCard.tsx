@@ -55,18 +55,18 @@ const RouteCard: React.FC<CardProps> = ({
     console.warn("A date has been picked: ", date);
     hideDatePicker();
     setSelectedDate(date);
-    addToCalendar(date);
+    addToCalendar(date, routeResult.route.locations[0]);
   };
 
   // add event to calendar
 
-  const addToCalendar = async (date: Date) => {
+  const addToCalendar = async (date: Date, location: String) => {
     if (calendarPermission) {
       // Get the default calendar
       const defaultCalendar = await Calendar.getDefaultCalendarAsync();
 
         const eventDetails = {
-          title: "My Event",
+          title: location,
           startDate: date.toISOString(),
           endDate: date.toISOString(),
           timeZone: "GMT", // Set the timezone as needed
