@@ -141,16 +141,21 @@ export default function MapScreen() {
   const fetchRoute = useCallback(async () => {
     setLoading(true);
 
-    const routeData: Route = JSON.parse(routeJSON as string)
-
-    if (routeData && routeData.route_id && routeData.locations && routeData.route) {
-
-      const { route_id, ...routeDataWithoutID } = routeData;
-      setData(routeDataWithoutID);
-      setLoading(false);
-      return; // return early so the fetch call is not made
+    if (typeof routeJSON === 'string') {
+      try {
+        const routeData: Route = JSON.parse(routeJSON);
+  
+        if (routeData && routeData.route_id && routeData.locations && routeData.route) {
+          const { route_id, ...routeDataWithoutID } = routeData;
+          setData(routeDataWithoutID);
+          setLoading(false);
+          return; // return early so the fetch call is not made
+        }
+      } catch (error) {
+        console.error("Failed to parse routeJSON:", error);
+      }
     }
-
+  
     let res = null;
     try {
       res = await fetch({
