@@ -21,16 +21,19 @@ import RestaurantIcon from "../../assets/images/icons/restaurant_menu.svg";
 import { AnimatedButton } from "../../components/AnimatedButton";
 import { useTheme } from "react-native-paper";
 import LightCloudyIcon from "../../assets/images/weather/light_cloudy.svg";
+import PersonPinIcon from "../../assets/images/icons/person_pin.svg";
+
 import { router } from "expo-router";
 import { useSelector } from "react-redux";
 import { selectToken, selectUserId } from "../../store/authSlice";
 import RouteCard from "../../components/RouteCard";
 import useFetch from "../../hooks/useFetch";
 import { RouteHistory } from "../../types/route";
+import { useAppTheme } from "../../theme/theme";
 
 export default function HomeScreen() {
   const { t } = useTranslation();
-  const theme = useTheme();
+  const theme = useAppTheme();
   const userID = useSelector(selectUserId);
   const token = useSelector(selectToken);
 
@@ -240,7 +243,7 @@ export default function HomeScreen() {
                     <Text
                       variant="titleLarge"
                       style={{
-                        color: "rgb(44, 0, 81)",
+                        color: theme.colors.onPurpleContainer,
                         fontWeight: "bold",
                       }}
                     >
@@ -260,6 +263,65 @@ export default function HomeScreen() {
                   >
                     {t("Plan your trip", { ns: "home" })}
                   </Text>
+                </View>
+              </View>
+            </AnimatedButton>
+            <AnimatedButton
+              height={76}
+              color={(theme.colors as any).amberContainer}
+              onPress={() => {
+                router.push("/track/track");
+              }}
+              style={{
+                marginTop: 16,
+              }}
+            >
+              <View
+                style={{
+                  flexDirection: "row",
+                  flex: 1,
+                  alignItems: "center",
+                }}
+              >
+                <PersonPinIcon
+                  style={
+                    {
+                      marginHorizontal: 18,
+                    } as any
+                  }
+                  height={40}
+                  width={40}
+                  fill={(theme.colors as any).onAmberContainer}
+                />
+                <View
+                  style={{
+                    flexDirection: "column",
+                    flex: 1,
+                    alignItems: "flex-start",
+                  }}
+                >
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Text
+                      variant="titleLarge"
+                      style={{
+                        color: theme.colors.onAmberContainer,
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {t("Location Sharing", { ns: "home" })}
+                    </Text>
+                    <ArrowIcon
+                      style={{
+                        marginLeft: 8,
+                      }}
+                      fill={(theme.colors as any).onAmberContainer}
+                    />
+                  </View>
                 </View>
               </View>
             </AnimatedButton>
