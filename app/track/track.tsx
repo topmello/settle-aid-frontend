@@ -25,7 +25,6 @@ import { selectTheme, setRoomId } from "../../store/appSlice";
 import { selectLonLat } from "../../store/routeSlice";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { useNotification } from "../../hooks/useNotification";
-import { ScrollView } from "react-native-gesture-handler";
 
 export default function TrackScreen() {
   const theme = useAppTheme();
@@ -40,21 +39,12 @@ export default function TrackScreen() {
   const locationState = useSelector(selectLonLat);
   const [showRoomIdInput, setShowRoomIdInput] = useState(false);
   const [roomIdInput, setRoomIdInput] = useState("");
-  const [region, setRegion] = useState({
-    latitude: 0,
-    longitude: 0,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
-  });
 
   const {
     roomId,
     isConnected,
-    messages,
     joinRoom,
     createRoom,
-    handleLeaveRoom,
-    sendLocation,
     exitRoom,
     startTrackMe,
     parentLocation,

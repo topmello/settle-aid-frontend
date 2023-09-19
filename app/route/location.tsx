@@ -32,13 +32,13 @@ import {
   setPrivacyUnchecked,
   selectPrivacyChecked,
   selectTheme,
+  loaded,
 } from "../../store/appSlice";
 import {
   setLonLat,
   setDistanceThreshold,
   selectLonLat,
   selectDistanceThres,
-  RouteState,
 } from "../../store/routeSlice";
 
 import useCurrentLocation from "../../hooks/useCurrentLocation";
@@ -54,7 +54,7 @@ export default function RouteGenLocation() {
 
   const privacyChecked = useSelector(selectPrivacyChecked);
 
-  const { isLoading, isFail } = useSelector((state: RootState) => state.app);
+  const isLoading  = useSelector((state: RootState) => state.app.isLoading);
   const locationState = useSelector(selectLonLat);
   const distanceThres = useSelector(selectDistanceThres);
   const fetchLocation = useCurrentLocation();
@@ -185,6 +185,7 @@ export default function RouteGenLocation() {
                     longitude: details.geometry.location.lng,
                     latitude: details.geometry.location.lat,
                   }))
+                  dispatch(loaded())
                 } else {
                   pushNotification({
                     message: t("Location not found", { ns: "route" }),
