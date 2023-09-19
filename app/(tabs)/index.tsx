@@ -50,17 +50,23 @@ export default function HomeScreen() {
     return `${dayName} ${day} ${monthName}`;
   };
 
-  const [routeList, refetchRouteList] = useFetch<RouteHistory[]>({
-      method: "GET",
-      url: `/route/user/${userID}/?limit=5`,
-      token: token,
-    },[]);
+    const [routeList, refetchRouteList] = useFetch<RouteHistory[]>(
+        {
+            method: "GET",
+            url: `/route/user/${userID}/?limit=5`,
+            token: token,
+        },
+        [token]
+    );
 
-  const [favRouteList, refetchFavRouteList] = useFetch<RouteHistory[]>({
-      method: "GET",
-      url: `/route/user/fav/${userID}/?limit=5`,
-      token: token,
-    },[]);
+    const [favRouteList, refetchFavRouteList] = useFetch<RouteHistory[]>(
+        {
+            method: "GET",
+            url: `/route/user/fav/${userID}/?limit=5`,
+            token: token,
+        },
+        [token]
+    );
 
   useEffect(() => {
     const updateDate = () => {
