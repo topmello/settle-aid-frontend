@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 export type MapRegion = {
   latitude: number;
@@ -55,14 +55,23 @@ export const useMapRegion = ({data, routeState, mapRef}: {
   routeState: Coordinates;
   mapRef: React.RefObject<any>;
 }) => {
+
+  const [mapIsLoaded, setMapIsLoaded] = useState(false);
+  const initialRender = useRef(true);
+
   const [region, setRegion] = useState<MapRegion>({
-    latitude: 0,
-    longitude: 0,
+    latitude: -37.8136,
+    longitude: 144.9631,
     latitudeDelta: 0,
     longitudeDelta: 0,
   });
   
   useEffect(() => {
+    if (initialRender.current) {
+      initialRender.current = false;
+      return;
+    }
+
     let centerLat = 0, centerLon = 0, deltaLat = 0, deltaLon = 0;
     data["locations_coordinates"].forEach((location) => {
       centerLat += location.latitude;
@@ -78,6 +87,9 @@ export const useMapRegion = ({data, routeState, mapRef}: {
       latitudeDelta: deltaLat * 2,
       longitudeDelta: deltaLon * 2,
     })
+
+    setMapIsLoaded(true);
+
   }, [data, routeState])
 
   const handleLocationSelect = useCallback((location: Coordinates) => {
@@ -139,5 +151,6 @@ export const useMapRegion = ({data, routeState, mapRef}: {
     region,
     handleLocationSelect,
     handlePressRoute,
+    mapIsLoaded
   };
 }

@@ -17,7 +17,8 @@ import { locationIcons } from "../../constants/icons";
 import { mapDarkTheme } from "../../theme/map";
 import { selectTheme } from "../../store/appSlice";
 
-import { fetch } from "../../api/fetch";
+import { fetch, RequestOptions } from "../../api/fetch";
+import useFetch from "../../hooks/useFetch";
 import { useSession } from "../../hooks/useSession";
 import {
   useMapRegion,
@@ -35,8 +36,26 @@ export default function MapScreen() {
   const routeState: RouteState = useSelector(selectRouteState);
 
   const routeJSON = useLocalSearchParams().routeJSON;
-  
-  
+  const [loading, setLoading] = useState(false);
+
+  const [data, setData] = useState<RouteResult>({
+    locations: [],
+    locations_coordinates: [
+      {
+        latitude: 0,
+        longitude: 0,
+      },
+    ],
+    route: [
+      {
+        latitude: 0,
+        longitude: 0,
+      },
+    ],
+    instructions: [],
+    duration: 0,
+  });
+
   //calendar permission
   const [calendarPermission, setCalendarPermission] = useState(false);
 
@@ -99,32 +118,7 @@ export default function MapScreen() {
     }
   };
 
-  const [loading, setLoading] = useState(false);
-  const [data, setData] = useState<RouteResult>({
-    locations: [],
-    locations_coordinates: [
-      {
-        latitude: 0,
-        longitude: 0,
-      },
-    ],
-    route: [
-      {
-        latitude: 0,
-        longitude: 0,
-      },
-    ],
-    instructions: [],
-    duration: 0,
-  });
-
-  const mapRef = useRef<MapView>(null);
-
-  const { region, handleLocationSelect, handlePressRoute } = useMapRegion({
-    data,
-    routeState,
-    mapRef,
-  });
+  
 
 
   const { checked, handlePress } = useCheckedList(data);
@@ -138,6 +132,24 @@ export default function MapScreen() {
   ];
 
   const tipList: Array<Tip> = getTipForMode(tips, modes);
+
+  const requestOptions: RequestOptions = {
+    method: "POST",
+    url: "/search/v2/route/",
+    data: routeState,
+    token: token,
+  };
+  
+  const [dataFromFetch, fetchData] = useFetch<RouteResult | null>(requestOptions, [routeState, token], null, false);
+
+  const mapRef = useRef<MapView>(null);
+
+  const { region, handleLocationSelect, handlePressRoute, mapIsLoaded } = useMapRegion({
+    data,
+    routeState,
+    mapRef,
+  });
+  
 
   const fetchRoute = useCallback(async () => {
     setLoading(true);
@@ -156,25 +168,16 @@ export default function MapScreen() {
         console.error("Failed to parse routeJSON:", error);
       }
     }
+    await fetchData();
+    
+  }, [routeState, token, mapRef, setData]);
   
-    let res = null;
-    try {
-      res = await fetch({
-        method: "POST",
-        url: "/search/v2/route/",
-        data: routeState,
-        token: token,
-      });
-    } catch (err: any) {
-      console.error(JSON.stringify(err.response.data));
-    } finally {
-      if (res !== null) {
-        setData(res.data);
-      }
+  useEffect(() => {
+    if (dataFromFetch) {
+      setData(dataFromFetch as RouteResult);
       setLoading(false);
     }
-  }, [routeState, token, mapRef, setData]);
-
+  }, [dataFromFetch]);
 
    // fetch route
    useEffect(() => {
@@ -184,7 +187,7 @@ export default function MapScreen() {
       }
     });
     fetchRoute();
-  }, []);
+  }, [fetchRoute]);
 
   
   // loading screen
@@ -303,7 +306,7 @@ export default function MapScreen() {
         </Button>}
       </View>
 
-      <MapView
+      {mapIsLoaded && <MapView
         customMapStyle={currentTheme === "dark" ? mapDarkTheme : []}
         ref={mapRef}
         style={{
@@ -338,7 +341,7 @@ export default function MapScreen() {
           strokeColor="rgba(227, 66, 52, 0.7)"
           lineDashPattern={[1, 5]}
         />
-      </MapView>
+      </MapView>}
 
       <ActivityIndicator animating={loading} size="large" />
 
