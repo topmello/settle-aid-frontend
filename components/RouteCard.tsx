@@ -75,7 +75,17 @@ const RouteCard: React.FC<CardProps> = ({
 
   const generatePDF = async () => {
     try {
-      const htmlContent = `<html><body><h1>Generated PDF</h1></body></html>`;
+      const locationsInPTags = routeResult.route.locations.map(location => `<p>${location}</p>`).join('');
+
+      const instructions = routeResult.route.instructions.map(instruction => `<p>${instruction}</p>`).join('');
+      const htmlContent = `
+      <html><body><h1>My Events</h1>
+      <h2>Locations</h2>
+      ${locationsInPTags} 
+      <h2>Instructions</h2>
+      ${instructions}
+      </body></html>
+      `;
       
       // Generate PDF using expo-print
       const { uri } = await Print.printToFileAsync({ html: htmlContent });
@@ -255,7 +265,7 @@ const RouteCard: React.FC<CardProps> = ({
               onPress={generatePDF}
               style={styles.button}
             >
-              PDF
+              Share
             </Button>
           </View>
         )}

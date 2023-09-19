@@ -301,6 +301,7 @@ export default function MapScreen() {
         ref={mapRef}
         style={styles.map}
         initialRegion={region}
+        showsUserLocation={true}
         scrollEnabled={true}
         pitchEnabled={true}
         rotateEnabled={true}
