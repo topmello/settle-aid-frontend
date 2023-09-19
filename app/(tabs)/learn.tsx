@@ -6,6 +6,8 @@ import { tips } from "../../tips/tips.json";
 import { Ionicons } from "@expo/vector-icons";
 import { useTip } from "../../store/TipContext";
 import { router } from "expo-router";
+import { useAppTheme } from "../../theme/theme";
+import { useTranslation } from "react-i18next";
 
 type IconName =
   | "airplane-outline"
@@ -30,22 +32,33 @@ const iconList: IconName[] = [
 ];
 
 export default function LearnScreen() {
-  const theme = useTheme();
+  const {t} = useTranslation();
+  const theme = useAppTheme();
   const { setCategory } = useTip();
   return (
     <SafeAreaView
       style={{
         flex: 1,
         flexDirection: "column",
-        padding: 20,
       }}
-      
     >
-      <Text variant="titleLarge">Cultural Tips</Text>
+      <Text
+          style={{
+            fontSize: 24,
+            fontWeight: "bold",
+            width: "100%",
+            padding: 16,
+            paddingTop: 48,
+            color: theme.colors.onBackground,
+          }}
+        >
+          {t("Cultural Tips", { ns: "settings" })}
+        </Text>
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={{
-          paddingTop: 20,
+          paddingHorizontal: 16,
+          paddingBottom: 24,
         }}
       >
         {tips.map((category, cateIndex) => {

@@ -17,9 +17,7 @@ import { useTranslation } from "react-i18next";
 import AccountCircleIcon from "../../assets/images/icons/account_circle.svg";
 import RouteIcon from "../../assets/images/icons/route.svg";
 import ArrowIcon from "../../assets/images/icons/navigate_next.svg";
-import RestaurantIcon from "../../assets/images/icons/restaurant_menu.svg";
 import { AnimatedButton } from "../../components/AnimatedButton";
-import { useTheme } from "react-native-paper";
 import LightCloudyIcon from "../../assets/images/weather/light_cloudy.svg";
 import PersonPinIcon from "../../assets/images/icons/person_pin.svg";
 
@@ -129,11 +127,6 @@ export default function HomeScreen() {
           <Text variant="headlineSmall" style={styles.headerText}>
             {t("Discover Melbourne", { ns: "home" })}
           </Text>
-          <AccountCircleIcon
-            fill={theme.colors.onBackground}
-            height={40}
-            width={40}
-          />
         </View>
         <View style={[styles.containerView]}>
           <AnimatedButton
@@ -162,7 +155,9 @@ export default function HomeScreen() {
             </View>
           </AnimatedButton>
         </View>
-        <View>
+        <View style={{
+          paddingTop: 8
+        }}>
           <Text variant="titleLarge" style={styles.titleLarge}>
             {t("Start Here", { ns: "home" })}
           </Text>
@@ -313,7 +308,7 @@ export default function HomeScreen() {
                 flexDirection: "row",
                 justifyContent: "space-between",
                 alignItems: "center",
-                marginTop: 8,
+                marginTop: 12,
               }}
             >
               <Text
@@ -370,48 +365,17 @@ export default function HomeScreen() {
             </View>
           </View>
         )}
-
-        <View>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginTop: 24,
-            }}
-          >
-            <Text
-              variant="titleLarge"
-              style={{
-                fontWeight: "bold",
-                marginHorizontal: 16,
-              }}
-            >
-              {/* {t("Beloved Routes", { ns: "home" })} */}
-            </Text>
-            <TouchableOpacity
-              activeOpacity={0.6}
-              onPress={() => {
-                /* handle action */
-              }}
-            >
-              <View
-                style={{
-                  alignItems: "center",
-                  marginRight: 30,
-                  marginTop: 10,
-                  flexDirection: "row",
-                }}
-              >
-                <Text
-                  style={{ color: theme.colors.primary, fontWeight: "bold" }}
-                >
-                  {/* {t("comm:More")} */}
-                </Text>
-                {/* <ArrowIcon width={22} height={22} fill={theme.colors.primary} /> */}
-              </View>
-            </TouchableOpacity>
-          </View>
+        <View style={{
+          width: "100%",
+          flexDirection: "row",
+          justifyContent: "center",
+          marginVertical: 24
+        }}>
+          <Text variant="bodyLarge" style={{
+            color: theme.colors.outline,
+          }}>
+            More features coming soon...
+          </Text>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -433,7 +397,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     flex: 1,
-    paddingTop: 16
+    paddingTop: 24,
+    paddingBottom: 8
   },
   headerText: {
     fontWeight: "bold",
@@ -479,6 +444,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    marginTop: 12
   },
   dateText: {
     marginHorizontal: 16,
