@@ -25,7 +25,6 @@ import { selectTheme, setRoomId } from "../../store/appSlice";
 import { selectLonLat } from "../../store/routeSlice";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { useNotification } from "../../hooks/useNotification";
-import { ScrollView } from "react-native-gesture-handler";
 
 export default function TrackScreen() {
   const theme = useAppTheme();
@@ -40,21 +39,12 @@ export default function TrackScreen() {
   const locationState = useSelector(selectLonLat);
   const [showRoomIdInput, setShowRoomIdInput] = useState(false);
   const [roomIdInput, setRoomIdInput] = useState("");
-  const [region, setRegion] = useState({
-    latitude: 0,
-    longitude: 0,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
-  });
 
   const {
     roomId,
     isConnected,
-    messages,
     joinRoom,
     createRoom,
-    handleLeaveRoom,
-    sendLocation,
     exitRoom,
     startTrackMe,
     parentLocation,
@@ -150,8 +140,7 @@ export default function TrackScreen() {
         <View
           style={{
             flex: 1,
-          }}
-        ></View>
+          }}></View>
         <View
           style={{
             height: 180,
@@ -186,6 +175,7 @@ export default function TrackScreen() {
               setShowRoomIdInput(false);
             }}
             contentContainerStyle={{
+              height: "100%",
               flex: 1,
               paddingTop: 100,
               justifyContent: "flex-start",
@@ -202,13 +192,13 @@ export default function TrackScreen() {
                 setRoomIdInput(text);
               }}
             />
+            <View style={{flex:1}}></View>
             <View
               style={{
-                position: "absolute",
                 width: "100%",
                 padding: 20,
-                bottom: "5%",
                 gap: 28,
+                alignSelf: 'flex-end'
               }}
             >
               <Button
@@ -232,6 +222,7 @@ export default function TrackScreen() {
                 Join
               </Button>
               <Button
+                style={{marginBottom: 54}}
                 mode="contained-tonal"
                 onPress={() => setShowRoomIdInput(false)}
               >
@@ -258,6 +249,7 @@ export default function TrackScreen() {
           flexDirection: "row",
           justifyContent: "space-between",
           padding: 20,
+          zIndex: 1,
         }}
       >
         <Pressable
@@ -292,8 +284,8 @@ export default function TrackScreen() {
         initialRegion={{
           latitude: locationState?.latitude || 0,
           longitude: locationState?.longitude || 0,
-          latitudeDelta: 0.018,
-          longitudeDelta: 0.009,
+          latitudeDelta: 0.006,
+          longitudeDelta: 0.003,
         }}
         scrollEnabled={true}
         pitchEnabled={true}

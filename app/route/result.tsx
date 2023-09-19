@@ -8,7 +8,7 @@ import MapView, { Marker, Polyline } from "react-native-maps";
 
 import ResultOverlay from "../../components/ResultOverlay";
 import useCheckedList from "../../hooks/useCheckList";
-import { RouteState, selectRouteState } from "../../store/routeSlice";
+import { RouteState, selectLonLat, selectRouteState } from "../../store/routeSlice";
 import ArrowBackIcon from "../../assets/images/icons/arrow_back.svg";
 import tips, { Tip } from "../../tips/tipsTyped";
 import getTipForMode from "../../tips/getTip";
@@ -25,7 +25,6 @@ import {
   Coordinates,
 } from "../../hooks/useMapRegion";
 import * as Calendar from "expo-calendar";
-import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Route } from "../../types/route";
 
 export default function MapScreen() {
