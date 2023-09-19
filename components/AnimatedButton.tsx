@@ -11,7 +11,6 @@ import {
 } from "react-native";
 
 export const AnimatedButton = ({
-  height = 120,
   color,
   children,
   onPress,
@@ -50,7 +49,6 @@ export const AnimatedButton = ({
         style={[
           styles.roundedRectangle,
           {
-            height: height,
             backgroundColor: color,
             transform: [{ scale: scaleAnim }],
           },
@@ -65,7 +63,7 @@ export const AnimatedButton = ({
 
 const styles = StyleSheet.create({
   roundedRectangle: {
-    height: 120,
     borderRadius: 15,
+    padding: 16
   },
 });

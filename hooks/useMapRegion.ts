@@ -73,12 +73,14 @@ export const useMapRegion = ({data, routeState, mapRef}: {
     }
 
     let centerLat = 0, centerLon = 0, deltaLat = 0, deltaLon = 0;
+
     data["locations_coordinates"].forEach((location) => {
       centerLat += location.latitude;
       centerLon += location.longitude;
       deltaLat = Math.max(deltaLat, Math.abs(location.latitude - routeState.latitude));
       deltaLon = Math.max(deltaLon, Math.abs(location.longitude - routeState.longitude));
     });
+    
     centerLat /= data["locations_coordinates"].length;
     centerLon /= data["locations_coordinates"].length;
     setRegion({

@@ -72,12 +72,7 @@ export default function SettingsScreen() {
   const { pushNotification } = useNotification();
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ alignItems: "center" }}
-        style={{ width: "100%" }}
-      >
-        <Text
+      <Text
           style={{
             fontSize: 24,
             fontWeight: "bold",
@@ -89,6 +84,11 @@ export default function SettingsScreen() {
         >
           {t("Settings", { ns: "settings" })}
         </Text>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ alignItems: "center" }}
+        style={{ width: "100%" }}
+      >
         <List.Section
           style={{
             width: "100%",
