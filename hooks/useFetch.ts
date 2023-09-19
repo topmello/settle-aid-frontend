@@ -11,7 +11,7 @@ const useFetch = <T = any>(
 ) => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<T | null>(null);
 
   const fetchData = async () => {
     dispatch(loading());
@@ -50,7 +50,7 @@ const useFetch = <T = any>(
     ...deps,
   ]);
 
-  return [data, fetchData];
+  return [data, fetchData] as [T | null, typeof fetchData];
 };
 
 export default useFetch;

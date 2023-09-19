@@ -3,9 +3,7 @@ import { View, TouchableOpacity } from "react-native";
 import { ScrollView, FlatList } from "react-native-gesture-handler";
 import {
   Text,
-  Card,
   List,
-  Button,
   useTheme,
   Surface,
   IconButton,
@@ -26,7 +24,6 @@ type OverlayProps = {
   handlePressRoute: (index: number) => void;
   handlePress: (index: number) => void;
   checked: boolean[];
-  styles: any;
   locationIcons: any;
 };
 
@@ -128,9 +125,12 @@ const ResultOverlay: React.FC<OverlayProps> = ({
           { /** Destinations */}
           <List.Section>
             {data?.locations.map((location: string, index: number) => {
-              const description = body?.location_type[index];
+              const description = body?.location_type?.[index] || '';
+
               const capitalizedDescription =
-                description.charAt(0).toUpperCase() + description.slice(1);
+                description && typeof description === 'string'
+                  ? description.charAt(0).toUpperCase() + description.slice(1)
+                  : '';
 
               const Icon = locationIcons[body?.location_type[index]];
               return (

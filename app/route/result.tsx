@@ -8,7 +8,7 @@ import MapView, { Marker, Polyline } from "react-native-maps";
 
 import ResultOverlay from "../../components/ResultOverlay";
 import useCheckedList from "../../hooks/useCheckList";
-import { RouteState, selectLonLat, selectRouteState } from "../../store/routeSlice";
+import { RouteState, selectRouteState } from "../../store/routeSlice";
 import ArrowBackIcon from "../../assets/images/icons/arrow_back.svg";
 import tips, { Tip } from "../../tips/tipsTyped";
 import getTipForMode from "../../tips/getTip";
@@ -25,6 +25,7 @@ import {
   Coordinates,
 } from "../../hooks/useMapRegion";
 import * as Calendar from "expo-calendar";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Route } from "../../types/route";
 
 export default function MapScreen() {
@@ -190,14 +191,13 @@ export default function MapScreen() {
   if (loading) {
     return (
       <SafeAreaView
-        style={[
-          styles.container,
+        style={
           {
             backgroundColor: theme.colors.primaryContainer,
             justifyContent: "center",
             alignItems: "center",
-          },
-        ]}
+            flex: 1,
+          }}
       >
         <ActivityIndicator size="large" />
       </SafeAreaView>
@@ -215,20 +215,23 @@ export default function MapScreen() {
   ) {
     return (
       <SafeAreaView
-        style={[
-          styles.container,
+        style={
           {
             backgroundColor: theme.colors.primaryContainer,
             justifyContent: "center",
             alignItems: "center",
             gap: 16,
-          },
-        ]}
+            flex: 1,
+          }}
       >
         <Text variant="titleLarge">No location found</Text>
         <Button
           mode="contained"
-          style={[styles.button]}
+          style={{
+            width: '50%',
+            alignItems: "center",
+
+          }}
           onPress={() => {
             router.back();
           }}
@@ -237,7 +240,11 @@ export default function MapScreen() {
         </Button>
         <Button
           mode="contained"
-          style={[styles.button]}
+          style={{
+            width: '50%',
+            alignItems: "center",
+
+          }}
           onPress={() => {
             router.replace("/(tabs)");
           }}
@@ -250,7 +257,9 @@ export default function MapScreen() {
 
   // main screen
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={{
+      flex: 1,
+    }}>
       <View
         style={{
           marginTop: 32,
@@ -264,8 +273,7 @@ export default function MapScreen() {
         {router.canGoBack() ? (
           <Pressable
             onPress={() => router.back()}
-            style={[
-              styles.above,
+            style={
               {
                 backgroundColor: theme.colors.primaryContainer,
                 borderRadius: 20,
@@ -274,8 +282,8 @@ export default function MapScreen() {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-              },
-            ]}
+                zIndex: 1,
+              }}
           >
             <ArrowBackIcon
               fill={theme.colors.onPrimaryContainer}
@@ -286,21 +294,26 @@ export default function MapScreen() {
         ) : (
           <View></View>
         )}
-        <Button
+        {typeof routeJSON === 'string' ? null:<Button
           mode="contained"
-          style={[styles.above, styles.button]}
+          style={{ width: '30%', zIndex: 1, alignItems: "center",}}
           onPress={fetchRoute}
         >
           Re-plan
-        </Button>
+        </Button>}
       </View>
 
       <MapView
         customMapStyle={currentTheme === "dark" ? mapDarkTheme : []}
         ref={mapRef}
-        style={styles.map}
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+        }}
         initialRegion={region}
-        showsUserLocation={true}
         scrollEnabled={true}
         pitchEnabled={true}
         rotateEnabled={true}
@@ -338,28 +351,9 @@ export default function MapScreen() {
           handlePressRoute={handlePressRoute}
           handlePress={handlePress}
           checked={checked}
-          styles={styles}
           locationIcons={locationIcons}
         />
       )}
     </SafeAreaView>
   );
 }
-
-const { width, height } = Dimensions.get("window");
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  map: {
-    ...StyleSheet.absoluteFillObject,
-  },
-  above: {
-    zIndex: 1,
-  },
-  button: {
-    width: width * 0.3,
-    alignItems: "center",
-  },
-});

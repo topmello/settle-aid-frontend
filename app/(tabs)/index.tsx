@@ -286,7 +286,7 @@ export default function HomeScreen() {
                         </AnimatedButton>
                     </View>
                 </View>
-                {routeList && Array.isArray(routeList) && (
+                {routeList && (
                     <View>
                         <View style={styles.historySection}>
                             <Text style={styles.titleLarge}>
@@ -334,7 +334,7 @@ export default function HomeScreen() {
                         </View>
                     </View>
                 )}
-                {favRouteList && Array.isArray(favRouteList) && (
+                {favRouteList && (
                     <View>
                         <View style={styles.favoriteSection}>
                             <Text style={styles.titleLarge}>
