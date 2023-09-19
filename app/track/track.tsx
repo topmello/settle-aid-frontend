@@ -207,7 +207,6 @@ export default function TrackScreen() {
               style={{
                 width: "100%",
                 padding: 20,
-                marginBottom: 24,
                 gap: 28,
                 alignSelf: 'flex-end'
               }}
@@ -233,6 +232,7 @@ export default function TrackScreen() {
                 Join
               </Button>
               <Button
+                style={{marginBottom: 54}}
                 mode="contained-tonal"
                 onPress={() => setShowRoomIdInput(false)}
               >
