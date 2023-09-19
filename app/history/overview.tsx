@@ -21,8 +21,9 @@ import { selectUserId, selectToken } from "../../store/authSlice";
 import RouteCard from "../../components/RouteCard";
 import { fetch } from "../../api/fetch";
 import { RouteHistory } from "../../types/route";
-import { ErrorResponse, CustomError } from "../../types/errorResponse";
+import { CustomError } from "../../types/errorResponse";
 import { use } from "i18next";
+import * as Calendar from "expo-calendar";
 
 export default function HistoryOverviewScreen() {
   const { t } = useTranslation();
@@ -33,7 +34,6 @@ export default function HistoryOverviewScreen() {
   const { routeJSON } = useLocalSearchParams();
   // const {routeList} = params;
   const routeList: RouteHistory[] = JSON.parse(routeJSON as string);
-  console.log(routeList);
 
   const handleFavRoute = async (route_id: number) => {
     try {
@@ -171,7 +171,7 @@ export default function HistoryOverviewScreen() {
         }}
       >
         <View style={styles.row_text}>
-          <Pressable onPress={() => router.back()}>
+          <Pressable onPress={() => router.replace("/(tabs)")}>
             <ArrowBackIcon
               fill={theme.colors.onPrimaryContainer}
               width={34}
@@ -185,19 +185,14 @@ export default function HistoryOverviewScreen() {
         </View>
 
         <View>
-          {routeList.map(
-            (result, index) => (
-              console.log(result.route.route_id),
-              (
-                <RouteCard
-                  key={result.route.route_id}
-                  routeResult={result}
-                  isSimplified={false}
-                  handleFavRoute={handleFavRoute}
-                />
-              )
-            )
-          )}
+          {routeList.map((result, index) => (
+            <RouteCard
+              key={result.route.route_id}
+              routeResult={result}
+              isSimplified={false}
+              handleFavRoute={handleFavRoute}
+            />
+          ))}
         </View>
       </ScrollView>
     </SafeAreaView>

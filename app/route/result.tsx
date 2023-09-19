@@ -25,7 +25,6 @@ import {
   Coordinates,
 } from "../../hooks/useMapRegion";
 import * as Calendar from "expo-calendar";
-import * as Permissions from "expo-permissions";
 
 export default function MapScreen() {
   const theme = useTheme();
@@ -123,7 +122,7 @@ export default function MapScreen() {
   const [calendarPermission, setCalendarPermission] = useState(false);
 
   const requestCalendarPermission = async () => {
-    const { status } = await Permissions.askAsync(Permissions.CALENDAR);
+    const { status } = await Calendar.requestCalendarPermissionsAsync();
     setCalendarPermission(status === "granted");
   };
 

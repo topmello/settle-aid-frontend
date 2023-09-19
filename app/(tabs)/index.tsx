@@ -20,9 +20,8 @@ import ArrowIcon from "../../assets/images/icons/navigate_next.svg";
 import RestaurantIcon from "../../assets/images/icons/restaurant_menu.svg";
 import { AnimatedButton } from "../../components/AnimatedButton";
 import { useTheme } from "react-native-paper";
-import { AppTheme } from "../../theme/theme";
 import LightCloudyIcon from "../../assets/images/weather/light_cloudy.svg";
-import { Link, router, useLocalSearchParams } from "expo-router";
+import { router } from "expo-router";
 import { useSelector } from "react-redux";
 import { selectToken, selectUserId } from "../../store/authSlice";
 import RouteCard from "../../components/RouteCard";
@@ -35,9 +34,6 @@ export default function HomeScreen() {
   const userID = useSelector(selectUserId);
   const token = useSelector(selectToken);
 
-  const handleStartClick = () => {
-    console.log("Rectangle clicked!");
-  };
   const [currentDate, setCurrentDate] = useState(new Date());
   const [translatedDate, setTranslatedDate] = useState("");
 
@@ -53,7 +49,7 @@ export default function HomeScreen() {
     return `${dayName} ${day} ${monthName}`;
   };
 
-  const routeList: RouteHistory[] = useFetch(
+  const [routeList, refetchRouteList] = useFetch<RouteHistory[]>(
     {
       method: "GET",
       url: `/route/user/${userID}/?limit=5`,
@@ -62,7 +58,7 @@ export default function HomeScreen() {
     []
   );
 
-  const favRouteList: RouteHistory[] = useFetch(
+  const [favRouteList, refetchFavRouteList] = useFetch<RouteHistory[]>(
     {
       method: "GET",
       url: `/route/user/fav/${userID}/?limit=5`,
@@ -194,7 +190,7 @@ export default function HomeScreen() {
             }}
           >
             <AnimatedButton
-              color={(theme.colors as any).onPurpleContainer}
+              color={(theme.colors as any).purpleContainer}
               onPress={() => {
                 router.push("/route/activity");
               }}
@@ -232,7 +228,7 @@ export default function HomeScreen() {
                     <Text
                       variant="titleLarge"
                       style={{
-                        color: (theme.colors as any).onPurpleContainer,
+                        color: "rgb(44, 0, 81)",
                         fontWeight: "bold",
                       }}
                     >

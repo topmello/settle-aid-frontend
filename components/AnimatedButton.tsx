@@ -10,7 +10,13 @@ import {
   Image,
 } from "react-native";
 
-export const AnimatedButton = ({ height = 120, color, children, onPress, style }: {
+export const AnimatedButton = ({
+  height = 120,
+  color,
+  children,
+  onPress,
+  style,
+}: {
   height?: number;
   color: string;
   children: React.ReactNode;
