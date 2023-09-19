@@ -1,17 +1,18 @@
 //@ts-nocheck
 import React from "react";
 import { useState, useMemo, useRef, useCallback, useEffect } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native"; // 或者你使用的库
-import { RouteHistory } from "../types/route"; // 假设你的RouteResult接口定义在这个文件里
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { RouteHistory } from "../types/route";
 import { useTheme, Button } from "react-native-paper";
 import { AnimatedButton } from "./AnimatedButton";
-import { useSelector } from "react-redux";
 import * as Calendar from "expo-calendar";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import Modal from 'react-native-modal';
 import { useNotification } from "../hooks/useNotification";
+import * as Print from 'expo-print';
+import * as Sharing from 'expo-sharing';
+import Bookmark  from '../assets/images/icons/bookmark.svg'
 
-// 定义传入的props类型
+
 interface CardProps {
   routeResult: RouteHistory;
   isSimplified: boolean;
@@ -70,6 +71,27 @@ const RouteCard: React.FC<CardProps> = ({
       message: "The event has been added to you system calendar!",
       type: "info",
     });
+  };
+
+  const generatePDF = async () => {
+    try {
+      const htmlContent = `<html><body><h1>Generated PDF</h1></body></html>`;
+      
+      // Generate PDF using expo-print
+      const { uri } = await Print.printToFileAsync({ html: htmlContent });
+  
+      // Open the generated PDF using expo-sharing
+      await Sharing.shareAsync(uri, {
+        mimeType: 'application/pdf',
+        dialogTitle: 'Share PDF',
+        UTI: 'com.adobe.pdf',
+        filename: 'generated.pdf',
+      });
+  
+      console.log('PDF saved and opened:', uri);
+    } catch (error) {
+      console.error('Error generating and opening PDF:', error);
+    }
   };
 
   // add event to calendar
@@ -201,7 +223,15 @@ const RouteCard: React.FC<CardProps> = ({
             <TouchableOpacity
               style={styles.circle}
               onPress={() => handleFavRoute(routeResult.route.route_id)}
-            ></TouchableOpacity>
+            >
+              <Bookmark 
+                fill="white"
+                marginTop={5}
+                marginLeft={5}
+                width={34}
+                height={34}
+              />
+            </TouchableOpacity>
             <Button
               mode="outlined"
               textColor={theme.colors.info}
@@ -222,10 +252,10 @@ const RouteCard: React.FC<CardProps> = ({
             <Button
               mode="outlined"
               textColor={theme.colors.info}
-              onPress={() => console.log("Pressed")}
+              onPress={generatePDF}
               style={styles.button}
             >
-              Reuse
+              PDF
             </Button>
           </View>
         )}
