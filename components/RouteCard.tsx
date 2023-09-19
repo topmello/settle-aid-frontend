@@ -172,12 +172,9 @@ const RouteCard: React.FC<CardProps> = ({
       justifyContent: "center",
     },
     row_text: {
-      paddingHorizontal: 16,
-      marginTop: 24,
       flexDirection: "row",
       justifyContent: "center",
       alignItems: "center",
-      height: 80,
     },
     text_title: {
       alignContent: "center",
@@ -185,22 +182,15 @@ const RouteCard: React.FC<CardProps> = ({
       fontSize: 28,
     },
     card: {
-      backgroundColor: theme.colors.infoContainer,
       overflow: "hidden",
-      // height: 200,
-      borderRadius: 15,
     },
     card_title: {
       fontWeight: "bold",
       fontSize: 20,
-      marginTop: 20,
-      marginLeft: 20,
       color: theme.colors.info,
     },
     card_description: {
       fontSize: 20,
-      marginLeft: 20,
-      marginRight: 20,
       marginTop: 8,
       marginBottom: 8,
       overflow: "hidden",
@@ -209,8 +199,6 @@ const RouteCard: React.FC<CardProps> = ({
     },
     tags_container: {
       flexDirection: "row",
-      marginLeft: 20,
-      marginBottom: 20,
       marginTop: 2,
     },
     tag: {
@@ -222,14 +210,10 @@ const RouteCard: React.FC<CardProps> = ({
       flexDirection: "row",
       justifyContent: "flex-end",
       alignItems: "center",
-      marginLeft: 20,
-      marginRight: 16,
-      marginTop: 16,
-      marginBottom: 20,
     },
     circle: {
       width: 34,
-      height: 34  ,
+      height: 34,
       borderRadius: 42,
       justifyContent: "center",
       alignItems: "center",
@@ -241,60 +225,60 @@ const RouteCard: React.FC<CardProps> = ({
   });
 
   return (
-    <AnimatedButton height={isSimplified?80:160} onPress={onPressCard}>
-      <View style={styles.card}>
-        <Text style={styles.card_title}>{routeResult.route.locations[0]}</Text>
-        <View style={styles.tags_container}>
-          {routeResult.route.locations.map((location, index) => (
-            <Text
-              key={index}
-              style={styles.tag}
-              numberOfLines={1}
-              ellipsizeMode="tail"
-            >
-              {`#${location}`}
-            </Text>
-          ))}
-        </View>
-        {!isSimplified && (
-          <View style={styles.button_container}>
-            <TouchableOpacity
-              style={styles.circle}
-              onPress={() => handleFavRoute(routeResult.route.route_id)}
-            >
-              <Bookmark
-                fill={theme.colors.infoContainer}
-                width={24}
-                height={24}
-              />
-            </TouchableOpacity>
-            <Button
-              mode="outlined"
-              textColor={theme.colors.info}
-              onPress={showDatePicker}
-              style={styles.button}
-            >
-              Schedule
-            </Button>
-
-            <DateTimePickerModal
-              isVisible={isDatePickerVisible}
-              mode="date"
-              onConfirm={handleConfirm}
-              onCancel={hideDatePicker}
-            />
-
-            <Button
-              mode="outlined"
-              textColor={theme.colors.info}
-              onPress={generatePDF}
-              style={styles.button}
-            >
-              Share
-            </Button>
-          </View>
-        )}
+    <AnimatedButton onPress={onPressCard} color={theme.colors.infoContainer} style={{
+      paddingHorizontal: 20,
+    }}>
+      <Text style={styles.card_title}>{routeResult.route.locations[0]}</Text>
+      <View style={styles.tags_container}>
+        {routeResult.route.locations.map((location, index) => (
+          <Text
+            key={index}
+            style={styles.tag}
+            numberOfLines={1}
+            ellipsizeMode="tail"
+          >
+            {`#${location}`}
+          </Text>
+        ))}
       </View>
+      {!isSimplified && (
+        <View style={styles.button_container}>
+          <TouchableOpacity
+            style={styles.circle}
+            onPress={() => handleFavRoute(routeResult.route.route_id)}
+          >
+            <Bookmark
+              fill={theme.colors.infoContainer}
+              width={24}
+              height={24}
+            />
+          </TouchableOpacity>
+          <Button
+            mode="outlined"
+            textColor={theme.colors.info}
+            onPress={showDatePicker}
+            style={styles.button}
+          >
+            Schedule
+          </Button>
+
+          <DateTimePickerModal
+            isVisible={isDatePickerVisible}
+            mode="date"
+            onConfirm={handleConfirm}
+            onCancel={hideDatePicker}
+          />
+
+          <Button
+            mode="outlined"
+            textColor={theme.colors.info}
+            onPress={generatePDF}
+            style={styles.button}
+          >
+            Share
+          </Button>
+        </View>
+      )}
     </AnimatedButton>
   );
 };

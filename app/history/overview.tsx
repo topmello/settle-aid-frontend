@@ -22,9 +22,6 @@ import RouteCard from "../../components/RouteCard";
 import { fetch } from "../../api/fetch";
 import { RouteHistory } from "../../types/route";
 import { CustomError } from "../../types/errorResponse";
-import { use } from "i18next";
-import * as Calendar from "expo-calendar";
-
 
 export default function HistoryOverviewScreen() {
   const { t } = useTranslation();
@@ -41,7 +38,6 @@ export default function HistoryOverviewScreen() {
   const handleEventAdded = () => {
     setShowConfirmation(true);
   };
-
 
   const handleFavRoute = async (route_id: number) => {
     try {
@@ -98,14 +94,14 @@ export default function HistoryOverviewScreen() {
     },
     row_text: {
       paddingHorizontal: 16,
-      marginTop: 24,
+      paddingVertical: 8,
+      marginTop: 16,
       flexDirection: "row",
       justifyContent: "center",
       alignItems: "center",
       height: 56,
     },
     text_title: {
-      alignContent: "center",
       fontSize: 24,
     },
     card: {
@@ -171,40 +167,41 @@ export default function HistoryOverviewScreen() {
       }}
     >
       <View style={styles.row_text}>
-          <Pressable onPress={() => router.replace("/(tabs)")}>
-            <ArrowBackIcon
-              fill={theme.colors.onPrimaryContainer}
-              width={28}
-              height={28}
-            />
-          </Pressable>
-          <View style={{ flex: 1, marginLeft: 8 }}>
-            <Text style={styles.text_title}>Route History</Text>
-          </View>
-          <View style={{ width: 34, height: 34 }}></View>
+        <Pressable onPress={() => router.back()}>
+          <ArrowBackIcon
+            fill={theme.colors.onPrimaryContainer}
+            width={28}
+            height={28}
+          />
+        </Pressable>
+        <View style={{ flex: 1, marginLeft: 12 }}>
+          <Text style={styles.text_title}>Route History</Text>
         </View>
+        <View style={{ width: 34, height: 34 }}></View>
+      </View>
       <ScrollView
         contentContainerStyle={{
           flexGrow: 1,
           flexDirection: "column",
         }}
       >
-        <View style={{
-          gap: 8,
-          marginBottom: 20,
-        }}>
+        <View
+          style={{
+            gap: 12,
+            marginBottom: 20,
+            paddingHorizontal: 16
+          }}
+        >
           {routeList.map((result, index) => (
             <RouteCard
               key={result.route.route_id}
               routeResult={result}
               isSimplified={false}
               handleFavRoute={handleFavRoute}
-              onPressCard={() => {}}
             />
           ))}
         </View>
       </ScrollView>
-      
     </SafeAreaView>
   );
 }
