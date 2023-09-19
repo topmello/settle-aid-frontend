@@ -45,15 +45,7 @@ export default function MapScreen() {
     requestCalendarPermission();
   }, []);
 
-  // fetch route
-  useEffect(() => {
-    checkSession().then((isSessionVaild) => {
-      if (!isSessionVaild) {
-        router.replace("/auth/login");
-      }
-    });
-    fetchRoute();
-  }, []);
+ 
 
 
   //date picker
@@ -162,6 +154,17 @@ export default function MapScreen() {
     }
   }, [routeState, token, mapRef, setData]);
 
+
+   // fetch route
+   useEffect(() => {
+    checkSession().then((isSessionVaild) => {
+      if (!isSessionVaild) {
+        router.replace("/auth/login");
+      }
+    });
+    fetchRoute();
+  }, []);
+
   
   // loading screen
   if (loading) {
@@ -221,17 +224,6 @@ export default function MapScreen() {
         >
           Home
         </Button>
-        
-
-        <View>
-          <Button mode="contained" style={[styles.above, styles.button]} onPress={showDatePicker}>Show date picker</Button>
-          <DateTimePickerModal
-            isVisible={isDatePickerVisible}
-            mode="date"
-            onConfirm={handleConfirm}
-            onCancel={hideDatePicker}
-          />
-        </View>
       </SafeAreaView>
     );
   }

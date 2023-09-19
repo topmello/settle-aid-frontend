@@ -1,10 +1,13 @@
 //@ts-nocheck
 import React from "react";
+import { useState, useMemo, useRef, useCallback, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native"; // 或者你使用的库
 import { RouteHistory } from "../types/route"; // 假设你的RouteResult接口定义在这个文件里
 import { useTheme, Button } from "react-native-paper";
 import { AnimatedButton } from "./AnimatedButton";
 import { useSelector } from "react-redux";
+import * as Calendar from "expo-calendar";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 // 定义传入的props类型
 interface CardProps {
@@ -20,6 +23,71 @@ const RouteCard: React.FC<CardProps> = ({
 }) => {
   const Wrapper = isSimplified ? AnimatedButton : View;
   const theme = useTheme();
+
+
+  //calendar permission
+  const [calendarPermission, setCalendarPermission] = useState(false);
+
+  const requestCalendarPermission = async () => {
+    const { status } = await Calendar.requestCalendarPermissionsAsync();
+    setCalendarPermission(status === "granted");
+  };
+
+  useEffect(() => {
+    requestCalendarPermission();
+  }, []);
+
+
+  //date picker
+
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirm = (date: Date) => {
+    console.warn("A date has been picked: ", date);
+    hideDatePicker();
+    setSelectedDate(date);
+    addToCalendar(date);
+  };
+
+  // add event to calendar
+
+  const addToCalendar = async (date: Date) => {
+    if (calendarPermission) {
+      // Get the default calendar
+      const defaultCalendar = await Calendar.getDefaultCalendarAsync();
+
+        const eventDetails = {
+          title: "My Event",
+          startDate: date.toISOString(),
+          endDate: date.toISOString(),
+          timeZone: "GMT", // Set the timezone as needed
+          location: "Event Location",
+          notes: "Event Description",
+        };
+
+      const event = await Calendar.createEventAsync(
+        defaultCalendar.id,
+        eventDetails
+      );
+
+      console.log(`Event added to calendar with ID: ${event}`);
+    } else {
+      console.warn("Calendar permissions not granted.");
+    }
+  };
+
+
+
+
 
   const styles = StyleSheet.create({
     container: {
@@ -123,11 +191,19 @@ const RouteCard: React.FC<CardProps> = ({
             <Button
               mode="outlined"
               textColor={theme.colors.info}
-              onPress={() => console.log("Pressed")}
+              onPress={showDatePicker}
               style={styles.button}
             >
               Schedule
             </Button>
+
+            <DateTimePickerModal
+            isVisible={isDatePickerVisible}
+            mode="date"
+            onConfirm={handleConfirm}
+            onCancel={hideDatePicker}
+          />
+
             <Button
               mode="outlined"
               textColor={theme.colors.info}
