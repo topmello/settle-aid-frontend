@@ -21,10 +21,8 @@ import { selectUserId, selectToken } from "../../store/authSlice";
 import RouteCard from "../../components/RouteCard";
 import { fetch } from "../../api/fetch";
 import { RouteHistory } from "../../types/route";
-import { CustomError } from "../../types/errorResponse";
+import { ErrorResponse, CustomError } from "../../types/errorResponse";
 import { use } from "i18next";
-import * as Calendar from "expo-calendar";
-
 
 export default function HistoryOverviewScreen() {
   const { t } = useTranslation();
@@ -32,16 +30,9 @@ export default function HistoryOverviewScreen() {
   const userID = useSelector(selectUserId);
   const token = useSelector(selectToken);
 
-  const { routeJSON } = useLocalSearchParams();
+  const { favRouteJSON } = useLocalSearchParams();
   // const {routeList} = params;
-  const routeList: RouteHistory[] = JSON.parse(routeJSON as string);
-
-  // Callback function to update the confirmation state
-  const [showConfirmation, setShowConfirmation] = useState(false);
-  const handleEventAdded = () => {
-    setShowConfirmation(true);
-  };
-
+  const routeList: RouteHistory[] = JSON.parse(favRouteJSON as string);
 
   const handleFavRoute = async (route_id: number) => {
     try {
@@ -178,7 +169,6 @@ export default function HistoryOverviewScreen() {
           flexDirection: "column",
         }}
       >
-
         <View style={styles.row_text}>
           <Pressable onPress={() => router.replace("/(tabs)")}>
             <ArrowBackIcon
@@ -205,7 +195,6 @@ export default function HistoryOverviewScreen() {
           ))}
         </View>
       </ScrollView>
-      
     </SafeAreaView>
   );
 }

@@ -1,6 +1,6 @@
 import { useState, useMemo, useRef, useCallback, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { StyleSheet, Dimensions, SafeAreaView } from "react-native";
 import { View, Pressable } from "react-native";
 import { Text, useTheme, Button, ActivityIndicator } from "react-native-paper";
@@ -19,9 +19,14 @@ import { selectTheme } from "../../store/appSlice";
 
 import { fetch } from "../../api/fetch";
 import { useSession } from "../../hooks/useSession";
-import { useMapRegion, RouteResult, Coordinates } from "../../hooks/useMapRegion";
-import * as Calendar from 'expo-calendar';
-import * as Permissions from 'expo-permissions';
+import {
+  useMapRegion,
+  RouteResult,
+  Coordinates,
+} from "../../hooks/useMapRegion";
+import * as Calendar from "expo-calendar";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { Route } from "../../types/route";
 
 export default function MapScreen() {
   const theme = useTheme();
@@ -29,52 +34,97 @@ export default function MapScreen() {
   const currentTheme = useSelector(selectTheme);
   const routeState: RouteState = useSelector(selectRouteState);
 
+  const routeJSON = useLocalSearchParams().routeJSON;
+  
+
+  //calendar permission
+  const [calendarPermission, setCalendarPermission] = useState(false);
+
+  const requestCalendarPermission = async () => {
+    const { status } = await Calendar.requestCalendarPermissionsAsync();
+    setCalendarPermission(status === "granted");
+  };
+
+  useEffect(() => {
+    requestCalendarPermission();
+  }, []);
+
+ 
+
+
+  //date picker
+
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirm = (date: Date) => {
+    console.warn("A date has been picked: ", date);
+    hideDatePicker();
+    setSelectedDate(date);
+    addToCalendar(date);
+  };
 
   // add event to calendar
 
-  const addToCalendar = async () => {
+  const addToCalendar = async (date: Date) => {
     if (calendarPermission) {
       // Get the default calendar
       const defaultCalendar = await Calendar.getDefaultCalendarAsync();
 
-      const eventDetails = {
-        title: "My Event",
-        startDate: new Date(), // Replace with your event's start date
-        endDate: new Date(),   // Replace with your event's end date
-        timeZone: "GMT",      // Set the timezone as needed
-        location: "Event Location",
-        notes: "Event Description",
-      };
+        const eventDetails = {
+          title: "My Event",
+          startDate: date.toISOString(),
+          endDate: date.toISOString(),
+          timeZone: "GMT", // Set the timezone as needed
+          location: "Event Location",
+          notes: "Event Description",
+        };
 
-      const event = await Calendar.createEventAsync(defaultCalendar.id, eventDetails);
+      const event = await Calendar.createEventAsync(
+        defaultCalendar.id,
+        eventDetails
+      );
 
       console.log(`Event added to calendar with ID: ${event}`);
     } else {
       console.warn("Calendar permissions not granted.");
     }
   };
-  
 
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<RouteResult>({
     locations: [],
-    locations_coordinates: [{
-      latitude: 0,
-      longitude: 0,
-    }],
-    route: [{
-      latitude: 0,
-      longitude: 0,
-    }],
+    locations_coordinates: [
+      {
+        latitude: 0,
+        longitude: 0,
+      },
+    ],
+    route: [
+      {
+        latitude: 0,
+        longitude: 0,
+      },
+    ],
     instructions: [],
     duration: 0,
   });
 
   const mapRef = useRef<MapView>(null);
-  
+
   const { region, handleLocationSelect, handlePressRoute } = useMapRegion({
-    data, routeState, mapRef
-  })
+    data,
+    routeState,
+    mapRef,
+  });
 
   const { checked, handlePress } = useCheckedList(data);
 
@@ -90,6 +140,22 @@ export default function MapScreen() {
 
   const fetchRoute = useCallback(async () => {
     setLoading(true);
+
+    if (typeof routeJSON === 'string') {
+      try {
+        const routeData: Route = JSON.parse(routeJSON);
+  
+        if (routeData && routeData.route_id && routeData.locations && routeData.route) {
+          const { route_id, ...routeDataWithoutID } = routeData;
+          setData(routeDataWithoutID);
+          setLoading(false);
+          return; // return early so the fetch call is not made
+        }
+      } catch (error) {
+        console.error("Failed to parse routeJSON:", error);
+      }
+    }
+  
     let res = null;
     try {
       res = await fetch({
@@ -108,21 +174,9 @@ export default function MapScreen() {
     }
   }, [routeState, token, mapRef, setData]);
 
-  //calendar permission
-  const [calendarPermission, setCalendarPermission] = useState(false);
 
-  const requestCalendarPermission = async () => {
-    const { status } = await Permissions.askAsync(Permissions.CALENDAR);
-    setCalendarPermission(status === "granted");
-  };
-
-  useEffect(() => {
-    requestCalendarPermission();
-  }, []);
- 
-
-  // fetch route
-  useEffect(() => {
+   // fetch route
+   useEffect(() => {
     checkSession().then((isSessionVaild) => {
       if (!isSessionVaild) {
         router.replace("/auth/login");
@@ -131,6 +185,7 @@ export default function MapScreen() {
     fetchRoute();
   }, []);
 
+  
   // loading screen
   if (loading) {
     return (
@@ -189,13 +244,6 @@ export default function MapScreen() {
         >
           Home
         </Button>
-        <Button
-          mode="contained"
-          style={[styles.above, styles.button]}
-          onPress={addToCalendar}
-        >
-          Add to Calendar
-        </Button>
       </SafeAreaView>
     );
   }
@@ -210,6 +258,7 @@ export default function MapScreen() {
           flexDirection: "row",
           justifyContent: "space-between",
           padding: 20,
+          zIndex: 1,
         }}
       >
         {router.canGoBack() ? (
@@ -268,11 +317,7 @@ export default function MapScreen() {
               />
             );
           })}
-        <Marker
-          coordinate={region}
-          pinColor="blue"
-          title="You are here"
-        />
+        <Marker coordinate={region} pinColor="blue" title="You are here" />
         <Polyline
           coordinates={data?.route}
           strokeWidth={3}

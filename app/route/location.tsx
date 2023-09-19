@@ -42,7 +42,6 @@ import {
 } from "../../store/routeSlice";
 
 import useCurrentLocation from "../../hooks/useCurrentLocation";
-import useCurrentLocationRealtime from "../../hooks/useCurrentLocationRealtime";
 import { useNotification } from "../../hooks/useNotification";
 import { useAppTheme } from "../../theme/theme";
 import { mapDarkTheme } from "../../theme/map";
@@ -59,12 +58,10 @@ export default function RouteGenLocation() {
   const locationState = useSelector(selectLonLat);
   const distanceThres = useSelector(selectDistanceThres);
   const fetchLocation = useCurrentLocation();
-  const routeState: RouteState = useSelector((state: RootState) => state.route);
   const [searchedLocation, setSearchedLocation] = useState<{
     description: string;
     geometry: { location: { lat: number; lng: number } };
   } | null>(null);
-  const location = useCurrentLocationRealtime();
   const { t } = useTranslation();
   const { pushNotification } = useNotification();
 
