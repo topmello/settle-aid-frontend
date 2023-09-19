@@ -294,8 +294,8 @@ export default function TrackScreen() {
         initialRegion={{
           latitude: locationState?.latitude || 0,
           longitude: locationState?.longitude || 0,
-          latitudeDelta: 0.018,
-          longitudeDelta: 0.009,
+          latitudeDelta: 0.006,
+          longitudeDelta: 0.003,
         }}
         scrollEnabled={true}
         pitchEnabled={true}

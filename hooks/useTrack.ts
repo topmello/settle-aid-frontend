@@ -37,7 +37,7 @@ export const useTrack = () => {
     latitude: 0,
     longitude: 0,
   });
-  const [beingTracked, setBeingTracked] = useState(false);
+  useCurrentLocationRealtime();
 
   const handleConnect = () => setIsConnected(true);
   const handleDisconnect = () => setIsConnected(false);
@@ -114,9 +114,8 @@ export const useTrack = () => {
     }
   };
 
-  const sendLocationRealtime = (lat: number = 0, long: number = 0, room: string, socket: any) => {
+  const sendLocationRealtime = (lat: number = 0, long: number = 0, room: string) => {
     if (socket) {
-      DEBUG && console.log("send location", lat, long, room)
       socket.emit("move", { lat, long, roomId: room });
     }
   };
@@ -147,7 +146,7 @@ export const useTrack = () => {
       clearInterval(shareTimerId);
     }
     joinRoom(room);
-    const timerId = setInterval(sendLocationRealtime, 5000, lonLat.latitude, lonLat.longitude, room, socket);
+    const timerId = setInterval(sendLocationRealtime, 5000, lonLat.latitude, lonLat.longitude, room);
     setShareTimerId(timerId);
   }
 
