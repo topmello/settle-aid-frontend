@@ -361,6 +361,7 @@ export default function TrackScreen() {
               </View>
             )}
             <Button onPress={() => {
+              console.log(locationState.latitude, locationState.longitude, roomId)
               sendLocation(locationState.latitude, locationState.longitude, roomId);
             }}>test</Button>
           </View>

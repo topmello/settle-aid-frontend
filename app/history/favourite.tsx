@@ -190,6 +190,7 @@ export default function HistoryOverviewScreen() {
               routeResult={result}
               isSimplified={false}
               handleFavRoute={handleFavRoute}
+              onPressCard={() => {}}
             />
           ))}
         </View>

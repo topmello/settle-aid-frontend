@@ -88,6 +88,18 @@ export default function HomeScreen() {
     };
   }, []);
 
+  const handlePressCard = (result: RouteHistory) => {
+
+    if (result && result.route) {
+      router.push({
+        pathname: "/route/result",
+        params: {
+          routeJSON: JSON.stringify(result.route),
+        },
+      });
+    }
+  };
+
   return (
     <SafeAreaView
       style={{
@@ -330,6 +342,9 @@ export default function HomeScreen() {
                   key={index}
                   routeResult={result}
                   isSimplified={true}
+                  onPressCard={() => {
+                    handlePressCard(result)
+                  }}
                 />
               ))}
             </View>
@@ -402,6 +417,9 @@ export default function HomeScreen() {
                   key={index}
                   routeResult={result}
                   isSimplified={true}
+                  onPressCard={() => {
+                    handlePressCard(result);
+                  }}
                 />
               ))}
             </View>
