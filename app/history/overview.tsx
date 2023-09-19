@@ -102,12 +102,11 @@ export default function HistoryOverviewScreen() {
       flexDirection: "row",
       justifyContent: "center",
       alignItems: "center",
-      height: 80,
+      height: 56,
     },
     text_title: {
       alignContent: "center",
-      fontWeight: "bold",
-      fontSize: 28,
+      fontSize: 24,
     },
     card: {
       backgroundColor: (theme.colors as any).infoContainer,
@@ -150,7 +149,6 @@ export default function HistoryOverviewScreen() {
       marginBottom: 20,
     },
     circle: {
-      marginLeft: 10,
       marginRight: 10,
       width: 44,
       height: 44,
@@ -172,28 +170,29 @@ export default function HistoryOverviewScreen() {
         paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
       }}
     >
+      <View style={styles.row_text}>
+          <Pressable onPress={() => router.replace("/(tabs)")}>
+            <ArrowBackIcon
+              fill={theme.colors.onPrimaryContainer}
+              width={28}
+              height={28}
+            />
+          </Pressable>
+          <View style={{ flex: 1, marginLeft: 8 }}>
+            <Text style={styles.text_title}>Route History</Text>
+          </View>
+          <View style={{ width: 34, height: 34 }}></View>
+        </View>
       <ScrollView
         contentContainerStyle={{
           flexGrow: 1,
           flexDirection: "column",
         }}
       >
-
-        <View style={styles.row_text}>
-          <Pressable onPress={() => router.replace("/(tabs)")}>
-            <ArrowBackIcon
-              fill={theme.colors.onPrimaryContainer}
-              width={34}
-              height={34}
-            />
-          </Pressable>
-          <View style={{ flex: 1, alignItems: "center" }}>
-            <Text style={styles.text_title}>Route History</Text>
-          </View>
-          <View style={{ width: 34, height: 34 }}></View>
-        </View>
-
-        <View>
+        <View style={{
+          gap: 8,
+          marginBottom: 20,
+        }}>
           {routeList.map((result, index) => (
             <RouteCard
               key={result.route.route_id}

@@ -8,10 +8,10 @@ import { AnimatedButton } from "./AnimatedButton";
 import * as Calendar from "expo-calendar";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { useNotification } from "../hooks/useNotification";
-import * as Print from 'expo-print';
-import * as Sharing from 'expo-sharing';
-import Bookmark  from '../assets/images/icons/bookmark.svg'
-
+import * as Print from "expo-print";
+import * as Sharing from "expo-sharing";
+import Bookmark from "../assets/images/icons/bookmark.svg";
+import { useAppTheme } from "../theme/theme";
 
 interface CardProps {
   routeResult: RouteHistory;
@@ -27,14 +27,14 @@ const RouteCard: React.FC<CardProps> = ({
   onPressCard,
 }) => {
   const Wrapper = isSimplified ? AnimatedButton : View;
-  const theme = useTheme();
+  const theme = useAppTheme();
 
   //use notification
   const { pushNotification } = useNotification();
 
-
   //confirmation model
-  const [isConfirmationModalVisible, setConfirmationModalVisible] = useState(false); 
+  const [isConfirmationModalVisible, setConfirmationModalVisible] =
+    useState(false);
 
   //calendar permission
   const [calendarPermission, setCalendarPermission] = useState(false);
@@ -47,7 +47,6 @@ const RouteCard: React.FC<CardProps> = ({
   useEffect(() => {
     requestCalendarPermission();
   }, []);
-
 
   //date picker
 
@@ -75,9 +74,13 @@ const RouteCard: React.FC<CardProps> = ({
 
   const generatePDF = async () => {
     try {
-      const locations = routeResult.route.locations.map(location => `<p>${location}</p>`).join('');
+      const locations = routeResult.route.locations
+        .map((location) => `<p>${location}</p>`)
+        .join("");
 
-      const instructions = routeResult.route.instructions.map(instruction => `<p>${instruction}</p>`).join('');
+      const instructions = routeResult.route.instructions
+        .map((instruction) => `<p>${instruction}</p>`)
+        .join("");
 
       const cssContent = `
       <style>
@@ -117,21 +120,21 @@ const RouteCard: React.FC<CardProps> = ({
         </body>
       </html>
       `;
-      
+
       // Generate PDF using expo-print
       const { uri } = await Print.printToFileAsync({ html: htmlContent });
-  
+
       // Open the generated PDF using expo-sharing
       await Sharing.shareAsync(uri, {
-        mimeType: 'application/pdf',
-        dialogTitle: 'Share PDF',
-        UTI: 'com.adobe.pdf',
-        filename: 'generated.pdf',
+        mimeType: "application/pdf",
+        dialogTitle: "Share PDF",
+        UTI: "com.adobe.pdf",
+        filename: "generated.pdf",
       });
-  
-      console.log('PDF saved and opened:', uri);
+
+      console.log("PDF saved and opened:", uri);
     } catch (error) {
-      console.error('Error generating and opening PDF:', error);
+      console.error("Error generating and opening PDF:", error);
     }
   };
 
@@ -142,14 +145,14 @@ const RouteCard: React.FC<CardProps> = ({
       // Get the default calendar
       const defaultCalendar = await Calendar.getDefaultCalendarAsync();
 
-        const eventDetails = {
-          title: location,
-          startDate: date.toISOString(),
-          endDate: date.toISOString(),
-          timeZone: "GMT",
-          location: "Event Location",
-          notes: "Event Description",
-        };
+      const eventDetails = {
+        title: location,
+        startDate: date.toISOString(),
+        endDate: date.toISOString(),
+        timeZone: "GMT",
+        location: "Event Location",
+        notes: "Event Description",
+      };
 
       const event = await Calendar.createEventAsync(
         defaultCalendar.id,
@@ -161,10 +164,6 @@ const RouteCard: React.FC<CardProps> = ({
       console.warn("Calendar permissions not granted.");
     }
   };
-
-
-
-
 
   const styles = StyleSheet.create({
     container: {
@@ -187,15 +186,13 @@ const RouteCard: React.FC<CardProps> = ({
     },
     card: {
       backgroundColor: theme.colors.infoContainer,
+      overflow: "hidden",
       // height: 200,
       borderRadius: 15,
-      marginHorizontal: 20,
-      marginBottom: 20,
-      marginTop: 20,
     },
     card_title: {
       fontWeight: "bold",
-      fontSize: 28,
+      fontSize: 20,
       marginTop: 20,
       marginLeft: 20,
       color: theme.colors.info,
@@ -223,27 +220,28 @@ const RouteCard: React.FC<CardProps> = ({
     },
     button_container: {
       flexDirection: "row",
+      justifyContent: "flex-end",
+      alignItems: "center",
       marginLeft: 20,
       marginRight: 16,
       marginTop: 16,
       marginBottom: 20,
     },
     circle: {
-      marginLeft: 10,
-      marginRight: 10,
-      width: 44,
-      height: 44,
+      width: 34,
+      height: 34  ,
       borderRadius: 42,
+      justifyContent: "center",
+      alignItems: "center",
       backgroundColor: theme.colors.info,
     },
     button: {
       marginLeft: 8,
-      marginRight: 8,
-      width: 110,
     },
   });
 
   return (
+    <AnimatedButton height={isSimplified?80:160} onPress={onPressCard}>
       <View style={styles.card}>
         <Text style={styles.card_title}>{routeResult.route.locations[0]}</Text>
         <View style={styles.tags_container}>
@@ -264,12 +262,10 @@ const RouteCard: React.FC<CardProps> = ({
               style={styles.circle}
               onPress={() => handleFavRoute(routeResult.route.route_id)}
             >
-              <Bookmark 
-                fill="white"
-                marginTop={5}
-                marginLeft={5}
-                width={34}
-                height={34}
+              <Bookmark
+                fill={theme.colors.infoContainer}
+                width={24}
+                height={24}
               />
             </TouchableOpacity>
             <Button
@@ -282,12 +278,11 @@ const RouteCard: React.FC<CardProps> = ({
             </Button>
 
             <DateTimePickerModal
-            isVisible={isDatePickerVisible}
-            mode="date"
-            onConfirm={handleConfirm}
-            onCancel={hideDatePicker}
-          />
-          
+              isVisible={isDatePickerVisible}
+              mode="date"
+              onConfirm={handleConfirm}
+              onCancel={hideDatePicker}
+            />
 
             <Button
               mode="outlined"
@@ -300,7 +295,7 @@ const RouteCard: React.FC<CardProps> = ({
           </View>
         )}
       </View>
-
+    </AnimatedButton>
   );
 };
 

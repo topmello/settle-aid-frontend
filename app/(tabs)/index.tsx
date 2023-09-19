@@ -317,96 +317,149 @@ export default function HomeScreen() {
                                 </Pressable>
                             </TouchableOpacity>
                         </View>
-                        <View>
-                            <Text style={styles.dateText}>
-                                {translatedDate}
-                            </Text>
-                            {routeList.map((result, index) => (
-                                <RouteCard
-                                    key={index}
-                                    routeResult={result}
-                                    isSimplified={true}
-                                    onPressCard={() => {
-                                        handlePressCard(result);
-                                    }}
-                                />
-                            ))}
-                        </View>
-                    </View>
-                )}
-                {favRouteList && Array.isArray(favRouteList) && (
-                    <View>
-                        <View style={styles.favoriteSection}>
-                            <Text style={styles.titleLarge}>
-                                {t("Favorite Route", { ns: "home" })}
-                            </Text>
-                            <TouchableOpacity
-                                activeOpacity={0.6}
-                                onPress={() => {
-                                    /* handle action */
-                                }}
-                            >
-                                <Pressable>
-                                    <View style={{
-                                        alignItems: "center",
-                                        marginRight: 30,
-                                        marginTop: 10,
-                                        flexDirection: "row",
-                                    }}>
-                                        <Text style={styles.moreText}>
-                                            {t("comm:More")}
-                                        </Text>
-                                        <ArrowIcon
-                                            width={22}
-                                            height={22}
-                                            fill={theme.colors.primary}
-                                        />
-                                    </View>
-                                </Pressable>
-                            </TouchableOpacity>
-                        </View>
-                        <View>
-                            {favRouteList.map((result, index) => (
-                                <RouteCard
-                                    key={index}
-                                    routeResult={result}
-                                    isSimplified={true}
-                                    onPressCard={() => {
-                                        handlePressCard(result);
-                                    }}
-                                />
-                            ))}
-                        </View>
-                    </View>
-                )}
-                <View>
-                    <View style={styles.historySection}>
-                        <Text style={styles.titleLarge}>
-                            {/* ... 其他文本内容 */}
-                        </Text>
-                        <TouchableOpacity
-                            activeOpacity={0.6}
-                            onPress={() => {
-                                /* handle action */
-                            }}
-                        >
-                            <View style={{
-                                alignItems: "center",
-                                marginRight: 30,
-                                marginTop: 10,
-                                flexDirection: "row",
-                            }}>
-                                <Text style={styles.moreText}>
-                                    {/* {t("comm:More")} */}
-                                </Text>
-                                {/* <ArrowIcon width={22} height={22} fill={theme.colors.primary} /> */}
-                            </View>
-                        </TouchableOpacity>
-                    </View>
 
-                </View>
-            </ScrollView>
-        </SafeAreaView>
-    );
+            <View>
+              <View
+                style={{
+                  gap: 8,
+                  marginVertical: 16,
+                }}
+              >
+                {routeList.slice(0, 2).map((result, index) => (
+                  <RouteCard
+                    key={index}
+                    routeResult={result}
+                    isSimplified={true}
+                    onPressCard={() => {
+                      handlePressCard(result);
+                    }}
+                  />
+                ))}
+              </View>
+            </View>
+          </View>
+        )}
 
+        {favRouteList && Array.isArray(favRouteList) && (
+          <View>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginTop: 24,
+              }}
+            >
+              <Text
+                variant="titleLarge"
+                style={{
+                  fontWeight: "bold",
+                  marginHorizontal: 16,
+                }}
+              >
+                {t("Favorite Route", { ns: "home" })}
+              </Text>
+              <TouchableOpacity
+                activeOpacity={0.6}
+                onPress={() => {
+                  /* handle action */
+                }}
+              >
+                <Pressable>
+                  <View
+                    style={{
+                      alignItems: "center",
+                      marginRight: 30,
+                      marginTop: 10,
+                      flexDirection: "row",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: theme.colors.primary,
+                        fontWeight: "bold",
+                      }}
+                      onPress={() => {
+                        router.push({
+                          pathname: "/history/favourite",
+                          params: {
+                            favRouteJSON: JSON.stringify(favRouteList),
+                          },
+                        });
+                      }}
+                    >
+                      {t("comm:More")}
+                    </Text>
+                    <ArrowIcon
+                      width={22}
+                      height={22}
+                      fill={theme.colors.primary}
+                    />
+                  </View>
+                </Pressable>
+              </TouchableOpacity>
+            </View>
+
+            <View style={{
+              marginVertical: 16,
+            }}>
+              {favRouteList.map((result, index) => (
+                <RouteCard
+                  key={index}
+                  routeResult={result}
+                  isSimplified={true}
+                  onPressCard={() => {
+                    handlePressCard(result);
+                  }}
+                />
+              ))}
+            </View>
+          </View>
+        )}
+
+        <View>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginTop: 24,
+            }}
+          >
+            <Text
+              variant="titleLarge"
+              style={{
+                fontWeight: "bold",
+                marginHorizontal: 16,
+              }}
+            >
+              {/* {t("Beloved Routes", { ns: "home" })} */}
+            </Text>
+            <TouchableOpacity
+              activeOpacity={0.6}
+              onPress={() => {
+                /* handle action */
+              }}
+            >
+              <View
+                style={{
+                  alignItems: "center",
+                  marginRight: 30,
+                  marginTop: 10,
+                  flexDirection: "row",
+                }}
+              >
+                <Text
+                  style={{ color: theme.colors.primary, fontWeight: "bold" }}
+                >
+                  {/* {t("comm:More")} */}
+                </Text>
+                {/* <ArrowIcon width={22} height={22} fill={theme.colors.primary} /> */}
+              </View>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
 }
