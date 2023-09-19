@@ -36,7 +36,7 @@ export default function MapScreen() {
 
   const routeJSON = useLocalSearchParams().routeJSON;
   
-
+  
   //calendar permission
   const [calendarPermission, setCalendarPermission] = useState(false);
 
@@ -125,6 +125,7 @@ export default function MapScreen() {
     routeState,
     mapRef,
   });
+
 
   const { checked, handlePress } = useCheckedList(data);
 
@@ -300,6 +301,7 @@ export default function MapScreen() {
         ref={mapRef}
         style={styles.map}
         initialRegion={region}
+        showsUserLocation={true}
         scrollEnabled={true}
         pitchEnabled={true}
         rotateEnabled={true}

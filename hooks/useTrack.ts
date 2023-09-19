@@ -22,6 +22,8 @@ type JoinMessage = {
 
 type MessageData = MoveMessage | JoinMessage;
 
+const DEBUG = false;
+
 export const useTrack = () => {
   const [socket, setSocket] = useState<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
@@ -31,22 +33,32 @@ export const useTrack = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [shareTimerId, setShareTimerId] = useState<NodeJS.Timeout | null>(null);
   const lonLat = useSelector(selectLonLat);
-  useCurrentLocationRealtime();
+  const [parentLocation, setParentLocation] = useState({
+    latitude: 0,
+    longitude: 0,
+  });
+  const [beingTracked, setBeingTracked] = useState(false);
 
   const handleConnect = () => setIsConnected(true);
   const handleDisconnect = () => setIsConnected(false);
 
   const handleJoin = (message: string) => {
-    console.log("handlejoin", message)
+    DEBUG && console.log("handlejoin", message)
     setMessages((prev) => [...prev, { message, type: "join_room" }]);
+
   };
 
-  const handleMove = (data: Omit<MoveMessage, "type">) => {
-    console.log("handleMove", data)
+  const handleMove = (data: any) => {
+    DEBUG && console.log("handleMove", data)
     setMessages((prev) => [...prev, { ...data, type: "move" }]);
+    setParentLocation({
+      latitude: data?.details?.msg?.lat,
+      longitude: data?.details?.msg?.long
+    })
   }
 
   useEffect(() => {
+    exitRoom();
     if (token) {
       const newSocket: Socket = io(process.env.EXPO_PUBLIC_API_URL || "", {
         path: "/track-sio/sio/",
@@ -66,6 +78,9 @@ export const useTrack = () => {
       newSocket.on("disconnect", handleDisconnect);
       newSocket.on("room_message", handleJoin);
       newSocket.on("move", handleMove);
+      newSocket.on("error", (err) => {
+        console.log(err);
+      });
 
       return () => {
         newSocket.off("connect", handleConnect);
@@ -73,6 +88,7 @@ export const useTrack = () => {
         newSocket.off("room_message", handleJoin);
         newSocket.off("move", handleMove);
         newSocket.close();
+        setMessages([]);
       };
     }
   }, [token]);
@@ -92,10 +108,16 @@ export const useTrack = () => {
     }
   };
 
-  const sendLocation = (lat: number, long: number, room: string) => {
+  const sendLocation = (lat: number = 0, long: number = 0, room: string) => {
     if (socket) {
-      console.log("send location", lat, long, room)
-      socket.emit("move", { lat, long, room });
+      socket.emit("move", { lat, long, roomId: room });
+    }
+  };
+
+  const sendLocationRealtime = (lat: number = 0, long: number = 0, room: string, socket: any) => {
+    if (socket) {
+      DEBUG && console.log("send location", lat, long, room)
+      socket.emit("move", { lat, long, roomId: room });
     }
   };
 
@@ -110,7 +132,6 @@ export const useTrack = () => {
         dispatch(setRoomId({
           roomId: res.data.room_id
         }));
-        startTrackMe(res.data.room_id);
         return res.data.roomId;
       } else {
         throw new Error("Failed to create room");
@@ -120,16 +141,13 @@ export const useTrack = () => {
     });
   }
 
+  
   const startTrackMe = (room: string) => {
     if (shareTimerId) {
       clearInterval(shareTimerId);
     }
     joinRoom(room);
-    const timerId = setInterval(() => {
-      console.log(lonLat.latitude, lonLat.longitude, room)
-      console.log(messages)
-      sendLocation(lonLat.latitude, lonLat.longitude, room);
-    }, 5000);
+    const timerId = setInterval(sendLocationRealtime, 5000, lonLat.latitude, lonLat.longitude, room, socket);
     setShareTimerId(timerId);
   }
 
@@ -140,12 +158,13 @@ export const useTrack = () => {
         }));
     }
     if (socket) {
-      console.log("join room", room)
+      DEBUG && console.log("join room", room)
       socket.emit("join_room", room);
     }
   };
 
   const exitRoom = () => {
+    setMessages([]);
     handleLeaveRoom(roomId);
     dispatch(setRoomId({
       roomId: "",
@@ -165,5 +184,6 @@ export const useTrack = () => {
     createRoom,
     startTrackMe,
     exitRoom,
+    parentLocation
   };
 };
