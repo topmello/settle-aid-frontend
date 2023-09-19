@@ -213,7 +213,6 @@ const RouteCard: React.FC<CardProps> = ({
   });
 
   return (
-    <Wrapper style={isSimplified ? {} : styles.view} onPress={onPressCard}>
       <View style={styles.card}>
         <Text style={styles.card_title}>{routeResult.route.locations[0]}</Text>
         <View style={styles.tags_container}>
@@ -270,8 +269,7 @@ const RouteCard: React.FC<CardProps> = ({
           </View>
         )}
       </View>
-    </Wrapper>
-    
+
   );
 };
 

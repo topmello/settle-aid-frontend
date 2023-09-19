@@ -97,7 +97,7 @@ const RouteCard = ({routeResult, isSimplified}) => {
     });
 
     return (
-        <AnimatedButton height={100} style={isSimplified ? styles.cardSim : styles.card}>
+        <AnimatedButton height={100} style={styles.cardSim}>
             <Text style={styles.card_title} numberOfLines={1}
                   ellipsizeMode='tail'>{routeResult.route.locations[0]}</Text>
             <View style={styles.tags_container}>
