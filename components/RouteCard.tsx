@@ -75,8 +75,48 @@ const RouteCard: React.FC<CardProps> = ({
 
   const generatePDF = async () => {
     try {
+      const locations = routeResult.route.locations.map(location => `<p>${location}</p>`).join('');
 
-      const htmlContent = `<html><body><h1>Generated PDF</h1></body></html>`;
+      const instructions = routeResult.route.instructions.map(instruction => `<p>${instruction}</p>`).join('');
+
+      const cssContent = `
+      <style>
+          body {
+              font-family: Arial, sans-serif;
+              margin: 40px;
+              background-color: #f4f4f4;
+              color: #333;
+          }
+          h1 {
+              background-color: #333;
+              color: #fff;
+              padding: 10px 20px;
+              border-radius: 5px;
+          }
+          h2 {
+              border-bottom: 2px solid #333;
+              padding-bottom: 5px;
+              margin-top: 30px;
+          }
+          p {
+              margin: 10px 0;
+              line-height: 1.6;
+              font-size: 16px;
+          }
+          </style>
+          `;
+      const htmlContent = `
+      <html>
+        <head>${cssContent}</head>
+        <body>
+          <h1>My Events</h1>
+          <h2>Locations</h2>
+          ${locations} 
+          <h2>Instructions</h2>
+          ${instructions}
+        </body>
+      </html>
+      `;
       
       // Generate PDF using expo-print
       const { uri } = await Print.printToFileAsync({ html: htmlContent });
@@ -121,6 +161,9 @@ const RouteCard: React.FC<CardProps> = ({
       console.warn("Calendar permissions not granted.");
     }
   };
+
+
+
 
 
   const styles = StyleSheet.create({
@@ -201,7 +244,6 @@ const RouteCard: React.FC<CardProps> = ({
   });
 
   return (
-    <Wrapper style={isSimplified ? {} : styles.view} onPress={onPressCard}>
       <View style={styles.card}>
         <Text style={styles.card_title}>{routeResult.route.locations[0]}</Text>
         <View style={styles.tags_container}>
@@ -253,13 +295,12 @@ const RouteCard: React.FC<CardProps> = ({
               onPress={generatePDF}
               style={styles.button}
             >
-              PDF
+              Share
             </Button>
           </View>
         )}
       </View>
-    </Wrapper>
-    
+
   );
 };
 

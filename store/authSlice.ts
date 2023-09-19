@@ -108,7 +108,6 @@ const authSlice = createSlice({
       state.status = 'refreshSuccess';
     });
     builder.addCase(refreshToken.rejected, (state, action) => {
-      console.log("Token refresh fail", JSON.stringify(action.payload.data));
       state.status = 'refreshFail';
     });
   }

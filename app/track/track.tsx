@@ -15,6 +15,7 @@ import {
   Text,
   Modal,
   TextInput,
+  Chip,
 } from "react-native-paper";
 import { useTranslation } from "react-i18next";
 import MapView, { Marker } from "react-native-maps";
@@ -24,7 +25,6 @@ import { selectTheme, setRoomId } from "../../store/appSlice";
 import { selectLonLat } from "../../store/routeSlice";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { useNotification } from "../../hooks/useNotification";
-import { ScrollView } from "react-native-gesture-handler";
 
 export default function TrackScreen() {
   const theme = useAppTheme();
@@ -35,29 +35,23 @@ export default function TrackScreen() {
   const currentTheme = useSelector(selectTheme);
   const mapRef = useRef<MapView>(null);
   const bottomSheetRef = useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ["15%", "35%"], []);
+  const snapPoints = useMemo(() => ["15%", "25%"], []);
   const locationState = useSelector(selectLonLat);
   const [showRoomIdInput, setShowRoomIdInput] = useState(false);
   const [roomIdInput, setRoomIdInput] = useState("");
-  const [region, setRegion] = useState({
-    latitude: 0,
-    longitude: 0,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
-  });
 
   const {
     roomId,
     isConnected,
-    messages,
     joinRoom,
     createRoom,
-    handleLeaveRoom,
-    sendLocation,
     exitRoom,
+    startTrackMe,
+    parentLocation,
   } = useTrack();
   const [mode, setMode] = useState<"trackme" | "trackother" | undefined>();
   const { pushNotification } = useNotification();
+  const [tracking, setTracking] = useState(false);
 
   // authentication guard
   useEffect(() => {
@@ -86,7 +80,7 @@ export default function TrackScreen() {
   }, [mode]);
 
   // option screen
-  if (!roomId && !mode) {
+  if (!roomId || !mode) {
     return (
       <SafeAreaView
         style={{
@@ -146,8 +140,7 @@ export default function TrackScreen() {
         <View
           style={{
             flex: 1,
-          }}
-        ></View>
+          }}></View>
         <View
           style={{
             height: 180,
@@ -182,6 +175,7 @@ export default function TrackScreen() {
               setShowRoomIdInput(false);
             }}
             contentContainerStyle={{
+              height: "100%",
               flex: 1,
               paddingTop: 100,
               justifyContent: "flex-start",
@@ -198,13 +192,13 @@ export default function TrackScreen() {
                 setRoomIdInput(text);
               }}
             />
+            <View style={{flex:1}}></View>
             <View
               style={{
-                position: "absolute",
                 width: "100%",
                 padding: 20,
-                bottom: "5%",
-                gap: 28
+                gap: 28,
+                alignSelf: 'flex-end'
               }}
             >
               <Button
@@ -228,6 +222,7 @@ export default function TrackScreen() {
                 Join
               </Button>
               <Button
+                style={{marginBottom: 54}}
                 mode="contained-tonal"
                 onPress={() => setShowRoomIdInput(false)}
               >
@@ -254,6 +249,7 @@ export default function TrackScreen() {
           flexDirection: "row",
           justifyContent: "space-between",
           padding: 20,
+          zIndex: 1,
         }}
       >
         <Pressable
@@ -288,21 +284,33 @@ export default function TrackScreen() {
         initialRegion={{
           latitude: locationState?.latitude || 0,
           longitude: locationState?.longitude || 0,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
+          latitudeDelta: 0.006,
+          longitudeDelta: 0.003,
         }}
         scrollEnabled={true}
         pitchEnabled={true}
         rotateEnabled={true}
       >
-        <Marker
-          coordinate={{
-            latitude: locationState?.latitude || 0,
-            longitude: locationState?.longitude || 0,
-          }}
-          pinColor="blue"
-          title="Parent"
-        />
+        {mode === "trackme" && (
+          <Marker
+            coordinate={{
+              latitude: locationState?.latitude || 0,
+              longitude: locationState?.longitude || 0,
+            }}
+            pinColor="blue"
+            title="You"
+          />
+        )}
+        {mode === "trackother" && parentLocation && (
+          <Marker
+            coordinate={{
+              latitude: parentLocation?.latitude || 0,
+              longitude: parentLocation?.longitude || 0,
+            }}
+            pinColor="red"
+            title="Parent"
+          />
+        )}
       </MapView>
       <View
         pointerEvents="box-none"
@@ -333,37 +341,87 @@ export default function TrackScreen() {
               alignItems: "center",
             }}
           >
-            <Text>{isConnected?"Connected": "Not Connected"}</Text>
+            <Text>{isConnected ? "Connected" : "Not Connected"}</Text>
             {loading && <ActivityIndicator animating={loading} size="large" />}
             {!loading && mode === "trackme" && (
-              <Text>Your pin number is {roomId}</Text>
-            )}
-            {!loading && mode === "trackother" && (
-              <View>
-                <Text>Tracking room {roomId}</Text>
-              <ScrollView>
-                {messages.map((message, index) => {
-                  return (
-                    <View
-                      key={index}
-                      style={{
-                        backgroundColor: theme.colors.surface,
-                        padding: 16,
-                        margin: 8,
-                        borderRadius: 8,
-                      }}
-                    >
-                      <Text>{JSON.stringify(message)}</Text>
-                    </View>
-                  );
-                })}
-              </ScrollView>
+              <View
+                style={{
+                  flex: 1,
+                  width: "100%",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 8,
+                }}
+              >
+                {!tracking && (
+                  <Button
+                    mode="contained"
+                    onPress={() => {
+                      startTrackMe(roomId);
+                      setTracking(true);
+                    }}
+                    style={{ width: 200, height: 40 }}
+                  >
+                    Start tracking
+                  </Button>
+                )}
+                {tracking && (
+                  <View
+                    style={{
+                      alignItems: "center",
+                    }}
+                  >
+                    <Text variant="bodyLarge">
+                      Ask your children to type in
+                    </Text>
+                    <Chip icon="information">{roomId}</Chip>
+                    <Text variant="bodyLarge">to track you</Text>
+                  </View>
+                )}
               </View>
             )}
-            <Button onPress={() => {
-              console.log(locationState.latitude, locationState.longitude, roomId)
-              sendLocation(locationState.latitude, locationState.longitude, roomId);
-            }}>test</Button>
+            {!loading && mode === "trackother" && (
+              <View
+                style={{
+                  flex: 1,
+                  width: "100%",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Text variant="bodyLarge" style={{ fontWeight: "bold" }}>
+                  Tracking {roomId}
+                </Text>
+                {/* <ScrollView>
+                  {messages.map((message, index) => {
+                    return (
+                      <View
+                        key={index}
+                        style={{
+                          backgroundColor: theme.colors.surface,
+                          padding: 16,
+                          margin: 8,
+                          borderRadius: 8,
+                        }}
+                      >
+                        <Text>{JSON.stringify(message)}</Text>
+                      </View>
+                    );
+                  })}
+                </ScrollView> */}
+              </View>
+            )}
+            {/* <Button
+              onPress={() => {
+                sendLocation(
+                  locationState.latitude,
+                  locationState.longitude,
+                  roomId
+                );
+              }}
+            >
+              test
+            </Button> */}
           </View>
         </BottomSheet>
       </View>
