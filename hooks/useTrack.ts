@@ -94,6 +94,7 @@ export const useTrack = () => {
 
   const sendLocation = (lat: number, long: number, room: string) => {
     if (socket) {
+      console.log("send location", lat, long, room)
       socket.emit("move", { lat, long, room });
     }
   };

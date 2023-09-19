@@ -16,12 +16,14 @@ interface CardProps {
   routeResult: RouteHistory;
   isSimplified: boolean;
   handleFavRoute?: (route_id: number) => Promise<void>;
+  onPressCard?: () => void;
 }
 
 const RouteCard: React.FC<CardProps> = ({
   routeResult,
   isSimplified,
-  handleFavRoute,
+  onPressCard,
+  onPress,
 }) => {
   const Wrapper = isSimplified ? AnimatedButton : View;
   const theme = useTheme();
@@ -179,7 +181,7 @@ const RouteCard: React.FC<CardProps> = ({
   });
 
   return (
-    <Wrapper style={isSimplified ? {} : styles.view}>
+    <Wrapper style={isSimplified ? {} : styles.view} onPress={onPressCard}>
       <View style={styles.card}>
         <Text style={styles.card_title}>{routeResult.route.locations[0]}</Text>
         <View style={styles.tags_container}>

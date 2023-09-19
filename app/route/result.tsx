@@ -1,6 +1,6 @@
 import { useState, useMemo, useRef, useCallback, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { StyleSheet, Dimensions, SafeAreaView } from "react-native";
 import { View, Pressable } from "react-native";
 import { Text, useTheme, Button, ActivityIndicator } from "react-native-paper";
@@ -26,12 +26,16 @@ import {
 } from "../../hooks/useMapRegion";
 import * as Calendar from "expo-calendar";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { Route } from "../../types/route";
 
 export default function MapScreen() {
   const theme = useTheme();
   const { token, checkSession } = useSession();
   const currentTheme = useSelector(selectTheme);
   const routeState: RouteState = useSelector(selectRouteState);
+
+  const routeJSON = useLocalSearchParams().routeJSON;
+  
 
   //calendar permission
   const [calendarPermission, setCalendarPermission] = useState(false);
@@ -136,6 +140,17 @@ export default function MapScreen() {
 
   const fetchRoute = useCallback(async () => {
     setLoading(true);
+
+    const routeData: Route = JSON.parse(routeJSON as string)
+
+    if (routeData && routeData.route_id && routeData.locations && routeData.route) {
+
+      const { route_id, ...routeDataWithoutID } = routeData;
+      setData(routeDataWithoutID);
+      setLoading(false);
+      return; // return early so the fetch call is not made
+    }
+
     let res = null;
     try {
       res = await fetch({
