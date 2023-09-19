@@ -75,6 +75,7 @@ const RouteCard: React.FC<CardProps> = ({
 
   const generatePDF = async () => {
     try {
+
       const htmlContent = `<html><body><h1>Generated PDF</h1></body></html>`;
       
       // Generate PDF using expo-print
@@ -120,9 +121,6 @@ const RouteCard: React.FC<CardProps> = ({
       console.warn("Calendar permissions not granted.");
     }
   };
-
-
-
 
 
   const styles = StyleSheet.create({
