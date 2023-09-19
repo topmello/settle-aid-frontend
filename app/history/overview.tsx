@@ -25,6 +25,7 @@ import { CustomError } from "../../types/errorResponse";
 import { use } from "i18next";
 import * as Calendar from "expo-calendar";
 
+
 export default function HistoryOverviewScreen() {
   const { t } = useTranslation();
   const theme = useTheme();
@@ -34,6 +35,13 @@ export default function HistoryOverviewScreen() {
   const { routeJSON } = useLocalSearchParams();
   // const {routeList} = params;
   const routeList: RouteHistory[] = JSON.parse(routeJSON as string);
+
+  // Callback function to update the confirmation state
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const handleEventAdded = () => {
+    setShowConfirmation(true);
+  };
+
 
   const handleFavRoute = async (route_id: number) => {
     try {
@@ -170,6 +178,7 @@ export default function HistoryOverviewScreen() {
           flexDirection: "column",
         }}
       >
+
         <View style={styles.row_text}>
           <Pressable onPress={() => router.replace("/(tabs)")}>
             <ArrowBackIcon
@@ -195,6 +204,7 @@ export default function HistoryOverviewScreen() {
           ))}
         </View>
       </ScrollView>
+      
     </SafeAreaView>
   );
 }

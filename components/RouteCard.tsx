@@ -8,6 +8,8 @@ import { AnimatedButton } from "./AnimatedButton";
 import { useSelector } from "react-redux";
 import * as Calendar from "expo-calendar";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import Modal from 'react-native-modal';
+import { useNotification } from "../hooks/useNotification";
 
 // 定义传入的props类型
 interface CardProps {
@@ -24,6 +26,12 @@ const RouteCard: React.FC<CardProps> = ({
   const Wrapper = isSimplified ? AnimatedButton : View;
   const theme = useTheme();
 
+  //use notification
+  const { pushNotification } = useNotification();
+
+
+  //confirmation model
+  const [isConfirmationModalVisible, setConfirmationModalVisible] = useState(false); 
 
   //calendar permission
   const [calendarPermission, setCalendarPermission] = useState(false);
@@ -56,6 +64,10 @@ const RouteCard: React.FC<CardProps> = ({
     hideDatePicker();
     setSelectedDate(date);
     addToCalendar(date, routeResult.route.locations[0]);
+    pushNotification({
+      message: "The event has been added to you system calendar!",
+      type: "info",
+    });
   };
 
   // add event to calendar
@@ -69,7 +81,7 @@ const RouteCard: React.FC<CardProps> = ({
           title: location,
           startDate: date.toISOString(),
           endDate: date.toISOString(),
-          timeZone: "GMT", // Set the timezone as needed
+          timeZone: "GMT",
           location: "Event Location",
           notes: "Event Description",
         };
@@ -203,6 +215,7 @@ const RouteCard: React.FC<CardProps> = ({
             onConfirm={handleConfirm}
             onCancel={hideDatePicker}
           />
+          
 
             <Button
               mode="outlined"
@@ -216,6 +229,7 @@ const RouteCard: React.FC<CardProps> = ({
         )}
       </View>
     </Wrapper>
+    
   );
 };
 
