@@ -122,6 +122,7 @@ export default function RouteGenLocation() {
             }}
             contentContainerStyle={{
               flex: 1,
+              height: "100%",
               paddingTop: 100,
               justifyContent: "flex-start",
             }}
@@ -137,6 +138,7 @@ export default function RouteGenLocation() {
             </Button>
             </View>
                <GooglePlacesAutocomplete
+               placeholder="Enter Location"
               styles={{
                 container:{
                   marginHorizontal: 20,
@@ -173,7 +175,6 @@ export default function RouteGenLocation() {
                   color: theme.colors.onSurface,
                 }
               }}
-              placeholder="Search"
               fetchDetails={true}
               GooglePlacesDetailsQuery={{ fields: "geometry" }}
               onPress={(data, details = null) => {
