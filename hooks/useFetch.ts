@@ -19,8 +19,8 @@ const useFetch = <T = any>(
 
   const { checkSession } = useSession();
 
-  const fetchData = async () => {
-    dispatch(loading());
+  const fetchData = async (overrideOptions?: RequestOptions) => {
+    const finalOptions = overrideOptions || requestOptions;
 
     const isSessionValid = await checkSession();
 
@@ -31,7 +31,7 @@ const useFetch = <T = any>(
     }
 
     try {
-      const response = await fetch(requestOptions);
+      const response = await fetch(finalOptions);
       setData(response.data);
       dispatch(loaded());
 
@@ -39,6 +39,7 @@ const useFetch = <T = any>(
 
       const errRes = error as CustomError;
       const response = errRes.response as ErrorResponse;
+
 
       if (!response) {
         dispatch(fail({ message: "Network Error" }));
@@ -58,10 +59,12 @@ const useFetch = <T = any>(
       } else if (response.data.details.type === "invalid_credentials") {
         dispatch(fail({ message: response.data.details.type }));
         router.replace("/auth/login");
-        return;
       
       } else {
         dispatch(fail({ message: response.data.details.type }));
+        console.log(response.data.details.type)
+        dispatch(loaded())
+        throw error;
       }
     }
   };
@@ -69,6 +72,8 @@ const useFetch = <T = any>(
   useEffect(() => {
     if (shouldFetchImmediately) {
       fetchData();
+
+
     }
   }, [
     requestOptions.token,
@@ -76,6 +81,7 @@ const useFetch = <T = any>(
     requestOptions.params,
     ...deps,
   ]);
+  
 
   return [data, fetchData] as [T | null, typeof fetchData];
 };

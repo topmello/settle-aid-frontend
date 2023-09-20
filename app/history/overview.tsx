@@ -19,9 +19,10 @@ import ArrowBackIcon from "../../assets/images/icons/arrow_back.svg";
 import { useSelector } from "react-redux";
 import { selectUserId, selectToken } from "../../store/authSlice";
 import RouteCard from "../../components/RouteCard";
-import { fetch } from "../../api/fetch";
+import { fetch, RequestOptions } from "../../api/fetch";
+import useFetch from "../../hooks/useFetch";
 import { RouteHistory } from "../../types/route";
-import { CustomError } from "../../types/errorResponse";
+import { CustomError, ErrorResponse } from "../../types/errorResponse";
 
 export default function HistoryOverviewScreen() {
   const { t } = useTranslation();
@@ -39,52 +40,37 @@ export default function HistoryOverviewScreen() {
     setShowConfirmation(true);
   };
 
+  const requestOptions: RequestOptions = {
+    method: "POST",
+    url: `/vote/`,
+    token: token,
+  };
+
+  const [, executeVote] = useFetch(requestOptions, [], null, false);
+
   const handleFavRoute = async (route_id: number) => {
     try {
-      const res = await fetch({
-        method: "POST",
-        data: { route_id: route_id, vote: true },
-        url: `/vote/`,
-        token: token,
-      });
-      console.log("Voted");
+      await executeVote({ ...requestOptions, data: { route_id, vote: true } });
 
-      // Handle success response if needed
+      console.log("Voted");
     } catch (error) {
-      const initialError = error as CustomError;
-      // Check if error is from Axios and has a response property
-      if (
-        initialError &&
-        typeof initialError === "object" &&
-        "response" in initialError
-      ) {
-        const response = initialError.response;
-        if (
-          response &&
-          response.data &&
-          response.data.details.type === "already_voted"
-        ) {
-          // If user has already voted, send another request to "unvote"
-          try {
-            const unvoteResponse = await fetch({
-              method: "POST",
-              data: { route_id: route_id, vote: false },
-              url: `/vote/`,
-              token: token,
-            });
-            console.log("Unvoted");
-          } catch (error) {
-            const unvoteError = error as CustomError;
-            console.error("Error while unvoting:", unvoteError.message);
-            // Handle any errors from the unvote request
-          }
-        } else {
-          console.error("Some other error occurred:", initialError.message);
-          // Handle other types of errors if needed
+      const err = error as ErrorResponse;
+  
+      if (err.data?.details?.type === "already_voted") {
+        try {
+          await executeVote({ ...requestOptions, data: { route_id, vote: false } });
+          console.log("Unvoted");
+        } catch (unvoteError) {
+          const err = unvoteError as ErrorResponse;
+          console.error("Error while unvoting:", err.data?.details.msg);
         }
+      } else {
+        console.error("Some other error occurred:", err.data?.details.msg);
+        return;
       }
     }
   };
+  
 
   const styles = StyleSheet.create({
     container: {

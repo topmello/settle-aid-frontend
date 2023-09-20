@@ -306,7 +306,7 @@ export default function HomeScreen() {
           </View>
         )}
 
-        {favRouteList && Array.isArray(favRouteList) && (
+        {favRouteList && (
           <View>
             <View
               style={{

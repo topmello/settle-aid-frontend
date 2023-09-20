@@ -186,7 +186,10 @@ export default function MapScreen() {
         router.replace("/auth/login");
       }
     });
-    fetchRoute();
+    fetchRoute().catch((error) => {
+      console.error("Failed to fetch route:", error);
+      setLoading(false);
+    });
   }, [fetchRoute]);
 
   
