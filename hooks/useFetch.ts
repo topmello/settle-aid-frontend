@@ -25,13 +25,14 @@ const useFetch = <T = any>(
 
   const [data, setData] = useState<T | null>(initialData || null);
 
-  const { checkSession } = useSession();
+  const { token, checkSession } = useSession();
 
   const fetchData = async (overrideOptions?: RequestOptions) => {
-    
-    dispatch(loading());
-
-    const finalOptions = overrideOptions || requestOptions;
+    let options = overrideOptions || requestOptions;
+    let finalOptions = {
+      ...options,
+      ...(token ? { token } : {}),
+    };
 
     const isSessionValid = await checkSession();
 
@@ -42,21 +43,19 @@ const useFetch = <T = any>(
     }
 
     try {
+      dispatch(loading());
       const response = await fetch(finalOptions);
       if (notificationMsg) {
-      pushNotification({
-        message: notificationMsg || t("comm:Done"),
-        type: "success",
-      })
-    }
+        pushNotification({
+          message: notificationMsg || t("comm:Done"),
+          type: "success",
+        });
+      }
       setData(response.data);
       dispatch(loaded());
-
     } catch (error) {
-
       const errRes = error as CustomError;
       const response = errRes.response as ErrorResponse;
-
 
       if (!response) {
         dispatch(fail({ message: "Network Error" }));
@@ -72,11 +71,10 @@ const useFetch = <T = any>(
         dispatch(fail({ message: "Unknown Error" }));
         return;
 
-      // If not authenticated, redirect to login
+        // If not authenticated, redirect to login
       } else if (response.data.details.type === "invalid_credentials") {
         dispatch(fail({ message: response.data.details.type }));
         router.replace("/auth/login");
-      
       } else if (response.data.details.type === "no_location") {
         dispatch(fail({ message: response.data.details.type }));
         pushNotification({
@@ -85,35 +83,32 @@ const useFetch = <T = any>(
           }),
           type: "error",
         });
-        throw new Error(response.data.details.msg)
-
-      } else if  (response.data.details.type === "already_voted") {
-
+        throw new Error(response.data.details.msg);
+      } else if (response.data.details.type === "already_voted") {
         dispatch(fail({ message: response.data.details.type }));
 
-        let method: Method = "DELETE"
-        let newOptions = { ...finalOptions, method: method }
+        let method: Method = "DELETE";
+        let newOptions = { ...finalOptions, method: method };
 
-        await fetch(newOptions).then((res) => {
-          if (res.status === 204) {
-            pushNotification({
-              message: t("Remove route from favorite", {
-                ns: "route",
-              }),
-              type: "success",
-            });
-            return res.data;
-          } else {
-            return;
-          }}).catch(err => {
+        await fetch(newOptions)
+          .then((res) => {
+            if (res.status === 204) {
+              pushNotification({
+                message: t("Remove route from favorite", {
+                  ns: "route",
+                }),
+                type: "success",
+              });
+              return res.data;
+            } else {
+              return;
+            }
+          })
+          .catch((err) => {
             console.log(JSON.stringify(err.response.data));
             return;
-          })
-        
-        
-      }
-      
-      else {
+          });
+      } else {
         dispatch(fail({ message: response.data.details.type }));
         pushNotification({
           message: t(response.data.details.msg, {
@@ -121,8 +116,8 @@ const useFetch = <T = any>(
           }),
           type: "error",
         });
-        console.log(response.data.details.type)
-        dispatch(loaded())
+        console.log(response.data.details.type);
+        dispatch(loaded());
         return;
       }
     }
@@ -133,7 +128,7 @@ const useFetch = <T = any>(
       fetchData();
     }
   }, [
-    requestOptions.token,
+    token,
     JSON.stringify(requestOptions.data),
     requestOptions.params,
     ...deps,

@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 import {
   SafeAreaView,
@@ -33,7 +33,6 @@ export default function HomeScreen() {
   const { t } = useTranslation();
   const theme = useAppTheme();
   const userID = useSelector(selectUserId);
-  const token = useSelector(selectToken);
 
   const [currentDate, setCurrentDate] = useState(new Date());
   const [translatedDate, setTranslatedDate] = useState("");
@@ -54,18 +53,16 @@ export default function HomeScreen() {
     {
       method: "GET",
       url: `/route/user/${userID}/?limit=2`,
-      token: token,
     },
-    [token]
+    [userID]
   );
 
   const [favRouteList, refetchFavRouteList] = useFetch<RouteHistory[]>(
     {
       method: "GET",
       url: `/route/user/fav/${userID}/?limit=5`,
-      token: token,
     },
-    [token]
+    [userID]
   );
 
   useFocusEffect(
@@ -110,18 +107,12 @@ export default function HomeScreen() {
   const handlePressMoreHistory = () => {
     router.push({
       pathname: "/history/overview",
-      params: {
-        routeJSON: JSON.stringify(routeList),
-      },
     });
   };
 
   const handlePressMoreFavorite = () => {
     router.push({
       pathname: "/history/favourite",
-      params: {
-        favRouteJSON: JSON.stringify(favRouteList),
-      },
     });
   };
 

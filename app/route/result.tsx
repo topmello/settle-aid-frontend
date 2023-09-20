@@ -40,7 +40,6 @@ const MORE_ICON = Platform.OS === "ios" ? "dots-horizontal" : "dots-vertical";
 
 export default function MapScreen() {
   const theme = useTheme();
-  const { token, checkSession } = useSession();
   const currentTheme = useSelector(selectTheme);
   const routeState: RouteState = useSelector(selectRouteState);
   const loading = useSelector(selectIsLoading);
@@ -92,12 +91,11 @@ export default function MapScreen() {
     method: "POST",
     url: "/search/v2/route/",
     data: routeState,
-    token: token,
   };
 
   const [dataFromFetch, fetchData] = useFetch<RouteResult | null>(
     requestOptions,
-    [routeState, token],
+    [routeState],
     null,
     false
   );
@@ -133,7 +131,7 @@ export default function MapScreen() {
       console.error("Failed to fetch route:", error);
       return;
     });
-  }, [routeState, token, mapRef, setData]);
+  }, [routeState, mapRef, setData]);
 
   useEffect(() => {
     if (dataFromFetch) {
@@ -143,11 +141,6 @@ export default function MapScreen() {
 
   // fetch route
   useEffect(() => {
-    checkSession().then((isSessionVaild) => {
-      if (!isSessionVaild) {
-        router.replace("/auth/login");
-      }
-    });
     fetchRoute().catch((error) => {
       console.error("Failed to fetch route:", error);
     });

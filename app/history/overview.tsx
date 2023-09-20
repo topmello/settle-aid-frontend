@@ -8,46 +8,50 @@ import {
   Platform,
   Pressable,
 } from "react-native";
-import { Button, Text } from "react-native-paper";
+import { Button, Text, ActivityIndicator } from "react-native-paper";
 import { useTranslation } from "react-i18next"; // <-- Import the hook
 import { useTheme } from "react-native-paper";
 import { router, useLocalSearchParams } from "expo-router";
 import ArrowBackIcon from "../../assets/images/icons/arrow_back.svg";
 import { useSelector } from "react-redux";
 import { selectUserId, selectToken } from "../../store/authSlice";
+import { selectIsLoading } from "../../store/appSlice";
 import RouteCard from "../../components/RouteCard";
 import { RequestOptions } from "../../api/fetch";
 import useFetch from "../../hooks/useFetch";
 import { RouteHistory } from "../../types/route";
 import useEventScheduler from "../../hooks/useEventScheduler";
 
-
 export default function HistoryOverviewScreen() {
   const { t } = useTranslation();
   const theme = useTheme();
-  const token = useSelector(selectToken);
   const userID = useSelector(selectUserId);
+  const loading = useSelector(selectIsLoading);
 
-
-  const [routeList, refetchRouteList] = useFetch<RouteHistory[]>({
-    method: "GET",
-    url: `/route/user/${userID}/?limit=10`,
-    token: token,
-  },[token]);
+  const [routeList, refetchRouteList] = useFetch<RouteHistory[]>(
+    {
+      method: "GET",
+      url: `/route/user/${userID}/?limit=10`,
+    },
+    [userID]
+  );
 
   const voteRequestOptions: RequestOptions = {
     method: "POST",
     url: `/vote/`,
-    token: token,
   };
 
-
-  const [, executeVote] = useFetch(voteRequestOptions, [], null, false, 'Added to favourites');
+  const [, executeVote] = useFetch(
+    voteRequestOptions,
+    [],
+    null,
+    false,
+    "Added to favourites"
+  );
 
   const handleFavRoute = async (route_id: number) => {
     try {
-      await executeVote({ ...voteRequestOptions, url: `/vote/${route_id}`});
-
+      await executeVote({ ...voteRequestOptions, url: `/vote/${route_id}` });
     } catch (error) {
       return;
     } finally {
@@ -59,9 +63,8 @@ export default function HistoryOverviewScreen() {
     isDatePickerVisible,
     showDatePicker,
     hideDatePicker,
-    handleDateConfirm
+    handleDateConfirm,
   } = useEventScheduler();
-  
 
   const styles = StyleSheet.create({
     container: {
@@ -143,6 +146,11 @@ export default function HistoryOverviewScreen() {
         paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
       }}
     >
+      <ActivityIndicator
+        style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }}
+        animating={loading}
+        size="large"
+      />
       <View style={styles.row_text}>
         <Pressable onPress={() => router.back()}>
           <ArrowBackIcon
@@ -166,7 +174,7 @@ export default function HistoryOverviewScreen() {
           style={{
             gap: 12,
             marginBottom: 20,
-            paddingHorizontal: 16
+            paddingHorizontal: 16,
           }}
         >
           {routeList?.map((result, index) => (
