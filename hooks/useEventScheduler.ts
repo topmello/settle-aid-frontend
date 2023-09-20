@@ -1,9 +1,7 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from "react";
 import * as Calendar from "expo-calendar";
-import { useNotification } from './useNotification';
-import { Route } from '../types/route';
-
-
+import { useNotification } from "./useNotification";
+import { Route, RouteResult } from "../types/route";
 
 const useEventScheduler = () => {
   // Notification
@@ -32,9 +30,7 @@ const useEventScheduler = () => {
     setDatePickerVisibility(false);
   }, []);
 
-
-
-  const addToCalendar = async (date: Date, route: Route) => {
+  const addToCalendar = async (date: Date, route: Route | RouteResult) => {
     if (calendarPermission) {
       // Get the default calendar
       const defaultCalendar = await Calendar.getDefaultCalendarAsync();
@@ -48,40 +44,42 @@ const useEventScheduler = () => {
         notes: route.instructions.map((instruction) => instruction).join("\n"),
       };
 
-      await Calendar.createEventAsync(
-        defaultCalendar.id,
-        eventDetails
-      ).then((event) => {
-        pushNotification({
-          message: "The event has been added to your system calendar!",
-          type: "info",
+      await Calendar.createEventAsync(defaultCalendar.id, eventDetails)
+        .then((event) => {
+          pushNotification({
+            message: "The event has been added to your system calendar!",
+            type: "info",
+          });
+          return;
+        })
+        .catch((error) => {
+          pushNotification({
+            message: "The event could not be added to your system calendar!",
+            type: "error",
+          });
+          return;
         });
-        return;
-      }).catch((error) => {
-        pushNotification({
-          message: "The event could not be added to your system calendar!",
-          type: "error",
-        });
-        return;
-      })
     }
-  }
+  };
 
-  const handleDateConfirm = useCallback(async (date: Date, route: Route) => {
-    await addToCalendar(date, route).then(() => {
-      hideDatePicker();
-    }).catch((error) => {
-      return;
-    })
-
-    
-  }, [hideDatePicker, pushNotification]);
+  const handleDateConfirm = useCallback(
+    async (date: Date, route: Route | RouteResult) => {
+      await addToCalendar(date, route)
+        .then(() => {
+          hideDatePicker();
+        })
+        .catch((error) => {
+          return;
+        });
+    },
+    [hideDatePicker, pushNotification]
+  );
 
   return {
     isDatePickerVisible,
     showDatePicker,
     hideDatePicker,
-    handleDateConfirm
+    handleDateConfirm,
   };
 };
 

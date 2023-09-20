@@ -1,11 +1,17 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { router, useLocalSearchParams } from "expo-router";
-import { SafeAreaView } from "react-native";
-import { View, Pressable } from "react-native";
-import { Text, useTheme, Button, ActivityIndicator } from "react-native-paper";
+import { SafeAreaView, Platform, View, Pressable } from "react-native";
+import {
+  Appbar,
+  Menu,
+  Text,
+  useTheme,
+  Button,
+  ActivityIndicator,
+} from "react-native-paper";
 import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from "react-native-maps";
-
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import ResultOverlay from "../../components/ResultOverlay";
 import useCheckedList from "../../hooks/useCheckList";
 import { RouteState, selectRouteState } from "../../store/routeSlice";
@@ -25,9 +31,12 @@ import {
   RouteResult,
   Coordinates,
 } from "../../hooks/useMapRegion";
-import * as Calendar from "expo-calendar";
+import useEventScheduler from "../../hooks/useEventScheduler";
+import generatePDF from "../../utils/generatePDF";
 import { Route } from "../../types/route";
 import { selectIsLoading } from "../../store/appSlice";
+
+const MORE_ICON = Platform.OS === "ios" ? "dots-horizontal" : "dots-vertical";
 
 export default function MapScreen() {
   const theme = useTheme();
@@ -56,70 +65,16 @@ export default function MapScreen() {
     duration: 0,
   });
 
-  //calendar permission
-  const [calendarPermission, setCalendarPermission] = useState(false);
+  const {
+    isDatePickerVisible,
+    showDatePicker,
+    hideDatePicker,
+    handleDateConfirm,
+  } = useEventScheduler();
 
-  const requestCalendarPermission = async () => {
-    const { status } = await Calendar.requestCalendarPermissionsAsync();
-    setCalendarPermission(status === "granted");
-  };
-
-  useEffect(() => {
-    requestCalendarPermission();
-  }, []);
-
- 
-
-
-  //date picker
-
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-
-  const showDatePicker = () => {
-    setDatePickerVisibility(true);
-  };
-
-  const hideDatePicker = () => {
-    setDatePickerVisibility(false);
-  };
-
-  const handleConfirm = (date: Date) => {
-    console.warn("A date has been picked: ", date);
-    hideDatePicker();
-    setSelectedDate(date);
-    addToCalendar(date);
-  };
-
-  // add event to calendar
-
-  const addToCalendar = async (date: Date) => {
-    if (calendarPermission) {
-      // Get the default calendar
-      const defaultCalendar = await Calendar.getDefaultCalendarAsync();
-
-        const eventDetails = {
-          title: "My Event",
-          startDate: date.toISOString(),
-          endDate: date.toISOString(),
-          timeZone: "GMT", // Set the timezone as needed
-          location: "Event Location",
-          notes: "Event Description",
-        };
-
-      const event = await Calendar.createEventAsync(
-        defaultCalendar.id,
-        eventDetails
-      );
-
-      console.log(`Event added to calendar with ID: ${event}`);
-    } else {
-      console.warn("Calendar permissions not granted.");
-    }
-  };
-
-  
-
+  const [menuVisible, setMenuVisible] = useState(true);
+  const openMenu = () => setMenuVisible(true);
+  const closeMenu = () => setMenuVisible(false);
 
   const { checked, handlePress } = useCheckedList(data);
 
@@ -139,8 +94,13 @@ export default function MapScreen() {
     data: routeState,
     token: token,
   };
-  
-  const [dataFromFetch, fetchData] = useFetch<RouteResult | null>(requestOptions, [routeState, token], null, false);
+
+  const [dataFromFetch, fetchData] = useFetch<RouteResult | null>(
+    requestOptions,
+    [routeState, token],
+    null,
+    false
+  );
 
   const mapRef = useRef<MapView>(null);
 
@@ -149,40 +109,40 @@ export default function MapScreen() {
     routeState,
     mapRef,
   });
-  
 
   const fetchRoute = useCallback(async () => {
-
-
-    if (typeof routeJSON === 'string') {
+    if (typeof routeJSON === "string") {
       try {
         const routeData: Route = JSON.parse(routeJSON);
-  
-        if (routeData && routeData.route_id && routeData.locations && routeData.route) {
+
+        if (
+          routeData &&
+          routeData.route_id &&
+          routeData.locations &&
+          routeData.route
+        ) {
           const { route_id, ...routeDataWithoutID } = routeData;
           setData(routeDataWithoutID);
           return; // return early so the fetch call is not made
         }
       } catch (error) {
         console.error("Failed to parse routeJSON:", error);
-
       }
     }
     await fetchData().catch((error) => {
       console.error("Failed to fetch route:", error);
       return;
-    })
-    
+    });
   }, [routeState, token, mapRef, setData]);
-  
+
   useEffect(() => {
     if (dataFromFetch) {
       setData(dataFromFetch as RouteResult);
     }
   }, [dataFromFetch]);
 
-   // fetch route
-   useEffect(() => {
+  // fetch route
+  useEffect(() => {
     checkSession().then((isSessionVaild) => {
       if (!isSessionVaild) {
         router.replace("/auth/login");
@@ -193,48 +153,44 @@ export default function MapScreen() {
     });
   }, [fetchRoute]);
 
-  
   // loading screen
   if (loading) {
     return (
       <SafeAreaView
-        style={
-          {
-            backgroundColor: theme.colors.primaryContainer,
-            justifyContent: "center",
-            alignItems: "center",
-            flex: 1,
-          }}
+        style={{
+          backgroundColor: theme.colors.primaryContainer,
+          justifyContent: "center",
+          alignItems: "center",
+          flex: 1,
+        }}
       >
         <ActivityIndicator size="large" />
       </SafeAreaView>
     );
   } else if (
     !data ||
-      !data.locations_coordinates ||
-      data.locations_coordinates.length < 2 ||
-      !region ||
-      !region.latitude ||
-      !region.longitude
+    !data.locations_coordinates ||
+    data.locations_coordinates.length < 2 ||
+    !region ||
+    !region.latitude ||
+    !region.longitude
   ) {
     return (
       <SafeAreaView
-        style={
-          {
-            backgroundColor: theme.colors.primaryContainer,
-            justifyContent: "center",
-            alignItems: "center",
-            gap: 16,
-            flex: 1,
-          }}
+        style={{
+          backgroundColor: theme.colors.primaryContainer,
+          justifyContent: "center",
+          alignItems: "center",
+          gap: 16,
+          flex: 1,
+        }}
       >
         <Text variant="titleLarge">No location found</Text>
         <Button
           mode="contained"
           style={{
-            width: '50%',
+            width: "50%",
             alignItems: "center",
-
           }}
           onPress={() => {
             router.back();
@@ -245,9 +201,8 @@ export default function MapScreen() {
         <Button
           mode="contained"
           style={{
-            width: '50%',
+            width: "50%",
             alignItems: "center",
-
           }}
           onPress={() => {
             router.replace("/(tabs)");
@@ -261,9 +216,11 @@ export default function MapScreen() {
 
   // main screen
   return (
-    <SafeAreaView style={{
-      flex: 1,
-    }}>
+    <SafeAreaView
+      style={{
+        flex: 1,
+      }}
+    >
       <View
         style={{
           marginTop: 32,
@@ -277,17 +234,16 @@ export default function MapScreen() {
         {router.canGoBack() ? (
           <Pressable
             onPress={() => router.back()}
-            style={
-              {
-                backgroundColor: theme.colors.primaryContainer,
-                borderRadius: 20,
-                width: 40,
-                height: 40,
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                zIndex: 1,
-              }}
+            style={{
+              backgroundColor: theme.colors.primaryContainer,
+              borderRadius: 20,
+              width: 40,
+              height: 40,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              zIndex: 1,
+            }}
           >
             <ArrowBackIcon
               fill={theme.colors.onPrimaryContainer}
@@ -298,6 +254,35 @@ export default function MapScreen() {
         ) : (
           <View></View>
         )}
+        <Pressable
+          style={{
+            backgroundColor: theme.colors.primaryContainer,
+            borderRadius: 20,
+            width: 40,
+            height: 40,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 1,
+          }}
+        >
+          <Menu
+            style={{ zIndex: 1 }}
+            visible={menuVisible}
+            onDismiss={closeMenu}
+            anchor={<Appbar.Action icon={MORE_ICON} onPress={openMenu} />}
+          >
+            <Menu.Item onPress={fetchRoute} title="Re-plan" />
+            <Menu.Item onPress={showDatePicker} title="Schedule" />
+            <Menu.Item
+              onPress={() => {
+                generatePDF(data);
+              }}
+              title="Share"
+            />
+          </Menu>
+        </Pressable>
+        {/*
         {typeof routeJSON === 'string' ? null:<Button
           mode="contained"
           style={{ width: '30%', zIndex: 1, alignItems: "center",}}
@@ -305,13 +290,29 @@ export default function MapScreen() {
         >
           Re-plan
         </Button>}
+        <Button
+          mode="contained"
+          onPress={showDatePicker}
+          style={{ width: '30%', zIndex: 1, alignItems: "center",}}
+        >
+          Schedule
+        </Button>
+        */}
+        <DateTimePickerModal
+          isVisible={isDatePickerVisible}
+          mode="date"
+          onConfirm={(date) => {
+            handleDateConfirm(date, data);
+          }}
+          onCancel={hideDatePicker}
+        />
       </View>
 
       <MapView
         provider={PROVIDER_GOOGLE}
         customMapStyle={currentTheme === "dark" ? mapDarkTheme : []}
         ref={mapRef}
-        mapPadding={{top: 0, right: 0, bottom: 150, left: 0}}
+        mapPadding={{ top: 0, right: 0, bottom: 150, left: 0 }}
         style={{
           position: "absolute",
           top: 0,
