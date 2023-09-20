@@ -26,10 +26,14 @@ export default function HistoryOverviewScreen() {
   const { t } = useTranslation();
   const theme = useTheme();
   const token = useSelector(selectToken);
+  const userID = useSelector(selectUserId);
 
-  const { routeJSON } = useLocalSearchParams();
-  // const {routeList} = params;
-  const routeList: RouteHistory[] = JSON.parse(routeJSON as string);
+
+  const [routeList, refetchRouteList] = useFetch<RouteHistory[]>({
+    method: "GET",
+    url: `/route/user/${userID}/?limit=10`,
+    token: token,
+  },[token]);
 
   const voteRequestOptions: RequestOptions = {
     method: "POST",
@@ -46,6 +50,8 @@ export default function HistoryOverviewScreen() {
 
     } catch (error) {
       return;
+    } finally {
+      refetchRouteList();
     }
   };
 
@@ -163,12 +169,13 @@ export default function HistoryOverviewScreen() {
             paddingHorizontal: 16
           }}
         >
-          {routeList.map((result, index) => (
+          {routeList?.map((result, index) => (
             <RouteCard
               key={result.route.route_id}
               isSimplified={false}
               routeResult={result}
               handleFavRoute={handleFavRoute}
+              voted={result.voted_by_user}
               isDatePickerVisible={isDatePickerVisible}
               showDatePicker={showDatePicker}
               hideDatePicker={hideDatePicker}
