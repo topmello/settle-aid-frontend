@@ -168,7 +168,10 @@ export default function MapScreen() {
         console.error("Failed to parse routeJSON:", error);
       }
     }
-    await fetchData();
+    await fetchData().catch((error) => {
+      console.error("Failed to fetch route:", error);
+      setLoading(false);
+    })
     
   }, [routeState, token, mapRef, setData]);
   
@@ -313,6 +316,7 @@ export default function MapScreen() {
         provider={PROVIDER_GOOGLE}
         customMapStyle={currentTheme === "dark" ? mapDarkTheme : []}
         ref={mapRef}
+        mapPadding={{top: 0, right: 0, bottom: 150, left: 0}}
         style={{
           position: "absolute",
           top: 0,

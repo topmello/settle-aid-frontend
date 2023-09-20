@@ -4,9 +4,6 @@ import {
   StyleSheet,
   View,
   ScrollView,
-  Animated,
-  TouchableOpacity,
-  Image,
   StatusBar,
   Platform,
   Pressable,
@@ -19,7 +16,7 @@ import ArrowBackIcon from "../../assets/images/icons/arrow_back.svg";
 import { useSelector } from "react-redux";
 import { selectUserId, selectToken } from "../../store/authSlice";
 import RouteCard from "../../components/RouteCard";
-import { fetch, RequestOptions } from "../../api/fetch";
+import { RequestOptions } from "../../api/fetch";
 import useFetch from "../../hooks/useFetch";
 import { RouteHistory } from "../../types/route";
 import { CustomError, ErrorResponse } from "../../types/errorResponse";
@@ -46,7 +43,7 @@ export default function HistoryOverviewScreen() {
     token: token,
   };
 
-  const [, executeVote] = useFetch(requestOptions, [], null, false);
+  const [, executeVote] = useFetch(requestOptions, [], null, false, 'Voted');
 
   const handleFavRoute = async (route_id: number) => {
     try {
@@ -57,7 +54,9 @@ export default function HistoryOverviewScreen() {
       const err = error as ErrorResponse;
   
       if (err.data?.details?.type === "already_voted") {
+        console.log('Unvoting')
         try {
+          
           await executeVote({ ...requestOptions, data: { route_id, vote: false } });
           console.log("Unvoted");
         } catch (unvoteError) {

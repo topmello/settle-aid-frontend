@@ -6,14 +6,20 @@ import { AppDispatch } from "../store";
 import { CustomError, ErrorResponse } from "../types/errorResponse";
 import { router } from "expo-router";
 import { useSession } from "./useSession";
+import { useNotification } from "./useNotification";
+import { useTranslation } from "react-i18next";
 
 const useFetch = <T = any>(
   requestOptions: RequestOptions,
   deps: any[] = [],
   initialData?: T,
-  shouldFetchImmediately: boolean = true
+  shouldFetchImmediately: boolean = true,
+  notificationMsg?: string
 ) => {
   const dispatch = useDispatch<AppDispatch>();
+
+  const { pushNotification } = useNotification();
+  const { t } = useTranslation();
 
   const [data, setData] = useState<T | null>(initialData || null);
 
@@ -32,6 +38,12 @@ const useFetch = <T = any>(
 
     try {
       const response = await fetch(finalOptions);
+      if (notificationMsg) {
+      pushNotification({
+        message: notificationMsg || t("comm:Done"),
+        type: "success",
+      })
+    }
       setData(response.data);
       dispatch(loaded());
 
@@ -60,11 +72,38 @@ const useFetch = <T = any>(
         dispatch(fail({ message: response.data.details.type }));
         router.replace("/auth/login");
       
-      } else {
+      } else if (response.data.details.type === "no_location") {
         dispatch(fail({ message: response.data.details.type }));
+        pushNotification({
+          message: t(response.data.details.msg, {
+            ns: "route",
+          }),
+          type: "error",
+        });
+        throw new Error(response.data.details.msg)
+
+      } else if  (response.data.details.type === "already_voted") {
+        console.log('already voted')
+        dispatch(fail({ message: response.data.details.type }));
+        console.log(initialData)
+        let newOptions = { ...finalOptions, data: { ...initialData, vote: false } }
+        console.log(newOptions)
+        await fetch(newOptions)
+        
+        
+      }
+      
+      else {
+        dispatch(fail({ message: response.data.details.type }));
+        pushNotification({
+          message: t(response.data.details.msg, {
+            ns: "route",
+          }),
+          type: "error",
+        });
         console.log(response.data.details.type)
         dispatch(loaded())
-        throw error;
+        return;
       }
     }
   };
