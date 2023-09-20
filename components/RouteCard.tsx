@@ -12,7 +12,7 @@ import * as Print from "expo-print";
 import * as Sharing from "expo-sharing";
 import Bookmark from "../assets/images/icons/bookmark.svg";
 import { useAppTheme } from "../theme/theme";
-import Animated, { FadeOutRight, SlideInRight, Layout } from "react-native-reanimated";
+import Animated, { FadeOutRight, SlideInRight, Layout, FadeInRight } from "react-native-reanimated";
 
 interface CardProps {
   routeResult: RouteHistory;
@@ -231,7 +231,7 @@ const RouteCard: React.FC<CardProps> = ({
   });
 
   return (
-    <Animated.View entering={SlideInRight.delay(index*50)} exiting={FadeOutRight} layout={Layout.springify()}>
+    <Animated.View entering={FadeInRight.delay(index*50)} exiting={FadeOutRight} layout={Layout.damping()}>
       <AnimatedButton
       onPress={onPressCard}
       color={theme.colors.infoContainer}
