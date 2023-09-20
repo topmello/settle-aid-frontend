@@ -18,7 +18,7 @@ import {
   Chip,
 } from "react-native-paper";
 import { useTranslation } from "react-i18next";
-import MapView, { Marker } from "react-native-maps";
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import { mapDarkTheme } from "../../theme/map";
 import { useSelector } from "react-redux";
 import { selectTheme, setRoomId } from "../../store/appSlice";
@@ -278,6 +278,7 @@ export default function TrackScreen() {
         </Pressable>
       </View>
       <MapView
+        provider={PROVIDER_GOOGLE}
         customMapStyle={currentTheme === "dark" ? mapDarkTheme : []}
         ref={mapRef}
         style={styles.map}

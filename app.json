@@ -28,7 +28,12 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffe78f"
       },
-      "package": "com.topmello.settleaid"
+      "package": "com.topmello.settleaid",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyC-H0FU08gC4ALNYwG004MVNRjbtatUXfc"
+        }
+      }
     },
     "web": {
       "bundler": "metro",

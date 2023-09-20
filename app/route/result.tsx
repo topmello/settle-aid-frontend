@@ -4,7 +4,7 @@ import { router, useLocalSearchParams } from "expo-router";
 import { StyleSheet, Dimensions, SafeAreaView } from "react-native";
 import { View, Pressable } from "react-native";
 import { Text, useTheme, Button, ActivityIndicator } from "react-native-paper";
-import MapView, { Marker, Polyline } from "react-native-maps";
+import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from "react-native-maps";
 
 import ResultOverlay from "../../components/ResultOverlay";
 import useCheckedList from "../../hooks/useCheckList";
@@ -310,6 +310,7 @@ export default function MapScreen() {
       </View>
 
       {mapIsLoaded && <MapView
+        provider={PROVIDER_GOOGLE}
         customMapStyle={currentTheme === "dark" ? mapDarkTheme : []}
         ref={mapRef}
         style={{

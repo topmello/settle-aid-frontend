@@ -35,6 +35,7 @@ export default function LearnScreen() {
   const {t} = useTranslation();
   const theme = useAppTheme();
   const { setCategory } = useTip();
+
   return (
     <SafeAreaView
       style={{

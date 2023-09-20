@@ -40,6 +40,7 @@ import {
   selectLonLat,
   selectDistanceThres,
 } from "../../store/routeSlice";
+import { PROVIDER_GOOGLE } from "react-native-maps";
 
 import useCurrentLocation from "../../hooks/useCurrentLocation";
 import { useNotification } from "../../hooks/useNotification";
@@ -265,6 +266,7 @@ export default function RouteGenLocation() {
             <MapView
               customMapStyle={currentTheme === "dark" ? mapDarkTheme : []}
               style={styles.map}
+              provider={PROVIDER_GOOGLE}
               initialRegion={{
                 latitude: locationState.latitude,
                 longitude: locationState.longitude,
