@@ -166,6 +166,7 @@ export default function MapScreen() {
         }
       } catch (error) {
         console.error("Failed to parse routeJSON:", error);
+        setLoading(false);
       }
     }
     await fetchData().catch((error) => {
@@ -176,18 +177,21 @@ export default function MapScreen() {
   }, [routeState, token, mapRef, setData]);
   
   useEffect(() => {
+    setLoading(true);
     if (dataFromFetch) {
       setData(dataFromFetch as RouteResult);
-      setLoading(false);
     }
+    setLoading(false);
   }, [dataFromFetch]);
 
    // fetch route
    useEffect(() => {
+    setLoading(true);
     checkSession().then((isSessionVaild) => {
       if (!isSessionVaild) {
         router.replace("/auth/login");
       }
+      setLoading(false);
     });
     fetchRoute().catch((error) => {
       console.error("Failed to fetch route:", error);
@@ -211,16 +215,13 @@ export default function MapScreen() {
         <ActivityIndicator size="large" />
       </SafeAreaView>
     );
-  }
-
-  // no location found screen
-  if (
+  } else if (
     !data ||
-    !data.locations_coordinates ||
-    data.locations_coordinates.length < 2 ||
-    !region ||
-    !region.latitude ||
-    !region.longitude
+      !data.locations_coordinates ||
+      data.locations_coordinates.length < 2 ||
+      !region ||
+      !region.latitude ||
+      !region.longitude
   ) {
     return (
       <SafeAreaView

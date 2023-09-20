@@ -221,21 +221,23 @@ export default function RouteActivityScreen() {
           {t("Tell us more about your preferences", { ns: "route" })}
         </Text>
       </View>
-      <KeyboardAvoidingView
+      <View style={{
+        flex: 1,
+        justifyContent: "center",
+      }}>
+        <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={{
           paddingTop: 18,
           paddingBottom: 8,
-          flex: 1,
           justifyContent: "center",
         }}
       >
         <ScrollView
           contentContainerStyle={{
-            justifyContent: "center",
-            gap: 8,
             paddingBottom: 20,
-            flexDirection: "column",
+            justifyContent: "center",
+            gap: 8
           }}
         >
           {activityPrompts.map((activity) => (
@@ -392,6 +394,7 @@ export default function RouteActivityScreen() {
           ))}
         </ScrollView>
       </KeyboardAvoidingView>
+      </View>
       <View
         style={{
           height: 100,
