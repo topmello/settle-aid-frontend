@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 
 import {
   SafeAreaView,
@@ -27,6 +27,7 @@ import RouteCard from "../../components/RouteCard";
 import useFetch from "../../hooks/useFetch";
 import { RouteHistory } from "../../types/route";
 import { useAppTheme } from "../../theme/theme";
+import { useFocusEffect } from "expo-router";
 
 export default function HomeScreen() {
   const { t } = useTranslation();
@@ -49,16 +50,30 @@ export default function HomeScreen() {
     return `${dayName} ${day} ${monthName}`;
   };
 
-  const [routeList, refetchRouteList] = useFetch<RouteHistory[]>({
+  const [routeList, refetchRouteList] = useFetch<RouteHistory[]>(
+    {
       method: "GET",
       url: `/route/user/${userID}/?limit=2`,
       token: token,
-    },[token]);
+    },
+    [token]
+  );
 
-  const [favRouteList, refetchFavRouteList] = useFetch<RouteHistory[]>({
+  const [favRouteList, refetchFavRouteList] = useFetch<RouteHistory[]>(
+    {
       method: "GET",
       url: `/route/user/fav/${userID}/?limit=5`,
-      token: token}, [token]);
+      token: token,
+    },
+    [token]
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      refetchRouteList();
+      refetchFavRouteList();
+    }, [])
+  );
 
   useEffect(() => {
     const updateDate = () => {
@@ -299,6 +314,25 @@ export default function HomeScreen() {
                     }}
                   />
                 ))}
+                {routeList.length === 0 && (
+                  <View
+                    style={{
+                      alignItems: "center",
+                      justifyContent: "center",
+                      marginVertical: 8,
+                    }}
+                  >
+                    <Text
+                      variant="bodyLarge"
+                      style={{
+                        textAlign: "center",
+                        color: theme.colors.outline,
+                      }}
+                    >
+                      {t("Plan your route to see your history")}
+                    </Text>
+                  </View>
+                )}
               </View>
             </View>
           </View>
@@ -365,6 +399,25 @@ export default function HomeScreen() {
                   }}
                 />
               ))}
+              {favRouteList.length === 0 && (
+                <View
+                  style={{
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginVertical: 8,
+                  }}
+                >
+                  <Text
+                    variant="bodyLarge"
+                    style={{
+                      color: theme.colors.outline,
+                      textAlign: "center",
+                    }}
+                  >
+                    {t("Add your favorite route by tapping the bookmark icon")}
+                  </Text>
+                </View>
+              )}
             </View>
           </View>
         )}

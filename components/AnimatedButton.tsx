@@ -45,7 +45,7 @@ export const AnimatedButton = ({
       onPressOut={onPressOut}
       onPress={onPress}
     >
-      <Animated.View
+      <Animated.View 
         style={[
           styles.roundedRectangle,
           {

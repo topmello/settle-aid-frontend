@@ -166,6 +166,7 @@ export default function HistoryOverviewScreen() {
         >
           {routeList?.map((result, index) => (
             <RouteCard
+              index={index}
               key={result.route.route_id}
               routeResult={result}
               isSimplified={false}
