@@ -37,36 +37,22 @@ export default function HistoryOverviewScreen() {
     setShowConfirmation(true);
   };
 
-  const requestOptions: RequestOptions = {
+  const voteRequestOptions: RequestOptions = {
     method: "POST",
     url: `/vote/`,
     token: token,
   };
 
-  const [, executeVote] = useFetch(requestOptions, [], null, false, 'Voted');
+
+  const [, executeVote] = useFetch(voteRequestOptions, [], null, false, 'Voted');
 
   const handleFavRoute = async (route_id: number) => {
     try {
-      await executeVote({ ...requestOptions, data: { route_id, vote: true } });
+      await executeVote({ ...voteRequestOptions, url: `/vote/${route_id}`});
 
-      console.log("Voted");
     } catch (error) {
       const err = error as ErrorResponse;
-  
-      if (err.data?.details?.type === "already_voted") {
-        console.log('Unvoting')
-        try {
-          
-          await executeVote({ ...requestOptions, data: { route_id, vote: false } });
-          console.log("Unvoted");
-        } catch (unvoteError) {
-          const err = unvoteError as ErrorResponse;
-          console.error("Error while unvoting:", err.data?.details.msg);
-        }
-      } else {
-        console.error("Some other error occurred:", err.data?.details.msg);
-        return;
-      }
+      return;
     }
   };
   
