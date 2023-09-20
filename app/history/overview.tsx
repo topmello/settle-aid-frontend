@@ -38,7 +38,7 @@ export default function HistoryOverviewScreen() {
   };
 
 
-  const [, executeVote] = useFetch(voteRequestOptions, [], null, false, 'Voted');
+  const [, executeVote] = useFetch(voteRequestOptions, [], null, false, 'Added to favourites');
 
   const handleFavRoute = async (route_id: number) => {
     try {
