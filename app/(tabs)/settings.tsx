@@ -71,7 +71,9 @@ export default function SettingsScreen() {
   const [adminAuthStatus, setAdminAuthStatus] = useState("Idle");
   const { pushNotification } = useNotification();
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, {
+      backgroundColor: paperTheme.colors.background,
+    }]}>
       <Text
           style={{
             fontSize: 24,

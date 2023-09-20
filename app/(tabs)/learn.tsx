@@ -41,6 +41,7 @@ export default function LearnScreen() {
       style={{
         flex: 1,
         flexDirection: "column",
+        backgroundColor: theme.colors.background,
       }}
     >
       <Text
