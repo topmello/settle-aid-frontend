@@ -28,6 +28,8 @@ const initialState: AppState = {
   privacyChecked: false,
 };
 
+export const selectIsLoading = (state: any) => state.app.isLoading;
+export const selectIsFail = (state: any) => state.app.isFail;
 export const selectTheme = (state: any) => state.app.theme;
 export const selectLanguage = (state: any) => state.app.language;
 export const selectPrivacyChecked = (state: any) => state.app.privacyChecked;

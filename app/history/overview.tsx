@@ -11,7 +11,7 @@ import {
 import { Button, Text } from "react-native-paper";
 import { useTranslation } from "react-i18next"; // <-- Import the hook
 import { useTheme } from "react-native-paper";
-import { router, useLocalSearchParams, useRouter } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import ArrowBackIcon from "../../assets/images/icons/arrow_back.svg";
 import { useSelector } from "react-redux";
 import { selectUserId, selectToken } from "../../store/authSlice";
@@ -19,26 +19,17 @@ import RouteCard from "../../components/RouteCard";
 import { RequestOptions } from "../../api/fetch";
 import useFetch from "../../hooks/useFetch";
 import { RouteHistory } from "../../types/route";
-import { CustomError, ErrorResponse } from "../../types/errorResponse";
+import useEventScheduler from "../../hooks/useEventScheduler";
+
 
 export default function HistoryOverviewScreen() {
   const { t } = useTranslation();
   const theme = useTheme();
-  const userID = useSelector(selectUserId);
   const token = useSelector(selectToken);
 
+  const { routeJSON } = useLocalSearchParams();
   // const {routeList} = params;
-  const [routeList, refetchRouteList] = useFetch<RouteHistory[]>({
-    method: "GET",
-    url: `/route/user/${userID}/?limit=10`,
-    token: token,
-  },[token]);
-
-  // Callback function to update the confirmation state
-  const [showConfirmation, setShowConfirmation] = useState(false);
-  const handleEventAdded = () => {
-    setShowConfirmation(true);
-  };
+  const routeList: RouteHistory[] = JSON.parse(routeJSON as string);
 
   const voteRequestOptions: RequestOptions = {
     method: "POST",
@@ -46,18 +37,26 @@ export default function HistoryOverviewScreen() {
     token: token,
   };
 
-  const [, executeVote] = useFetch(voteRequestOptions, [], null, false, 'Added to favourites');
+
+  const [, executeVote] = useFetch(voteRequestOptions, [], null, false, 'Voted');
 
   const handleFavRoute = async (route_id: number) => {
     try {
       await executeVote({ ...voteRequestOptions, url: `/vote/${route_id}`});
-    } catch (error) {
 
-    } finally {
-      refetchRouteList();
+    } catch (error) {
+      return;
     }
   };
+
+  const {
+    isDatePickerVisible,
+    showDatePicker,
+    hideDatePicker,
+    handleDateConfirm
+  } = useEventScheduler();
   
+
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -164,14 +163,16 @@ export default function HistoryOverviewScreen() {
             paddingHorizontal: 16
           }}
         >
-          {routeList?.map((result, index) => (
+          {routeList.map((result, index) => (
             <RouteCard
-              index={index}
               key={result.route.route_id}
-              routeResult={result}
               isSimplified={false}
+              routeResult={result}
               handleFavRoute={handleFavRoute}
-              voted={result.voted_by_user}
+              isDatePickerVisible={isDatePickerVisible}
+              showDatePicker={showDatePicker}
+              hideDatePicker={hideDatePicker}
+              handleDateConfirm={handleDateConfirm}
             />
           ))}
         </View>

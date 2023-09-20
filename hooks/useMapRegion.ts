@@ -56,7 +56,6 @@ export const useMapRegion = ({data, routeState, mapRef}: {
   mapRef: React.RefObject<any>;
 }) => {
 
-  const [mapIsLoaded, setMapIsLoaded] = useState(false);
   const initialRender = useRef(true);
 
   const [region, setRegion] = useState<MapRegion>({
@@ -80,9 +79,10 @@ export const useMapRegion = ({data, routeState, mapRef}: {
       deltaLat = Math.max(deltaLat, Math.abs(location.latitude - routeState.latitude));
       deltaLon = Math.max(deltaLon, Math.abs(location.longitude - routeState.longitude));
     });
-    
+
     centerLat /= data["locations_coordinates"].length;
     centerLon /= data["locations_coordinates"].length;
+
     setRegion({
       latitude: routeState.latitude,
       longitude: routeState.longitude,
@@ -90,7 +90,6 @@ export const useMapRegion = ({data, routeState, mapRef}: {
       longitudeDelta: deltaLon * 2,
     })
 
-    setMapIsLoaded(true);
 
   }, [data, routeState])
 
@@ -152,7 +151,6 @@ export const useMapRegion = ({data, routeState, mapRef}: {
   return {
     region,
     handleLocationSelect,
-    handlePressRoute,
-    mapIsLoaded
+    handlePressRoute
   };
 }

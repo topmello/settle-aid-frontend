@@ -1,7 +1,7 @@
-import { useState, useMemo, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { router, useLocalSearchParams } from "expo-router";
-import { StyleSheet, Dimensions, SafeAreaView } from "react-native";
+import { SafeAreaView } from "react-native";
 import { View, Pressable } from "react-native";
 import { Text, useTheme, Button, ActivityIndicator } from "react-native-paper";
 import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from "react-native-maps";
@@ -17,7 +17,7 @@ import { locationIcons } from "../../constants/icons";
 import { mapDarkTheme } from "../../theme/map";
 import { selectTheme } from "../../store/appSlice";
 
-import { fetch, RequestOptions } from "../../api/fetch";
+import { RequestOptions } from "../../api/fetch";
 import useFetch from "../../hooks/useFetch";
 import { useSession } from "../../hooks/useSession";
 import {
@@ -26,17 +26,17 @@ import {
   Coordinates,
 } from "../../hooks/useMapRegion";
 import * as Calendar from "expo-calendar";
-import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Route } from "../../types/route";
+import { selectIsLoading } from "../../store/appSlice";
 
 export default function MapScreen() {
   const theme = useTheme();
   const { token, checkSession } = useSession();
   const currentTheme = useSelector(selectTheme);
   const routeState: RouteState = useSelector(selectRouteState);
+  const loading = useSelector(selectIsLoading);
 
   const routeJSON = useLocalSearchParams().routeJSON;
-  const [loading, setLoading] = useState(false);
 
   const [data, setData] = useState<RouteResult>({
     locations: [],
@@ -144,7 +144,7 @@ export default function MapScreen() {
 
   const mapRef = useRef<MapView>(null);
 
-  const { region, handleLocationSelect, handlePressRoute, mapIsLoaded } = useMapRegion({
+  const { region, handleLocationSelect, handlePressRoute } = useMapRegion({
     data,
     routeState,
     mapRef,
@@ -152,7 +152,7 @@ export default function MapScreen() {
   
 
   const fetchRoute = useCallback(async () => {
-    setLoading(true);
+
 
     if (typeof routeJSON === 'string') {
       try {
@@ -161,41 +161,35 @@ export default function MapScreen() {
         if (routeData && routeData.route_id && routeData.locations && routeData.route) {
           const { route_id, ...routeDataWithoutID } = routeData;
           setData(routeDataWithoutID);
-          setLoading(false);
           return; // return early so the fetch call is not made
         }
       } catch (error) {
         console.error("Failed to parse routeJSON:", error);
-        setLoading(false);
+
       }
     }
     await fetchData().catch((error) => {
       console.error("Failed to fetch route:", error);
-      setLoading(false);
+      return;
     })
     
   }, [routeState, token, mapRef, setData]);
   
   useEffect(() => {
-    setLoading(true);
     if (dataFromFetch) {
       setData(dataFromFetch as RouteResult);
     }
-    setLoading(false);
   }, [dataFromFetch]);
 
    // fetch route
    useEffect(() => {
-    setLoading(true);
     checkSession().then((isSessionVaild) => {
       if (!isSessionVaild) {
         router.replace("/auth/login");
       }
-      setLoading(false);
     });
     fetchRoute().catch((error) => {
       console.error("Failed to fetch route:", error);
-      setLoading(false);
     });
   }, [fetchRoute]);
 
@@ -313,7 +307,7 @@ export default function MapScreen() {
         </Button>}
       </View>
 
-      {mapIsLoaded && <MapView
+      <MapView
         provider={PROVIDER_GOOGLE}
         customMapStyle={currentTheme === "dark" ? mapDarkTheme : []}
         ref={mapRef}
@@ -350,7 +344,7 @@ export default function MapScreen() {
           strokeColor="rgba(227, 66, 52, 0.7)"
           lineDashPattern={[1, 5]}
         />
-      </MapView>}
+      </MapView>
 
       <ActivityIndicator animating={loading} size="large" />
 

@@ -14,7 +14,7 @@ import {
 import { Button, Text } from "react-native-paper";
 import { useTranslation } from "react-i18next"; // <-- Import the hook
 import { useTheme } from "react-native-paper";
-import { router, useLocalSearchParams, useRouter } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import ArrowBackIcon from "../../assets/images/icons/arrow_back.svg";
 import { useSelector } from "react-redux";
 import { selectUserId, selectToken } from "../../store/authSlice";
@@ -22,7 +22,7 @@ import RouteCard from "../../components/RouteCard";
 import { RequestOptions } from "../../api/fetch";
 import useFetch from "../../hooks/useFetch";
 import { RouteHistory } from "../../types/route";
-import { ErrorResponse, CustomError } from "../../types/errorResponse";
+import useEventScheduler from "../../hooks/useEventScheduler";
 
 export default function HistoryOverviewScreen() {
   const { t } = useTranslation();
@@ -61,6 +61,13 @@ export default function HistoryOverviewScreen() {
       refetchFavRouteList();
     }
   };
+
+  const {
+    isDatePickerVisible,
+    showDatePicker,
+    hideDatePicker,
+    handleDateConfirm
+  } = useEventScheduler();
 
   const styles = StyleSheet.create({
     container: {
@@ -171,11 +178,15 @@ export default function HistoryOverviewScreen() {
           {favRouteList?.map((result, index) => (
             <RouteCard
               index={index}
+              isSimplified={false}
               key={result.route.route_id}
               routeResult={result}
-              isSimplified={false}
               handleFavRoute={handleFavRoute}
               voted={result.voted_by_user}
+              isDatePickerVisible={isDatePickerVisible}
+              showDatePicker={showDatePicker}
+              hideDatePicker={hideDatePicker}
+              handleDateConfirm={handleDateConfirm}
             />
           ))}
         </View>

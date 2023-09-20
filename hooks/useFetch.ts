@@ -20,6 +20,7 @@ const useFetch = <T = any>(
   const dispatch = useDispatch<AppDispatch>();
 
   const { pushNotification } = useNotification();
+
   const { t } = useTranslation();
 
   const [data, setData] = useState<T | null>(initialData || null);
@@ -27,6 +28,9 @@ const useFetch = <T = any>(
   const { checkSession } = useSession();
 
   const fetchData = async (overrideOptions?: RequestOptions) => {
+    
+    dispatch(loading());
+
     const finalOptions = overrideOptions || requestOptions;
 
     const isSessionValid = await checkSession();
@@ -86,6 +90,7 @@ const useFetch = <T = any>(
       } else if  (response.data.details.type === "already_voted") {
 
         dispatch(fail({ message: response.data.details.type }));
+
         let method: Method = "DELETE"
         let newOptions = { ...finalOptions, method: method }
 
@@ -126,8 +131,6 @@ const useFetch = <T = any>(
   useEffect(() => {
     if (shouldFetchImmediately) {
       fetchData();
-
-
     }
   }, [
     requestOptions.token,
@@ -135,8 +138,6 @@ const useFetch = <T = any>(
     requestOptions.params,
     ...deps,
   ]);
-  
-
   return [data, fetchData] as [T | null, typeof fetchData];
 };
 
