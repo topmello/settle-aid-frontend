@@ -30,38 +30,35 @@ export default function HistoryOverviewScreen() {
   const userID = useSelector(selectUserId);
   const token = useSelector(selectToken);
 
-  const { favRouteJSON } = useLocalSearchParams();
+  const [favRouteList, refetchFavRouteList] = useFetch<RouteHistory[]>(
+    {
+      method: "GET",
+      url: `/route/user/fav/${userID}/?limit=10`,
+      token: token,
+    },
+    [token]
+  );
 
-  const routeList: RouteHistory[] = JSON.parse(favRouteJSON as string);
-
-  const requestOptions: RequestOptions = {
+  const voteRequestOptions: RequestOptions = {
     method: "POST",
     url: `/vote/`,
     token: token,
   };
 
-  const [, executeVote] = useFetch(requestOptions, [], null, false);
+  const [, executeVote] = useFetch(
+    voteRequestOptions,
+    [],
+    null,
+    false,
+    "Added to favourites"
+  );
 
   const handleFavRoute = async (route_id: number) => {
     try {
-      await executeVote({ ...requestOptions, data: { route_id, vote: true } });
-
-      console.log("Voted");
+      await executeVote({ ...voteRequestOptions, url: `/vote/${route_id}` });
     } catch (error) {
-      const err = error as ErrorResponse;
-  
-      if (err.data?.details?.type === "already_voted") {
-        try {
-          await executeVote({ ...requestOptions, data: { route_id, vote: false } });
-          console.log("Unvoted");
-        } catch (unvoteError) {
-          const err = unvoteError as ErrorResponse;
-          console.error("Error while unvoting:", err.data?.details.msg);
-        }
-      } else {
-        console.error("Some other error occurred:", err.data?.details.msg);
-        return;
-      }
+    } finally {
+      refetchFavRouteList();
     }
   };
 
@@ -164,17 +161,20 @@ export default function HistoryOverviewScreen() {
           </View>
         </View>
 
-        <View style={{
-          gap: 12,
-          marginHorizontal: 16,
-          marginBottom: 20,
-        }}>
-          {routeList.map((result, index) => (
+        <View
+          style={{
+            gap: 12,
+            marginHorizontal: 16,
+            marginBottom: 20,
+          }}
+        >
+          {favRouteList?.map((result, index) => (
             <RouteCard
               key={result.route.route_id}
               routeResult={result}
               isSimplified={false}
               handleFavRoute={handleFavRoute}
+              voted={result.voted_by_user}
             />
           ))}
         </View>

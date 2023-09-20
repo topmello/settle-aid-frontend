@@ -14,7 +14,6 @@ import {
 } from "react-native";
 import { Button, Text } from "react-native-paper";
 import { useTranslation } from "react-i18next";
-import AccountCircleIcon from "../../assets/images/icons/account_circle.svg";
 import RouteIcon from "../../assets/images/icons/route.svg";
 import ArrowIcon from "../../assets/images/icons/navigate_next.svg";
 import { AnimatedButton } from "../../components/AnimatedButton";
@@ -50,23 +49,17 @@ export default function HomeScreen() {
     return `${dayName} ${day} ${monthName}`;
   };
 
-    const [routeList, refetchRouteList] = useFetch<RouteHistory[]>(
-        {
-            method: "GET",
-            url: `/route/user/${userID}/?limit=5`,
-            token: token,
-        },
-        [token]
-    );
+  const [routeList, refetchRouteList] = useFetch<RouteHistory[]>({
+      method: "GET",
+      url: `/route/user/${userID}/?limit=2`,
+      token: token,
+    },[token]);
 
-    const [favRouteList, refetchFavRouteList] = useFetch<RouteHistory[]>(
-        {
-            method: "GET",
-            url: `/route/user/fav/${userID}/?limit=5`,
-            token: token,
-        },
-        [token]
-    );
+  const [favRouteList, refetchFavRouteList] = useFetch<RouteHistory[]>({
+      method: "GET",
+      url: `/route/user/fav/${userID}/?limit=5`,
+      token: token}, [token]);
+
   useEffect(() => {
     const updateDate = () => {
       setCurrentDate(new Date());
@@ -137,7 +130,7 @@ export default function HomeScreen() {
           <AnimatedButton
             color={theme.colors.amberContainer}
             style={{
-              paddingVertical: 12
+              paddingVertical: 12,
             }}
             onPress={() => {}}
           >
@@ -160,19 +153,26 @@ export default function HomeScreen() {
             </View>
           </AnimatedButton>
         </View>
-        <View style={{
-          paddingTop: 8
-        }}>
+        <View
+          style={{
+            paddingTop: 8,
+          }}
+        >
           <Text variant="titleLarge" style={styles.titleLarge}>
             {t("Start Here", { ns: "home" })}
           </Text>
-          <View style={[styles.containerView, {
-            gap: 12
-          }]}>
+          <View
+            style={[
+              styles.containerView,
+              {
+                gap: 12,
+              },
+            ]}
+          >
             <AnimatedButton
               color={theme.colors.purpleContainer}
               style={{
-                paddingVertical: 24
+                paddingVertical: 24,
               }}
               onPress={() => {
                 router.push("/route/activity");
@@ -195,9 +195,7 @@ export default function HomeScreen() {
                       fill={theme.colors.onPurpleContainer}
                     />
                   </View>
-                  <Text
-                    style={{ color: theme.colors.onPurpleContainer }}
-                  >
+                  <Text style={{ color: theme.colors.onPurpleContainer }}>
                     {t("Plan your trip", { ns: "home" })}
                   </Text>
                 </View>
@@ -207,7 +205,7 @@ export default function HomeScreen() {
               height={76}
               color={theme.colors.successContainer}
               style={{
-                paddingVertical: 24
+                paddingVertical: 24,
               }}
               onPress={() => {
                 router.push("/track/track");
@@ -325,29 +323,29 @@ export default function HomeScreen() {
                 {t("Favorite Route", { ns: "home" })}
               </Text>
               <Pressable onPress={() => handlePressMoreFavorite()}>
-                  <View
+                <View
+                  style={{
+                    alignItems: "center",
+                    marginRight: 16,
+                    marginTop: 10,
+                    flexDirection: "row",
+                  }}
+                >
+                  <Text
                     style={{
-                      alignItems: "center",
-                      marginRight: 16,
-                      marginTop: 10,
-                      flexDirection: "row",
+                      color: theme.colors.primary,
+                      fontWeight: "bold",
                     }}
                   >
-                    <Text
-                      style={{
-                        color: theme.colors.primary,
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {t("comm:More")}
-                    </Text>
-                    <ArrowIcon
-                      width={22}
-                      height={22}
-                      fill={theme.colors.primary}
-                    />
-                  </View>
-                </Pressable>
+                    {t("comm:More")}
+                  </Text>
+                  <ArrowIcon
+                    width={22}
+                    height={22}
+                    fill={theme.colors.primary}
+                  />
+                </View>
+              </Pressable>
             </View>
 
             <View
@@ -370,15 +368,20 @@ export default function HomeScreen() {
             </View>
           </View>
         )}
-        <View style={{
-          width: "100%",
-          flexDirection: "row",
-          justifyContent: "center",
-          marginVertical: 24
-        }}>
-          <Text variant="bodyLarge" style={{
-            color: theme.colors.outline,
-          }}>
+        <View
+          style={{
+            width: "100%",
+            flexDirection: "row",
+            justifyContent: "center",
+            marginVertical: 24,
+          }}
+        >
+          <Text
+            variant="bodyLarge"
+            style={{
+              color: theme.colors.outline,
+            }}
+          >
             More features coming soon...
           </Text>
         </View>
@@ -390,7 +393,6 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   scrollView: {
     flexGrow: 1,
-    flexDirection: "column",
   },
   containerView: {
     marginHorizontal: 16,
@@ -403,7 +405,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flex: 1,
     paddingTop: 24,
-    paddingBottom: 8
+    paddingBottom: 8,
   },
   headerText: {
     fontWeight: "bold",
@@ -426,7 +428,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flex: 1,
     alignItems: "center",
-    gap: 8
+    gap: 8,
   },
   iconStyle: {
     // marginHorizontal: 18,
@@ -440,7 +442,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    gap: 8
+    gap: 8,
   },
   moreIcon: {
     marginTop: 2,
@@ -449,7 +451,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginTop: 12
+    marginTop: 12,
   },
   dateText: {
     marginHorizontal: 16,

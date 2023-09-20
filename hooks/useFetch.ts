@@ -92,7 +92,7 @@ const useFetch = <T = any>(
         await fetch(newOptions).then((res) => {
           if (res.status === 204) {
             pushNotification({
-              message: t("Route unsaved", {
+              message: t("Remove route from favorite", {
                 ns: "route",
               }),
               type: "success",

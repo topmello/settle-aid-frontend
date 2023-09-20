@@ -19,4 +19,5 @@ export interface Route extends RouteResult {
 export interface RouteHistory {
   num_votes: number;
   route: Route;
+  voted_by_user: boolean;
 }

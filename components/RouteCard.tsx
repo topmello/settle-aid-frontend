@@ -18,6 +18,7 @@ interface CardProps {
   isSimplified: boolean;
   handleFavRoute?: (route_id: number) => Promise<void>;
   onPressCard?: () => void;
+  voted?: boolean;
 }
 
 const RouteCard: React.FC<CardProps> = ({
@@ -25,6 +26,7 @@ const RouteCard: React.FC<CardProps> = ({
   isSimplified,
   handleFavRoute,
   onPressCard,
+  voted = false,
 }) => {
   const Wrapper = isSimplified ? AnimatedButton : View;
   const theme = useAppTheme();
@@ -200,7 +202,6 @@ const RouteCard: React.FC<CardProps> = ({
     tags_container: {
       flexDirection: "row",
       marginTop: 2,
-      width: 400
     },
     tag: {
       fontSize: 14,
@@ -227,32 +228,38 @@ const RouteCard: React.FC<CardProps> = ({
   });
 
   return (
-    <AnimatedButton onPress={onPressCard} color={theme.colors.infoContainer} style={{
-      paddingHorizontal: 20,
-      overflow: "hidden",
-    }}>
+    <AnimatedButton
+      onPress={onPressCard}
+      color={theme.colors.infoContainer}
+      style={{
+        paddingHorizontal: 20,
+        overflow: "hidden",
+      }}
+    >
       <Text style={styles.card_title}>{routeResult.route.locations[0]}</Text>
       <View style={styles.tags_container}>
-        {routeResult.route.locations.map((location, index) => (
-          <Text
-            key={index}
-            style={styles.tag}
-            numberOfLines={1}
-            ellipsizeMode="tail"
-          >
-            {`#${location}`}
-          </Text>
-        ))}
+        <Text
+          style={styles.tag}
+          numberOfLines={1}
+          ellipsizeMode="tail"
+        >
+          {routeResult.route.locations.map((location, index) => `#${location}`)}
+        </Text>
       </View>
       {!isSimplified && (
         <View style={styles.button_container}>
-          <IconButton icon="bookmark-outline" theme={{
-            colors: {
-              onPrimary: theme.colors.info,
-              primary: theme.colors.onInfo,
-              surfaceVariant: theme.colors.info,
-            }
-          }} mode="contained" onPress={() => handleFavRoute(routeResult.route.route_id)} />
+          <IconButton
+            icon={voted ? "bookmark" : "bookmark-outline"}
+            theme={{
+              colors: {
+                onPrimary: theme.colors.info,
+                primary: theme.colors.onInfo,
+                surfaceVariant: theme.colors.info,
+              },
+            }}
+            mode="contained"
+            onPress={() => handleFavRoute(routeResult.route.route_id)}
+          />
           <Button
             mode="outlined"
             textColor={theme.colors.info}

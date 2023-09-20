@@ -27,9 +27,12 @@ export default function HistoryOverviewScreen() {
   const userID = useSelector(selectUserId);
   const token = useSelector(selectToken);
 
-  const { routeJSON } = useLocalSearchParams();
   // const {routeList} = params;
-  const routeList: RouteHistory[] = JSON.parse(routeJSON as string);
+  const [routeList, refetchRouteList] = useFetch<RouteHistory[]>({
+    method: "GET",
+    url: `/route/user/${userID}/?limit=10`,
+    token: token,
+  },[token]);
 
   // Callback function to update the confirmation state
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -43,20 +46,18 @@ export default function HistoryOverviewScreen() {
     token: token,
   };
 
-
-  const [, executeVote] = useFetch(voteRequestOptions, [], null, false, 'Voted');
+  const [, executeVote] = useFetch(voteRequestOptions, [], null, false, 'Added to favourites');
 
   const handleFavRoute = async (route_id: number) => {
     try {
       await executeVote({ ...voteRequestOptions, url: `/vote/${route_id}`});
-
     } catch (error) {
-      const err = error as ErrorResponse;
-      return;
+
+    } finally {
+      refetchRouteList();
     }
   };
   
-
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -163,12 +164,13 @@ export default function HistoryOverviewScreen() {
             paddingHorizontal: 16
           }}
         >
-          {routeList.map((result, index) => (
+          {routeList?.map((result, index) => (
             <RouteCard
               key={result.route.route_id}
               routeResult={result}
               isSimplified={false}
               handleFavRoute={handleFavRoute}
+              voted={result.voted_by_user}
             />
           ))}
         </View>
