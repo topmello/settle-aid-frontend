@@ -171,8 +171,8 @@ export default function RouteActivityScreen() {
             onPress: () => {
               addPromptToActivity(id, prompt, isPositive);
             },
-          }
-        })
+          },
+        });
       } else {
         console.error("Activity not found for prompt: ", prompt);
       }
@@ -221,179 +221,175 @@ export default function RouteActivityScreen() {
           {t("Tell us more about your preferences", { ns: "route" })}
         </Text>
       </View>
-      <View style={{
-        flex: 1,
-        justifyContent: "center",
-      }}>
-        <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      <View
         style={{
-          paddingTop: 18,
-          paddingBottom: 8,
+          flex: 1,
           justifyContent: "center",
         }}
       >
-        <ScrollView
-          contentContainerStyle={{
-            paddingBottom: 20,
-            justifyContent: "center",
-            gap: 8
-          }}
-        >
-          {activityPrompts.map((activity) => (
-            <List.Accordion
-              key={activity.id}
-              style={{ width: "100%", paddingVertical: 0 }}
-              title={t(activity.name, { ns: "route" })}
-              titleStyle={{
-                color: theme.colors.onPrimaryContainer,
-                fontWeight: "bold",
-              }}
-              description={activity.positivePrompts
-                .map((val) => `#${val}`)
-                .join(" ")}
-              onPress={() => {
-                setSelectedActivity(activity);
-              }}
-              expanded={selectedActivity?.id === activity.id}
-              left={(props) =>
-                React.createElement(activity.logo, {
-                  width: 32,
-                  height: 32,
-                  marginLeft: 10,
-                  ...props,
-                })
-              }
-            >
-              <View
-                style={{
-                  paddingLeft: 0,
-                  paddingBottom: 8,
-                  width: "100%",
-                  backgroundColor: theme.colors.surface,
+        <View style={{ justifyContent: "center" }}>
+          <ScrollView
+            contentContainerStyle={{
+              paddingTop: 18,
+              paddingBottom: 20,
+              justifyContent: "center",
+              gap: 8,
+            }}
+          >
+            {activityPrompts.map((activity) => (
+              <List.Accordion
+                key={activity.id}
+                style={{ width: "100%", paddingVertical: 0 }}
+                title={t(activity.name, { ns: "route" })}
+                titleStyle={{
+                  color: theme.colors.onPrimaryContainer,
+                  fontWeight: "bold",
                 }}
+                description={activity.positivePrompts
+                  .map((val) => `#${val}`)
+                  .join(" ")}
+                onPress={() => {
+                  setSelectedActivity(activity);
+                }}
+                expanded={selectedActivity?.id === activity.id}
+                left={(props) =>
+                  React.createElement(activity.logo, {
+                    width: 32,
+                    height: 32,
+                    marginLeft: 10,
+                    ...props,
+                  })
+                }
               >
-                <Divider />
                 <View
                   style={{
-                    paddingHorizontal: 16,
-                    paddingTop: 8,
-                    paddingBottom: 4,
-                    flexDirection: "row",
-                    flexWrap: "wrap",
+                    paddingLeft: 0,
+                    paddingBottom: 8,
+                    width: "100%",
+                    backgroundColor: theme.colors.surface,
                   }}
                 >
-                  {activity.positivePrompts.map((prompt) => (
-                    <Chip
-                      icon="heart-outline"
-                      mode="outlined"
-                      selectedColor={theme.colors.primary}
-                      onClose={() => {
-                        removePromptFromActivity(activity.id, prompt);
-                      }}
-                      style={{ margin: 4 }}
-                      key={prompt}
-                    >
-                      {prompt}
-                    </Chip>
-                  ))}
-                  {activity.negativePrompts.map((prompt) => (
-                    <Chip
-                      icon="cancel"
-                      mode="outlined"
-                      selectedColor={theme.colors.error}
-                      theme={{
-                        colors: {
-                          primary: theme.colors.error,
-                        },
-                      }}
-                      onClose={() => {
-                        removePromptFromActivity(activity.id, prompt, false);
-                      }}
-                      style={{ margin: 4 }}
-                      key={prompt}
-                    >
-                      {prompt}
-                    </Chip>
-                  ))}
-                </View>
-                <View style={style.promptRow}>
-                  <TextInput
-                    style={style.promptInput}
-                    outlineStyle={{
-                      ...style.promptInputOutline,
-                      borderColor: theme.colors.primary,
-                    }}
-                    left={<TextInput.Icon
-                      icon="heart-outline"
-                    />}
-                    mode="outlined"
-                    placeholder={t("Add things you love", { ns: "route" })}
-                    value={tempPositivePrompt}
-                    onChangeText={setTempPositivePrompt}
-                    dense
-                  />
-                  <Button
-                    buttonColor={theme.colors.primaryContainer}
-                    textColor={theme.colors.onPrimaryContainer}
-                    onPress={() => {
-                      if (tempPositivePrompt.length > 0) {
-                        addPromptToActivity(activity.id, tempPositivePrompt);
-                        setTempPositivePrompt("");
-                      } else {
-                        pushNotification({
-                          message: t("Please enter a prompt", { ns: "route" }),
-                          type: "error",
-                        })
-                      }
+                  <Divider />
+                  <View
+                    style={{
+                      paddingHorizontal: 16,
+                      paddingTop: 8,
+                      paddingBottom: 4,
+                      flexDirection: "row",
+                      flexWrap: "wrap",
                     }}
                   >
-                    {t("Love", { ns: "route" })}
-                  </Button>
+                    {activity.positivePrompts.map((prompt) => (
+                      <Chip
+                        icon="heart-outline"
+                        mode="outlined"
+                        selectedColor={theme.colors.primary}
+                        onClose={() => {
+                          removePromptFromActivity(activity.id, prompt);
+                        }}
+                        style={{ margin: 4 }}
+                        key={prompt}
+                      >
+                        {prompt}
+                      </Chip>
+                    ))}
+                    {activity.negativePrompts.map((prompt) => (
+                      <Chip
+                        icon="cancel"
+                        mode="outlined"
+                        selectedColor={theme.colors.error}
+                        theme={{
+                          colors: {
+                            primary: theme.colors.error,
+                          },
+                        }}
+                        onClose={() => {
+                          removePromptFromActivity(activity.id, prompt, false);
+                        }}
+                        style={{ margin: 4 }}
+                        key={prompt}
+                      >
+                        {prompt}
+                      </Chip>
+                    ))}
+                  </View>
+                  <View style={style.promptRow}>
+                    <TextInput
+                      style={style.promptInput}
+                      outlineStyle={{
+                        ...style.promptInputOutline,
+                        borderColor: theme.colors.primary,
+                      }}
+                      left={<TextInput.Icon icon="heart-outline" />}
+                      mode="outlined"
+                      placeholder={t("Add things you love", { ns: "route" })}
+                      value={tempPositivePrompt}
+                      onChangeText={setTempPositivePrompt}
+                      dense
+                    />
+                    <Button
+                      buttonColor={theme.colors.primaryContainer}
+                      textColor={theme.colors.onPrimaryContainer}
+                      onPress={() => {
+                        if (tempPositivePrompt.length > 0) {
+                          addPromptToActivity(activity.id, tempPositivePrompt);
+                          setTempPositivePrompt("");
+                        } else {
+                          pushNotification({
+                            message: t("Please enter a prompt", {
+                              ns: "route",
+                            }),
+                            type: "error",
+                          });
+                        }
+                      }}
+                    >
+                      {t("Love", { ns: "route" })}
+                    </Button>
+                  </View>
+                  <View style={style.promptRow}>
+                    <TextInput
+                      style={style.promptInput}
+                      outlineStyle={{
+                        ...style.promptInputOutline,
+                        borderColor: theme.colors.error,
+                      }}
+                      left={<TextInput.Icon icon="cancel" />}
+                      mode="outlined"
+                      placeholder={t("Add things to avoid", { ns: "route" })}
+                      value={tempNegativePrompt}
+                      onChangeText={setTempNegativePrompt}
+                      dense
+                    />
+                    <Button
+                      buttonColor={theme.colors.errorContainer}
+                      textColor={theme.colors.onErrorContainer}
+                      onPress={() => {
+                        if (tempNegativePrompt.length > 0) {
+                          addPromptToActivity(
+                            activity.id,
+                            tempNegativePrompt,
+                            false
+                          );
+                          setTempNegativePrompt("");
+                        } else {
+                          pushNotification({
+                            message: t("Please enter a prompt", {
+                              ns: "route",
+                            }),
+                            type: "error",
+                          });
+                        }
+                      }}
+                    >
+                      {t("Avoid", { ns: "route" })}
+                    </Button>
+                  </View>
                 </View>
-                <View style={style.promptRow}>
-                  <TextInput
-                    style={style.promptInput}
-                    outlineStyle={{
-                      ...style.promptInputOutline,
-                      borderColor: theme.colors.error,
-                    }}
-                    left={<TextInput.Icon
-                      icon="cancel"
-                    />}
-                    mode="outlined"
-                    placeholder={t("Add things to avoid", { ns: "route"})}
-                    value={tempNegativePrompt}
-                    onChangeText={setTempNegativePrompt}
-                    dense
-                  />
-                  <Button
-                    buttonColor={theme.colors.errorContainer}
-                    textColor={theme.colors.onErrorContainer}
-                    onPress={() => {
-                      if (tempNegativePrompt.length > 0) {
-                        addPromptToActivity(
-                          activity.id,
-                          tempNegativePrompt,
-                          false
-                        );
-                        setTempNegativePrompt("");
-                      } else {
-                        pushNotification({
-                          message: t("Please enter a prompt", { ns: "route" }),
-                          type: "error",
-                        })
-                      }
-                    }}
-                  >
-                    {t("Avoid", { ns: "route" })}
-                  </Button>
-                </View>
-              </View>
-            </List.Accordion>
-          ))}
-        </ScrollView>
-      </KeyboardAvoidingView>
+              </List.Accordion>
+            ))}
+          </ScrollView>
+        </View>
       </View>
       <View
         style={{
@@ -409,11 +405,11 @@ export default function RouteActivityScreen() {
             dispatch(
               setQueryWithLocationType({
                 location_type: activityPrompts.map((activity) => activity.id),
-                query: activityPrompts.map((activity) =>
-                  activity.positivePrompts.join(",") || ""
+                query: activityPrompts.map(
+                  (activity) => activity.positivePrompts.join(",") || ""
                 ),
-                negative_query: activityPrompts.map((activity) =>
-                  activity.negativePrompts.join(",") || ""
+                negative_query: activityPrompts.map(
+                  (activity) => activity.negativePrompts.join(",") || ""
                 ),
               })
             );

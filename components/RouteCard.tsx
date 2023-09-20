@@ -8,8 +8,18 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import * as Print from "expo-print";
 import * as Sharing from "expo-sharing";
 import { useAppTheme } from "../theme/theme";
-import Animated, { FadeOutRight, Layout, FadeInRight } from "react-native-reanimated";
+import Animated, {
+  FadeOutRight,
+  Layout,
+  FadeInRight,
+} from "react-native-reanimated";
 import generatePDF from "../utils/generatePDF";
+import Animated, {
+  FadeOutRight,
+  SlideInRight,
+  Layout,
+  FadeInRight,
+} from "react-native-reanimated";
 
 interface CardProps {
   routeResult: RouteHistory;
@@ -60,7 +70,6 @@ const RouteCard: React.FC<CardProps> = ({
     card_title: {
       fontWeight: "bold",
       fontSize: 20,
-      color: theme.colors.info,
     },
     card_description: {
       fontSize: 20,
@@ -77,7 +86,6 @@ const RouteCard: React.FC<CardProps> = ({
     tag: {
       fontSize: 14,
       marginRight: 8,
-      color: theme.colors.info,
     },
     button_container: {
       flexDirection: "row",
@@ -85,85 +93,92 @@ const RouteCard: React.FC<CardProps> = ({
       alignItems: "center",
       marginTop: 16,
     },
-    circle: {
-      width: 34,
-      height: 34,
-      borderRadius: 42,
-      justifyContent: "center",
-      alignItems: "center",
-      backgroundColor: theme.colors.info,
-    },
     button: {
       marginLeft: 8,
     },
   });
 
   return (
-    <Animated.View entering={FadeInRight.delay(index*50)} exiting={FadeOutRight} layout={Layout.damping()}>
-      <AnimatedButton
-      onPress={onPressCard}
-      color={theme.colors.infoContainer}
-      style={{
-        paddingHorizontal: 20,
-        overflow: "hidden",
-      }}
+    <Animated.View
+      entering={FadeInRight.delay(index * 50)}
+      exiting={FadeOutRight}
+      layout={Layout.damping()}
     >
-      <Text style={styles.card_title}>{routeResult.route.locations[0]}</Text>
-      <View style={styles.tags_container}>
+      <AnimatedButton
+        onPress={onPressCard}
+        color={theme.colors.infoContainer}
+        style={{
+          paddingHorizontal: 20,
+          overflow: "hidden",
+        }}
+      >
         <Text
-          style={styles.tag}
-          numberOfLines={1}
-          ellipsizeMode="tail"
+          style={[
+            styles.card_title,
+            {
+              color: theme.colors.info,
+            },
+          ]}
         >
-          {routeResult.route.locations.map((location, index) => `#${location}`)}
+          {routeResult.route.locations[0]}
         </Text>
-      </View>
-      {!isSimplified && (
-        <View style={styles.button_container}>
-          <IconButton
-            icon={voted ? "bookmark" : "bookmark-outline"}
-            theme={{
-              colors: {
-                onPrimary: theme.colors.info,
-                primary: theme.colors.onInfo,
-                surfaceVariant: theme.colors.info,
+        <View style={styles.tags_container}>
+          <Text
+            style={[
+              styles.tag,
+              {
+                color: theme.colors.info,
               },
-            }}
-            mode="contained"
-            onPress={() => handleFavRoute(routeResult.route.route_id)}
-          />
-          <Button
-            mode="outlined"
-            textColor={theme.colors.info}
-            onPress={showDatePicker}
-            style={styles.button}
+            ]}
+            numberOfLines={1}
+            ellipsizeMode="tail"
           >
-            Schedule
-          </Button>
-
-          <DateTimePickerModal
-            isVisible={isDatePickerVisible}
-            mode="date"
-            onConfirm={(date) => {
-              handleDateConfirm(date, routeResult.route);
-            }}
-            onCancel={hideDatePicker}
-          />
-
-          <Button
-            mode="outlined"
-            textColor={theme.colors.info}
-            onPress={() => {
-              generatePDF(routeResult.route);
-              }
-            }
-            style={styles.button}
-          >
-            Share
-          </Button>
+            {routeResult.route.locations.map(
+              (location, index) => `#${location}`
+            )}
+          </Text>
         </View>
-      )}
-    </AnimatedButton>
+        {!isSimplified && (
+          <View style={styles.button_container}>
+            <IconButton
+              icon={voted ? "bookmark" : "bookmark-outline"}
+              theme={{
+                colors: {
+                  onPrimary: theme.colors.info,
+                  primary: theme.colors.onInfo,
+                  surfaceVariant: theme.colors.info,
+                },
+              }}
+              mode="contained"
+              onPress={() => handleFavRoute(routeResult.route.route_id)}
+            />
+            <Button
+              mode="outlined"
+              textColor={theme.colors.info}
+              onPress={showDatePicker}
+              style={styles.button}
+            >
+              Schedule
+            </Button>
+
+            <DateTimePickerModal
+              isVisible={isDatePickerVisible}
+              mode="date"
+              onConfirm={handleConfirm}
+              onCancel={hideDatePicker}
+            />
+
+            <Button
+              mode="outlined"
+              textColor={theme.colors.info}
+              onPress={generatePDF}
+              style={styles.button}
+            >
+              Share
+            </Button>
+          </View>
+        )}
+      </AnimatedButton>
     </Animated.View>
   );
 };

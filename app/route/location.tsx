@@ -55,7 +55,7 @@ export default function RouteGenLocation() {
 
   const privacyChecked = useSelector(selectPrivacyChecked);
 
-  const isLoading  = useSelector((state: RootState) => state.app.isLoading);
+  const isLoading = useSelector((state: RootState) => state.app.isLoading);
   const locationState = useSelector(selectLonLat);
   const distanceThres = useSelector(selectDistanceThres);
   const fetchLocation = useCurrentLocation();
@@ -127,20 +127,25 @@ export default function RouteGenLocation() {
               justifyContent: "flex-start",
             }}
           >
-            <View style={{
-              position: "absolute",
-              width: "100%",
-              padding: 20,
-              bottom: "5%",
-            }}>
-            <Button mode="contained-tonal" onPress={() => setShowLocationInput(false)}>
-              Cancel
-            </Button>
+            <View
+              style={{
+                position: "absolute",
+                width: "100%",
+                padding: 20,
+                bottom: "5%",
+              }}
+            >
+              <Button
+                mode="contained-tonal"
+                onPress={() => setShowLocationInput(false)}
+              >
+                Cancel
+              </Button>
             </View>
-               <GooglePlacesAutocomplete
-               placeholder="Enter Location"
+            <GooglePlacesAutocomplete
+              placeholder="Enter Location"
               styles={{
-                container:{
+                container: {
                   marginHorizontal: 20,
                 },
                 textInput: {
@@ -173,7 +178,7 @@ export default function RouteGenLocation() {
                 poweredContainer: {
                   backgroundColor: theme.colors.surface,
                   color: theme.colors.onSurface,
-                }
+                },
               }}
               fetchDetails={true}
               GooglePlacesDetailsQuery={{ fields: "geometry" }}
@@ -183,16 +188,18 @@ export default function RouteGenLocation() {
                     description: data.description,
                     geometry: details.geometry,
                   });
-                  dispatch(setLonLat({
-                    longitude: details.geometry.location.lng,
-                    latitude: details.geometry.location.lat,
-                  }))
-                  dispatch(loaded())
+                  dispatch(
+                    setLonLat({
+                      longitude: details.geometry.location.lng,
+                      latitude: details.geometry.location.lat,
+                    })
+                  );
+                  dispatch(loaded());
                 } else {
                   pushNotification({
                     message: t("Location not found", { ns: "route" }),
                     type: "error",
-                  })
+                  });
                 }
                 setShowLocationInput(false);
               }}
@@ -311,18 +318,16 @@ export default function RouteGenLocation() {
             >
               Hint: Press and Drag the pin to change location
             </Text>
-            {
-              searchedLocation && (
-                <Text
-                  variant="bodyLarge"
-                  style={{
-                    marginTop: 12,
-                  }}
-                >
-                  {searchedLocation.description}
-                </Text>
-              )
-            }
+            {searchedLocation && (
+              <Text
+                variant="bodyLarge"
+                style={{
+                  marginTop: 12,
+                }}
+              >
+                {searchedLocation.description}
+              </Text>
+            )}
           </View>
           <View
             style={{
@@ -383,10 +388,12 @@ export default function RouteGenLocation() {
             </Text>
           </View>
 
-          <Text style={{
-            fontSize: 20,
-            textAlign: "center",
-          }}>
+          <Text
+            style={{
+              fontSize: 20,
+              textAlign: "center",
+            }}
+          >
             {new Intl.NumberFormat().format(
               parseFloat((distanceThres / 1000).toFixed(2))
             )}{" "}

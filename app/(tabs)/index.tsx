@@ -17,7 +17,6 @@ import { useTranslation } from "react-i18next";
 import RouteIcon from "../../assets/images/icons/route.svg";
 import ArrowIcon from "../../assets/images/icons/navigate_next.svg";
 import { AnimatedButton } from "../../components/AnimatedButton";
-import LightCloudyIcon from "../../assets/images/weather/light_cloudy.svg";
 import PersonPinIcon from "../../assets/images/icons/person_pin.svg";
 
 import { router } from "expo-router";
@@ -28,6 +27,7 @@ import useFetch from "../../hooks/useFetch";
 import { RouteHistory } from "../../types/route";
 import { useAppTheme } from "../../theme/theme";
 import { useFocusEffect } from "expo-router";
+import { WeatherWidget } from "../../components/WeatherWidget";
 
 export default function HomeScreen() {
   const { t } = useTranslation();
@@ -133,31 +133,7 @@ export default function HomeScreen() {
           </Text>
         </View>
         <View style={[styles.containerView]}>
-          <AnimatedButton
-            color={theme.colors.amberContainer}
-            style={{
-              paddingVertical: 12,
-            }}
-            onPress={() => {}}
-          >
-            <LightCloudyIcon
-              style={{
-                position: "absolute",
-                top: -36,
-                left: -36,
-              }}
-              height={200}
-              width={200}
-            />
-            <View style={styles.weatherView}>
-              <Text variant="headlineLarge" style={styles.headerText}>
-                17 C°
-              </Text>
-              <Text variant="bodySmall" style={styles.headerText}>
-                {t("Cloudy", { ns: "home" })}
-              </Text>
-            </View>
-          </AnimatedButton>
+          <WeatherWidget />
         </View>
         <View
           style={{
@@ -453,12 +429,6 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontWeight: "bold",
-  },
-  weatherView: {
-    flex: 1,
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "flex-end",
   },
   titleLarge: {
     marginHorizontal: 16,

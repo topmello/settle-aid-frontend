@@ -17,9 +17,9 @@ export const AnimatedButton = ({
   style,
 }: {
   height?: number;
-  color: string;
+  color?: string;
   children: React.ReactNode;
-  onPress: () => void;
+  onPress?: () => void;
   style?: any;
 }) => {
   const scaleAnim = useRef(new Animated.Value(1)).current;
