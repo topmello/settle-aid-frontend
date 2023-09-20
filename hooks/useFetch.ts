@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { fetch, RequestOptions } from "../api/fetch";
+import { Method } from "axios";
 import { loading, loaded, fail } from "../store/appSlice";
 import { AppDispatch } from "../store";
 import { CustomError, ErrorResponse } from "../types/errorResponse";
@@ -83,12 +84,26 @@ const useFetch = <T = any>(
         throw new Error(response.data.details.msg)
 
       } else if  (response.data.details.type === "already_voted") {
-        console.log('already voted')
+
         dispatch(fail({ message: response.data.details.type }));
-        console.log(initialData)
-        let newOptions = { ...finalOptions, data: { ...initialData, vote: false } }
-        console.log(newOptions)
-        await fetch(newOptions)
+        let method: Method = "DELETE"
+        let newOptions = { ...finalOptions, method: method }
+
+        await fetch(newOptions).then((res) => {
+          if (res.status === 204) {
+            pushNotification({
+              message: t("Route unsaved", {
+                ns: "route",
+              }),
+              type: "success",
+            });
+            return res.data;
+          } else {
+            return;
+          }}).catch(err => {
+            console.log(JSON.stringify(err.response.data));
+            return;
+          })
         
         
       }
