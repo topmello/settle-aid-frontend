@@ -22,7 +22,6 @@ import RouteCard from "../../components/RouteCard";
 import { fetch } from "../../api/fetch";
 import { RouteHistory } from "../../types/route";
 import { ErrorResponse, CustomError } from "../../types/errorResponse";
-import { use } from "i18next";
 
 export default function HistoryOverviewScreen() {
   const { t } = useTranslation();

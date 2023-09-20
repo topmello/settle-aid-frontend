@@ -3,7 +3,7 @@ import React from "react";
 import { useState, useMemo, useRef, useCallback, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { RouteHistory } from "../types/route";
-import { useTheme, Button } from "react-native-paper";
+import { useTheme, Button, IconButton } from "react-native-paper";
 import { AnimatedButton } from "./AnimatedButton";
 import * as Calendar from "expo-calendar";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -200,6 +200,7 @@ const RouteCard: React.FC<CardProps> = ({
     tags_container: {
       flexDirection: "row",
       marginTop: 2,
+      width: 400
     },
     tag: {
       fontSize: 14,
@@ -210,6 +211,7 @@ const RouteCard: React.FC<CardProps> = ({
       flexDirection: "row",
       justifyContent: "flex-end",
       alignItems: "center",
+      marginTop: 16,
     },
     circle: {
       width: 34,
@@ -227,6 +229,7 @@ const RouteCard: React.FC<CardProps> = ({
   return (
     <AnimatedButton onPress={onPressCard} color={theme.colors.infoContainer} style={{
       paddingHorizontal: 20,
+      overflow: "hidden",
     }}>
       <Text style={styles.card_title}>{routeResult.route.locations[0]}</Text>
       <View style={styles.tags_container}>
@@ -243,16 +246,13 @@ const RouteCard: React.FC<CardProps> = ({
       </View>
       {!isSimplified && (
         <View style={styles.button_container}>
-          <TouchableOpacity
-            style={styles.circle}
-            onPress={() => handleFavRoute(routeResult.route.route_id)}
-          >
-            <Bookmark
-              fill={theme.colors.infoContainer}
-              width={24}
-              height={24}
-            />
-          </TouchableOpacity>
+          <IconButton icon="bookmark-outline" theme={{
+            colors: {
+              onPrimary: theme.colors.info,
+              primary: theme.colors.onInfo,
+              surfaceVariant: theme.colors.info,
+            }
+          }} mode="contained" onPress={() => handleFavRoute(routeResult.route.route_id)} />
           <Button
             mode="outlined"
             textColor={theme.colors.info}

@@ -67,7 +67,6 @@ export default function HomeScreen() {
         },
         [token]
     );
-
   useEffect(() => {
     const updateDate = () => {
       setCurrentDate(new Date());
@@ -206,7 +205,7 @@ export default function HomeScreen() {
             </AnimatedButton>
             <AnimatedButton
               height={76}
-              color={theme.colors.amberContainer}
+              color={theme.colors.successContainer}
               style={{
                 paddingVertical: 24
               }}
@@ -218,7 +217,7 @@ export default function HomeScreen() {
                 <PersonPinIcon
                   height={40}
                   width={40}
-                  fill={theme.colors.onAmberContainer}
+                  fill={theme.colors.onSuccessContainer}
                 />
                 <View style={styles.columnFlexStart}>
                   <View style={styles.rowSpaceBetween}>
@@ -226,14 +225,14 @@ export default function HomeScreen() {
                       variant="titleLarge"
                       style={[
                         styles.headerText,
-                        { color: theme.colors.onAmberContainer },
+                        { color: theme.colors.onSuccessContainer },
                       ]}
                     >
                       {t("Location Sharing", { ns: "home" })}
                     </Text>
                     <ArrowIcon
                       style={styles.moreIcon}
-                      fill={theme.colors.onAmberContainer}
+                      fill={theme.colors.onSuccessContainer}
                     />
                   </View>
                 </View>
@@ -261,7 +260,7 @@ export default function HomeScreen() {
                   <View
                     style={{
                       alignItems: "center",
-                      marginRight: 30,
+                      marginRight: 16,
                       marginTop: 10,
                       flexDirection: "row",
                     }}
@@ -329,7 +328,7 @@ export default function HomeScreen() {
                   <View
                     style={{
                       alignItems: "center",
-                      marginRight: 30,
+                      marginRight: 16,
                       marginTop: 10,
                       flexDirection: "row",
                     }}

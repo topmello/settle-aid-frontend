@@ -224,17 +224,17 @@ export default function RouteActivityScreen() {
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={{
+          paddingTop: 18,
+          paddingBottom: 8,
           flex: 1,
           justifyContent: "center",
         }}
       >
         <ScrollView
           contentContainerStyle={{
-            flex: 1,
             justifyContent: "center",
-            marginTop: 32,
             gap: 8,
-            paddingBottom: 32,
+            paddingBottom: 20,
             flexDirection: "column",
           }}
         >
