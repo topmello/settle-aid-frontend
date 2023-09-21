@@ -1,24 +1,18 @@
 import React, { useMemo } from "react";
 import { View, TouchableOpacity } from "react-native";
 import { ScrollView, FlatList } from "react-native-gesture-handler";
-import {
-  Text,
-  List,
-  useTheme,
-  Surface,
-  IconButton,
-} from "react-native-paper";
+import { Text, List, useTheme, Surface, IconButton } from "react-native-paper";
 import { RouteState } from "../store/routeSlice";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Tip } from "../tips/tipsTyped";
-import { RouteResult } from "../types/route";
+import { Route } from "../types/route";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { useTip } from "../store/TipContext";
 import { router } from "expo-router";
 
 type OverlayProps = {
   tipList: Tip[];
-  data: RouteResult;
+  data: Route;
   body: RouteState;
   handleLocationSelect: (location: any) => void;
   handlePressRoute: (index: number) => void;
@@ -107,10 +101,13 @@ const ResultOverlay: React.FC<OverlayProps> = ({
                     justifyContent: "center",
                   }}
                 >
-                  <IconButton icon="chevron-right" onPress={() => {
-                    setResultTip(item);
-                    router.push("/learn/detail");
-                  }} />
+                  <IconButton
+                    icon="chevron-right"
+                    onPress={() => {
+                      setResultTip(item);
+                      router.push("/learn/detail");
+                    }}
+                  />
                 </View>
               </Surface>
             )}
@@ -122,15 +119,15 @@ const ResultOverlay: React.FC<OverlayProps> = ({
             horizontal={true}
           />
 
-          { /** Destinations */}
+          {/** Destinations */}
           <List.Section>
-            {data?.locations.map((location: string, index: number) => {
-              const description = body?.location_type?.[index] || '';
+            {data.locations.map((location: string, index: number) => {
+              const description = body?.location_type?.[index] || "";
 
               const capitalizedDescription =
-                description && typeof description === 'string'
+                description && typeof description === "string"
                   ? description.charAt(0).toUpperCase() + description.slice(1)
-                  : '';
+                  : "";
 
               const Icon = locationIcons[body?.location_type[index]];
               return (
@@ -177,7 +174,7 @@ const ResultOverlay: React.FC<OverlayProps> = ({
               title="Instructions"
               left={(props) => <List.Icon {...props} icon="map-legend" />}
             >
-              {data?.instructions.map((instruction: string, index: number) => {
+              {data.instructions.map((instruction: string, index: number) => {
                 return (
                   <List.Item
                     key={index}

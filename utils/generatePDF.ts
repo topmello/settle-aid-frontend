@@ -1,8 +1,8 @@
 import * as Print from "expo-print";
 import * as Sharing from "expo-sharing";
-import { Route, RouteResult } from "../types/route";
+import { Route } from "../types/route";
 
-const generatePDF = async (route: Route | RouteResult) => {
+const generatePDF = async (route: Route) => {
   try {
     const locations = route.locations
       .map((location) => `<p>${location}</p>`)

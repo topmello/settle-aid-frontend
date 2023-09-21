@@ -64,7 +64,6 @@ export default function HomeScreen() {
       router.push({
         pathname: "/route/result",
         params: {
-          routeJSON: JSON.stringify(result.route),
           route_id_: result.route.route_id,
         },
       });
@@ -243,7 +242,7 @@ export default function HomeScreen() {
                   marginHorizontal: 16,
                 }}
               >
-                {routeList.slice(0, 2).map((result, index) => (
+                {routeList.map((result, index) => (
                   <RouteCard
                     key={index}
                     routeResult={result}

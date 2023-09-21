@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { RouteResult } from "../types/route";
+import { Route } from "../types/route";
 
 export type MapRegion = {
   latitude: number;
@@ -42,7 +42,7 @@ export const useMapRegion = ({
   routeState,
   mapRef,
 }: {
-  data: RouteResult;
+  data: Route;
   routeState: Coordinates;
   mapRef: React.RefObject<any>;
 }) => {

@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import * as Calendar from "expo-calendar";
 import { useNotification } from "./useNotification";
-import { Route, RouteResult } from "../types/route";
+import { Route } from "../types/route";
 
 const useEventScheduler = () => {
   // Notification
@@ -38,7 +38,7 @@ const useEventScheduler = () => {
     setDatePickerVisibility(false);
   }, []);
 
-  const addToCalendar = async (date: Date, route: Route | RouteResult) => {
+  const addToCalendar = async (date: Date, route: Route) => {
     const { status } = await Calendar.getCalendarPermissionsAsync();
 
     if (status !== "granted") {
@@ -83,7 +83,7 @@ const useEventScheduler = () => {
   };
 
   const handleDateConfirm = useCallback(
-    async (date: Date, route: Route | RouteResult) => {
+    async (date: Date, route: Route) => {
       try {
         await addToCalendar(date, route);
         hideDatePicker();

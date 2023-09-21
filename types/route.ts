@@ -1,4 +1,5 @@
-export interface RouteResult {
+export interface Route {
+  route_id: number;
   locations: string[];
   locations_coordinates: {
     latitude: number;
@@ -12,8 +13,9 @@ export interface RouteResult {
   duration: number;
 }
 
-export interface Route extends RouteResult {
-  route_id: number;
+export interface RouteGetResult {
+  num_votes: number;
+  route: Route;
 }
 
 export interface RouteHistory {

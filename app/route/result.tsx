@@ -23,14 +23,14 @@ import { locationIcons } from "../../constants/icons";
 import { mapDarkTheme } from "../../theme/map";
 import { selectTheme } from "../../store/appSlice";
 
-import { RequestOptions } from "../../api/fetch";
 import useFetch from "../../hooks/useFetch";
 import { useSession } from "../../hooks/useSession";
 import { useMapRegion, Coordinates } from "../../hooks/useMapRegion";
 import useEventScheduler from "../../hooks/useEventScheduler";
 import generatePDF from "../../utils/generatePDF";
-import { RouteResult, Route, RouteGetResult } from "../../types/route";
+import { Route, RouteGetResult } from "../../types/route";
 import { selectIsLoading } from "../../store/appSlice";
+import { use } from "i18next";
 
 const MORE_ICON = Platform.OS === "ios" ? "dots-horizontal" : "dots-vertical";
 
@@ -40,10 +40,11 @@ export default function MapScreen() {
   const routeState: RouteState = useSelector(selectRouteState);
   const loading = useSelector(selectIsLoading);
 
-  const routeJSON = useLocalSearchParams().routeJSON;
   const route_id_ = useLocalSearchParams().route_id_;
+  const [useHistory, setUseHistory] = useState(true);
 
-  const [data, setData] = useState<RouteResult>({
+  const [data, setData] = useState<Route>({
+    route_id: 0,
     locations: [],
     locations_coordinates: [
       {
@@ -84,15 +85,27 @@ export default function MapScreen() {
 
   const tipList: Array<Tip> = getTipForMode(tips, modes);
 
-  const requestOptions: RequestOptions = {
-    method: "POST",
-    url: "/search/v2/route/",
-    data: routeState,
-  };
+  const [dataFromFetch, fetchData] = useFetch<Route>(
+    {
+      method: "POST",
+      url: "/search/v2/route/",
+      data: routeState,
+    },
+    [routeState],
+    data,
+    false
+  );
 
-  const [dataFromFetch, fetchData] = useFetch<
-    RouteResult | RouteGetResult | null
-  >(requestOptions, [routeState], null, false);
+  const [routeDataFromHistory, fetchRouteDataFromHistory] =
+    useFetch<RouteGetResult>(
+      {
+        method: "GET",
+        url: `/route/${route_id_}`,
+      },
+      [route_id_],
+      { num_votes: 0, route: data },
+      false
+    );
 
   const mapRef = useRef<MapView>(null);
 
@@ -103,62 +116,39 @@ export default function MapScreen() {
   });
 
   const fetchRoute = useCallback(async () => {
-    if (typeof routeJSON === "string") {
+    if (typeof route_id_ === "string") {
       try {
-        const routeData: Route = JSON.parse(routeJSON);
-
-        if (
-          routeData &&
-          routeData.route_id &&
-          routeData.locations &&
-          routeData.route
-        ) {
-          const { route_id, ...routeDataWithoutID } = routeData;
-          setData(routeDataWithoutID);
-          return; // return early so the fetch call is not made
-        }
+        await fetchRouteDataFromHistory().then(() => {
+          setUseHistory(true);
+        });
+        return;
       } catch (error) {
-        console.error("Failed to parse routeJSON:", error);
-      }
-    } else if (typeof route_id_ === "string") {
-      try {
-        const route_id: number = parseInt(JSON.parse(route_id_));
-
-        const routeRequestOptions: RequestOptions = {
-          method: "GET",
-          url: `/route/${route_id}`,
-        };
-
-        const routeData = (await fetchData(
-          routeRequestOptions
-        )) as RouteGetResult;
-
-        if (routeData && routeData.route) {
-          if ("route_id" in routeData.route) {
-            const { route_id, ...routeDataWithoutID } = routeData.route;
-
-            setData(routeDataWithoutID);
-            return;
-          } else {
-            setData(routeData.route);
-            return;
-          }
-        }
-      } catch (error) {
-        console.error("Failed to parse routeJSON:", error);
+        console.error("Failed to fetch route:", error);
+        return;
       }
     }
-    await fetchData().catch((error) => {
+
+    try {
+      await fetchData().then(() => {
+        setUseHistory(false);
+      });
+    } catch (error) {
       console.error("Failed to fetch route:", error);
       return;
-    });
-  }, [routeState, mapRef, setData]);
+    }
+  }, [routeState, mapRef, setData, route_id_]);
 
   useEffect(() => {
-    if (dataFromFetch) {
-      setData(dataFromFetch as RouteResult);
+    if (!useHistory && dataFromFetch && dataFromFetch.locations.length > 0) {
+      setData(dataFromFetch as Route);
+    } else if (
+      useHistory &&
+      routeDataFromHistory &&
+      routeDataFromHistory.route
+    ) {
+      setData(routeDataFromHistory.route as Route);
     }
-  }, [dataFromFetch]);
+  }, [useHistory, dataFromFetch, routeDataFromHistory]);
 
   // fetch route
   useEffect(() => {
@@ -268,34 +258,38 @@ export default function MapScreen() {
         ) : (
           <View></View>
         )}
-        <Pressable
-          style={{
-            backgroundColor: theme.colors.primaryContainer,
-            borderRadius: 20,
-            width: 40,
-            height: 40,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: 1,
-          }}
-        >
-          <Menu
-            style={{ zIndex: 1 }}
-            visible={menuVisible}
-            onDismiss={closeMenu}
-            anchor={<Appbar.Action icon={MORE_ICON} onPress={openMenu} />}
-          >
-            <Menu.Item onPress={fetchRoute} title="Re-plan" />
-            <Menu.Item onPress={showDatePicker} title="Schedule" />
-            <Menu.Item
-              onPress={() => {
-                generatePDF(data);
+        <Menu
+          style={{ zIndex: 1 }}
+          visible={menuVisible}
+          onDismiss={closeMenu}
+          anchor={
+            <Appbar.Action
+              icon={MORE_ICON}
+              onPress={openMenu}
+              style={{
+                backgroundColor: theme.colors.primaryContainer,
+                borderRadius: 20,
+                width: 40,
+                height: 40,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
               }}
-              title="Share"
             />
-          </Menu>
-        </Pressable>
+          }
+        >
+          {typeof route_id_ !== "string" && (
+            <Menu.Item onPress={fetchRoute} title="Re-plan" />
+          )}
+          <Menu.Item onPress={showDatePicker} title="Schedule" />
+          <Menu.Item
+            onPress={() => {
+              generatePDF(data);
+            }}
+            title="Share"
+          />
+        </Menu>
+
         <DateTimePickerModal
           isVisible={isDatePickerVisible}
           mode="date"
