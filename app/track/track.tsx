@@ -1,4 +1,4 @@
-import { View, Pressable, StyleSheet } from "react-native";
+import { View, Pressable, StyleSheet, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAppTheme } from "../../theme/theme";
 import { useSession } from "../../hooks/useSession";
@@ -153,8 +153,15 @@ export default function TrackScreen() {
         <View
           style={{
             flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
           }}
-        ></View>
+        >
+          <Image
+            source={require("../../assets/images/animation/abstract-location-access.gif")}
+            style={{ width: 280, height: 170 }}
+          />
+        </View>
         <View
           style={{
             height: 180,

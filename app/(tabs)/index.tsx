@@ -36,21 +36,6 @@ export default function HomeScreen() {
   const userID = useSelector(selectUserId);
   const loading = useSelector(selectIsLoading);
 
-  const [currentDate, setCurrentDate] = useState(new Date());
-  const [translatedDate, setTranslatedDate] = useState("");
-
-  const getTranslatedDate = (date: Date) => {
-    const dayName = t(date.toLocaleDateString("en-US", { weekday: "long" }), {
-      ns: "home",
-    });
-    const day = date.getDate();
-    const monthName = t(date.toLocaleDateString("en-US", { month: "long" }), {
-      ns: "home",
-    });
-
-    return `${dayName} ${day} ${monthName}`;
-  };
-
   const [routeList, refetchRouteList] = useFetch<RouteHistory[]>(
     {
       method: "GET",
@@ -73,27 +58,6 @@ export default function HomeScreen() {
       refetchFavRouteList();
     }, [])
   );
-
-  useEffect(() => {
-    const updateDate = () => {
-      setCurrentDate(new Date());
-      setTranslatedDate(getTranslatedDate(currentDate)); // Update the translated date
-    };
-
-    // Update the date initially
-    updateDate();
-
-    // Schedule the next update for the next day
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    tomorrow.setHours(0, 0, 0, 0);
-    const timeUntilTomorrow = tomorrow.getTime() - new Date().getTime();
-    const timerId = setTimeout(updateDate, timeUntilTomorrow);
-    // Clean up the timer when the component unmounts
-    return () => {
-      clearTimeout(timerId);
-    };
-  }, []);
 
   const handlePressCard = (result: RouteHistory) => {
     if (result && result.route) {
