@@ -38,7 +38,6 @@ const useFetch = <T = any>(
 
     if (!isSessionValid) {
       dispatch(fail({ message: "Session Invalid" }));
-      router.replace("/auth/login");
       return;
     }
 
@@ -74,7 +73,6 @@ const useFetch = <T = any>(
         // If not authenticated, redirect to login
       } else if (response.data.details.type === "invalid_credentials") {
         dispatch(fail({ message: response.data.details.type }));
-        router.replace("/auth/login");
       } else if (response.data.details.type === "no_location") {
         dispatch(fail({ message: response.data.details.type }));
         pushNotification({

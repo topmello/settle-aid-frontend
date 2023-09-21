@@ -1,5 +1,5 @@
-import { throttle } from 'lodash';
-import { useCallback, useEffect } from 'react';
+import { throttle } from "lodash";
+import { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../store";
 import {
@@ -11,19 +11,21 @@ import {
   logoutUser,
 } from "../store/authSlice";
 
-const DEBUG = true;
+const DEBUG = false;
 
-const _checkSession = async (dispatch: any, token:any, tokenExpireAt:any, refreshToken:any, refreshTokenExpireAt:any) => {
+const _checkSession = async (
+  dispatch: any,
+  token: any,
+  tokenExpireAt: any,
+  refreshToken: any,
+  refreshTokenExpireAt: any
+) => {
   if (!token || !tokenExpireAt || !refreshToken || !refreshTokenExpireAt) {
     DEBUG && console.log("no token or refresh token");
     dispatch(logoutUser());
     return false;
-  } else if (
-    new Date(tokenExpireAt) < new Date()
-  ) {
-    if (
-      new Date(refreshTokenExpireAt) < new Date()
-    ) {
+  } else if (new Date(tokenExpireAt) < new Date()) {
+    if (new Date(refreshTokenExpireAt) < new Date()) {
       DEBUG && console.log("refresh token expired");
       dispatch(logoutUser());
       return false;
@@ -42,7 +44,7 @@ const _checkSession = async (dispatch: any, token:any, tokenExpireAt:any, refres
     DEBUG && console.log("token is valid");
     return true;
   }
-}
+};
 
 const throttleCheckSession = throttle(_checkSession, 1000);
 
@@ -55,9 +57,15 @@ export const useSession = () => {
   const refreshTokenExpireAt = useSelector(selectRefreshTokenExpiresAt);
 
   const checkSession = async () => {
-    return throttleCheckSession(dispatch, token, tokenExpireAt, refreshToken, refreshTokenExpireAt);
-  }
-  
+    return throttleCheckSession(
+      dispatch,
+      token,
+      tokenExpireAt,
+      refreshToken,
+      refreshTokenExpireAt
+    );
+  };
+
   return {
     token,
     checkSession,
