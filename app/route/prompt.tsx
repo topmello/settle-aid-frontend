@@ -33,6 +33,7 @@ import {
 import { ActivityOption } from "./activity";
 import { useAppTheme } from "../../theme/theme";
 import { useNotification } from "../../hooks/useNotification";
+import { useKeyboardEvent } from "../../hooks/useKeyboardEvent";
 
 type ActivityPrompt = {
   id: LocationType;
@@ -65,7 +66,7 @@ const activityOptions: ActivityOption[] = [
   },
 ];
 
-export default function RouteActivityScreen() {
+export default function RoutePromptScreen() {
   const { t } = useTranslation();
   const theme = useAppTheme();
   const [activityPrompts, setActivityPrompts] = React.useState<
@@ -73,6 +74,7 @@ export default function RouteActivityScreen() {
   >([]);
   const dispatch = useDispatch();
   const activities = useSelector(selectLocationType);
+  const { keyboardShow } = useKeyboardEvent();
 
   const { pushNotification } = useNotification();
 
@@ -184,7 +186,7 @@ export default function RouteActivityScreen() {
     <SafeAreaView
       style={{
         backgroundColor: theme.colors.primaryContainer,
-        flex: 1,
+        height: "100%",
         flexDirection: "column",
         padding: 20,
       }}
@@ -391,16 +393,10 @@ export default function RouteActivityScreen() {
           </ScrollView>
         </View>
       </View>
-      <View
-        style={{
-          height: 100,
-          justifyContent: "flex-start",
-          alignItems: "center",
-        }}
-      >
+      {!keyboardShow && (
         <Button
           mode="contained"
-          style={{ width: 150 }}
+          style={{ width: 150, marginBottom: 60, alignSelf: "center" }}
           onPress={() => {
             dispatch(
               setQueryWithLocationType({
@@ -418,7 +414,7 @@ export default function RouteActivityScreen() {
         >
           {t("comm:Next")}
         </Button>
-      </View>
+      )}
     </SafeAreaView>
   );
 }

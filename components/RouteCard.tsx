@@ -8,11 +8,6 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import * as Print from "expo-print";
 import * as Sharing from "expo-sharing";
 import { useAppTheme } from "../theme/theme";
-import Animated, {
-  FadeOutRight,
-  Layout,
-  FadeInRight,
-} from "react-native-reanimated";
 import generatePDF from "../utils/generatePDF";
 import Animated, {
   FadeOutRight,
