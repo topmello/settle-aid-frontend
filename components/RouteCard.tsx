@@ -6,6 +6,11 @@ import { AnimatedButton } from "./AnimatedButton";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { useAppTheme } from "../theme/theme";
 import generatePDF from "../utils/generatePDF";
+import Animated, {
+  FadeInRight,
+  FadeOutRight,
+  Layout,
+} from "react-native-reanimated";
 
 interface CardProps {
   routeResult: RouteHistory;

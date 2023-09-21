@@ -27,13 +27,7 @@ const useFetch = <T = any>(
 
   const { token, checkSession } = useSession();
 
-  const rootNativationState = useRootNavigationState();
-
   const fetchData = async (overrideOptions?: RequestOptions) => {
-    if (!rootNativationState?.key) {
-      return;
-    }
-
     let options = overrideOptions || requestOptions;
     let finalOptions = {
       ...options,
