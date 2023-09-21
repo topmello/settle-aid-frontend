@@ -125,7 +125,7 @@ export function RootLayout() {
     <PaperProvider theme={theme}>
       <NotificationProvider>
         <TipProvider>
-          <StatusBar style={theme.dark ? "light" : "dark"} />
+          <StatusBar style={theme.dark ? "light" : "dark"} translucent />
           <Stack screenOptions={{ headerShown: false }}>
             <Stack.Screen name="(tabs)" />
             <Stack.Screen name="common/language" />
