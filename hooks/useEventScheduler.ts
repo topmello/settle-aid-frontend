@@ -10,14 +10,22 @@ const useEventScheduler = () => {
   // Calendar permission
   const [calendarPermission, setCalendarPermission] = useState(false);
 
-  const requestCalendarPermission = useCallback(async () => {
-    const { status } = await Calendar.requestCalendarPermissionsAsync();
-    setCalendarPermission(status === "granted");
-  }, []);
-
   useEffect(() => {
-    requestCalendarPermission();
-  }, [requestCalendarPermission]);
+    let isMounted = true;
+
+    const fetchCalendarPermission = async () => {
+      const { status } = await Calendar.requestCalendarPermissionsAsync();
+      if (isMounted) {
+        setCalendarPermission(status === "granted");
+      }
+    };
+
+    fetchCalendarPermission();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   // Date picker
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
@@ -31,8 +39,18 @@ const useEventScheduler = () => {
   }, []);
 
   const addToCalendar = async (date: Date, route: Route | RouteResult) => {
+    const { status } = await Calendar.getCalendarPermissionsAsync();
+
+    if (status !== "granted") {
+      // Handle lack of permissions, for example:
+      pushNotification({
+        message: "Calendar permissions are required to add an event!",
+        type: "warning",
+      });
+      return;
+    }
+
     if (calendarPermission) {
-      // Get the default calendar
       const defaultCalendar = await Calendar.getDefaultCalendarAsync();
 
       const eventDetails = {
@@ -44,35 +62,36 @@ const useEventScheduler = () => {
         notes: route.instructions.map((instruction) => instruction).join("\n"),
       };
 
-      await Calendar.createEventAsync(defaultCalendar.id, eventDetails)
-        .then((event) => {
-          pushNotification({
-            message: "The event has been added to your system calendar!",
-            type: "info",
-          });
-          return;
-        })
-        .catch((error) => {
-          pushNotification({
-            message: "The event could not be added to your system calendar!",
-            type: "error",
-          });
-          return;
+      try {
+        const event = await Calendar.createEventAsync(
+          defaultCalendar.id,
+          eventDetails
+        );
+        pushNotification({
+          message: "The event has been added to your calendar!",
+          type: "info",
         });
+        return;
+      } catch (error) {
+        pushNotification({
+          message: "The event could not be added to your calendar!",
+          type: "error",
+        });
+        return;
+      }
     }
   };
 
   const handleDateConfirm = useCallback(
     async (date: Date, route: Route | RouteResult) => {
-      await addToCalendar(date, route)
-        .then(() => {
-          hideDatePicker();
-        })
-        .catch((error) => {
-          return;
-        });
+      try {
+        await addToCalendar(date, route);
+        hideDatePicker();
+      } catch (error) {
+        return;
+      }
     },
-    [hideDatePicker, pushNotification]
+    [hideDatePicker, addToCalendar, pushNotification]
   );
 
   return {

@@ -1,20 +1,11 @@
-//@ts-nocheck
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { Route, RouteHistory } from "../types/route";
 import { Button, IconButton } from "react-native-paper";
 import { AnimatedButton } from "./AnimatedButton";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import * as Print from "expo-print";
-import * as Sharing from "expo-sharing";
 import { useAppTheme } from "../theme/theme";
 import generatePDF from "../utils/generatePDF";
-import Animated, {
-  FadeOutRight,
-  SlideInRight,
-  Layout,
-  FadeInRight,
-} from "react-native-reanimated";
 
 interface CardProps {
   routeResult: RouteHistory;
@@ -65,6 +56,7 @@ const RouteCard: React.FC<CardProps> = ({
     card_title: {
       fontWeight: "bold",
       fontSize: 20,
+      color: theme.colors.info,
     },
     card_description: {
       fontSize: 20,
@@ -81,12 +73,21 @@ const RouteCard: React.FC<CardProps> = ({
     tag: {
       fontSize: 14,
       marginRight: 8,
+      color: theme.colors.info,
     },
     button_container: {
       flexDirection: "row",
       justifyContent: "flex-end",
       alignItems: "center",
       marginTop: 16,
+    },
+    circle: {
+      width: 34,
+      height: 34,
+      borderRadius: 42,
+      justifyContent: "center",
+      alignItems: "center",
+      backgroundColor: theme.colors.info,
     },
     button: {
       marginLeft: 8,
@@ -95,39 +96,21 @@ const RouteCard: React.FC<CardProps> = ({
 
   return (
     <Animated.View
-      entering={FadeInRight.delay(index * 50)}
+      entering={FadeInRight.delay(index ? index * 50 : 0)}
       exiting={FadeOutRight}
-      layout={Layout.damping()}
+      layout={Layout.damping(1)}
     >
       <AnimatedButton
-        onPress={onPressCard}
+        onPress={onPressCard ? onPressCard : () => {}}
         color={theme.colors.infoContainer}
         style={{
           paddingHorizontal: 20,
           overflow: "hidden",
         }}
       >
-        <Text
-          style={[
-            styles.card_title,
-            {
-              color: theme.colors.info,
-            },
-          ]}
-        >
-          {routeResult.route.locations[0]}
-        </Text>
+        <Text style={styles.card_title}>{routeResult.route.locations[0]}</Text>
         <View style={styles.tags_container}>
-          <Text
-            style={[
-              styles.tag,
-              {
-                color: theme.colors.info,
-              },
-            ]}
-            numberOfLines={1}
-            ellipsizeMode="tail"
-          >
+          <Text style={styles.tag} numberOfLines={1} ellipsizeMode="tail">
             {routeResult.route.locations.map(
               (location, index) => `#${location}`
             )}
@@ -145,7 +128,9 @@ const RouteCard: React.FC<CardProps> = ({
                 },
               }}
               mode="contained"
-              onPress={() => handleFavRoute(routeResult.route.route_id)}
+              onPress={() =>
+                handleFavRoute && handleFavRoute(routeResult.route.route_id)
+              }
             />
             <Button
               mode="outlined"
@@ -159,14 +144,20 @@ const RouteCard: React.FC<CardProps> = ({
             <DateTimePickerModal
               isVisible={isDatePickerVisible}
               mode="date"
-              onConfirm={handleConfirm}
-              onCancel={hideDatePicker}
+              onConfirm={async (date) => {
+                if (handleDateConfirm) {
+                  handleDateConfirm(date, routeResult.route);
+                }
+              }}
+              onCancel={hideDatePicker ? hideDatePicker : () => {}}
             />
 
             <Button
               mode="outlined"
               textColor={theme.colors.info}
-              onPress={generatePDF}
+              onPress={() => {
+                generatePDF(routeResult.route);
+              }}
               style={styles.button}
             >
               Share

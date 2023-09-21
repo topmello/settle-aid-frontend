@@ -83,7 +83,7 @@ const useFetch = <T = any>(
           }),
           type: "error",
         });
-        throw new Error(response.data.details.msg);
+        return new Error(response.data.details.msg);
       } else if (response.data.details.type === "already_voted") {
         dispatch(fail({ message: response.data.details.type }));
 

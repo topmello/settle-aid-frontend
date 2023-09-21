@@ -275,27 +275,13 @@ export default function MapScreen() {
             />
           </Menu>
         </Pressable>
-        {/*
-        {typeof routeJSON === 'string' ? null:<Button
-          mode="contained"
-          style={{ width: '30%', zIndex: 1, alignItems: "center",}}
-          onPress={fetchRoute}
-        >
-          Re-plan
-        </Button>}
-        <Button
-          mode="contained"
-          onPress={showDatePicker}
-          style={{ width: '30%', zIndex: 1, alignItems: "center",}}
-        >
-          Schedule
-        </Button>
-        */}
         <DateTimePickerModal
           isVisible={isDatePickerVisible}
           mode="date"
-          onConfirm={(date) => {
-            handleDateConfirm(date, data);
+          onConfirm={async (date) => {
+            if (handleDateConfirm) {
+              await handleDateConfirm(date, data);
+            }
           }}
           onCancel={hideDatePicker}
         />
