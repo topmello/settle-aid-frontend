@@ -34,7 +34,7 @@ export default function TabLayout() {
         }
       });
     }
-  }, [rootNativationState?.key, language]);
+  }, [rootNativationState?.key, language, checkSession]);
 
   return (
     <Tab.Navigator initialRouteName="home" theme={theme}>
