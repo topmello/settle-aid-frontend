@@ -79,6 +79,19 @@ export default function TrackScreen() {
     }
   }, [mode]);
 
+  useEffect(() => {
+    if (mode === "trackme" && !tracking && roomId) {
+      startTrackMe(roomId);
+    }
+  }, [roomId, mode, tracking]);
+
+  useEffect(() => {
+    return () => {
+      exitRoom();
+      setTracking(false);
+    };
+  }, []);
+
   // option screen
   if (!roomId || !mode) {
     return (
@@ -140,7 +153,8 @@ export default function TrackScreen() {
         <View
           style={{
             flex: 1,
-          }}></View>
+          }}
+        ></View>
         <View
           style={{
             height: 180,
@@ -192,13 +206,13 @@ export default function TrackScreen() {
                 setRoomIdInput(text);
               }}
             />
-            <View style={{flex:1}}></View>
+            <View style={{ flex: 1 }}></View>
             <View
               style={{
                 width: "100%",
                 padding: 20,
                 gap: 28,
-                alignSelf: 'flex-end'
+                alignSelf: "flex-end",
               }}
             >
               <Button
@@ -222,7 +236,7 @@ export default function TrackScreen() {
                 Join
               </Button>
               <Button
-                style={{marginBottom: 54}}
+                style={{ marginBottom: 54 }}
                 mode="contained-tonal"
                 onPress={() => setShowRoomIdInput(false)}
               >
@@ -288,6 +302,7 @@ export default function TrackScreen() {
           latitudeDelta: 0.006,
           longitudeDelta: 0.003,
         }}
+        showsUserLocation={mode === "trackother"}
         scrollEnabled={true}
         pitchEnabled={true}
         rotateEnabled={true}
@@ -358,7 +373,6 @@ export default function TrackScreen() {
                   <Button
                     mode="contained"
                     onPress={() => {
-                      startTrackMe(roomId);
                       setTracking(true);
                     }}
                     style={{ width: 200, height: 40 }}

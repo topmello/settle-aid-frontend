@@ -1,13 +1,10 @@
 import { View } from "react-native";
 import { Text } from "react-native-paper";
 import LightCloudyIcon from "../assets/images/weather/light_cloudy.svg";
-import NightLightCloudyIcon from "../assets/images/weather/night_light_cloudy.svg";
 import CloudyIcon from "../assets/images/weather/cloudy.svg";
-import NightCloudyIcon from "../assets/images/weather/night_cloudy.svg";
 import SunnyIcon from "../assets/images/weather/sunny.svg";
 import NightIcon from "../assets/images/weather/night.svg";
 import RainIcon from "../assets/images/weather/rain.svg";
-import NightRainIcon from "../assets/images/weather/night_rain.svg";
 import HeavyRainIcon from "../assets/images/weather/heavy_rain.svg";
 import ThunderStormIcon from "../assets/images/weather/thunder_storm.svg";
 import FogIcon from "../assets/images/weather/fog.svg";
@@ -40,13 +37,11 @@ const weatherOptions: WeatherOption[] = [
     ids: ["801", "802"],
     name: "Light Cloudy",
     icon: <LightCloudyIcon />,
-    iconNight: <NightLightCloudyIcon />,
   },
   {
     ids: ["803"],
     name: "Cloudy",
     icon: <CloudyIcon />,
-    iconNight: <NightCloudyIcon />,
   },
   {
     ids: ["804"],
@@ -69,7 +64,6 @@ const weatherOptions: WeatherOption[] = [
     ],
     name: "Rain",
     icon: <RainIcon />,
-    iconNight: <NightRainIcon />,
   },
   {
     ids: ["502", "503", "504", "511", "520", "521", "522", "531"],
@@ -150,7 +144,9 @@ export const WeatherWidget = () => {
         setCurrentWeatherOption({
           ...weatherOption,
           tempDay: Math.round(weatherData?.data?.daily?.[0]?.feels_like?.day),
-          tempNight: Math.round(weatherData?.data?.daily?.[0]?.feels_like?.night),
+          tempNight: Math.round(
+            weatherData?.data?.daily?.[0]?.feels_like?.night
+          ),
         });
       }
     }
@@ -171,11 +167,11 @@ export const WeatherWidget = () => {
         {
           style: {
             position: "absolute",
-            top: -36,
-            left: -36,
+            top: -28,
+            left: 0,
           },
-          height: 200,
-          width: 200,
+          height: 138,
+          width: 138,
         }
       )}
       <View
@@ -200,7 +196,8 @@ export const WeatherWidget = () => {
             fontWeight: "bold",
           }}
         >
-          {currentWeatherOption?.name && t(currentWeatherOption?.name, { ns: "home" })}
+          {currentWeatherOption?.name &&
+            t(currentWeatherOption?.name, { ns: "home" })}
         </Text>
       </View>
     </AnimatedButton>

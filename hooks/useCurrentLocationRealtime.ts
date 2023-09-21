@@ -29,7 +29,7 @@ const useCurrentLocationRealtime = () => {
         {
           accuracy: Location.Accuracy.High,
           timeInterval: 1000,
-          distanceInterval: 10,
+          distanceInterval: 1,
         },
         (location) => {
           const { longitude, latitude } = location.coords;

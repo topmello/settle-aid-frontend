@@ -22,7 +22,7 @@ type JoinMessage = {
 
 type MessageData = MoveMessage | JoinMessage;
 
-const DEBUG = false;
+const DEBUG = true;
 
 export const useTrack = () => {
   const [socket, setSocket] = useState<Socket | null>(null);
@@ -30,8 +30,8 @@ export const useTrack = () => {
   const [messages, setMessages] = useState<MessageData[]>([]);
   const token = useSelector(selectToken);
   const roomId = useSelector(selectRoomId);
+  const [startTracking, setStartTracking] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
-  const [shareTimerId, setShareTimerId] = useState<NodeJS.Timeout | null>(null);
   const lonLat = useSelector(selectLonLat);
   const [parentLocation, setParentLocation] = useState({
     latitude: 0,
@@ -43,19 +43,26 @@ export const useTrack = () => {
   const handleDisconnect = () => setIsConnected(false);
 
   const handleJoin = (message: string) => {
-    DEBUG && console.log("handlejoin", message)
+    DEBUG && console.log("handlejoin", message);
     setMessages((prev) => [...prev, { message, type: "join_room" }]);
+    if (startTracking) {
+      sendLocation(lonLat.latitude, lonLat.longitude, roomId);
+    }
+  };
 
+  const handleLeave = (message: string) => {
+    DEBUG && console.log("leave room", message);
+    setMessages((prev) => [...prev, { message, type: "join_room" }]);
   };
 
   const handleMove = (data: any) => {
-    DEBUG && console.log("handleMove", data)
+    // DEBUG && console.log("handleMove", data);
     setMessages((prev) => [...prev, { ...data, type: "move" }]);
     setParentLocation({
       latitude: data?.details?.msg?.lat,
-      longitude: data?.details?.msg?.long
-    })
-  }
+      longitude: data?.details?.msg?.long,
+    });
+  };
 
   useEffect(() => {
     exitRoom();
@@ -99,8 +106,14 @@ export const useTrack = () => {
         socket.close();
       }
       exitRoom();
-    }
+    };
   }, []);
+
+  useEffect(() => {
+    if (startTracking && lonLat.latitude && lonLat.longitude) {
+      sendLocation(lonLat.latitude, lonLat.longitude, roomId);
+    }
+  }, [lonLat, startTracking, roomId]);
 
   const handleLeaveRoom = (room: string) => {
     if (socket) {
@@ -109,13 +122,7 @@ export const useTrack = () => {
   };
 
   const sendLocation = (lat: number = 0, long: number = 0, room: string) => {
-    if (socket) {
-      socket.emit("move", { lat, long, roomId: room });
-    }
-  };
-
-  const sendLocationRealtime = (lat: number = 0, long: number = 0, room: string) => {
-    if (socket) {
+    if (socket && startTracking) {
       socket.emit("move", { lat, long, roomId: room });
     }
   };
@@ -125,39 +132,39 @@ export const useTrack = () => {
       method: "GET",
       url: "/track/generate-pin/",
       token: token,
-    }).then((res) => {
-      if (res.status === 200) {
-        console.log(res.data.room_id)
-        dispatch(setRoomId({
-          roomId: res.data.room_id
-        }));
-        return res.data.roomId;
-      } else {
-        throw new Error("Failed to create room");
-      }
-    }).catch(err => {
-      console.log(JSON.stringify(err.response.data));
-    });
-  }
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          console.log(res.data.room_id);
+          dispatch(
+            setRoomId({
+              roomId: res.data.room_id,
+            })
+          );
+          return res.data.roomId;
+        } else {
+          throw new Error("Failed to create room");
+        }
+      })
+      .catch((err) => {
+        console.log(JSON.stringify(err.response.data));
+      });
+  };
 
-  
   const startTrackMe = (room: string) => {
-    if (shareTimerId) {
-      clearInterval(shareTimerId);
-    }
     joinRoom(room);
-    const timerId = setInterval(sendLocationRealtime, 5000, lonLat.latitude, lonLat.longitude, room);
-    setShareTimerId(timerId);
-  }
+    setStartTracking(true);
+  };
 
   const joinRoom = (room: string) => {
     if (roomId !== room) {
-      dispatch(setRoomId({
-        roomId: room,
-        }));
+      dispatch(
+        setRoomId({
+          roomId: room,
+        })
+      );
     }
     if (socket) {
-      DEBUG && console.log("join room", room)
       socket.emit("join_room", room);
     }
   };
@@ -165,13 +172,12 @@ export const useTrack = () => {
   const exitRoom = () => {
     setMessages([]);
     handleLeaveRoom(roomId);
-    dispatch(setRoomId({
-      roomId: "",
-    }));
-    if (shareTimerId) {
-      clearInterval(shareTimerId);
-    }
-  }
+    dispatch(
+      setRoomId({
+        roomId: "",
+      })
+    );
+  };
 
   return {
     isConnected,
@@ -179,10 +185,9 @@ export const useTrack = () => {
     roomId,
     joinRoom,
     handleLeaveRoom,
-    sendLocation,
     createRoom,
     startTrackMe,
     exitRoom,
-    parentLocation
+    parentLocation,
   };
 };

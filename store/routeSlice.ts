@@ -26,10 +26,12 @@ const initialState: RouteState = {
   distance_threshold: 1000,
   similarity_threshold: 0,
   route_type: "walking",
-  negative_similarity_threshold: 0
+  negative_similarity_threshold: 0,
 };
 
 const selectRoute = (state: { route: RouteState }) => state.route;
+const selectLongitude = (state: { route: RouteState }) => state.route.longitude;
+const selectLatitude = (state: { route: RouteState }) => state.route.latitude;
 
 export const selectLocationType = createSelector(
   [selectRoute],
@@ -41,10 +43,13 @@ export const selectQuery = createSelector(
   (route) => route.query
 );
 
-export const selectLonLat = createSelector([selectRoute], (route) => ({
-  longitude: route.longitude,
-  latitude: route.latitude,
-}));
+export const selectLonLat = createSelector(
+  [selectLongitude, selectLatitude],
+  (long, lat) => ({
+    longitude: long,
+    latitude: lat,
+  })
+);
 
 export const selectDistanceThres = createSelector(
   [selectRoute],

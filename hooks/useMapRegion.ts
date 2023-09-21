@@ -72,11 +72,13 @@ export const useMapRegion = ({
         centerLon += location.longitude;
         deltaLat = Math.max(
           deltaLat,
-          Math.abs(location.latitude - routeState.latitude)
+          Math.abs(location.latitude - routeState.latitude),
+          0.03
         );
         deltaLon = Math.max(
           deltaLon,
-          Math.abs(location.longitude - routeState.longitude)
+          Math.abs(location.longitude - routeState.longitude),
+          0.015
         );
       });
 
