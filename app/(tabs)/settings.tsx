@@ -71,21 +71,26 @@ export default function SettingsScreen() {
   const [adminAuthStatus, setAdminAuthStatus] = useState("Idle");
   const { pushNotification } = useNotification();
   return (
-    <SafeAreaView style={[styles.container, {
-      backgroundColor: paperTheme.colors.background,
-    }]}>
+    <SafeAreaView
+      style={[
+        styles.container,
+        {
+          backgroundColor: paperTheme.colors.background,
+        },
+      ]}
+    >
       <Text
-          style={{
-            fontSize: 24,
-            fontWeight: "bold",
-            width: "100%",
-            padding: 16,
-            paddingTop: 48,
-            color: paperTheme.colors.onBackground,
-          }}
-        >
-          {t("Settings", { ns: "settings" })}
-        </Text>
+        style={{
+          fontSize: 24,
+          fontWeight: "bold",
+          width: "100%",
+          padding: 16,
+          paddingTop: 48,
+          color: paperTheme.colors.onBackground,
+        }}
+      >
+        {t("Settings", { ns: "settings" })}
+      </Text>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ alignItems: "center" }}
@@ -248,11 +253,11 @@ export default function SettingsScreen() {
             title="Authentication States"
             left={(props) => <List.Icon {...props} icon="key" />}
           >
+            <List.Item title="Auth Status" description={authStatus} />
             <List.Item
-              title="Auth Status"
-              description={authStatus}
+              title="Current UTC Time"
+              description={new Date().toISOString()}
             />
-            <List.Item title="Current UTC Time" description={new Date().toISOString()} />
             <List.Item title="Token" description={token} />
             <List.Item title="Id" description={userId} />
             <List.Item title="Username" description={username} />
@@ -266,7 +271,7 @@ export default function SettingsScreen() {
               description={refreshTokenExpireAt?.toString()}
             />
           </List.Accordion>
-          
+
           <List.Item
             title="Test Notificaiton"
             description="Send a test notification"

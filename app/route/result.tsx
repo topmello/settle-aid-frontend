@@ -26,14 +26,10 @@ import { selectTheme } from "../../store/appSlice";
 import { RequestOptions } from "../../api/fetch";
 import useFetch from "../../hooks/useFetch";
 import { useSession } from "../../hooks/useSession";
-import {
-  useMapRegion,
-  RouteResult,
-  Coordinates,
-} from "../../hooks/useMapRegion";
+import { useMapRegion, Coordinates } from "../../hooks/useMapRegion";
 import useEventScheduler from "../../hooks/useEventScheduler";
 import generatePDF from "../../utils/generatePDF";
-import { Route } from "../../types/route";
+import { RouteResult, Route, RouteGetResult } from "../../types/route";
 import { selectIsLoading } from "../../store/appSlice";
 
 const MORE_ICON = Platform.OS === "ios" ? "dots-horizontal" : "dots-vertical";
@@ -45,6 +41,7 @@ export default function MapScreen() {
   const loading = useSelector(selectIsLoading);
 
   const routeJSON = useLocalSearchParams().routeJSON;
+  const route_id_ = useLocalSearchParams().route_id_;
 
   const [data, setData] = useState<RouteResult>({
     locations: [],
@@ -93,12 +90,9 @@ export default function MapScreen() {
     data: routeState,
   };
 
-  const [dataFromFetch, fetchData] = useFetch<RouteResult | null>(
-    requestOptions,
-    [routeState],
-    null,
-    false
-  );
+  const [dataFromFetch, fetchData] = useFetch<
+    RouteResult | RouteGetResult | null
+  >(requestOptions, [routeState], null, false);
 
   const mapRef = useRef<MapView>(null);
 
@@ -122,6 +116,33 @@ export default function MapScreen() {
           const { route_id, ...routeDataWithoutID } = routeData;
           setData(routeDataWithoutID);
           return; // return early so the fetch call is not made
+        }
+      } catch (error) {
+        console.error("Failed to parse routeJSON:", error);
+      }
+    } else if (typeof route_id_ === "string") {
+      try {
+        const route_id: number = parseInt(JSON.parse(route_id_));
+
+        const routeRequestOptions: RequestOptions = {
+          method: "GET",
+          url: `/route/${route_id}`,
+        };
+
+        const routeData = (await fetchData(
+          routeRequestOptions
+        )) as RouteGetResult;
+
+        if (routeData && routeData.route) {
+          if ("route_id" in routeData.route) {
+            const { route_id, ...routeDataWithoutID } = routeData.route;
+
+            setData(routeDataWithoutID);
+            return;
+          } else {
+            setData(routeData.route);
+            return;
+          }
         }
       } catch (error) {
         console.error("Failed to parse routeJSON:", error);

@@ -12,7 +12,7 @@ import {
   Platform,
   Pressable,
 } from "react-native";
-import { Button, Text } from "react-native-paper";
+import { Button, Text, ActivityIndicator } from "react-native-paper";
 import { useTranslation } from "react-i18next";
 import RouteIcon from "../../assets/images/icons/route.svg";
 import ArrowIcon from "../../assets/images/icons/navigate_next.svg";
@@ -22,6 +22,7 @@ import PersonPinIcon from "../../assets/images/icons/person_pin.svg";
 import { router } from "expo-router";
 import { useSelector } from "react-redux";
 import { selectToken, selectUserId } from "../../store/authSlice";
+import { selectIsLoading } from "../../store/appSlice";
 import RouteCard from "../../components/RouteCard";
 import useFetch from "../../hooks/useFetch";
 import { RouteHistory } from "../../types/route";
@@ -33,6 +34,7 @@ export default function HomeScreen() {
   const { t } = useTranslation();
   const theme = useAppTheme();
   const userID = useSelector(selectUserId);
+  const loading = useSelector(selectIsLoading);
 
   const [currentDate, setCurrentDate] = useState(new Date());
   const [translatedDate, setTranslatedDate] = useState("");
@@ -99,6 +101,7 @@ export default function HomeScreen() {
         pathname: "/route/result",
         params: {
           routeJSON: JSON.stringify(result.route),
+          route_id_: result.route.route_id,
         },
       });
     }
@@ -126,6 +129,11 @@ export default function HomeScreen() {
         { backgroundColor: theme.colors.background },
       ]}
     >
+      <ActivityIndicator
+        style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }}
+        animating={loading}
+        size="large"
+      />
       <ScrollView contentContainerStyle={styles.scrollView}>
         <View style={[styles.headerView, styles.containerView]}>
           <Text variant="headlineSmall" style={styles.headerText}>

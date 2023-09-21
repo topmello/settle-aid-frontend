@@ -27,7 +27,9 @@ const useFetch = <T = any>(
 
   const { token, checkSession } = useSession();
 
-  const fetchData = async (overrideOptions?: RequestOptions) => {
+  const fetchData = async (
+    overrideOptions?: RequestOptions
+  ): Promise<T | null> => {
     let options = overrideOptions || requestOptions;
     let finalOptions = {
       ...options,
@@ -38,7 +40,7 @@ const useFetch = <T = any>(
 
     if (!isSessionValid) {
       dispatch(fail({ message: "Session Invalid" }));
-      return;
+      return null;
     }
 
     try {
@@ -52,13 +54,14 @@ const useFetch = <T = any>(
       }
       setData(response.data);
       dispatch(loaded());
+      return response.data;
     } catch (error) {
       const errRes = error as CustomError;
       const response = errRes.response as ErrorResponse;
 
       if (!response) {
         dispatch(fail({ message: "Network Error" }));
-        return;
+        return null;
       }
 
       // Ensure response.data, response.data.details, and response.data.details.type are defined before checking their values
@@ -68,11 +71,12 @@ const useFetch = <T = any>(
         !response.data.details.type
       ) {
         dispatch(fail({ message: "Unknown Error" }));
-        return;
+        return null;
 
         // If not authenticated, redirect to login
       } else if (response.data.details.type === "invalid_credentials") {
         dispatch(fail({ message: response.data.details.type }));
+        return null;
       } else if (response.data.details.type === "no_location") {
         dispatch(fail({ message: response.data.details.type }));
         pushNotification({
@@ -81,7 +85,7 @@ const useFetch = <T = any>(
           }),
           type: "error",
         });
-        return new Error(response.data.details.msg);
+        return null;
       } else if (response.data.details.type === "already_voted") {
         dispatch(fail({ message: response.data.details.type }));
 
@@ -97,15 +101,15 @@ const useFetch = <T = any>(
                 }),
                 type: "success",
               });
-              return res.data;
+              return null;
             } else {
-              return;
+              return null;
             }
           })
           .catch((err) => {
             console.log(JSON.stringify(err.response.data));
-            return;
           });
+        return null;
       } else {
         dispatch(fail({ message: response.data.details.type }));
         pushNotification({
@@ -116,7 +120,7 @@ const useFetch = <T = any>(
         });
         console.log(response.data.details.type);
         dispatch(loaded());
-        return;
+        return null;
       }
     }
   };
