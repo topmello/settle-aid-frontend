@@ -9,6 +9,7 @@ import {
   useTheme,
   Button,
   ActivityIndicator,
+  IconButton,
 } from "react-native-paper";
 import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from "react-native-maps";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -226,6 +227,7 @@ export default function MapScreen() {
       }}
     >
       <View
+        pointerEvents="box-none"
         style={{
           marginTop: 32,
           width: "100%",
@@ -233,6 +235,7 @@ export default function MapScreen() {
           justifyContent: "space-between",
           padding: 20,
           zIndex: 1,
+          backgroundColor: theme.colors.primaryContainer,
         }}
       >
         {router.canGoBack() ? (
@@ -243,7 +246,6 @@ export default function MapScreen() {
               borderRadius: 20,
               width: 40,
               height: 40,
-              display: "flex",
               justifyContent: "center",
               alignItems: "center",
               zIndex: 1,
@@ -263,17 +265,17 @@ export default function MapScreen() {
           visible={menuVisible}
           onDismiss={closeMenu}
           anchor={
-            <Appbar.Action
+            <IconButton
               icon={MORE_ICON}
               onPress={openMenu}
               style={{
                 backgroundColor: theme.colors.primaryContainer,
-                borderRadius: 20,
                 width: 40,
                 height: 40,
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
+                zIndex: 1,
               }}
             />
           }
