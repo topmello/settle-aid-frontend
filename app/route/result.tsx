@@ -25,13 +25,11 @@ import { mapDarkTheme } from "../../theme/map";
 import { selectTheme } from "../../store/appSlice";
 
 import useFetch from "../../hooks/useFetch";
-import { useSession } from "../../hooks/useSession";
 import { useMapRegion, Coordinates } from "../../hooks/useMapRegion";
 import useEventScheduler from "../../hooks/useEventScheduler";
 import generatePDF from "../../utils/generatePDF";
 import { Route, RouteGetResult } from "../../types/route";
 import { selectIsLoading } from "../../store/appSlice";
-import { use } from "i18next";
 
 const MORE_ICON = Platform.OS === "ios" ? "dots-horizontal" : "dots-vertical";
 
@@ -227,7 +225,6 @@ export default function MapScreen() {
       }}
     >
       <View
-        pointerEvents="box-none"
         style={{
           marginTop: 32,
           width: "100%",
@@ -235,33 +232,27 @@ export default function MapScreen() {
           justifyContent: "space-between",
           padding: 20,
           zIndex: 1,
-          backgroundColor: theme.colors.primaryContainer,
         }}
       >
-        {router.canGoBack() ? (
-          <Pressable
-            onPress={() => router.back()}
-            style={{
-              backgroundColor: theme.colors.primaryContainer,
-              borderRadius: 20,
-              width: 40,
-              height: 40,
-              justifyContent: "center",
-              alignItems: "center",
-              zIndex: 1,
-            }}
-          >
-            <ArrowBackIcon
-              fill={theme.colors.onPrimaryContainer}
-              width={34}
-              height={34}
-            />
-          </Pressable>
-        ) : (
-          <View></View>
-        )}
+        <Pressable
+          onPress={() => router.back()}
+          style={{
+            backgroundColor: theme.colors.primaryContainer,
+            borderRadius: 20,
+            width: 40,
+            height: 40,
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 1,
+          }}
+        >
+          <ArrowBackIcon
+            fill={theme.colors.onPrimaryContainer}
+            width={34}
+            height={34}
+          />
+        </Pressable>
         <Menu
-          style={{ zIndex: 1 }}
           visible={menuVisible}
           onDismiss={closeMenu}
           anchor={

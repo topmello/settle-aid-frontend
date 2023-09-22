@@ -70,8 +70,8 @@ const ResultOverlay: React.FC<OverlayProps> = ({
           {/** Horizontal Tips */}
           <FlatList
             style={{
-              height: 138,
               width: "100%",
+              overflow: "visible",
             }}
             data={tipList}
             renderItem={({ item }) => (
@@ -80,7 +80,6 @@ const ResultOverlay: React.FC<OverlayProps> = ({
                   backgroundColor: theme.colors.primaryContainer,
                   borderRadius: 8,
                   width: 300,
-                  marginVertical: 4,
                   padding: 16,
                   flexDirection: "row",
                 }}
