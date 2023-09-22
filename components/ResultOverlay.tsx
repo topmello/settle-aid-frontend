@@ -1,7 +1,14 @@
 import React, { useMemo } from "react";
 import { View, TouchableOpacity } from "react-native";
 import { ScrollView, FlatList } from "react-native-gesture-handler";
-import { Text, List, useTheme, Surface, IconButton } from "react-native-paper";
+import {
+  Text,
+  List,
+  useTheme,
+  Surface,
+  IconButton,
+  Checkbox,
+} from "react-native-paper";
 import { RouteState } from "../store/routeSlice";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Tip } from "../tips/tipsTyped";
@@ -174,31 +181,20 @@ const ResultOverlay: React.FC<OverlayProps> = ({
               title="Instructions"
               left={(props) => <List.Icon {...props} icon="map-legend" />}
             >
-              {data.instructions.map((instruction: string, index: number) => {
-                return (
-                  <List.Item
-                    key={index}
-                    title={instruction}
-                    onPress={() => handlePressRoute(index)}
-                    left={() => (
-                      <TouchableOpacity
-                        key={index}
-                        onPress={() => handlePress(index)}
-                        style={{
-                          backgroundColor: "transparent",
-                          paddingLeft: 20,
-                        }}
-                      >
-                        <List.Icon
-                          icon={
-                            checked[index] ? "check" : "checkbox-blank-outline"
-                          }
-                        />
-                      </TouchableOpacity>
-                    )}
-                  />
-                );
-              })}
+              {data.instructions.map((instruction: string, index: number) => (
+                <List.Item
+                  key={index}
+                  title={instruction}
+                  onPress={() => handlePressRoute(index)}
+                  left={() => (
+                    <Checkbox
+                      key={index}
+                      onPress={() => handlePress(index)}
+                      status={checked[index] ? "checked" : "unchecked"}
+                    />
+                  )}
+                />
+              ))}
             </List.Accordion>
           </List.Section>
           <View

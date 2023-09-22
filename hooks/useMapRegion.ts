@@ -51,8 +51,8 @@ export const useMapRegion = ({
   const [region, setRegion] = useState<MapRegion>({
     latitude: -37.8136,
     longitude: 144.9631,
-    latitudeDelta: 0,
-    longitudeDelta: 0,
+    latitudeDelta: 0.03,
+    longitudeDelta: 0.015,
   });
 
   useEffect(() => {
@@ -89,10 +89,10 @@ export const useMapRegion = ({
     setRegion({
       latitude: routeState.latitude,
       longitude: routeState.longitude,
-      latitudeDelta: deltaLat * 2,
-      longitudeDelta: deltaLon * 2,
+      latitudeDelta: deltaLat,
+      longitudeDelta: deltaLon,
     });
-  }, [data, routeState]);
+  }, [data, routeState.latitude, routeState.longitude]);
 
   const handleLocationSelect = useCallback(
     (location: Coordinates) => {
