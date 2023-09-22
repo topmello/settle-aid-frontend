@@ -42,7 +42,24 @@ export default function MapScreen() {
   const route_id_ = useLocalSearchParams().route_id_;
   const [useHistory, setUseHistory] = useState(true);
 
-  const [data, setData] = useState<Route | null>(null);
+  const [data, setData] = useState<Route>({
+    route_id: 0,
+    locations: [],
+    locations_coordinates: [
+      {
+        latitude: 0,
+        longitude: 0,
+      },
+    ],
+    route: [
+      {
+        latitude: 0,
+        longitude: 0,
+      },
+    ],
+    instructions: [],
+    duration: 0,
+  });
 
   const {
     isDatePickerVisible,
@@ -67,25 +84,25 @@ export default function MapScreen() {
 
   const tipList: Array<Tip> = getTipForMode(tips, modes);
 
-  const [dataFromFetch, fetchData] = useFetch<Route | null>(
+  const [dataFromFetch, fetchData] = useFetch<Route>(
     {
       method: "POST",
       url: "/search/v2/route/",
       data: routeState,
     },
     [routeState],
-    null,
+    data,
     false
   );
 
   const [routeDataFromHistory, fetchRouteDataFromHistory] =
-    useFetch<RouteGetResult | null>(
+    useFetch<RouteGetResult>(
       {
         method: "GET",
         url: `/route/${route_id_}`,
       },
       [route_id_],
-      null,
+      { num_votes: 0, route: data },
       false
     );
 
@@ -344,7 +361,7 @@ export default function MapScreen() {
 
       <ActivityIndicator animating={loading} size="large" />
 
-      {data && data.locations.length > 0 && data.locations.length > 0 ? (
+      {data && (
         <ResultOverlay
           tipList={tipList}
           data={data}
@@ -355,8 +372,6 @@ export default function MapScreen() {
           checked={checked}
           locationIcons={locationIcons}
         />
-      ) : (
-        <View>Text</View>
       )}
     </SafeAreaView>
   );
