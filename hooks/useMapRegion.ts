@@ -42,7 +42,7 @@ export const useMapRegion = ({
   routeState,
   mapRef,
 }: {
-  data: Route;
+  data: Route | null;
   routeState: Coordinates;
   mapRef: React.RefObject<any>;
 }) => {
@@ -128,7 +128,12 @@ export const useMapRegion = ({
 
   const handlePressRoute = useCallback(
     async (index: number) => {
-      if (index < 0 || index >= data.route.length || data.route.length === 0) {
+      if (
+        !data ||
+        index < 0 ||
+        index >= data.route.length ||
+        data.route.length === 0
+      ) {
         return;
       }
       const lat1 = data.route[index]?.latitude;

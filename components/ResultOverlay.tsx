@@ -127,51 +127,67 @@ const ResultOverlay: React.FC<OverlayProps> = ({
 
           {/** Destinations */}
           <List.Section>
-            {data.locations.map((location: string, index: number) => {
-              const description = body?.location_type?.[index] || "";
+            {data &&
+              Array.isArray(data.locations) &&
+              data.locations.map((location: string, index: number) => {
+                const locationType = body?.location_type;
+                if (
+                  !locationType ||
+                  !Array.isArray(locationType) ||
+                  typeof location !== "string"
+                ) {
+                  return null;
+                }
 
-              const capitalizedDescription =
-                description && typeof description === "string"
-                  ? description.charAt(0).toUpperCase() + description.slice(1)
-                  : "";
+                const description = locationType[index] || "";
+                const capitalizedDescription =
+                  description.charAt(0).toUpperCase() + description.slice(1);
 
-              const Icon = locationIcons[body?.location_type[index]];
-              return (
-                <List.Item
-                  key={index}
-                  title={location}
-                  description={capitalizedDescription}
-                  left={() => (
-                    <View style={{ justifyContent: "center", paddingLeft: 10 }}>
-                      <Icon width={30} height={30} />
-                    </View>
-                  )}
-                  right={() => (
-                    <TouchableOpacity
-                      style={{
-                        backgroundColor: theme.colors.primaryContainer,
-                        borderRadius: 24,
-                        height: 48,
-                        width: 48,
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                      onPress={() =>
-                        handleLocationSelect(
-                          data.locations_coordinates[index + 1]
-                        )
-                      }
-                    >
-                      <FontAwesome
-                        name="location-arrow"
-                        size={30}
-                        color={theme.colors.onPrimaryContainer}
-                      />
-                    </TouchableOpacity>
-                  )}
-                />
-              );
-            })}
+                const Icon =
+                  locationIcons &&
+                  locationType &&
+                  locationIcons[locationType[index]];
+                if (!Icon) {
+                  return null;
+                }
+                return (
+                  <List.Item
+                    key={index}
+                    title={location}
+                    description={capitalizedDescription}
+                    left={() => (
+                      <View
+                        style={{ justifyContent: "center", paddingLeft: 10 }}
+                      >
+                        <Icon width={30} height={30} />
+                      </View>
+                    )}
+                    right={() => (
+                      <TouchableOpacity
+                        style={{
+                          backgroundColor: theme.colors.primaryContainer,
+                          borderRadius: 24,
+                          height: 48,
+                          width: 48,
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                        onPress={() =>
+                          handleLocationSelect(
+                            data.locations_coordinates[index + 1]
+                          )
+                        }
+                      >
+                        <FontAwesome
+                          name="location-arrow"
+                          size={30}
+                          color={theme.colors.onPrimaryContainer}
+                        />
+                      </TouchableOpacity>
+                    )}
+                  />
+                );
+              })}
           </List.Section>
 
           {/** Instructions */}
@@ -180,20 +196,30 @@ const ResultOverlay: React.FC<OverlayProps> = ({
               title="Instructions"
               left={(props) => <List.Icon {...props} icon="map-legend" />}
             >
-              {data.instructions.map((instruction: string, index: number) => (
-                <List.Item
-                  key={index}
-                  title={instruction}
-                  onPress={() => handlePressRoute(index)}
-                  left={() => (
-                    <Checkbox
+              {data &&
+                Array.isArray(data.instructions) &&
+                data.instructions.map((instruction: string, index: number) => {
+                  if (typeof instruction !== "string") {
+                    return null;
+                  }
+
+                  const isChecked = Array.isArray(checked) && !!checked[index];
+
+                  return (
+                    <List.Item
                       key={index}
-                      onPress={() => handlePress(index)}
-                      status={checked[index] ? "checked" : "unchecked"}
+                      title={instruction}
+                      onPress={() => handlePressRoute(index)}
+                      left={() => (
+                        <Checkbox
+                          key={index}
+                          onPress={() => handlePress(index)}
+                          status={isChecked ? "checked" : "unchecked"}
+                        />
+                      )}
                     />
-                  )}
-                />
-              ))}
+                  );
+                })}
             </List.Accordion>
           </List.Section>
           <View

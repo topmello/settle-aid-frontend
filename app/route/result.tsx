@@ -23,7 +23,7 @@ import getTipForMode from "../../tips/getTip";
 import { locationIcons } from "../../constants/icons";
 import { mapDarkTheme } from "../../theme/map";
 import { selectTheme } from "../../store/appSlice";
-
+import { RequestOptions } from "../../api/fetch";
 import useFetch from "../../hooks/useFetch";
 import { useMapRegion, Coordinates } from "../../hooks/useMapRegion";
 import useEventScheduler from "../../hooks/useEventScheduler";
@@ -42,24 +42,7 @@ export default function MapScreen() {
   const route_id_ = useLocalSearchParams().route_id_;
   const [useHistory, setUseHistory] = useState(true);
 
-  const [data, setData] = useState<Route>({
-    route_id: 0,
-    locations: [],
-    locations_coordinates: [
-      {
-        latitude: 0,
-        longitude: 0,
-      },
-    ],
-    route: [
-      {
-        latitude: 0,
-        longitude: 0,
-      },
-    ],
-    instructions: [],
-    duration: 0,
-  });
+  const [data, setData] = useState<Route | null>(null);
 
   const {
     isDatePickerVisible,
@@ -84,25 +67,25 @@ export default function MapScreen() {
 
   const tipList: Array<Tip> = getTipForMode(tips, modes);
 
-  const [dataFromFetch, fetchData] = useFetch<Route>(
+  const [dataFromFetch, fetchData] = useFetch<Route | null>(
     {
       method: "POST",
       url: "/search/v2/route/",
       data: routeState,
     },
     [routeState],
-    data,
+    null,
     false
   );
 
   const [routeDataFromHistory, fetchRouteDataFromHistory] =
-    useFetch<RouteGetResult>(
+    useFetch<RouteGetResult | null>(
       {
         method: "GET",
         url: `/route/${route_id_}`,
       },
       [route_id_],
-      { num_votes: 0, route: data },
+      null,
       false
     );
 
@@ -155,6 +138,27 @@ export default function MapScreen() {
       console.error("Failed to fetch route:", error);
     });
   }, [fetchRoute]);
+
+  const voteRequestOptions: RequestOptions = {
+    method: "POST",
+    url: `/vote/`,
+  };
+
+  const [, executeVote] = useFetch(
+    voteRequestOptions,
+    [],
+    null,
+    false,
+    "Added to favourites"
+  );
+
+  const handleFavRoute = async (route_id: number) => {
+    try {
+      await executeVote({ ...voteRequestOptions, url: `/vote/${route_id}` });
+    } catch (error) {
+      return;
+    }
+  };
 
   // loading screen
   if (loading) {
@@ -281,6 +285,10 @@ export default function MapScreen() {
             }}
             title="Share"
           />
+          <Menu.Item
+            onPress={() => handleFavRoute(data.route_id)}
+            title="Favourite"
+          />
         </Menu>
 
         <DateTimePickerModal
@@ -336,7 +344,7 @@ export default function MapScreen() {
 
       <ActivityIndicator animating={loading} size="large" />
 
-      {data && (
+      {data && data.locations.length > 0 && data.locations.length > 0 ? (
         <ResultOverlay
           tipList={tipList}
           data={data}
@@ -347,6 +355,8 @@ export default function MapScreen() {
           checked={checked}
           locationIcons={locationIcons}
         />
+      ) : (
+        <View>Text</View>
       )}
     </SafeAreaView>
   );
