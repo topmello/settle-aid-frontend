@@ -5,7 +5,6 @@ import { Method } from "axios";
 import { loading, loaded, fail } from "../store/appSlice";
 import { AppDispatch } from "../store";
 import { CustomError, ErrorResponse } from "../types/errorResponse";
-import { router, useRootNavigationState } from "expo-router";
 import { useSession } from "./useSession";
 import { useNotification } from "./useNotification";
 import { useTranslation } from "react-i18next";

@@ -51,7 +51,7 @@ export default function HistoryOverviewScreen() {
 
   const handleFavRoute = async (route_id: number) => {
     try {
-      await executeVote({ ...voteRequestOptions, url: `/vote/${route_id}` });
+      await executeVote({ ...voteRequestOptions, url: `/vote/${route_id}/` });
     } catch (error) {
       return;
     } finally {
