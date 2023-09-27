@@ -67,6 +67,9 @@ export default function HomeScreen() {
   const handleDeepLink = (event: { url: string }) => {
     let data = Linking.parse(event.url);
     setData(data);
+    router.push({
+      pathname: "/route/location",
+    });
   };
 
   useEffect(() => {
