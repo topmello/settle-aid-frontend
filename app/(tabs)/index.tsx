@@ -30,6 +30,8 @@ import { useAppTheme } from "../../theme/theme";
 import { useFocusEffect } from "expo-router";
 import { WeatherWidget } from "../../components/WeatherWidget";
 
+import * as Linking from "expo-linking";
+
 export default function HomeScreen() {
   const { t } = useTranslation();
   const theme = useAppTheme();
@@ -59,6 +61,25 @@ export default function HomeScreen() {
     }, [])
   );
 
+  // handle deep linking
+  const [data, setData] = useState<Linking.ParsedURL | null>(null);
+
+  const handleDeepLink = (event: { url: string }) => {
+    let data = Linking.parse(event.url);
+    setData(data);
+  };
+
+  useEffect(() => {
+    Linking.addEventListener("url", handleDeepLink);
+    return () => {};
+  }, []);
+
+  // Log the data whenever it changes
+  useEffect(() => {
+    console.log("Parsed Data:", data);
+  }, [data]);
+
+  // handle press card
   const handlePressCard = (result: RouteHistory) => {
     if (result && result.route) {
       router.push({
