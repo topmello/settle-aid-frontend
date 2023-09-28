@@ -3,6 +3,7 @@ import * as Sharing from "expo-sharing";
 import { Route } from "../types/route";
 
 const generatePDF = async (route: Route) => {
+  console.log(route.route_id);
   try {
     const locations = route.locations
       .map((location) => `<p>${location}</p>`)

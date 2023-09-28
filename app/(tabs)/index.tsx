@@ -61,26 +61,84 @@ export default function HomeScreen() {
     }, [])
   );
 
-  // handle deep linking
-  const [data, setData] = useState<Linking.ParsedURL | null>(null);
+  // // handle deep linking
+  // const [data, setData] = useState<Linking.ParsedURL | null>(null);
 
-  const handleDeepLink = (event: { url: string }) => {
-    let data = Linking.parse(event.url);
-    setData(data);
-    router.push({
-      pathname: "/route/location",
-    });
-  };
+  // const handleDeepLink = (event: { url: string }) => {
+  //   let data = Linking.parse(event.url);
+  //   setData(data);
+  //   router.push({
+  //     pathname: "/route/result",
+  //     params: {
+  //       route_id_: 442,
+  //     },
+  //   });
+  // };
+
+  // useEffect(() => {
+  //   const getInitialUrl = async () => {
+  //     const initialUrl = await Linking.getInitialURL();
+  //     if (initialUrl) setData(Linking.parse(initialUrl));
+  //   };
+
+  //   Linking.addEventListener("url", handleDeepLink);
+  //   if (!data) {
+  //     getInitialUrl();
+  //   }
+  //   return () => {};
+  // }, []);
+
+  // // Log the data whenever it changes
+  // useEffect(() => {
+  //   console.log("Parsed Data:", data);
+  //   router.push({
+  //     pathname: "/route/result",
+  //     params: {
+  //       route_id_: 442,
+  //     },
+  //   });
+  // }, [data]);
+
+  const [routeId, setRouteId] = useState<string | null>(null);
 
   useEffect(() => {
+    // Handle the initial deep link
+    const handleInitialDeepLink = async () => {
+      const initialUrl = await Linking.getInitialURL();
+      if (initialUrl) {
+        const { queryParams } = Linking.parse(initialUrl);
+        if (queryParams.routeid) {
+          setRouteId(queryParams.routeid);
+        }
+      }
+    };
+
+    handleInitialDeepLink();
+
+    // Add an event listener for deep links
+    const handleDeepLink = (event: { url: string }) => {
+      const { queryParams } = Linking.parse(event.url);
+      if (queryParams.routeid) {
+        setRouteId(queryParams.routeid);
+      }
+    };
+
     Linking.addEventListener("url", handleDeepLink);
+
     return () => {};
   }, []);
 
-  // Log the data whenever it changes
+  // Navigate to the "RouteResult" screen when routeId is "442"
   useEffect(() => {
-    console.log("Parsed Data:", data);
-  }, [data]);
+    if (routeId) {
+      router.push({
+        pathname: "/route/result",
+        params: {
+          route_id_: routeId,
+        },
+      });
+    }
+  }, [routeId]);
 
   // handle press card
   const handlePressCard = (result: RouteHistory) => {
