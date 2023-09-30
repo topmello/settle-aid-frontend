@@ -23,6 +23,7 @@ interface CardProps {
   showDatePicker?: () => void;
   hideDatePicker?: () => void;
   handleDateConfirm?: (date: Date, route: Route) => void;
+  getUrl?: () => Promise<void>;
 }
 
 const RouteCard: React.FC<CardProps> = ({
@@ -36,6 +37,7 @@ const RouteCard: React.FC<CardProps> = ({
   showDatePicker,
   hideDatePicker,
   handleDateConfirm,
+  getUrl,
 }) => {
   const theme = useAppTheme();
 
@@ -166,6 +168,15 @@ const RouteCard: React.FC<CardProps> = ({
               style={styles.button}
             >
               Share
+            </Button>
+
+            <Button
+              mode="outlined"
+              textColor={theme.colors.info}
+              onPress={getUrl}
+              style={styles.button}
+            >
+              Share Link
             </Button>
           </View>
         )}

@@ -22,6 +22,8 @@ import useFetch from "../../hooks/useFetch";
 import { RouteHistory } from "../../types/route";
 import useEventScheduler from "../../hooks/useEventScheduler";
 
+import * as Linking from "expo-linking";
+
 export default function HistoryOverviewScreen() {
   const { t } = useTranslation();
   const theme = useTheme();
@@ -57,6 +59,12 @@ export default function HistoryOverviewScreen() {
     } finally {
       refetchRouteList();
     }
+  };
+
+  // get the initial url
+  const getUrl = async () => {
+    const initialUrl = await Linking.getInitialURL();
+    console.log(initialUrl);
   };
 
   const {
@@ -189,6 +197,7 @@ export default function HistoryOverviewScreen() {
               showDatePicker={showDatePicker}
               hideDatePicker={hideDatePicker}
               handleDateConfirm={handleDateConfirm}
+              getUrl={getUrl}
             />
           ))}
         </View>
