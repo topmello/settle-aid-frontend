@@ -99,7 +99,7 @@ export default function HomeScreen() {
   //   });
   // }, [data]);
 
-  const [routeId, setRouteId] = useState<string | null>(null);
+  const [routeId, setRouteId] = useState<string  | null>(null);
 
   useEffect(() => {
     // Handle the initial deep link
@@ -128,7 +128,7 @@ export default function HomeScreen() {
     return () => {};
   }, []);
 
-  // Navigate to the "RouteResult" screen when routeId is "442"
+  // Navigate 
   useEffect(() => {
     if (routeId) {
       router.push({
@@ -140,7 +140,7 @@ export default function HomeScreen() {
     }
   }, [routeId]);
 
-  // handle press card
+
   const handlePressCard = (result: RouteHistory) => {
     if (result && result.route) {
       router.push({
