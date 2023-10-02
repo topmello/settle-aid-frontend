@@ -61,44 +61,6 @@ export default function HomeScreen() {
     }, [])
   );
 
-  // // handle deep linking
-  // const [data, setData] = useState<Linking.ParsedURL | null>(null);
-
-  // const handleDeepLink = (event: { url: string }) => {
-  //   let data = Linking.parse(event.url);
-  //   setData(data);
-  //   router.push({
-  //     pathname: "/route/result",
-  //     params: {
-  //       route_id_: 442,
-  //     },
-  //   });
-  // };
-
-  // useEffect(() => {
-  //   const getInitialUrl = async () => {
-  //     const initialUrl = await Linking.getInitialURL();
-  //     if (initialUrl) setData(Linking.parse(initialUrl));
-  //   };
-
-  //   Linking.addEventListener("url", handleDeepLink);
-  //   if (!data) {
-  //     getInitialUrl();
-  //   }
-  //   return () => {};
-  // }, []);
-
-  // // Log the data whenever it changes
-  // useEffect(() => {
-  //   console.log("Parsed Data:", data);
-  //   router.push({
-  //     pathname: "/route/result",
-  //     params: {
-  //       route_id_: 442,
-  //     },
-  //   });
-  // }, [data]);
-
   const [routeId, setRouteId] = useState<string | null>(null);
 
   useEffect(() => {
