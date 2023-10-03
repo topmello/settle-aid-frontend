@@ -25,6 +25,7 @@ import { selectTheme, setRoomId } from "../../store/appSlice";
 import { selectLonLat } from "../../store/routeSlice";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { useNotification } from "../../hooks/useNotification";
+import * as Clipboard from "expo-clipboard";
 
 export default function TrackScreen() {
   const theme = useAppTheme();
@@ -384,7 +385,7 @@ export default function TrackScreen() {
                     }}
                     style={{ width: 200, height: 40 }}
                   >
-                    Start tracking
+                    Start sharing
                   </Button>
                 )}
                 {tracking && (
@@ -396,7 +397,23 @@ export default function TrackScreen() {
                     <Text variant="bodyLarge">
                       Ask your children to type in
                     </Text>
-                    <Chip icon="information">{roomId}</Chip>
+                    <Chip
+                      icon="information"
+                      style={{
+                        marginVertical: 4,
+                      }}
+                      onPress={async () => {
+                        await Clipboard.setStringAsync(roomId);
+                        pushNotification({
+                          message: t("Room PIN Copied to clipboard", {
+                            ns: "acc",
+                          }),
+                          type: "success",
+                        });
+                      }}
+                    >
+                      {roomId}
+                    </Chip>
                     <Text variant="bodyLarge">to track you</Text>
                   </View>
                 )}
