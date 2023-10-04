@@ -140,17 +140,6 @@ const RouteCard: React.FC<CardProps> = ({
             >
               Schedule
             </Button>
-
-            <DateTimePickerModal
-              isVisible={isDatePickerVisible}
-              mode="date"
-              onConfirm={async (date) => {
-                if (handleDateConfirm) {
-                  handleDateConfirm(date, routeResult.route);
-                }
-              }}
-              onCancel={hideDatePicker}
-            />
             <Menu
               visible={menuVisible}
               onDismiss={() => setMenuVisible(false)}
@@ -175,6 +164,16 @@ const RouteCard: React.FC<CardProps> = ({
                 title="Share Link"
               />
             </Menu>
+            <DateTimePickerModal
+              isVisible={isDatePickerVisible}
+              mode="date"
+              onConfirm={async (date) => {
+                if (handleDateConfirm) {
+                  handleDateConfirm(date, routeResult.route);
+                }
+              }}
+              onCancel={hideDatePicker}
+            />
           </View>
         )}
       </AnimatedButton>
