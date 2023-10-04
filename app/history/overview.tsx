@@ -76,13 +76,6 @@ export default function HistoryOverviewScreen() {
     }
   };
 
-  const {
-    isDatePickerVisible,
-    showDatePicker,
-    hideDatePicker,
-    handleDateConfirm,
-  } = useEventScheduler();
-
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -202,10 +195,6 @@ export default function HistoryOverviewScreen() {
               routeResult={result}
               handleFavRoute={handleFavRoute}
               voted={result.voted_by_user}
-              isDatePickerVisible={isDatePickerVisible}
-              showDatePicker={showDatePicker}
-              hideDatePicker={hideDatePicker}
-              handleDateConfirm={handleDateConfirm}
               shareUrl={shareUrl}
             />
           ))}

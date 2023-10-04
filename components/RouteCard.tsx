@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { Route, RouteHistory } from "../types/route";
-import { Button, IconButton } from "react-native-paper";
+import { Button, IconButton, Menu } from "react-native-paper";
 import { AnimatedButton } from "./AnimatedButton";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { useAppTheme } from "../theme/theme";
@@ -11,6 +11,7 @@ import Animated, {
   FadeOutRight,
   Layout,
 } from "react-native-reanimated";
+import useEventScheduler from "../hooks/useEventScheduler";
 
 interface CardProps {
   routeResult: RouteHistory;
@@ -19,10 +20,6 @@ interface CardProps {
   onPressCard?: () => void;
   voted?: boolean;
   index?: number;
-  isDatePickerVisible?: boolean;
-  showDatePicker?: () => void;
-  hideDatePicker?: () => void;
-  handleDateConfirm?: (date: Date, route: Route) => void;
   shareUrl?: (route_id: number) => Promise<void>;
 }
 
@@ -33,10 +30,6 @@ const RouteCard: React.FC<CardProps> = ({
   onPressCard,
   voted = false,
   index,
-  isDatePickerVisible,
-  showDatePicker,
-  hideDatePicker,
-  handleDateConfirm,
   shareUrl,
 }) => {
   const theme = useAppTheme();
@@ -87,6 +80,7 @@ const RouteCard: React.FC<CardProps> = ({
       justifyContent: "flex-end",
       alignItems: "center",
       marginTop: 16,
+      gap: 8,
     },
     circle: {
       width: 34,
@@ -96,10 +90,16 @@ const RouteCard: React.FC<CardProps> = ({
       alignItems: "center",
       backgroundColor: theme.colors.info,
     },
-    button: {
-      marginLeft: 8,
-    },
+    button: {},
   });
+
+  const [menuVisible, setMenuVisible] = React.useState(false);
+  const {
+    isDatePickerVisible,
+    showDatePicker,
+    hideDatePicker,
+    handleDateConfirm,
+  } = useEventScheduler();
 
   return (
     <Animated.View
@@ -127,14 +127,8 @@ const RouteCard: React.FC<CardProps> = ({
           <View style={styles.button_container}>
             <IconButton
               icon={voted ? "bookmark" : "bookmark-outline"}
-              theme={{
-                colors: {
-                  onPrimary: theme.colors.info,
-                  primary: theme.colors.onInfo,
-                  surfaceVariant: theme.colors.info,
-                },
-              }}
-              mode="contained"
+              iconColor={theme.colors.onInfoContainer}
+              mode="outlined"
               onPress={() =>
                 handleFavRoute && handleFavRoute(routeResult.route.route_id)
               }
@@ -143,7 +137,6 @@ const RouteCard: React.FC<CardProps> = ({
               mode="outlined"
               textColor={theme.colors.info}
               onPress={showDatePicker}
-              style={styles.button}
             >
               Schedule
             </Button>
@@ -156,28 +149,32 @@ const RouteCard: React.FC<CardProps> = ({
                   handleDateConfirm(date, routeResult.route);
                 }
               }}
-              onCancel={hideDatePicker ? hideDatePicker : () => {}}
+              onCancel={hideDatePicker}
             />
-
-            <Button
-              mode="outlined"
-              textColor={theme.colors.info}
-              onPress={() => {
-                generatePDF(routeResult.route);
-              }}
-              style={styles.button}
+            <Menu
+              visible={menuVisible}
+              onDismiss={() => setMenuVisible(false)}
+              anchor={
+                <IconButton
+                  mode="contained-tonal"
+                  iconColor={theme.colors.onInfo}
+                  containerColor={theme.colors.info}
+                  icon="dots-vertical"
+                  onPress={() => setMenuVisible(true)}
+                />
+              }
             >
-              Share
-            </Button>
-
-            <Button
-              mode="outlined"
-              textColor={theme.colors.info}
-              onPress={() => shareUrl(routeResult.route.route_id)}
-              style={styles.button}
-            >
-              Share Link
-            </Button>
+              <Menu.Item
+                onPress={() => {
+                  generatePDF(routeResult.route);
+                }}
+                title="Share"
+              />
+              <Menu.Item
+                onPress={() => shareUrl?.(routeResult.route.route_id)}
+                title="Share Link"
+              />
+            </Menu>
           </View>
         )}
       </AnimatedButton>
