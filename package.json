@@ -7,7 +7,8 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "test": "jest --watchAll"
+    "test": "jest --watchAll",
+    "build": "eas build -p android --profile preview"
   },
   "jest": {
     "preset": "jest-expo"
@@ -22,7 +23,7 @@
     "@reduxjs/toolkit": "^1.9.5",
     "axios": "^1.4.0",
     "expo": "~49.0.8",
-    "expo-calendar": "~11.3.0",
+    "expo-calendar": "~11.3.2",
     "expo-font": "~11.4.0",
     "expo-linking": "^3.3.1",
     "expo-location": "~16.1.0",
@@ -39,7 +40,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-i18next": "^13.2.0",
-    "react-native": "0.72.4",
+    "react-native": "0.72.5",
     "react-native-add-calendar-event": "^4.2.2",
     "react-native-calendar-events": "^2.2.0",
     "react-native-calendars": "^1.1301.0",
