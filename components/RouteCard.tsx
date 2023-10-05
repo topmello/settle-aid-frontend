@@ -102,82 +102,80 @@ const RouteCard: React.FC<CardProps> = ({
   } = useEventScheduler();
 
   return (
-    <Animated.View
-      entering={FadeInRight.delay(index ? index * 50 : 0)}
-      exiting={FadeOutRight}
-      layout={Layout.damping(1)}
+    // <Animated.View
+    //   entering={FadeInRight.delay(index ? index * 50 : 0)}
+    //   exiting={FadeOutRight}
+    //   layout={Layout.damping(1)}
+    // >
+    <AnimatedButton
+      onPress={onPressCard ? onPressCard : () => {}}
+      color={theme.colors.infoContainer}
+      style={{
+        paddingHorizontal: 20,
+        overflow: "hidden",
+      }}
     >
-      <AnimatedButton
-        onPress={onPressCard ? onPressCard : () => {}}
-        color={theme.colors.infoContainer}
-        style={{
-          paddingHorizontal: 20,
-          overflow: "hidden",
-        }}
-      >
-        <Text style={styles.card_title}>{routeResult.route.locations[0]}</Text>
-        <View style={styles.tags_container}>
-          <Text style={styles.tag} numberOfLines={1} ellipsizeMode="tail">
-            {routeResult.route.locations.map(
-              (location, index) => `#${location}`
-            )}
-          </Text>
-        </View>
-        {!isSimplified && (
-          <View style={styles.button_container}>
-            <IconButton
-              icon={voted ? "bookmark" : "bookmark-outline"}
-              iconColor={theme.colors.onInfoContainer}
-              mode="outlined"
-              onPress={() =>
-                handleFavRoute && handleFavRoute(routeResult.route.route_id)
-              }
-            />
-            <Button
-              mode="outlined"
-              textColor={theme.colors.info}
-              onPress={showDatePicker}
-            >
-              Schedule
-            </Button>
-            <Menu
-              visible={menuVisible}
-              onDismiss={() => setMenuVisible(false)}
-              anchor={
-                <IconButton
-                  mode="contained-tonal"
-                  iconColor={theme.colors.onInfo}
-                  containerColor={theme.colors.info}
-                  icon="dots-vertical"
-                  onPress={() => setMenuVisible(true)}
-                />
-              }
-            >
-              <Menu.Item
-                onPress={() => {
-                  generatePDF(routeResult.route);
-                }}
-                title="Share"
+      <Text style={styles.card_title}>{routeResult.route.locations[0]}</Text>
+      <View style={styles.tags_container}>
+        <Text style={styles.tag} numberOfLines={1} ellipsizeMode="tail">
+          {routeResult.route.locations.map((location, index) => `#${location}`)}
+        </Text>
+      </View>
+      {!isSimplified && (
+        <View style={styles.button_container}>
+          <IconButton
+            icon={voted ? "bookmark" : "bookmark-outline"}
+            iconColor={theme.colors.onInfoContainer}
+            mode="outlined"
+            onPress={() =>
+              handleFavRoute && handleFavRoute(routeResult.route.route_id)
+            }
+          />
+          <Button
+            mode="outlined"
+            textColor={theme.colors.info}
+            onPress={showDatePicker}
+          >
+            Schedule
+          </Button>
+          <Menu
+            visible={menuVisible}
+            onDismiss={() => setMenuVisible(false)}
+            anchor={
+              <IconButton
+                mode="contained-tonal"
+                iconColor={theme.colors.onInfo}
+                containerColor={theme.colors.info}
+                icon="dots-vertical"
+                onPress={() => setMenuVisible(true)}
               />
-              <Menu.Item
-                onPress={() => shareUrl?.(routeResult.route.route_id)}
-                title="Share Link"
-              />
-            </Menu>
-            <DateTimePickerModal
-              isVisible={isDatePickerVisible}
-              mode="date"
-              onConfirm={async (date) => {
-                if (handleDateConfirm) {
-                  handleDateConfirm(date, routeResult.route);
-                }
+            }
+          >
+            <Menu.Item
+              onPress={() => {
+                generatePDF(routeResult.route);
               }}
-              onCancel={hideDatePicker}
+              title="Share"
             />
-          </View>
-        )}
-      </AnimatedButton>
-    </Animated.View>
+            <Menu.Item
+              onPress={() => shareUrl?.(routeResult.route.route_id)}
+              title="Share Link"
+            />
+          </Menu>
+          <DateTimePickerModal
+            isVisible={isDatePickerVisible}
+            mode="date"
+            onConfirm={async (date) => {
+              if (handleDateConfirm) {
+                handleDateConfirm(date, routeResult.route);
+              }
+            }}
+            onCancel={hideDatePicker}
+          />
+        </View>
+      )}
+    </AnimatedButton>
+    // </Animated.View>
   );
 };
 

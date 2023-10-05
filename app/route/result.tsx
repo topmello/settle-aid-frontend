@@ -39,7 +39,7 @@ export default function MapScreen() {
   const routeState: RouteState = useSelector(selectRouteState);
   const loading = useSelector(selectIsLoading);
 
-  const route_id_ = useLocalSearchParams().route_id_;
+  const route_id_ = useLocalSearchParams().route_id;
   const [useHistory, setUseHistory] = useState(true);
 
   const [data, setData] = useState<Route>({

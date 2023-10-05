@@ -47,6 +47,8 @@ import { useNotification } from "../../hooks/useNotification";
 import { useAppTheme } from "../../theme/theme";
 import { mapDarkTheme } from "../../theme/map";
 
+const GOOGLE_PLACES_API_KEY = process.env.EXPO_PUBLIC_GOOGLE_PLACES_API_KEY;
+
 export default function RouteGenLocation() {
   const theme = useAppTheme();
   const dispatch = useDispatch<AppDispatch>();
@@ -204,7 +206,7 @@ export default function RouteGenLocation() {
                 setShowLocationInput(false);
               }}
               query={{
-                key: "AIzaSyDRCFeHN0Z_yftUs5FKP6nv3XAm_Ex8cbc",
+                key: GOOGLE_PLACES_API_KEY,
                 language: "en",
                 location: "-37.840935, 144.946457",
                 radius: "20000",
