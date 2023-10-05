@@ -76,6 +76,30 @@ export default function HistoryOverviewScreen() {
     }
   };
 
+  //publish
+  const publishRequestOptions: RequestOptions = {
+    method: "POST",
+    url: `/route/publish/`,
+  };
+
+  const [, executePublish] = useFetch(
+      publishRequestOptions,
+      [],
+      null,
+      false,
+      "Route Published"
+  );
+
+  const handlePublishRoute = async (route_id: number) => {
+    try {
+      await executePublish({ ...publishRequestOptions, url: `/route/publish/${route_id}/` });
+    } catch (error) {
+      console.error("Error publishing the route:", error);
+    } finally {
+      refetchRouteList(); // Optional: You can refetch the routes if necessary
+    }
+  };
+
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -196,6 +220,7 @@ export default function HistoryOverviewScreen() {
               handleFavRoute={handleFavRoute}
               voted={result.voted_by_user}
               shareUrl={shareUrl}
+              handlePublishRoute={handlePublishRoute}
             />
           ))}
         </View>

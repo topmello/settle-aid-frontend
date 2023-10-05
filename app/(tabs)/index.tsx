@@ -232,6 +232,41 @@ export default function HomeScreen() {
                 </View>
               </View>
             </AnimatedButton>
+            <AnimatedButton
+                height={76}
+                color={theme.colors.secondaryContainer}
+                style={{
+                  paddingVertical: 24,
+                }}
+                onPress={() => {
+                  router.push("/history/sharedroute");
+                }}
+            >
+              <View style={styles.animatedButtonInner}>
+                <PersonPinIcon
+                    height={40}
+                    width={40}
+                    fill={theme.colors.onSuccessContainer}
+                />
+                <View style={styles.columnFlexStart}>
+                  <View style={styles.rowSpaceBetween}>
+                    <Text
+                        variant="titleLarge"
+                        style={[
+                          styles.headerText,
+                          { color: theme.colors.onSuccessContainer },
+                        ]}
+                    >
+                      {t("Shared Route", { ns: "home" })}
+                    </Text>
+                    <ArrowIcon
+                        style={styles.moreIcon}
+                        fill={theme.colors.onSuccessContainer}
+                    />
+                  </View>
+                </View>
+              </View>
+            </AnimatedButton>
           </View>
         </View>
         {routeList && (
