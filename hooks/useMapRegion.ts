@@ -1,12 +1,20 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Route } from "../types/route";
+import MapView from "react-native-maps";
 
-export type MapRegion = {
+export type SimpleMapRegion = {
   latitude: number;
   longitude: number;
   latitudeDelta: number;
   longitudeDelta: number;
 };
+
+export type UserRegion = {
+  userLongitude: number;
+  userLatitude: number;
+};
+
+export type MapRegion = SimpleMapRegion & UserRegion;
 
 export type Coordinates = {
   latitude: number;
@@ -44,11 +52,20 @@ export const useMapRegion = ({
 }: {
   data: Route | null;
   routeState: Coordinates;
-  mapRef: React.RefObject<any>;
+  mapRef: React.RefObject<MapView>;
 }) => {
-  const initialRender = useRef(true);
-
   const [region, setRegion] = useState<MapRegion>({
+    userLongitude: 0,
+    userLatitude: 0,
+    latitude: -37.8136,
+    longitude: 144.9631,
+    latitudeDelta: 0.03,
+    longitudeDelta: 0.015,
+  });
+
+  const [initialRegion, setInitialRegion] = useState<MapRegion>({
+    userLongitude: 0,
+    userLatitude: 0,
     latitude: -37.8136,
     longitude: 144.9631,
     latitudeDelta: 0.03,
@@ -56,93 +73,113 @@ export const useMapRegion = ({
   });
 
   useEffect(() => {
-    if (initialRender.current) {
-      initialRender.current = false;
-      return;
-    }
-
     let centerLat = 0,
       centerLon = 0,
-      deltaLat = 0,
-      deltaLon = 0;
+      minLat = Infinity,
+      maxLat = -Infinity,
+      minLon = Infinity,
+      maxLon = -Infinity;
 
     if (data && Array.isArray(data["locations_coordinates"])) {
       data["locations_coordinates"].forEach((location) => {
         centerLat += location.latitude;
         centerLon += location.longitude;
-        deltaLat = Math.max(
-          deltaLat,
-          Math.abs(location.latitude - routeState.latitude),
-          0.03
-        );
-        deltaLon = Math.max(
-          deltaLon,
-          Math.abs(location.longitude - routeState.longitude),
-          0.015
-        );
+        if (location.latitude < minLat) {
+          minLat = location.latitude;
+        }
+        if (location.latitude > maxLat) {
+          maxLat = location.latitude;
+        }
+        if (location.longitude < minLon) {
+          minLon = location.longitude;
+        }
+        if (location.longitude > maxLon) {
+          maxLon = location.longitude;
+        }
       });
 
       centerLat /= data["locations_coordinates"].length;
       centerLon /= data["locations_coordinates"].length;
     }
+    const latitudeDelta = maxLat - minLat;
+    const longitudeDelta = maxLon - minLon;
 
-    setRegion({
+    const newRegion = {
+      userLatitude: routeState.latitude,
+      userLongitude: routeState.longitude,
       latitude: centerLat - 0.002,
       longitude: centerLon,
-      latitudeDelta: deltaLat * 1.3,
-      longitudeDelta: deltaLon * 1.3,
-    });
+      latitudeDelta: latitudeDelta * 1.4,
+      longitudeDelta: longitudeDelta * 1.4,
+    };
+
+    setRegion(newRegion);
+    setInitialRegion(newRegion);
   }, [data, routeState.latitude, routeState.longitude]);
 
-  const handleLocationSelect = useCallback(
-    (location: Coordinates) => {
-      if (
-        location === undefined ||
-        mapRef.current === undefined ||
-        location === null ||
-        location.latitude === undefined ||
-        location.longitude === undefined
-      ) {
-        return;
-      }
-      const newRegion = {
-        ...region,
-        latitude: location?.latitude,
-        longitude: location?.longitude,
-      };
+  const handleMapDeltaChange = (newRegion: SimpleMapRegion) => {
+    setRegion({
+      ...region,
+      ...newRegion,
+    });
+  };
 
-      mapRef.current?.animateCamera(
-        {
-          center: newRegion,
-        },
-        { duration: 1000 }
-      );
+  const handleLocationSelect = (location: Coordinates) => {
+    if (
+      location === undefined ||
+      mapRef.current === undefined ||
+      location === null ||
+      location.latitude === undefined ||
+      location.longitude === undefined
+    ) {
+      return;
+    }
+    const newRegion = {
+      ...region,
+      latitude: location?.latitude,
+      longitude: location?.longitude,
+    };
 
-      setRegion({
-        ...region,
-        ...newRegion,
-      });
-    },
-    [region, mapRef]
-  );
+    mapRef.current?.animateCamera(
+      {
+        center: newRegion,
+      },
+      { duration: 1000 }
+    );
 
-  const handlePressRoute = useCallback(
-    async (index: number) => {
-      if (
-        !data ||
-        index < 0 ||
-        index >= data.route.length ||
-        data.route.length === 0
-      ) {
-        return;
-      }
-      const lat1 = data.route[index]?.latitude;
-      const lon1 = data.route[index]?.longitude;
-      const lat2 = data.route[index + 1]?.latitude;
-      const lon2 = data.route[index + 1]?.longitude;
+    setRegion({
+      ...region,
+      ...newRegion,
+    });
+  };
 
-      const bearing =
-        lat2 && lon2 ? calculateBearing(lat1, lon1, lat2, lon2) : 0;
+  const handleOverview = () => {
+    if (mapRef.current) {
+      mapRef.current.animateToRegion(initialRegion, 1000);
+    }
+  };
+
+  const handlePressRoute = (index: number) => {
+    if (
+      !data ||
+      index < 0 ||
+      index >= data.route.length ||
+      data.route.length === 0
+    ) {
+      return;
+    }
+    const lat1 = data.route[index]?.latitude;
+    const lon1 = data.route[index]?.longitude;
+    const lat2 = data.route[index + 1]?.latitude;
+    const lon2 = data.route[index + 1]?.longitude;
+    console.log("lat1", lat1);
+    console.log("lon1", lon1);
+    console.log("lat2", lat2);
+    console.log("lon2", lon2);
+
+    if (lat1 && lon1 && lat2 && lon2) {
+      const bearing = calculateBearing(lat1, lon1, lat2, lon2);
+      console.log("bearing", bearing);
       const newRegion = {
         ...region,
         latitude: lat1,
@@ -150,25 +187,20 @@ export const useMapRegion = ({
       };
 
       if (mapRef.current) {
-        await mapRef.current.animateCamera(
-          {
-            center: region,
-            heading: bearing,
-          },
-          { duration: 1000 }
-        );
+        mapRef.current.animateCamera({
+          center: newRegion,
+          heading: bearing,
+          zoom: 18,
+        });
       }
-      setRegion({
-        ...region,
-        ...newRegion,
-      });
-    },
-    [region, mapRef]
-  );
+    }
+  };
 
   return {
     region,
     handleLocationSelect,
     handlePressRoute,
+    handleMapDeltaChange,
+    handleOverview,
   };
 };

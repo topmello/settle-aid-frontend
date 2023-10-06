@@ -115,7 +115,13 @@ export default function MapScreen() {
 
   const mapRef = useRef<MapView>(null);
 
-  const { region, handleLocationSelect, handlePressRoute } = useMapRegion({
+  const {
+    region,
+    handleLocationSelect,
+    handlePressRoute,
+    handleMapDeltaChange,
+    handleOverview,
+  } = useMapRegion({
     data,
     routeState,
     mapRef,
@@ -221,7 +227,6 @@ export default function MapScreen() {
           mode="contained"
           style={{
             width: "50%",
-            alignItems: "center",
           }}
           onPress={() => {
             router.back();
@@ -233,7 +238,6 @@ export default function MapScreen() {
           mode="contained"
           style={{
             width: "50%",
-            alignItems: "center",
           }}
           onPress={() => {
             router.replace("/(tabs)");
@@ -283,35 +287,48 @@ export default function MapScreen() {
               height={34}
             />
           </TouchableOpacity>
-          <Menu
-            visible={menuVisible}
-            onDismiss={closeMenu}
-            anchor={
-              <IconButton
-                icon={MORE_ICON}
-                onPress={openMenu}
-                mode="contained"
-                style={{
-                  backgroundColor: theme.colors.primaryContainer,
-                }}
-              />
-            }
+          <View
+            style={{
+              flexDirection: "row",
+            }}
           >
-            {typeof route_id_ !== "string" && (
-              <Menu.Item onPress={fetchRoute} title="Re-plan" />
-            )}
-            <Menu.Item onPress={showDatePicker} title="Schedule" />
-            <Menu.Item
-              onPress={() => {
-                generatePDF(data);
-              }}
-              title="Share"
+            <IconButton
+              icon="map-marker-path"
+              onPress={handleOverview}
+              mode="contained"
+              containerColor={theme.colors.tertiaryContainer}
+              iconColor={theme.colors.onTertiaryContainer}
             />
-            <Menu.Item
-              onPress={() => handleFavRoute(data.route_id)}
-              title="Favourite"
-            />
-          </Menu>
+            <Menu
+              visible={menuVisible}
+              onDismiss={closeMenu}
+              anchor={
+                <IconButton
+                  icon={MORE_ICON}
+                  onPress={openMenu}
+                  mode="contained"
+                  style={{
+                    backgroundColor: theme.colors.primaryContainer,
+                  }}
+                />
+              }
+            >
+              {typeof route_id_ !== "string" && (
+                <Menu.Item onPress={fetchRoute} title="Re-plan" />
+              )}
+              <Menu.Item onPress={showDatePicker} title="Schedule" />
+              <Menu.Item
+                onPress={() => {
+                  generatePDF(data);
+                }}
+                title="Share"
+              />
+              <Menu.Item
+                onPress={() => handleFavRoute(data.route_id)}
+                title="Favourite"
+              />
+            </Menu>
+          </View>
 
           <DateTimePickerModal
             isVisible={isDatePickerVisible}
@@ -329,6 +346,14 @@ export default function MapScreen() {
           provider={PROVIDER_GOOGLE}
           customMapStyle={currentTheme === "dark" ? mapDarkTheme : []}
           ref={mapRef}
+          showsUserLocation={true}
+          showsCompass={false}
+          showsMyLocationButton={false}
+          onRegionChangeComplete={(region, { isGesture }) => {
+            if (isGesture) {
+              handleMapDeltaChange(region);
+            }
+          }}
           mapPadding={{
             top: 0,
             right: 0,
@@ -339,7 +364,7 @@ export default function MapScreen() {
             height: "100%",
             width: "100%",
           }}
-          initialRegion={region}
+          region={region}
           scrollEnabled={true}
           pitchEnabled={true}
           rotateEnabled={true}
@@ -357,12 +382,19 @@ export default function MapScreen() {
                 />
               );
             })}
-          <Marker coordinate={region} pinColor="blue" title="You are here" />
+          <Marker
+            coordinate={{
+              latitude: region.userLatitude,
+              longitude: region.userLongitude,
+            }}
+            pinColor="blue"
+            title="Start Point"
+          />
           <Polyline
             coordinates={data?.route}
             strokeWidth={3}
-            strokeColor="rgba(227, 66, 52, 0.7)"
-            lineDashPattern={[1, 5]}
+            strokeColor={theme.colors.onBackground}
+            lineDashPattern={[1, 3]}
           />
         </MapView>
 
