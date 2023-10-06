@@ -20,7 +20,6 @@ import { PersistGate } from "redux-persist/integration/react";
 import { useNotification } from "../hooks/useNotification";
 import { NotificationProvider } from "../store/NotificationContext";
 import { TipProvider } from "../store/TipContext";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export {
   // Catch any errors thrown by the Layout component.

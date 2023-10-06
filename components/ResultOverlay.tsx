@@ -44,24 +44,24 @@ const ResultOverlay: React.FC<OverlayProps> = ({
 }: OverlayProps) => {
   const theme = useTheme();
   const bottomSheetRef = React.useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ["15%", "50%"], []);
   const { resultTip, setResultTip } = useTip();
 
   return (
     <BottomSheet
       ref={bottomSheetRef}
-      index={1}
-      snapPoints={snapPoints}
+      snapPoints={["50%"]}
+      enableOverDrag={false}
+      enableContentPanningGesture={false}
+      enableHandlePanningGesture={false}
       style={{
         elevation: 5,
-        zIndex: 5,
       }}
       animateOnMount={false}
       backgroundStyle={{
         backgroundColor: theme.colors.surface,
       }}
       handleIndicatorStyle={{
-        backgroundColor: theme.colors.onSurfaceVariant,
+        backgroundColor: theme.colors.surface,
       }}
     >
       <ScrollView>

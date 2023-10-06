@@ -7,6 +7,7 @@ import {
   StatusBar,
   Platform,
   Pressable,
+  TouchableOpacity,
 } from "react-native";
 import { Button, Text, ActivityIndicator } from "react-native-paper";
 import { useTranslation } from "react-i18next"; // <-- Import the hook
@@ -83,16 +84,19 @@ export default function HistoryOverviewScreen() {
   };
 
   const [, executePublish] = useFetch(
-      publishRequestOptions,
-      [],
-      null,
-      false,
-      "Route Published"
+    publishRequestOptions,
+    [],
+    null,
+    false,
+    "Route Published"
   );
 
   const handlePublishRoute = async (route_id: number) => {
     try {
-      await executePublish({ ...publishRequestOptions, url: `/route/publish/${route_id}/` });
+      await executePublish({
+        ...publishRequestOptions,
+        url: `/route/publish/${route_id}/`,
+      });
     } catch (error) {
       console.error("Error publishing the route:", error);
     } finally {
@@ -186,13 +190,13 @@ export default function HistoryOverviewScreen() {
         size="large"
       />
       <View style={styles.row_text}>
-        <Pressable onPress={() => router.back()}>
+        <TouchableOpacity onPress={() => router.back()}>
           <ArrowBackIcon
             fill={theme.colors.onPrimaryContainer}
             width={28}
             height={28}
           />
-        </Pressable>
+        </TouchableOpacity>
         <View style={{ flex: 1, marginLeft: 12 }}>
           <Text style={styles.text_title}>Route History</Text>
         </View>

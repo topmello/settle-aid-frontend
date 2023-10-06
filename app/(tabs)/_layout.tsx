@@ -27,7 +27,6 @@ export default function TabLayout() {
       router.replace("/common/language");
       return;
     } else {
-      console.log("check session");
       checkSession().then((isSessionVaild) => {
         if (!isSessionVaild) {
           router.replace("/auth/login");

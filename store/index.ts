@@ -13,6 +13,7 @@ import {
   REGISTER,
 } from "redux-persist";
 import storage from "@react-native-async-storage/async-storage";
+import challengeSlice from "./challengeSlice";
 
 export const store = configureStore({
   reducer: {
@@ -36,6 +37,13 @@ export const store = configureStore({
         storage,
       },
       routeSlice
+    ),
+    challenge: persistReducer(
+      {
+        key: "challenge",
+        storage,
+      },
+      challengeSlice
     ),
   },
   middleware: (getDefaultMiddleware) =>

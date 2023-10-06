@@ -233,35 +233,35 @@ export default function HomeScreen() {
               </View>
             </AnimatedButton>
             <AnimatedButton
-                height={76}
-                color={theme.colors.secondaryContainer}
-                style={{
-                  paddingVertical: 24,
-                }}
-                onPress={() => {
-                  router.push("/history/sharedroute");
-                }}
+              height={76}
+              color={theme.colors.secondaryContainer}
+              style={{
+                paddingVertical: 24,
+              }}
+              onPress={() => {
+                router.push("/history/sharedroute");
+              }}
             >
               <View style={styles.animatedButtonInner}>
                 <PersonPinIcon
-                    height={40}
-                    width={40}
-                    fill={theme.colors.onSuccessContainer}
+                  height={40}
+                  width={40}
+                  fill={theme.colors.onSuccessContainer}
                 />
                 <View style={styles.columnFlexStart}>
                   <View style={styles.rowSpaceBetween}>
                     <Text
-                        variant="titleLarge"
-                        style={[
-                          styles.headerText,
-                          { color: theme.colors.onSuccessContainer },
-                        ]}
+                      variant="titleLarge"
+                      style={[
+                        styles.headerText,
+                        { color: theme.colors.onSuccessContainer },
+                      ]}
                     >
                       {t("Shared Route", { ns: "home" })}
                     </Text>
                     <ArrowIcon
-                        style={styles.moreIcon}
-                        fill={theme.colors.onSuccessContainer}
+                      style={styles.moreIcon}
+                      fill={theme.colors.onSuccessContainer}
                     />
                   </View>
                 </View>
@@ -276,39 +276,32 @@ export default function HomeScreen() {
                 {t("Route History", { ns: "home" })}
               </Text>
               <TouchableOpacity
-                activeOpacity={0.6}
                 onPress={() => {
-                  /* handle action */
+                  handlePressMoreHistory();
                 }}
               >
-                <Pressable
-                  onPress={() => {
-                    handlePressMoreHistory();
+                <View
+                  style={{
+                    alignItems: "center",
+                    marginRight: 16,
+                    marginTop: 10,
+                    flexDirection: "row",
                   }}
                 >
-                  <View
+                  <Text
                     style={{
-                      alignItems: "center",
-                      marginRight: 16,
-                      marginTop: 10,
-                      flexDirection: "row",
+                      color: theme.colors.primary,
+                      fontWeight: "bold",
                     }}
                   >
-                    <Text
-                      style={{
-                        color: theme.colors.primary,
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {t("comm:More")}
-                    </Text>
-                    <ArrowIcon
-                      width={22}
-                      height={22}
-                      fill={theme.colors.primary}
-                    />
-                  </View>
-                </Pressable>
+                    {t("comm:More")}
+                  </Text>
+                  <ArrowIcon
+                    width={22}
+                    height={22}
+                    fill={theme.colors.primary}
+                  />
+                </View>
               </TouchableOpacity>
             </View>
 
@@ -372,7 +365,7 @@ export default function HomeScreen() {
               >
                 {t("Favorite Route", { ns: "home" })}
               </Text>
-              <Pressable onPress={() => handlePressMoreFavorite()}>
+              <TouchableOpacity onPress={() => handlePressMoreFavorite()}>
                 <View
                   style={{
                     alignItems: "center",
@@ -395,7 +388,7 @@ export default function HomeScreen() {
                     fill={theme.colors.primary}
                   />
                 </View>
-              </Pressable>
+              </TouchableOpacity>
             </View>
 
             <View

@@ -8,21 +8,11 @@ import {
   ActivityIndicator,
   Pressable,
   ScrollView,
-  KeyboardAvoidingView,
+  TouchableOpacity,
 } from "react-native";
-import {
-  Text,
-  Card,
-  Button,
-  Banner,
-  Portal,
-  Modal,
-  Surface,
-} from "react-native-paper";
+import { Text, Card, Button, Banner, Portal, Modal } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Slider from "@react-native-community/slider";
-import { Link } from "expo-router";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
 import ArrowBackIcon from "../../assets/images/icons/arrow_back.svg";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { useTranslation } from "react-i18next";
@@ -224,13 +214,13 @@ export default function RouteGenLocation() {
             justifyContent: "space-between",
           }}
         >
-          <Pressable onPress={() => router.back()}>
+          <TouchableOpacity onPress={() => router.back()}>
             <ArrowBackIcon
               fill={theme.colors.onPrimaryContainer}
               width={34}
               height={34}
             />
-          </Pressable>
+          </TouchableOpacity>
           <View style={{ flexDirection: "row", paddingEnd: 8 }}>
             <Text variant="headlineMedium" style={{ fontWeight: "900" }}>
               3

@@ -1,7 +1,13 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { router, useLocalSearchParams } from "expo-router";
-import { SafeAreaView, Platform, View, Pressable } from "react-native";
+import {
+  SafeAreaView,
+  Platform,
+  View,
+  Pressable,
+  TouchableOpacity,
+} from "react-native";
 import {
   Appbar,
   Menu,
@@ -245,6 +251,7 @@ export default function MapScreen() {
       <SafeAreaView
         style={{
           flex: 1,
+          backgroundColor: theme.colors.background,
         }}
       >
         <View
@@ -259,7 +266,7 @@ export default function MapScreen() {
             zIndex: 1,
           }}
         >
-          <Pressable
+          <TouchableOpacity
             onPress={() => router.back()}
             style={{
               backgroundColor: theme.colors.primaryContainer,
@@ -275,7 +282,7 @@ export default function MapScreen() {
               width={34}
               height={34}
             />
-          </Pressable>
+          </TouchableOpacity>
           <Menu
             visible={menuVisible}
             onDismiss={closeMenu}
@@ -322,9 +329,9 @@ export default function MapScreen() {
           provider={PROVIDER_GOOGLE}
           customMapStyle={currentTheme === "dark" ? mapDarkTheme : []}
           ref={mapRef}
-          mapPadding={{ top: 0, right: 0, bottom: 150, left: 0 }}
           style={{
-            flex: 1,
+            height: "80%",
+            width: "100%",
           }}
           initialRegion={region}
           scrollEnabled={true}
