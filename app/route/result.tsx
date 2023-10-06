@@ -117,6 +117,8 @@ export default function MapScreen() {
 
   const {
     region,
+    currentRoute,
+    initialRegion,
     handleLocationSelect,
     handlePressRoute,
     handleMapDeltaChange,
@@ -364,7 +366,7 @@ export default function MapScreen() {
             height: "100%",
             width: "100%",
           }}
-          region={region}
+          region={initialRegion}
           scrollEnabled={true}
           pitchEnabled={true}
           rotateEnabled={true}
@@ -395,6 +397,20 @@ export default function MapScreen() {
             strokeWidth={3}
             strokeColor={theme.colors.onBackground}
             lineDashPattern={[1, 3]}
+          />
+          <Polyline
+            coordinates={[
+              {
+                latitude: data?.route[currentRoute].latitude,
+                longitude: data?.route[currentRoute].longitude,
+              },
+              {
+                latitude: data?.route[currentRoute + 1].latitude,
+                longitude: data?.route[currentRoute + 1].longitude,
+              },
+            ]}
+            strokeWidth={5}
+            strokeColor={theme.colors.primary}
           />
         </MapView>
 

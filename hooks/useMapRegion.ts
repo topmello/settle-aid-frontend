@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Route } from "../types/route";
 import MapView from "react-native-maps";
 
@@ -71,6 +71,8 @@ export const useMapRegion = ({
     latitudeDelta: 0.03,
     longitudeDelta: 0.015,
   });
+
+  const [currentRoute, setCurrentRoute] = useState<number>(0);
 
   useEffect(() => {
     let centerLat = 0,
@@ -168,18 +170,14 @@ export const useMapRegion = ({
     ) {
       return;
     }
+    setCurrentRoute(index);
     const lat1 = data.route[index]?.latitude;
     const lon1 = data.route[index]?.longitude;
     const lat2 = data.route[index + 1]?.latitude;
     const lon2 = data.route[index + 1]?.longitude;
-    console.log("lat1", lat1);
-    console.log("lon1", lon1);
-    console.log("lat2", lat2);
-    console.log("lon2", lon2);
 
     if (lat1 && lon1 && lat2 && lon2) {
       const bearing = calculateBearing(lat1, lon1, lat2, lon2);
-      console.log("bearing", bearing);
       const newRegion = {
         ...region,
         latitude: lat1,
@@ -193,11 +191,17 @@ export const useMapRegion = ({
           zoom: 18,
         });
       }
+      setRegion({
+        ...region,
+        ...newRegion,
+      });
     }
   };
 
   return {
     region,
+    initialRegion,
+    currentRoute,
     handleLocationSelect,
     handlePressRoute,
     handleMapDeltaChange,
