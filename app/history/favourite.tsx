@@ -160,13 +160,13 @@ export default function HistoryOverviewScreen() {
         }}
       >
         <View style={styles.row_text}>
-          <Pressable onPress={() => router.back()}>
+          <TouchableOpacity onPress={() => router.back()}>
             <ArrowBackIcon
               fill={theme.colors.onPrimaryContainer}
               width={28}
               height={28}
             />
-          </Pressable>
+          </TouchableOpacity>
           <View style={{ flex: 1, marginLeft: 12 }}>
             <Text style={styles.text_title}>Favorite Routes</Text>
           </View>

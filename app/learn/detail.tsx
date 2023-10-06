@@ -1,14 +1,23 @@
 import { Button, Text } from "react-native-paper";
 import { useTip } from "../../store/TipContext";
 import { useAppTheme } from "../../theme/theme";
-import { Pressable, View } from "react-native";
+import { Pressable, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import ArrowBackIcon from "../../assets/images/icons/arrow_back.svg";
 import { useMemo, useEffect } from "react";
 
 export default function LearnDetailScreen() {
-  const { currentTip, canNext, canPrev, nextTip, prevTip, category, resultTip, setResultTip } = useTip();
+  const {
+    currentTip,
+    canNext,
+    canPrev,
+    nextTip,
+    prevTip,
+    category,
+    resultTip,
+    setResultTip,
+  } = useTip();
   const theme = useAppTheme();
 
   const colorCombinations = useMemo(() => {
@@ -47,13 +56,13 @@ export default function LearnDetailScreen() {
   }, [theme.colors]);
 
   useEffect(() => {
-    return ()=> {
+    return () => {
       setResultTip({
         description: "",
         content: "",
       });
-    }
-  }, [])
+    };
+  }, []);
 
   const randomColor = useMemo(() => {
     return colorCombinations[
@@ -78,13 +87,13 @@ export default function LearnDetailScreen() {
         }}
       >
         {router.canGoBack() ? (
-          <Pressable onPress={() => router.back()}>
+          <TouchableOpacity onPress={() => router.back()}>
             <ArrowBackIcon
               fill={randomColor.onPrimaryContainer}
               width={34}
               height={34}
             />
-          </Pressable>
+          </TouchableOpacity>
         ) : (
           <View></View>
         )}
@@ -104,9 +113,9 @@ export default function LearnDetailScreen() {
             marginBottom: 20,
           }}
         >
-          {
-            resultTip?.description? resultTip.description : currentTip?.description
-          }
+          {resultTip?.description
+            ? resultTip.description
+            : currentTip?.description}
         </Text>
         <Text
           variant="headlineSmall"
@@ -115,9 +124,7 @@ export default function LearnDetailScreen() {
             lineHeight: 34,
           }}
         >
-          {
-            resultTip?.content? resultTip.content : currentTip?.content
-          }
+          {resultTip?.content ? resultTip.content : currentTip?.content}
         </Text>
       </View>
       <View

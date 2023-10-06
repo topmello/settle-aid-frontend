@@ -8,21 +8,11 @@ import {
   ActivityIndicator,
   Pressable,
   ScrollView,
-  KeyboardAvoidingView,
+  TouchableOpacity,
 } from "react-native";
-import {
-  Text,
-  Card,
-  Button,
-  Banner,
-  Portal,
-  Modal,
-  Surface,
-} from "react-native-paper";
+import { Text, Card, Button, Banner, Portal, Modal } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Slider from "@react-native-community/slider";
-import { Link } from "expo-router";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
 import ArrowBackIcon from "../../assets/images/icons/arrow_back.svg";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { useTranslation } from "react-i18next";
@@ -46,6 +36,8 @@ import useCurrentLocation from "../../hooks/useCurrentLocation";
 import { useNotification } from "../../hooks/useNotification";
 import { useAppTheme } from "../../theme/theme";
 import { mapDarkTheme } from "../../theme/map";
+
+const GOOGLE_PLACES_API_KEY = process.env.EXPO_PUBLIC_GOOGLE_PLACES_API_KEY;
 
 export default function RouteGenLocation() {
   const theme = useAppTheme();
@@ -204,7 +196,7 @@ export default function RouteGenLocation() {
                 setShowLocationInput(false);
               }}
               query={{
-                key: "AIzaSyDRCFeHN0Z_yftUs5FKP6nv3XAm_Ex8cbc",
+                key: GOOGLE_PLACES_API_KEY,
                 language: "en",
                 location: "-37.840935, 144.946457",
                 radius: "20000",
@@ -222,13 +214,13 @@ export default function RouteGenLocation() {
             justifyContent: "space-between",
           }}
         >
-          <Pressable onPress={() => router.back()}>
+          <TouchableOpacity onPress={() => router.back()}>
             <ArrowBackIcon
               fill={theme.colors.onPrimaryContainer}
               width={34}
               height={34}
             />
-          </Pressable>
+          </TouchableOpacity>
           <View style={{ flexDirection: "row", paddingEnd: 8 }}>
             <Text variant="headlineMedium" style={{ fontWeight: "900" }}>
               3

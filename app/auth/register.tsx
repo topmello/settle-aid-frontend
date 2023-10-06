@@ -5,6 +5,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
+  TouchableOpacity,
 } from "react-native";
 import { router } from "expo-router";
 import {
@@ -166,13 +167,13 @@ export default function RegisterPage() {
         }}
       >
         {router.canGoBack() ? (
-          <Pressable onPress={() => router.back()}>
+          <TouchableOpacity onPress={() => router.back()}>
             <ArrowBackIcon
               fill={theme.colors.onPrimaryContainer}
               width={34}
               height={34}
             />
-          </Pressable>
+          </TouchableOpacity>
         ) : (
           <View></View>
         )}

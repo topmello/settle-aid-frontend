@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Pressable, View } from "react-native";
+import { Pressable, TouchableOpacity, View } from "react-native";
 import { Card, RadioButton, Text, useTheme, Button } from "react-native-paper";
 import { router } from "expo-router";
 import ArrowBackIcon from "../../assets/images/icons/arrow_back.svg";
@@ -11,7 +11,7 @@ import ParkBirdsIcon from "../../assets/images/icons/park_birds.svg";
 import PharmacyIcon from "../../assets/images/icons/pharmacy.svg";
 import { useDispatch } from "react-redux";
 import { LocationType, setLocationType } from "../../store/routeSlice";
-import { useNotification } from "../../hooks/useNotification"
+import { useNotification } from "../../hooks/useNotification";
 
 export type ActivityOption = {
   id: LocationType;
@@ -84,13 +84,13 @@ export default function RouteActivityScreen() {
           justifyContent: "space-between",
         }}
       >
-        <Pressable onPress={() => router.back()}>
+        <TouchableOpacity onPress={() => router.back()}>
           <ArrowBackIcon
             fill={theme.colors.onPrimaryContainer}
             width={34}
             height={34}
           />
-        </Pressable>
+        </TouchableOpacity>
         <View style={{ flexDirection: "row", paddingEnd: 8 }}>
           <Text variant="headlineMedium" style={{ fontWeight: "900" }}>
             1
@@ -164,7 +164,14 @@ export default function RouteActivityScreen() {
                   width: 60,
                   height: 60,
                 })}
-                <Text variant="bodyLarge" style={{ marginTop: 6, fontWeight: "bold", color: theme.colors.onSurfaceVariant }}>
+                <Text
+                  variant="bodyLarge"
+                  style={{
+                    marginTop: 6,
+                    fontWeight: "bold",
+                    color: theme.colors.onSurfaceVariant,
+                  }}
+                >
                   {t(option.name, { ns: "route" })}
                 </Text>
               </View>

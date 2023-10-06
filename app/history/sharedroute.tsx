@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   SafeAreaView,
   StyleSheet,
@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Button, Text, ActivityIndicator } from "react-native-paper";
-import { useTranslation } from "react-i18next"; // <-- Import the hook
+import { useTranslation } from "react-i18next";
 import { useTheme } from "react-native-paper";
 import { router, useLocalSearchParams } from "expo-router";
 import ArrowBackIcon from "../../assets/images/icons/arrow_back.svg";
@@ -21,26 +21,59 @@ import RouteCard from "../../components/RouteCard";
 import { RequestOptions } from "../../api/fetch";
 import useFetch from "../../hooks/useFetch";
 import { RouteHistory } from "../../types/route";
-import useEventScheduler from "../../hooks/useEventScheduler";
-
 import * as Linking from "expo-linking";
 import * as Sharing from "expo-sharing";
 
-export default function HistoryOverviewScreen() {
+export default function SharedOverviewScreen() {
   const { t } = useTranslation();
   const theme = useTheme();
   const userID = useSelector(selectUserId);
   const loading = useSelector(selectIsLoading);
-
+  const [limit, setLimit] = useState(4);
   const [routeList, refetchRouteList] = useFetch<RouteHistory[]>(
     {
       method: "GET",
-      url: `/route/user/${userID}/?limit=10`,
+      url: `/route/feed/top_routes/?limit=2&order_by=num_votes&offset=0`,
     },
     [userID]
   );
 
-  const voteRequestOptions: RequestOptions = {
+  const [accumulatedRouteList, setAccumulatedRouteList] = useState<
+    RouteHistory[]
+  >([]);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  useEffect(() => {
+    if (routeList && routeList.length > 0) {
+      setAccumulatedRouteList((prevList) => [...prevList, ...routeList]);
+    }
+  }, [routeList]);
+
+  const handleScroll = async (event) => {
+    if (isLoadingMore && !routeList && routeList.length === 0) return;
+    const scrollY = event.nativeEvent.contentOffset.y;
+    const windowHeight = event.nativeEvent.layoutMeasurement.height;
+    const contentHeight = event.nativeEvent.contentSize.height;
+
+    if (scrollY + windowHeight >= contentHeight - 100 && !isLoadingMore) {
+      setIsLoadingMore(true); // 设置为正在加载
+
+      const newLimit = accumulatedRouteList.length + 2;
+
+      await refetchRouteList({
+        method: "GET",
+        url: `/route/feed/top_routes/?limit=${newLimit}&order_by=num_votes&offset=0`,
+      });
+
+      console.log("newLimit", newLimit);
+
+      // 稍作延迟以确保状态得到更新
+      setTimeout(() => {
+        setIsLoadingMore(false); // 设置为加载完毕
+      }, 500);
+    }
+  };
+
+  const voteRequestOptions = {
     method: "POST",
     url: `/vote/`,
   };
@@ -53,7 +86,7 @@ export default function HistoryOverviewScreen() {
     "Added to favourites"
   );
 
-  const handleFavRoute = async (route_id: number) => {
+  const handleFavRoute = async (route_id) => {
     try {
       await executeVote({ ...voteRequestOptions, url: `/vote/${route_id}/` });
     } catch (error) {
@@ -63,44 +96,13 @@ export default function HistoryOverviewScreen() {
     }
   };
 
-  // get the initial url and share
-  const shareUrl = async (route_id: number) => {
+  const shareUrl = async (route_id) => {
     const initialUrl = await Linking.getInitialURL();
-    console.log(initialUrl + "/?routeid=" + route_id);
     const url = initialUrl + "/?routeid=" + route_id;
-
     try {
       await Sharing.shareAsync(url);
-      console.log("Shared successfully");
     } catch (error) {
       console.error("Error while sharing:", error);
-    }
-  };
-
-  //publish
-  const publishRequestOptions: RequestOptions = {
-    method: "POST",
-    url: `/route/publish/`,
-  };
-
-  const [, executePublish] = useFetch(
-    publishRequestOptions,
-    [],
-    null,
-    false,
-    "Route Published"
-  );
-
-  const handlePublishRoute = async (route_id: number) => {
-    try {
-      await executePublish({
-        ...publishRequestOptions,
-        url: `/route/publish/${route_id}/`,
-      });
-    } catch (error) {
-      console.error("Error publishing the route:", error);
-    } finally {
-      refetchRouteList(); // Optional: You can refetch the routes if necessary
     }
   };
 
@@ -198,7 +200,7 @@ export default function HistoryOverviewScreen() {
           />
         </TouchableOpacity>
         <View style={{ flex: 1, marginLeft: 12 }}>
-          <Text style={styles.text_title}>Route History</Text>
+          <Text style={styles.text_title}>Shared Route</Text>
         </View>
         <View style={{ width: 34, height: 34 }}></View>
       </View>
@@ -207,6 +209,8 @@ export default function HistoryOverviewScreen() {
           flexGrow: 1,
           flexDirection: "column",
         }}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
       >
         <View
           style={{
@@ -224,7 +228,6 @@ export default function HistoryOverviewScreen() {
               handleFavRoute={handleFavRoute}
               voted={result.voted_by_user}
               shareUrl={shareUrl}
-              handlePublishRoute={handlePublishRoute}
             />
           ))}
         </View>

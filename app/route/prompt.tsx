@@ -5,6 +5,7 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
+  TouchableOpacity,
   View,
 } from "react-native";
 import {
@@ -198,13 +199,13 @@ export default function RoutePromptScreen() {
           justifyContent: "space-between",
         }}
       >
-        <Pressable onPress={() => router.back()}>
+        <TouchableOpacity onPress={() => router.back()}>
           <ArrowBackIcon
             fill={theme.colors.onPrimaryContainer}
             width={34}
             height={34}
           />
-        </Pressable>
+        </TouchableOpacity>
         <View style={{ flexDirection: "row", paddingEnd: 8 }}>
           <Text variant="headlineMedium" style={{ fontWeight: "900" }}>
             2

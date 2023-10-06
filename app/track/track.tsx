@@ -1,4 +1,10 @@
-import { View, Pressable, StyleSheet, Image } from "react-native";
+import {
+  View,
+  Pressable,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAppTheme } from "../../theme/theme";
 import { useSession } from "../../hooks/useSession";
@@ -112,7 +118,7 @@ export default function TrackScreen() {
           }}
         >
           {router.canGoBack() ? (
-            <Pressable
+            <TouchableOpacity
               onPress={() => {
                 router.back();
               }}
@@ -122,7 +128,7 @@ export default function TrackScreen() {
                 width={34}
                 height={34}
               />
-            </Pressable>
+            </TouchableOpacity>
           ) : (
             <View></View>
           )}
@@ -274,7 +280,7 @@ export default function TrackScreen() {
           zIndex: 1,
         }}
       >
-        <Pressable
+        <TouchableOpacity
           onPress={() => {
             setMode(undefined);
             exitRoom();
@@ -297,7 +303,7 @@ export default function TrackScreen() {
             width={34}
             height={34}
           />
-        </Pressable>
+        </TouchableOpacity>
       </View>
       <MapView
         provider={PROVIDER_GOOGLE}

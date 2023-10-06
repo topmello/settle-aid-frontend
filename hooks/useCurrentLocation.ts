@@ -11,18 +11,17 @@ const useCurrentLocation = () => {
   const fetchLocation = useCallback(async () => {
     dispatch(loading());
     let { status } = await Location.requestForegroundPermissionsAsync();
-
-    if (status !== "granted") { 
+    if (status !== "granted") {
       dispatch(fail({ message: "not granted" }));
       return;
     }
 
     let location = await Location.getCurrentPositionAsync({});
-
     const { longitude, latitude } = location.coords;
     dispatch(setLonLat({ longitude, latitude }));
-
-    dispatch(loaded());
+    setTimeout(() => {
+      dispatch(loaded());
+    }, 1000);
   }, [dispatch]);
 
   return fetchLocation;
