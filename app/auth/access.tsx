@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Pressable, View } from "react-native";
+import { Pressable, TouchableOpacity, View } from "react-native";
 import { Card, RadioButton, Text, useTheme, Button } from "react-native-paper";
 import { router } from "expo-router";
 import ArrowBackIcon from "../../assets/images/icons/arrow_back.svg";
@@ -51,13 +51,13 @@ export default function AccessPage() {
         }}
       >
         {router.canGoBack() ? (
-          <Pressable onPress={() => router.back()}>
+          <TouchableOpacity onPress={() => router.back()}>
             <ArrowBackIcon
               fill={theme.colors.onPrimaryContainer}
               width={34}
               height={34}
             />
-          </Pressable>
+          </TouchableOpacity>
         ) : (
           <View></View>
         )}

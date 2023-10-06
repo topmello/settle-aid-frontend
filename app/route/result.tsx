@@ -1,7 +1,13 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { router, useLocalSearchParams } from "expo-router";
-import { SafeAreaView, Platform, View, Pressable } from "react-native";
+import {
+  SafeAreaView,
+  Platform,
+  View,
+  Pressable,
+  TouchableOpacity,
+} from "react-native";
 import {
   Appbar,
   Menu,
@@ -30,6 +36,7 @@ import useEventScheduler from "../../hooks/useEventScheduler";
 import generatePDF from "../../utils/generatePDF";
 import { Route, RouteGetResult } from "../../types/route";
 import { selectIsLoading } from "../../store/appSlice";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const MORE_ICON = Platform.OS === "ios" ? "dots-horizontal" : "dots-vertical";
 
@@ -68,7 +75,7 @@ export default function MapScreen() {
     handleDateConfirm,
   } = useEventScheduler();
 
-  const [menuVisible, setMenuVisible] = useState(true);
+  const [menuVisible, setMenuVisible] = useState(false);
   const openMenu = () => setMenuVisible(true);
   const closeMenu = () => setMenuVisible(false);
 
@@ -240,139 +247,134 @@ export default function MapScreen() {
 
   // main screen
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-      }}
-    >
-      <View
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaView
         style={{
-          marginTop: 32,
-          width: "100%",
-          flexDirection: "row",
-          justifyContent: "space-between",
-          padding: 20,
-          zIndex: 1,
+          flex: 1,
+          backgroundColor: theme.colors.background,
         }}
       >
-        <Pressable
-          onPress={() => router.back()}
+        <View
+          pointerEvents="box-none"
           style={{
-            backgroundColor: theme.colors.primaryContainer,
-            borderRadius: 20,
-            width: 40,
-            height: 40,
-            justifyContent: "center",
-            alignItems: "center",
+            marginTop: 32,
+            width: "100%",
+            position: "absolute",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            padding: 20,
             zIndex: 1,
           }}
         >
-          <ArrowBackIcon
-            fill={theme.colors.onPrimaryContainer}
-            width={34}
-            height={34}
-          />
-        </Pressable>
-        <Menu
-          visible={menuVisible}
-          onDismiss={closeMenu}
-          anchor={
-            <IconButton
-              icon={MORE_ICON}
-              onPress={openMenu}
-              style={{
-                backgroundColor: theme.colors.primaryContainer,
-                width: 40,
-                height: 40,
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                zIndex: 1,
-              }}
-            />
-          }
-        >
-          {typeof route_id_ !== "string" && (
-            <Menu.Item onPress={fetchRoute} title="Re-plan" />
-          )}
-          <Menu.Item onPress={showDatePicker} title="Schedule" />
-          <Menu.Item
-            onPress={() => {
-              generatePDF(data);
+          <TouchableOpacity
+            onPress={() => router.back()}
+            style={{
+              backgroundColor: theme.colors.primaryContainer,
+              borderRadius: 20,
+              width: 40,
+              height: 40,
+              justifyContent: "center",
+              alignItems: "center",
             }}
-            title="Share"
-          />
-          <Menu.Item
-            onPress={() => handleFavRoute(data.route_id)}
-            title="Favourite"
-          />
-        </Menu>
-
-        <DateTimePickerModal
-          isVisible={isDatePickerVisible}
-          mode="date"
-          onConfirm={async (date) => {
-            if (handleDateConfirm) {
-              await handleDateConfirm(date, data);
-            }
-          }}
-          onCancel={hideDatePicker}
-        />
-      </View>
-
-      <MapView
-        provider={PROVIDER_GOOGLE}
-        customMapStyle={currentTheme === "dark" ? mapDarkTheme : []}
-        ref={mapRef}
-        mapPadding={{ top: 0, right: 0, bottom: 150, left: 0 }}
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-        }}
-        initialRegion={region}
-        scrollEnabled={true}
-        pitchEnabled={true}
-        rotateEnabled={true}
-      >
-        {data?.locations_coordinates
-          .filter((_, index) => index !== 0)
-          .map((location: Coordinates, index: number) => {
-            return (
-              <Marker
-                key={index}
-                coordinate={location}
-                title={data.locations[index]}
-                pinColor={"red"}
-                description=""
+          >
+            <ArrowBackIcon
+              fill={theme.colors.onPrimaryContainer}
+              width={34}
+              height={34}
+            />
+          </TouchableOpacity>
+          <Menu
+            visible={menuVisible}
+            onDismiss={closeMenu}
+            anchor={
+              <IconButton
+                icon={MORE_ICON}
+                onPress={openMenu}
+                mode="contained"
+                style={{
+                  backgroundColor: theme.colors.primaryContainer,
+                }}
               />
-            );
-          })}
-        <Marker coordinate={region} pinColor="blue" title="You are here" />
-        <Polyline
-          coordinates={data?.route}
-          strokeWidth={3}
-          strokeColor="rgba(227, 66, 52, 0.7)"
-          lineDashPattern={[1, 5]}
-        />
-      </MapView>
+            }
+          >
+            {typeof route_id_ !== "string" && (
+              <Menu.Item onPress={fetchRoute} title="Re-plan" />
+            )}
+            <Menu.Item onPress={showDatePicker} title="Schedule" />
+            <Menu.Item
+              onPress={() => {
+                generatePDF(data);
+              }}
+              title="Share"
+            />
+            <Menu.Item
+              onPress={() => handleFavRoute(data.route_id)}
+              title="Favourite"
+            />
+          </Menu>
 
-      <ActivityIndicator animating={loading} size="large" />
+          <DateTimePickerModal
+            isVisible={isDatePickerVisible}
+            mode="date"
+            onConfirm={async (date) => {
+              if (handleDateConfirm) {
+                await handleDateConfirm(date, data);
+              }
+            }}
+            onCancel={hideDatePicker}
+          />
+        </View>
 
-      {data && (
-        <ResultOverlay
-          tipList={tipList}
-          data={data}
-          body={routeState}
-          handleLocationSelect={handleLocationSelect}
-          handlePressRoute={handlePressRoute}
-          handlePress={handlePress}
-          checked={checked}
-          locationIcons={locationIcons}
-        />
-      )}
-    </SafeAreaView>
+        <MapView
+          provider={PROVIDER_GOOGLE}
+          customMapStyle={currentTheme === "dark" ? mapDarkTheme : []}
+          ref={mapRef}
+          style={{
+            height: "80%",
+            width: "100%",
+          }}
+          initialRegion={region}
+          scrollEnabled={true}
+          pitchEnabled={true}
+          rotateEnabled={true}
+        >
+          {data?.locations_coordinates
+            .filter((_, index) => index !== 0)
+            .map((location: Coordinates, index: number) => {
+              return (
+                <Marker
+                  key={index}
+                  coordinate={location}
+                  title={data.locations[index]}
+                  pinColor={"red"}
+                  description=""
+                />
+              );
+            })}
+          <Marker coordinate={region} pinColor="blue" title="You are here" />
+          <Polyline
+            coordinates={data?.route}
+            strokeWidth={3}
+            strokeColor="rgba(227, 66, 52, 0.7)"
+            lineDashPattern={[1, 5]}
+          />
+        </MapView>
+
+        <ActivityIndicator animating={loading} size="large" />
+
+        {data && (
+          <ResultOverlay
+            tipList={tipList}
+            data={data}
+            body={routeState}
+            handleLocationSelect={handleLocationSelect}
+            handlePressRoute={handlePressRoute}
+            handlePress={handlePress}
+            checked={checked}
+            locationIcons={locationIcons}
+          />
+        )}
+      </SafeAreaView>
+    </GestureHandlerRootView>
   );
 }

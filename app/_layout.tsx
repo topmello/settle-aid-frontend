@@ -20,7 +20,6 @@ import { PersistGate } from "redux-persist/integration/react";
 import { useNotification } from "../hooks/useNotification";
 import { NotificationProvider } from "../store/NotificationContext";
 import { TipProvider } from "../store/TipContext";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -126,22 +125,20 @@ export function RootLayout() {
     <PaperProvider theme={theme}>
       <NotificationProvider>
         <TipProvider>
-          <GestureHandlerRootView style={{ flex: 1 }}>
-            <StatusBar style={theme.dark ? "light" : "dark"} translucent />
-            <Stack screenOptions={{ headerShown: false }}>
-              <Stack.Screen name="(tabs)" />
-              <Stack.Screen name="common/language" />
-              <Stack.Screen name="auth/access" />
-              <Stack.Screen name="auth/login" />
-              <Stack.Screen name="auth/register" />
-              <Stack.Screen name="route/activity" />
-              <Stack.Screen name="route/location" />
-              <Stack.Screen name="route/prompt" />
-              <Stack.Screen name="route/result" />
-              <Stack.Screen name="track/track" />
-              <Stack.Screen name="modal" options={{ presentation: "modal" }} />
-            </Stack>
-          </GestureHandlerRootView>
+          <StatusBar style={theme.dark ? "light" : "dark"} translucent />
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="(tabs)" />
+            <Stack.Screen name="common/language" />
+            <Stack.Screen name="auth/access" />
+            <Stack.Screen name="auth/login" />
+            <Stack.Screen name="auth/register" />
+            <Stack.Screen name="route/activity" />
+            <Stack.Screen name="route/location" />
+            <Stack.Screen name="route/prompt" />
+            <Stack.Screen name="route/result" />
+            <Stack.Screen name="track/track" />
+            <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+          </Stack>
         </TipProvider>
       </NotificationProvider>
     </PaperProvider>

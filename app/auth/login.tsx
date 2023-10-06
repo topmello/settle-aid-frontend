@@ -1,5 +1,11 @@
 import * as React from "react";
-import { Pressable, View, KeyboardAvoidingView, Platform } from "react-native";
+import {
+  Pressable,
+  View,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableOpacity,
+} from "react-native";
 import { router } from "expo-router";
 import {
   Card,
@@ -18,11 +24,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../store";
 import { loginUser as loginUserThunk } from "../../store/authSlice";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useNotification } from "../../hooks/useNotification"
+import { useNotification } from "../../hooks/useNotification";
 
 // for default route to home screen
 export const unstable_settings = {
-  initialRouteName: 'index',
+  initialRouteName: "index",
 };
 
 export default function LoginPage() {
@@ -52,7 +58,7 @@ export default function LoginPage() {
           router.replace("/(tabs)");
         })
         .catch((err) => {
-          switch(err.code) {
+          switch (err.code) {
             case "ERR_BAD_REQUEST":
               pushNotification({
                 message: t("Invalid username or password", { ns: "acc" }),
@@ -90,15 +96,17 @@ export default function LoginPage() {
         }}
       >
         {router.canGoBack() ? (
-          <Pressable onPress={() => {
-            router.back();
-          }}>
+          <TouchableOpacity
+            onPress={() => {
+              router.back();
+            }}
+          >
             <ArrowBackIcon
               fill={theme.colors.onPrimaryContainer}
               width={34}
               height={34}
             />
-          </Pressable>
+          </TouchableOpacity>
         ) : (
           <View></View>
         )}
