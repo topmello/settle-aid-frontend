@@ -329,8 +329,14 @@ export default function MapScreen() {
           provider={PROVIDER_GOOGLE}
           customMapStyle={currentTheme === "dark" ? mapDarkTheme : []}
           ref={mapRef}
+          mapPadding={{
+            top: 0,
+            right: 0,
+            bottom: 140,
+            left: 0,
+          }}
           style={{
-            height: "80%",
+            height: "100%",
             width: "100%",
           }}
           initialRegion={region}

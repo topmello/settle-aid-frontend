@@ -54,12 +54,10 @@ export default function HomeScreen() {
     [userID]
   );
 
-  useFocusEffect(
-    useCallback(() => {
-      refetchRouteList();
-      refetchFavRouteList();
-    }, [])
-  );
+  useEffect(() => {
+    refetchRouteList();
+    refetchFavRouteList();
+  }, []);
 
   const [routeId, setRouteId] = useState<string | null>(null);
 

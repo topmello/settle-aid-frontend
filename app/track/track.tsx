@@ -308,6 +308,12 @@ export default function TrackScreen() {
       <MapView
         provider={PROVIDER_GOOGLE}
         customMapStyle={currentTheme === "dark" ? mapDarkTheme : []}
+        mapPadding={{
+          top: 0,
+          right: 0,
+          bottom: 200,
+          left: 0,
+        }}
         ref={mapRef}
         style={styles.map}
         initialRegion={{
@@ -342,102 +348,93 @@ export default function TrackScreen() {
           />
         )}
       </MapView>
+
       <View
-        pointerEvents="box-none"
         style={{
-          flex: 1,
+          zIndex: 1,
+          elevation: 5,
+          position: "absolute",
+          height: 200,
+          width: "100%",
+          bottom: 0,
+          paddingTop: 20,
+          paddingHorizontal: 16,
+          backgroundColor: theme.colors.surface,
+          borderTopLeftRadius: 16,
+          borderTopRightRadius: 16,
         }}
       >
-        <BottomSheet
-          ref={bottomSheetRef}
-          index={1}
-          snapPoints={snapPoints}
+        <View
           style={{
-            zIndex: 1,
-            elevation: 5,
-          }}
-          animateOnMount={true}
-          backgroundStyle={{
-            backgroundColor: theme.colors.surface,
-          }}
-          handleIndicatorStyle={{
-            backgroundColor: theme.colors.onSurfaceVariant,
+            flex: 1,
+            alignItems: "center",
           }}
         >
-          <View
-            style={{
-              flex: 1,
-              backgroundColor: theme.colors.surface,
-              alignItems: "center",
-            }}
-          >
-            <Text>{isConnected ? "Connected" : "Not Connected"}</Text>
-            {loading && <ActivityIndicator animating={loading} size="large" />}
-            {!loading && mode === "trackme" && (
-              <View
-                style={{
-                  flex: 1,
-                  width: "100%",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: 8,
-                }}
-              >
-                {!tracking && (
-                  <Button
-                    mode="contained"
-                    onPress={() => {
-                      setTracking(true);
-                    }}
-                    style={{ width: 200, height: 40 }}
-                  >
-                    Start sharing
-                  </Button>
-                )}
-                {tracking && (
-                  <View
+          <Text>{isConnected ? "Connected" : "Not Connected"}</Text>
+          {loading && <ActivityIndicator animating={loading} size="large" />}
+          {!loading && mode === "trackme" && (
+            <View
+              style={{
+                flex: 1,
+                width: "100%",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 8,
+              }}
+            >
+              {!tracking && (
+                <Button
+                  mode="contained"
+                  onPress={() => {
+                    setTracking(true);
+                  }}
+                  style={{ width: 200, height: 40 }}
+                >
+                  Start sharing
+                </Button>
+              )}
+              {tracking && (
+                <View
+                  style={{
+                    alignItems: "center",
+                  }}
+                >
+                  <Text variant="bodyLarge">Ask your children to type in</Text>
+                  <Chip
+                    icon="information"
                     style={{
-                      alignItems: "center",
+                      marginVertical: 4,
+                    }}
+                    onPress={async () => {
+                      await Clipboard.setStringAsync(roomId);
+                      pushNotification({
+                        message: t("Room PIN Copied to clipboard", {
+                          ns: "acc",
+                        }),
+                        type: "success",
+                      });
                     }}
                   >
-                    <Text variant="bodyLarge">
-                      Ask your children to type in
-                    </Text>
-                    <Chip
-                      icon="information"
-                      style={{
-                        marginVertical: 4,
-                      }}
-                      onPress={async () => {
-                        await Clipboard.setStringAsync(roomId);
-                        pushNotification({
-                          message: t("Room PIN Copied to clipboard", {
-                            ns: "acc",
-                          }),
-                          type: "success",
-                        });
-                      }}
-                    >
-                      {roomId}
-                    </Chip>
-                    <Text variant="bodyLarge">to track you</Text>
-                  </View>
-                )}
-              </View>
-            )}
-            {!loading && mode === "trackother" && (
-              <View
-                style={{
-                  flex: 1,
-                  width: "100%",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <Text variant="bodyLarge" style={{ fontWeight: "bold" }}>
-                  Tracking {roomId}
-                </Text>
-                {/* <ScrollView>
+                    {roomId}
+                  </Chip>
+                  <Text variant="bodyLarge">to track you</Text>
+                </View>
+              )}
+            </View>
+          )}
+          {!loading && mode === "trackother" && (
+            <View
+              style={{
+                flex: 1,
+                width: "100%",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Text variant="bodyLarge" style={{ fontWeight: "bold" }}>
+                Tracking {roomId}
+              </Text>
+              {/* <ScrollView>
                   {messages.map((message, index) => {
                     return (
                       <View
@@ -454,9 +451,9 @@ export default function TrackScreen() {
                     );
                   })}
                 </ScrollView> */}
-              </View>
-            )}
-            {/* <Button
+            </View>
+          )}
+          {/* <Button
               onPress={() => {
                 sendLocation(
                   locationState.latitude,
@@ -467,8 +464,7 @@ export default function TrackScreen() {
             >
               test
             </Button> */}
-          </View>
-        </BottomSheet>
+        </View>
       </View>
     </SafeAreaView>
   );

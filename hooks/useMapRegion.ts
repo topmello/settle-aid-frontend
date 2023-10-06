@@ -87,10 +87,10 @@ export const useMapRegion = ({
     }
 
     setRegion({
-      latitude: routeState.latitude,
-      longitude: routeState.longitude,
-      latitudeDelta: deltaLat,
-      longitudeDelta: deltaLon,
+      latitude: centerLat - 0.002,
+      longitude: centerLon,
+      latitudeDelta: deltaLat * 1.3,
+      longitudeDelta: deltaLon * 1.3,
     });
   }, [data, routeState.latitude, routeState.longitude]);
 

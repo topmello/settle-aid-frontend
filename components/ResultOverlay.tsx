@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { View, TouchableOpacity } from "react-native";
 import {
   ScrollView,
@@ -20,6 +20,12 @@ import { Route } from "../types/route";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { useTip } from "../store/TipContext";
 import { router } from "expo-router";
+import Animated, {
+  CurvedTransition,
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from "react-native-reanimated";
 
 type OverlayProps = {
   tipList: Tip[];
@@ -43,33 +49,48 @@ const ResultOverlay: React.FC<OverlayProps> = ({
   locationIcons,
 }: OverlayProps) => {
   const theme = useTheme();
-  const bottomSheetRef = React.useRef<BottomSheet>(null);
+  const bottomSheetRef = React.useRef<Animated.View>(null);
   const { resultTip, setResultTip } = useTip();
+  const [showBottomSheet, setShowBottomSheet] = React.useState(true);
 
   return (
-    <BottomSheet
+    <Animated.View
       ref={bottomSheetRef}
-      snapPoints={["50%"]}
-      enableOverDrag={false}
-      enableContentPanningGesture={false}
-      enableHandlePanningGesture={false}
-      style={{
-        elevation: 5,
-      }}
-      animateOnMount={false}
-      backgroundStyle={{
-        backgroundColor: theme.colors.surface,
-      }}
-      handleIndicatorStyle={{
-        backgroundColor: theme.colors.surface,
-      }}
+      style={[
+        {
+          elevation: 5,
+          position: "absolute",
+          height: 420,
+          zIndex: 1,
+          bottom: showBottomSheet ? 0 : -280,
+          borderTopLeftRadius: 16,
+          borderTopRightRadius: 16,
+          width: "100%",
+          backgroundColor: theme.colors.surface,
+        },
+      ]}
     >
+      <IconButton
+        mode="contained"
+        iconColor={theme.colors.onPrimaryContainer}
+        containerColor={theme.colors.primaryContainer}
+        icon={!showBottomSheet ? "chevron-up" : "chevron-down"}
+        style={{
+          position: "absolute",
+          top: -62,
+          right: 16,
+        }}
+        onPress={() => {
+          setShowBottomSheet(!showBottomSheet);
+        }}
+      />
       <ScrollView>
         {/** Horizontal Tips */}
         <FlatList
           style={{
             width: "100%",
             overflow: "visible",
+            marginTop: 12,
           }}
           data={tipList}
           renderItem={({ item }) => (
@@ -187,7 +208,11 @@ const ResultOverlay: React.FC<OverlayProps> = ({
         </List.Section>
 
         {/** Instructions */}
-        <List.Section>
+        <List.Section
+          style={{
+            paddingHorizontal: 12,
+          }}
+        >
           <List.Accordion
             title="Instructions"
             left={(props) => <List.Icon {...props} icon="map-legend" />}
@@ -229,7 +254,7 @@ const ResultOverlay: React.FC<OverlayProps> = ({
           }}
         ></View>
       </ScrollView>
-    </BottomSheet>
+    </Animated.View>
   );
 };
 
