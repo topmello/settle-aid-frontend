@@ -23,19 +23,19 @@ export default function SharedOverviewScreen() {
     const [limit, setLimit] = useState(4);
     const [routeList, refetchRouteList] = useFetch<RouteHistory[]>({
         method: "GET",
-        url: `/route/feed/top_routes/?limit=2&order_by=num_votes&offset=0`,
+        url: `/route/feed/top_routes/?limit=4&order_by=num_votes&offset=0`,
     }, [userID]);
 
     const [accumulatedRouteList, setAccumulatedRouteList] = useState<RouteHistory[]>([]);
     const [isLoadingMore, setIsLoadingMore] = useState(false);
     useEffect(() => {
         if (routeList && routeList.length > 0) {
-            setAccumulatedRouteList(prevList => [...prevList, ...routeList]);
+            setAccumulatedRouteList(routeList);
         }
     }, [routeList]);
 
     const handleScroll = async (event) => {
-        if (isLoadingMore && !routeList && routeList.length === 0) return;
+        if (isLoadingMore || !routeList || routeList.length === 0) return;
         const scrollY = event.nativeEvent.contentOffset.y;
         const windowHeight = event.nativeEvent.layoutMeasurement.height;
         const contentHeight = event.nativeEvent.contentSize.height;
@@ -43,13 +43,13 @@ export default function SharedOverviewScreen() {
         if (scrollY + windowHeight >= contentHeight - 100 && !isLoadingMore) {
             setIsLoadingMore(true); // 设置为正在加载
 
-            const newLimit = accumulatedRouteList.length + 2;
-
+            const newLimit = accumulatedRouteList.length+1;
+            const newOffset = 0;
             await refetchRouteList({
                 method: "GET",
-                url: `/route/feed/top_routes/?limit=${newLimit}&order_by=num_votes&offset=0`,
+                url: `/route/feed/top_routes/?limit=${newLimit}&order_by=num_votes&offset=${newOffset}`,
             });
-
+            console.log("accmulated",accumulatedRouteList.length)
             console.log("newLimit", newLimit);
 
             // 稍作延迟以确保状态得到更新
