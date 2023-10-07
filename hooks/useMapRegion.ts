@@ -73,19 +73,28 @@ export const useMapRegion = ({
   });
 
   const [currentRoute, setCurrentRoute] = useState<number>(0);
+  const [firstPress, setFirstPress] = useState<boolean>(true);
 
   const resetRoute = useCallback(() => {
     handlePressRoute(0);
+    setFirstPress(true);
   }, []);
 
   const nextRoute = useCallback(() => {
-    if (data) {
+    if (firstPress) {
+      handlePressRoute(currentRoute);
+      setFirstPress(false);
+      return;
+    } else if (data) {
       handlePressRoute((currentRoute + 1) % data.route.length);
     }
-  }, [currentRoute, data]);
+  }, [currentRoute, data, firstPress]);
 
   const prevRoute = useCallback(() => {
     if (data) {
+      if (currentRoute === 1) {
+        setFirstPress(true);
+      }
       handlePressRoute(
         (currentRoute - 1 + data.route.length) % data.route.length,
         true
