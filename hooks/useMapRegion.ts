@@ -222,22 +222,29 @@ export const useMapRegion = ({
           longitude: reverse ? lon2 : lon1,
         };
 
+        /**
+         * Animate camera to new region
+         *
+         * camera movement is not based on the center coordinate passed in
+         * but rather somewhere in the map
+         * event swapping the order of moving the camera and setting the region
+         * does not work
+         */
+        // FIXME - camera animation is not working as expected
         if (mapRef.current) {
-          mapRef.current.animateCamera(
+          mapRef.current?.animateCamera(
             {
+              center: newRegion,
               heading: bearing,
-              altitude: 1000,
               zoom: 18,
             },
-            { duration: 1000 }
+            { duration: 500 }
           );
           setTimeout(() => {
             mapRef.current?.animateCamera(
               {
-                center: {
-                  latitude: newRegion.latitude,
-                  longitude: newRegion.longitude,
-                },
+                center: newRegion,
+                heading: bearing,
               },
               { duration: 1000 }
             );
