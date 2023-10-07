@@ -30,19 +30,22 @@ function calculateBearing(
   lon1: number,
   lat2: number,
   lon2: number
-): number {
-  lat1 = degreesToRadians(lat1);
-  lon1 = degreesToRadians(lon1);
-  lat2 = degreesToRadians(lat2);
-  lon2 = degreesToRadians(lon2);
+) {
+  const radianLat1 = (Math.PI * lat1) / 180;
+  const radianLon1 = (Math.PI * lon1) / 180;
+  const radianLat2 = (Math.PI * lat2) / 180;
+  const radianLon2 = (Math.PI * lon2) / 180;
 
-  const dLon = lon2 - lon1;
-  const x = Math.cos(lat2) * Math.sin(dLon);
-  const y =
-    Math.cos(lat1) * Math.sin(lat2) -
-    Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon);
-  const bearing = (Math.atan2(x, y) * 180) / Math.PI;
-  return (bearing + 360) % 360;
+  const dLon = radianLon2 - radianLon1;
+  const y = Math.sin(dLon) * Math.cos(radianLat2);
+  const x =
+    Math.cos(radianLat1) * Math.sin(radianLat2) -
+    Math.sin(radianLat1) * Math.cos(radianLat2) * Math.cos(dLon);
+  let brng = Math.atan2(y, x);
+  brng = (brng * 180) / Math.PI;
+  brng = (brng + 360) % 360;
+
+  return brng;
 }
 
 export const useMapRegion = ({
@@ -220,11 +223,25 @@ export const useMapRegion = ({
         };
 
         if (mapRef.current) {
-          mapRef.current.animateCamera({
-            center: newRegion,
-            heading: bearing,
-            zoom: 18,
-          });
+          mapRef.current.animateCamera(
+            {
+              heading: bearing,
+              altitude: 1000,
+              zoom: 18,
+            },
+            { duration: 1000 }
+          );
+          setTimeout(() => {
+            mapRef.current?.animateCamera(
+              {
+                center: {
+                  latitude: newRegion.latitude,
+                  longitude: newRegion.longitude,
+                },
+              },
+              { duration: 1000 }
+            );
+          }, 1000);
         }
         setRegion({
           ...region,
