@@ -74,6 +74,25 @@ export const useMapRegion = ({
 
   const [currentRoute, setCurrentRoute] = useState<number>(0);
 
+  const resetRoute = useCallback(() => {
+    handlePressRoute(0);
+  }, []);
+
+  const nextRoute = useCallback(() => {
+    if (data) {
+      handlePressRoute((currentRoute + 1) % data.route.length);
+    }
+  }, [currentRoute, data]);
+
+  const prevRoute = useCallback(() => {
+    if (data) {
+      handlePressRoute(
+        (currentRoute - 1 + data.route.length) % data.route.length,
+        true
+      );
+    }
+  }, [currentRoute, data]);
+
   useEffect(() => {
     let centerLat = 0,
       centerLon = 0,
@@ -161,7 +180,7 @@ export const useMapRegion = ({
     }
   };
 
-  const handlePressRoute = (index: number) => {
+  const handlePressRoute = (index: number, reverse: boolean = false) => {
     if (
       !data ||
       index < 0 ||
@@ -177,11 +196,13 @@ export const useMapRegion = ({
     const lon2 = data.route[index + 1]?.longitude;
 
     if (lat1 && lon1 && lat2 && lon2) {
-      const bearing = calculateBearing(lat1, lon1, lat2, lon2);
+      const bearing = reverse
+        ? calculateBearing(lat2, lon2, lat1, lon1)
+        : calculateBearing(lat1, lon1, lat2, lon2);
       const newRegion = {
         ...region,
-        latitude: lat1,
-        longitude: lon1,
+        latitude: reverse ? lat2 : lat1,
+        longitude: reverse ? lon2 : lon1,
       };
 
       if (mapRef.current) {
@@ -202,6 +223,9 @@ export const useMapRegion = ({
     region,
     initialRegion,
     currentRoute,
+    nextRoute,
+    prevRoute,
+    resetRoute,
     handleLocationSelect,
     handlePressRoute,
     handleMapDeltaChange,

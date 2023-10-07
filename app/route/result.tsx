@@ -119,6 +119,9 @@ export default function MapScreen() {
     region,
     currentRoute,
     initialRegion,
+    nextRoute,
+    prevRoute,
+    resetRoute,
     handleLocationSelect,
     handlePressRoute,
     handleMapDeltaChange,
@@ -289,18 +292,7 @@ export default function MapScreen() {
               height={34}
             />
           </TouchableOpacity>
-          <View
-            style={{
-              flexDirection: "row",
-            }}
-          >
-            <IconButton
-              icon="map-marker-path"
-              onPress={handleOverview}
-              mode="contained"
-              containerColor={theme.colors.tertiaryContainer}
-              iconColor={theme.colors.onTertiaryContainer}
-            />
+          <View>
             <Menu
               visible={menuVisible}
               onDismiss={closeMenu}
@@ -330,6 +322,49 @@ export default function MapScreen() {
                 title="Favourite"
               />
             </Menu>
+            <IconButton
+              icon="map-marker-path"
+              style={{
+                marginTop: 16,
+              }}
+              onPress={handleOverview}
+              mode="contained"
+              containerColor={theme.colors.tertiaryContainer}
+              iconColor={theme.colors.onTertiaryContainer}
+            />
+            <IconButton
+              icon="arrow-u-right-bottom"
+              style={{
+                marginTop: 2,
+              }}
+              disabled={currentRoute === 0}
+              onPress={resetRoute}
+              mode="contained"
+              containerColor={theme.colors.tertiaryContainer}
+              iconColor={theme.colors.onTertiaryContainer}
+            />
+            <IconButton
+              icon="skip-previous-outline"
+              style={{
+                marginTop: 2,
+              }}
+              disabled={currentRoute === 0}
+              onPress={prevRoute}
+              mode="contained"
+              containerColor={theme.colors.tertiaryContainer}
+              iconColor={theme.colors.onTertiaryContainer}
+            />
+            <IconButton
+              icon="skip-next-outline"
+              style={{
+                marginTop: 2,
+              }}
+              disabled={currentRoute === data.route.length - 2}
+              onPress={nextRoute}
+              mode="contained"
+              containerColor={theme.colors.tertiaryContainer}
+              iconColor={theme.colors.onTertiaryContainer}
+            />
           </View>
 
           <DateTimePickerModal
