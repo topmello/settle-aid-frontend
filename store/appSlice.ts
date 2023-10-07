@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import store from ".";
 
 /**
  * For global states
@@ -78,7 +77,7 @@ const appSlice = createSlice({
     },
     setRoomId(state, action: PayloadAction<{ roomId: string }>) {
       state.roomId = action.payload.roomId;
-    }
+    },
   },
 });
 
@@ -93,7 +92,6 @@ export const {
   setLanguage,
   setPrivacyChecked,
   setPrivacyUnchecked,
-  setRoomId
+  setRoomId,
 } = appSlice.actions;
 export default appSlice.reducer;
-

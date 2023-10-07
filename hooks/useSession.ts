@@ -1,5 +1,4 @@
 import { throttle } from "lodash";
-import { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../store";
 import {

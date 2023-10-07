@@ -42,12 +42,9 @@ export default function TrackScreen() {
   const [loading, setLoading] = useState(false);
   const currentTheme = useSelector(selectTheme);
   const mapRef = useRef<MapView>(null);
-  const bottomSheetRef = useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ["15%", "25%"], []);
   const locationState = useSelector(selectLonLat);
   const [showRoomIdInput, setShowRoomIdInput] = useState(false);
   const [roomIdInput, setRoomIdInput] = useState("");
-  const [trackingLocation, setTrackingLocation] = useState(false);
 
   const {
     roomId,

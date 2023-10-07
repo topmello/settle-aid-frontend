@@ -1,4 +1,4 @@
-import React, { useEffect, useState, createContext, useMemo, useCallback } from "react";
+import React, { useState, createContext, useMemo, useCallback } from "react";
 
 export type Tip = {
   description: string;
@@ -71,7 +71,8 @@ export const TipProvider = ({ children }: { children: React.ReactNode }) => {
   const prevTip = useCallback(() => {
     if (currentTipIndex > 0) {
       setCurrentTipIndex(currentTipIndex - 1);
-    }}, [currentTipIndex]);
+    }
+  }, [currentTipIndex]);
 
   const currentTip = useMemo(() => {
     if (tips.length < currentTipIndex) {
@@ -86,7 +87,7 @@ export const TipProvider = ({ children }: { children: React.ReactNode }) => {
 
   const canPrev = useMemo(() => {
     return currentTipIndex > 0;
-  }, [currentTipIndex]); 
+  }, [currentTipIndex]);
 
   const clearTips = () => {
     setCurrentTipIndex(0);
@@ -110,7 +111,7 @@ export const TipProvider = ({ children }: { children: React.ReactNode }) => {
         clearTips,
         currentTip,
         resultTip,
-        setResultTip
+        setResultTip,
       }}
     >
       {children}
@@ -124,4 +125,4 @@ export const useTip = () => {
     throw new Error("useTip must be used within a TipProvider");
   }
   return context;
-}
+};

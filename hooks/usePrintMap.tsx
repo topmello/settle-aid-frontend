@@ -2,12 +2,8 @@ import * as Print from "expo-print";
 import * as Sharing from "expo-sharing";
 import { Route } from "../types/route";
 import MapView, { Marker, PROVIDER_GOOGLE, Polyline } from "react-native-maps";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { Coordinates, useMapRegion } from "./useMapRegion";
-import { RouteState, selectRouteState } from "../store/routeSlice";
-import { useSelector } from "react-redux";
-import { useAppTheme } from "../theme/theme";
-import { Image } from "react-native";
 
 const customPins = [
   require("../assets/images/pin/pin1.png"),

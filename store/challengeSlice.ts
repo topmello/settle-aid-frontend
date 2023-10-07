@@ -1,4 +1,3 @@
-import { selectAuthStatus, selectUserId } from "./authSlice";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { fetch } from "../api/fetch";
 
