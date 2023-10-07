@@ -66,6 +66,7 @@ export default function MapScreen() {
     ],
     instructions: [],
     duration: 0,
+    route_image_name: ''
   });
 
   const {

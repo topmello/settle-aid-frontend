@@ -11,6 +11,7 @@ export interface Route {
   }[];
   instructions: string[];
   duration: number;
+  route_image_name: string;
 }
 
 export interface RouteGetResult {
