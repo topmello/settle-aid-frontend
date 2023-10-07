@@ -74,11 +74,7 @@ export const useMapRegion = ({
 
   const [currentRoute, setCurrentRoute] = useState<number>(0);
   const [firstPress, setFirstPress] = useState<boolean>(true);
-
-  const resetRoute = useCallback(() => {
-    handlePressRoute(0);
-    setFirstPress(true);
-  }, []);
+  const [regionCalculating, setRegionCalculating] = useState<boolean>(false);
 
   const nextRoute = useCallback(() => {
     if (firstPress) {
@@ -103,6 +99,7 @@ export const useMapRegion = ({
   }, [currentRoute, data]);
 
   useEffect(() => {
+    setRegionCalculating(true);
     let centerLat = 0,
       centerLon = 0,
       minLat = Infinity,
@@ -145,88 +142,103 @@ export const useMapRegion = ({
 
     setRegion(newRegion);
     setInitialRegion(newRegion);
+    setRegionCalculating(false);
   }, [data, routeState.latitude, routeState.longitude]);
 
-  const handleMapDeltaChange = (newRegion: SimpleMapRegion) => {
-    setRegion({
-      ...region,
-      ...newRegion,
-    });
-  };
-
-  const handleLocationSelect = (location: Coordinates) => {
-    if (
-      location === undefined ||
-      mapRef.current === undefined ||
-      location === null ||
-      location.latitude === undefined ||
-      location.longitude === undefined
-    ) {
-      return;
-    }
-    const newRegion = {
-      ...region,
-      latitude: location?.latitude,
-      longitude: location?.longitude,
-    };
-
-    mapRef.current?.animateCamera(
-      {
-        center: newRegion,
-      },
-      { duration: 1000 }
-    );
-
-    setRegion({
-      ...region,
-      ...newRegion,
-    });
-  };
-
-  const handleOverview = () => {
-    if (mapRef.current) {
-      mapRef.current.animateToRegion(initialRegion, 1000);
-    }
-  };
-
-  const handlePressRoute = (index: number, reverse: boolean = false) => {
-    if (
-      !data ||
-      index < 0 ||
-      index >= data.route.length ||
-      data.route.length === 0
-    ) {
-      return;
-    }
-    setCurrentRoute(index);
-    const lat1 = data.route[index]?.latitude;
-    const lon1 = data.route[index]?.longitude;
-    const lat2 = data.route[index + 1]?.latitude;
-    const lon2 = data.route[index + 1]?.longitude;
-
-    if (lat1 && lon1 && lat2 && lon2) {
-      const bearing = reverse
-        ? calculateBearing(lat2, lon2, lat1, lon1)
-        : calculateBearing(lat1, lon1, lat2, lon2);
-      const newRegion = {
-        ...region,
-        latitude: reverse ? lat2 : lat1,
-        longitude: reverse ? lon2 : lon1,
-      };
-
-      if (mapRef.current) {
-        mapRef.current.animateCamera({
-          center: newRegion,
-          heading: bearing,
-          zoom: 18,
-        });
-      }
+  const handleMapDeltaChange = useCallback(
+    (newRegion: SimpleMapRegion) => {
       setRegion({
         ...region,
         ...newRegion,
       });
+    },
+    [region]
+  );
+
+  const handleLocationSelect = useCallback(
+    (location: Coordinates) => {
+      if (
+        location === undefined ||
+        mapRef.current === undefined ||
+        location === null ||
+        location.latitude === undefined ||
+        location.longitude === undefined
+      ) {
+        return;
+      }
+      const newRegion = {
+        ...region,
+        latitude: location?.latitude,
+        longitude: location?.longitude,
+      };
+
+      mapRef.current?.animateCamera(
+        {
+          center: newRegion,
+        },
+        { duration: 1000 }
+      );
+
+      setRegion({
+        ...region,
+        ...newRegion,
+      });
+    },
+    [mapRef, region]
+  );
+
+  const handleOverview = useCallback(() => {
+    if (mapRef.current) {
+      mapRef.current.animateToRegion(initialRegion, 1000);
     }
-  };
+  }, [initialRegion]);
+
+  const handlePressRoute = useCallback(
+    (index: number, reverse: boolean = false) => {
+      if (
+        !data ||
+        index < 0 ||
+        index >= data.route.length ||
+        data.route.length === 0
+      ) {
+        return;
+      }
+      setCurrentRoute(index);
+      const lat1 = data.route[index]?.latitude;
+      const lon1 = data.route[index]?.longitude;
+      const lat2 = data.route[index + 1]?.latitude;
+      const lon2 = data.route[index + 1]?.longitude;
+
+      if (lat1 && lon1 && lat2 && lon2) {
+        const bearing = reverse
+          ? calculateBearing(lat2, lon2, lat1, lon1)
+          : calculateBearing(lat1, lon1, lat2, lon2);
+        const newRegion = {
+          ...region,
+          latitude: reverse ? lat2 : lat1,
+          longitude: reverse ? lon2 : lon1,
+        };
+
+        if (mapRef.current) {
+          mapRef.current.animateCamera({
+            center: newRegion,
+            heading: bearing,
+            zoom: 18,
+          });
+        }
+        setRegion({
+          ...region,
+          ...newRegion,
+        });
+      }
+    },
+    [data, region]
+  );
+
+  const resetRoute = useCallback(() => {
+    handlePressRoute(0);
+    setFirstPress(true);
+  }, [handlePressRoute, setFirstPress]);
 
   return {
     region,
@@ -239,5 +251,6 @@ export const useMapRegion = ({
     handlePressRoute,
     handleMapDeltaChange,
     handleOverview,
+    regionCalculating,
   };
 };

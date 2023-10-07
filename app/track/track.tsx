@@ -22,6 +22,7 @@ import {
   Modal,
   TextInput,
   Chip,
+  IconButton,
 } from "react-native-paper";
 import { useTranslation } from "react-i18next";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
@@ -46,6 +47,7 @@ export default function TrackScreen() {
   const locationState = useSelector(selectLonLat);
   const [showRoomIdInput, setShowRoomIdInput] = useState(false);
   const [roomIdInput, setRoomIdInput] = useState("");
+  const [trackingLocation, setTrackingLocation] = useState(false);
 
   const {
     roomId,
@@ -304,10 +306,28 @@ export default function TrackScreen() {
             height={34}
           />
         </TouchableOpacity>
+        <View>
+          <IconButton
+            icon="crosshairs-gps"
+            onPress={() => {
+              mapRef.current?.animateToRegion({
+                latitude: locationState.latitude,
+                longitude: locationState.longitude,
+                latitudeDelta: 0.004,
+                longitudeDelta: 0.002,
+              });
+            }}
+            mode="contained"
+            containerColor={theme.colors.tertiaryContainer}
+            iconColor={theme.colors.onTertiaryContainer}
+          />
+        </View>
       </View>
       <MapView
         provider={PROVIDER_GOOGLE}
         customMapStyle={currentTheme === "dark" ? mapDarkTheme : []}
+        showsUserLocation={mode !== "trackme"}
+        showsMyLocationButton={false}
         mapPadding={{
           top: 0,
           right: 0,
@@ -322,7 +342,6 @@ export default function TrackScreen() {
           latitudeDelta: 0.006,
           longitudeDelta: 0.003,
         }}
-        showsUserLocation={mode === "trackother"}
         scrollEnabled={true}
         pitchEnabled={true}
         rotateEnabled={true}
@@ -397,18 +416,25 @@ export default function TrackScreen() {
                 <View
                   style={{
                     alignItems: "center",
+                    gap: 4,
                   }}
                 >
-                  <Text variant="bodyLarge">Ask your children to type in</Text>
-                  <Chip
+                  <Text variant="bodyLarge" style={{ fontWeight: "bold" }}>
+                    Ask your children to type in
+                  </Text>
+                  <Button
+                    mode="outlined"
                     icon="information"
                     style={{
                       marginVertical: 4,
                     }}
+                    labelStyle={{
+                      fontSize: 18,
+                    }}
                     onPress={async () => {
                       await Clipboard.setStringAsync(roomId);
                       pushNotification({
-                        message: t("Room PIN Copied to clipboard", {
+                        message: t("Room ID Copied to clipboard", {
                           ns: "acc",
                         }),
                         type: "success",
@@ -416,8 +442,10 @@ export default function TrackScreen() {
                     }}
                   >
                     {roomId}
-                  </Chip>
-                  <Text variant="bodyLarge">to track you</Text>
+                  </Button>
+                  <Text variant="bodyLarge" style={{ fontWeight: "bold" }}>
+                    locate you on their device
+                  </Text>
                 </View>
               )}
             </View>
@@ -432,25 +460,11 @@ export default function TrackScreen() {
               }}
             >
               <Text variant="bodyLarge" style={{ fontWeight: "bold" }}>
-                Tracking {roomId}
+                You are tracking
               </Text>
-              {/* <ScrollView>
-                  {messages.map((message, index) => {
-                    return (
-                      <View
-                        key={index}
-                        style={{
-                          backgroundColor: theme.colors.surface,
-                          padding: 16,
-                          margin: 8,
-                          borderRadius: 8,
-                        }}
-                      >
-                        <Text>{JSON.stringify(message)}</Text>
-                      </View>
-                    );
-                  })}
-                </ScrollView> */}
+              <Text variant="headlineSmall" style={{ fontWeight: "bold" }}>
+                {roomId}
+              </Text>
             </View>
           )}
           {/* <Button

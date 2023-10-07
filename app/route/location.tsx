@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { router } from "expo-router";
 import MapView, { Marker } from "react-native-maps";
@@ -10,7 +10,15 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import { Text, Card, Button, Banner, Portal, Modal } from "react-native-paper";
+import {
+  Text,
+  Card,
+  Button,
+  Banner,
+  Portal,
+  Modal,
+  IconButton,
+} from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Slider from "@react-native-community/slider";
 import ArrowBackIcon from "../../assets/images/icons/arrow_back.svg";
@@ -59,6 +67,7 @@ export default function RouteGenLocation() {
   const { pushNotification } = useNotification();
 
   const [showLocationInput, setShowLocationInput] = useState(false);
+  const mapRef = useRef<MapView>(null);
 
   return (
     <ScrollView
@@ -135,7 +144,10 @@ export default function RouteGenLocation() {
               </Button>
             </View>
             <GooglePlacesAutocomplete
-              placeholder="Enter Location"
+              placeholder="Enter your address to search"
+              textInputProps={{
+                placeholderTextColor: theme.colors.onSurfaceVariant,
+              }}
               styles={{
                 container: {
                   marginHorizontal: 20,
@@ -256,6 +268,29 @@ export default function RouteGenLocation() {
         >
           <View
             style={{
+              position: "absolute",
+              top: 8,
+              right: 8,
+              zIndex: 999,
+            }}
+          >
+            <IconButton
+              icon="crosshairs-gps"
+              iconColor={theme.colors.onTertiaryContainer}
+              containerColor={theme.colors.tertiaryContainer}
+              size={30}
+              onPress={() => {
+                mapRef.current?.animateToRegion({
+                  latitude: locationState.latitude,
+                  longitude: locationState.longitude,
+                  latitudeDelta: 0.02,
+                  longitudeDelta: 0.01,
+                });
+              }}
+            />
+          </View>
+          <View
+            style={{
               height: 230,
               width: "100%",
               borderTopLeftRadius: 10,
@@ -267,11 +302,12 @@ export default function RouteGenLocation() {
               customMapStyle={currentTheme === "dark" ? mapDarkTheme : []}
               style={styles.map}
               provider={PROVIDER_GOOGLE}
-              initialRegion={{
+              ref={mapRef}
+              region={{
                 latitude: locationState.latitude,
                 longitude: locationState.longitude,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421,
+                latitudeDelta: 0.02,
+                longitudeDelta: 0.01,
               }}
               showsUserLocation={false}
             >

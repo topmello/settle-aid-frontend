@@ -34,6 +34,7 @@ type OverlayProps = {
   handleLocationSelect: (location: any) => void;
   handlePressRoute: (index: number) => void;
   handlePress: (index: number) => void;
+  handleHide: (isHide: boolean) => void;
   checked: boolean[];
   locationIcons: any;
 };
@@ -47,6 +48,7 @@ const ResultOverlay: React.FC<OverlayProps> = ({
   handlePress,
   checked,
   locationIcons,
+  handleHide,
 }: OverlayProps) => {
   const theme = useTheme();
   const bottomSheetRef = React.useRef<Animated.View>(null);
@@ -77,11 +79,13 @@ const ResultOverlay: React.FC<OverlayProps> = ({
         icon={!showBottomSheet ? "chevron-up" : "chevron-down"}
         style={{
           position: "absolute",
-          top: -62,
+          top: -24,
           right: 16,
+          zIndex: 2,
         }}
         onPress={() => {
           setShowBottomSheet(!showBottomSheet);
+          handleHide(!showBottomSheet);
         }}
       />
       <ScrollView>

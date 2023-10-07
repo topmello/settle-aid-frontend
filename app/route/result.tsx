@@ -78,6 +78,10 @@ export default function MapScreen() {
   const [menuVisible, setMenuVisible] = useState(false);
   const openMenu = () => setMenuVisible(true);
   const closeMenu = () => setMenuVisible(false);
+  const [isBottomSheetShow, setIsBottomSheetShow] = useState(true);
+  const handleBottomSheetHide = (isHide: boolean) => {
+    setIsBottomSheetShow(isHide);
+  };
 
   const { checked, handlePress } = useCheckedList(data);
 
@@ -126,6 +130,7 @@ export default function MapScreen() {
     handlePressRoute,
     handleMapDeltaChange,
     handleOverview,
+    regionCalculating,
   } = useMapRegion({
     data,
     routeState,
@@ -196,7 +201,7 @@ export default function MapScreen() {
   };
 
   // loading screen
-  if (loading) {
+  if (loading || regionCalculating) {
     return (
       <SafeAreaView
         style={{
@@ -205,9 +210,7 @@ export default function MapScreen() {
           alignItems: "center",
           flex: 1,
         }}
-      >
-        <ActivityIndicator size="large" />
-      </SafeAreaView>
+      ></SafeAreaView>
     );
   } else if (
     !data ||
@@ -227,29 +230,35 @@ export default function MapScreen() {
           flex: 1,
         }}
       >
-        <Text variant="titleLarge">No location found</Text>
-        <Button
-          mode="contained"
-          style={{
-            width: "50%",
-          }}
-          onPress={() => {
-            router.back();
-          }}
-        >
-          Back
-        </Button>
-        <Button
-          mode="contained"
-          style={{
-            width: "50%",
-          }}
-          onPress={() => {
-            router.replace("/(tabs)");
-          }}
-        >
-          Home
-        </Button>
+        {!region || !region.latitude || !region.longitude ? (
+          <ActivityIndicator size="large" />
+        ) : (
+          <View>
+            <Text variant="titleLarge">No route found</Text>
+            <Button
+              mode="contained"
+              style={{
+                width: "50%",
+              }}
+              onPress={() => {
+                router.back();
+              }}
+            >
+              Back
+            </Button>
+            <Button
+              mode="contained"
+              style={{
+                width: "50%",
+              }}
+              onPress={() => {
+                router.replace("/(tabs)");
+              }}
+            >
+              Home
+            </Button>
+          </View>
+        )}
       </SafeAreaView>
     );
   }
@@ -386,6 +395,7 @@ export default function MapScreen() {
           showsUserLocation={true}
           showsCompass={false}
           showsMyLocationButton={false}
+          showsPointsOfInterest={false}
           onRegionChangeComplete={(region, { isGesture }) => {
             if (isGesture) {
               handleMapDeltaChange(region);
@@ -394,7 +404,7 @@ export default function MapScreen() {
           mapPadding={{
             top: 0,
             right: 0,
-            bottom: 140,
+            bottom: isBottomSheetShow ? 440 : 160,
             left: 0,
           }}
           style={{
@@ -454,6 +464,7 @@ export default function MapScreen() {
         {data && (
           <ResultOverlay
             tipList={tipList}
+            handleHide={handleBottomSheetHide}
             data={data}
             body={routeState}
             handleLocationSelect={handleLocationSelect}
