@@ -33,10 +33,11 @@ import { RequestOptions } from "../../api/fetch";
 import useFetch from "../../hooks/useFetch";
 import { useMapRegion, Coordinates } from "../../hooks/useMapRegion";
 import useEventScheduler from "../../hooks/useEventScheduler";
-import generatePDF from "../../utils/generatePDF";
+import { usePrintMap } from "../../hooks/usePrintMap";
 import { Route, RouteGetResult } from "../../types/route";
 import { selectIsLoading } from "../../store/appSlice";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { useNotification } from "../../hooks/useNotification";
 
 const MORE_ICON = Platform.OS === "ios" ? "dots-horizontal" : "dots-vertical";
 
@@ -45,6 +46,7 @@ export default function MapScreen() {
   const currentTheme = useSelector(selectTheme);
   const routeState: RouteState = useSelector(selectRouteState);
   const loading = useSelector(selectIsLoading);
+  const { pushNotification } = useNotification();
 
   const route_id_ = useLocalSearchParams().route_id;
   const [useHistory, setUseHistory] = useState(true);
@@ -85,6 +87,8 @@ export default function MapScreen() {
   };
 
   const { checked, handlePress } = useCheckedList(data);
+
+  const { map, printMap } = usePrintMap(data);
 
   const modes: Array<string> = [
     "Walk",
@@ -234,8 +238,9 @@ export default function MapScreen() {
         {!region || !region.latitude || !region.longitude ? (
           <ActivityIndicator size="large" />
         ) : (
-          <View>
+          <>
             <Text variant="titleLarge">No route found</Text>
+            <Text variant="bodyLarge">{route_id_}</Text>
             <Button
               mode="contained"
               style={{
@@ -258,7 +263,7 @@ export default function MapScreen() {
             >
               Home
             </Button>
-          </View>
+          </>
         )}
       </SafeAreaView>
     );
@@ -267,6 +272,7 @@ export default function MapScreen() {
   // main screen
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
+      {map}
       <SafeAreaView
         style={{
           flex: 1,
@@ -323,7 +329,11 @@ export default function MapScreen() {
               <Menu.Item onPress={showDatePicker} title="Schedule" />
               <Menu.Item
                 onPress={() => {
-                  generatePDF(data);
+                  printMap();
+                  pushNotification({
+                    message: "Printing route for you",
+                    type: "success",
+                  });
                 }}
                 title="Share"
               />
