@@ -93,8 +93,6 @@ const ResultOverlay: React.FC<OverlayProps> = ({
         <FlatList
           style={{
             width: "100%",
-            overflow: "visible",
-            marginTop: 12,
           }}
           data={tipList}
           renderItem={({ item }) => (
@@ -103,41 +101,54 @@ const ResultOverlay: React.FC<OverlayProps> = ({
                 backgroundColor: theme.colors.primaryContainer,
                 borderRadius: 8,
                 width: 300,
-                padding: 16,
+                marginTop: 12,
+                marginBottom: 8,
                 flexDirection: "row",
               }}
             >
-              <View
+              <TouchableOpacity
                 style={{
                   flex: 1,
+                  flexDirection: "row",
+                  padding: 16,
+                }}
+                onPress={() => {
+                  setResultTip(item);
+                  router.push("/learn/detail");
                 }}
               >
-                <Text variant="bodyLarge" style={{ fontWeight: "bold" }}>
-                  {item.description}
-                </Text>
-                <Text
-                  variant="bodyMedium"
-                  numberOfLines={2}
-                  ellipsizeMode="tail"
-                >
-                  {item.content}
-                </Text>
-              </View>
-              <View
-                style={{
-                  width: 30,
-                  height: "100%",
-                  justifyContent: "center",
-                }}
-              >
-                <IconButton
-                  icon="chevron-right"
-                  onPress={() => {
-                    setResultTip(item);
-                    router.push("/learn/detail");
+                <View
+                  style={{
+                    flex: 1,
                   }}
-                />
-              </View>
+                >
+                  <Text variant="bodyLarge" style={{ fontWeight: "bold" }}>
+                    {item.description}
+                  </Text>
+                  <Text
+                    variant="bodyMedium"
+                    numberOfLines={2}
+                    ellipsizeMode="tail"
+                  >
+                    {item.content}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    width: 30,
+                    height: "100%",
+                    justifyContent: "center",
+                  }}
+                >
+                  <IconButton
+                    icon="chevron-right"
+                    onPress={() => {
+                      setResultTip(item);
+                      router.push("/learn/detail");
+                    }}
+                  />
+                </View>
+              </TouchableOpacity>
             </Surface>
           )}
           keyExtractor={(tip) => tip?.description}

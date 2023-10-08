@@ -128,12 +128,7 @@ const useFetch = <T = any>(
     if (shouldFetchImmediately) {
       fetchData();
     }
-  }, [
-    token,
-    JSON.stringify(requestOptions.data),
-    requestOptions.params,
-    ...deps,
-  ]);
+  }, [token, requestOptions.params, ...deps]);
   return [data, fetchData] as [T | null, typeof fetchData];
 };
 

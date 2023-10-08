@@ -5,12 +5,7 @@ import { Button, IconButton, Menu } from "react-native-paper";
 import { AnimatedButton } from "./AnimatedButton";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { useAppTheme } from "../theme/theme";
-import generatePDF from "../hooks/usePrintMap";
-import Animated, {
-  FadeInRight,
-  FadeOutRight,
-  Layout,
-} from "react-native-reanimated";
+import { usePrintMap } from "../hooks/usePrintMap";
 import useEventScheduler from "../hooks/useEventScheduler";
 
 interface CardProps {
@@ -102,13 +97,9 @@ const RouteCard: React.FC<CardProps> = ({
     hideDatePicker,
     handleDateConfirm,
   } = useEventScheduler();
+  const { map, printMap } = usePrintMap(routeResult.route);
 
   return (
-    // <Animated.View
-    //   entering={FadeInRight.delay(index ? index * 50 : 0)}
-    //   exiting={FadeOutRight}
-    //   layout={Layout.damping(1)}
-    // >
     <AnimatedButton
       onPress={onPressCard ? onPressCard : () => {}}
       color={theme.colors.infoContainer}
@@ -117,6 +108,7 @@ const RouteCard: React.FC<CardProps> = ({
         overflow: "hidden",
       }}
     >
+      {menuVisible && map}
       <Text style={styles.card_title}>{routeResult.route.locations[0]}</Text>
       <View style={styles.tags_container}>
         <Text style={styles.tag} numberOfLines={1} ellipsizeMode="tail">
@@ -133,13 +125,7 @@ const RouteCard: React.FC<CardProps> = ({
               handleFavRoute && handleFavRoute(routeResult.route.route_id)
             }
           />
-          <Button
-            mode="outlined"
-            textColor={theme.colors.info}
-            onPress={showDatePicker}
-          >
-            Schedule
-          </Button>
+
           <Menu
             visible={menuVisible}
             onDismiss={() => setMenuVisible(false)}
@@ -153,9 +139,10 @@ const RouteCard: React.FC<CardProps> = ({
               />
             }
           >
+            <Menu.Item title="Schedule" onPress={showDatePicker} />
             <Menu.Item
               onPress={() => {
-                generatePDF(routeResult.route);
+                printMap();
               }}
               title="Share"
             />

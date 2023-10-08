@@ -61,6 +61,17 @@ export default function HistoryOverviewScreen() {
     }
   };
 
+  const handlePressCard = (result: RouteHistory) => {
+    if (result && result.route) {
+      router.push({
+        pathname: "/route/result",
+        params: {
+          routeId: result.route.route_id + "",
+        },
+      });
+    }
+  };
+
   const {
     isDatePickerVisible,
     showDatePicker,
@@ -187,10 +198,7 @@ export default function HistoryOverviewScreen() {
               routeResult={result}
               handleFavRoute={handleFavRoute}
               voted={result.voted_by_user}
-              isDatePickerVisible={isDatePickerVisible}
-              showDatePicker={showDatePicker}
-              hideDatePicker={hideDatePicker}
-              handleDateConfirm={handleDateConfirm}
+              onPressCard={() => handlePressCard(result)}
             />
           ))}
         </View>

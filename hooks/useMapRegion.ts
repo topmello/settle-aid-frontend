@@ -246,9 +246,9 @@ export const useMapRegion = ({
                 center: newRegion,
                 heading: bearing,
               },
-              { duration: 1000 }
+              { duration: 500 }
             );
-          }, 1000);
+          }, 500);
         }
         setRegion({
           ...region,

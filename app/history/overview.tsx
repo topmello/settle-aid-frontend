@@ -25,6 +25,7 @@ import useEventScheduler from "../../hooks/useEventScheduler";
 
 import * as Linking from "expo-linking";
 import * as Sharing from "expo-sharing";
+import { usePrintMap } from "../../hooks/usePrintMap";
 
 export default function HistoryOverviewScreen() {
   const { t } = useTranslation();
@@ -52,6 +53,17 @@ export default function HistoryOverviewScreen() {
     false,
     "Added to favourites"
   );
+
+  const handlePressCard = (result: RouteHistory) => {
+    if (result && result.route) {
+      router.push({
+        pathname: "/route/result",
+        params: {
+          routeId: result.route.route_id + "",
+        },
+      });
+    }
+  };
 
   const handleFavRoute = async (route_id: number) => {
     try {
@@ -221,6 +233,7 @@ export default function HistoryOverviewScreen() {
               key={result.route.route_id}
               isSimplified={false}
               routeResult={result}
+              onPressCard={() => handlePressCard(result)}
               handleFavRoute={handleFavRoute}
               voted={result.voted_by_user}
               shareUrl={shareUrl}

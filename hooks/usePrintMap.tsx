@@ -2,8 +2,9 @@ import * as Print from "expo-print";
 import * as Sharing from "expo-sharing";
 import { Route } from "../types/route";
 import MapView, { Marker, PROVIDER_GOOGLE, Polyline } from "react-native-maps";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Coordinates, useMapRegion } from "./useMapRegion";
+import { useNotification } from "./useNotification";
 
 const customPins = [
   require("../assets/images/pin/pin1.png"),
@@ -15,6 +16,7 @@ const customPins = [
 const usePrintMap = (route: Route) => {
   const mapRef = useRef<MapView>(null);
   const [printing, setPrinting] = useState(false);
+  const { pushNotification } = useNotification();
 
   const { region, initialRegion } = useMapRegion({
     data: route,
@@ -60,6 +62,11 @@ const usePrintMap = (route: Route) => {
 </style>
 `;
   const printMap = useCallback(() => {
+    setPrinting(true);
+    pushNotification({
+      message: "Printing route for you...",
+      type: "info",
+    });
     mapRef.current
       ?.takeSnapshot({
         format: "png",
@@ -93,7 +100,8 @@ const usePrintMap = (route: Route) => {
           UTI: "com.adobe.pdf",
         });
       });
-  }, [locations]);
+    setPrinting(false);
+  }, [mapRef, locations]);
 
   return {
     map: (

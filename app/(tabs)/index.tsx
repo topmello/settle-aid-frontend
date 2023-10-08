@@ -1,16 +1,13 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 
 import {
   SafeAreaView,
   StyleSheet,
   View,
   ScrollView,
-  Animated,
   TouchableOpacity,
-  Image,
   StatusBar,
   Platform,
-  Pressable,
 } from "react-native";
 import { Button, Text, ActivityIndicator } from "react-native-paper";
 import { useTranslation } from "react-i18next";
@@ -27,10 +24,10 @@ import RouteCard from "../../components/RouteCard";
 import useFetch from "../../hooks/useFetch";
 import { RouteHistory } from "../../types/route";
 import { useAppTheme } from "../../theme/theme";
-import { useFocusEffect } from "expo-router";
 import { WeatherWidget } from "../../components/WeatherWidget";
 
 import * as Linking from "expo-linking";
+import { isString } from "lodash";
 
 export default function HomeScreen() {
   const { t } = useTranslation();
@@ -67,8 +64,8 @@ export default function HomeScreen() {
       const initialUrl = await Linking.getInitialURL();
       if (initialUrl) {
         const { queryParams } = Linking.parse(initialUrl);
-        if (queryParams.routeid) {
-          setRouteId(queryParams.routeid);
+        if (queryParams?.routeid && isString(queryParams?.routeid)) {
+          setRouteId(queryParams?.routeid);
         }
       }
     };
@@ -78,7 +75,7 @@ export default function HomeScreen() {
     // Add an event listener for deep links
     const handleDeepLink = (event: { url: string }) => {
       const { queryParams } = Linking.parse(event.url);
-      if (queryParams.routeid) {
+      if (queryParams?.routeid && isString(queryParams?.routeid)) {
         setRouteId(queryParams.routeid);
       }
     };
@@ -105,7 +102,7 @@ export default function HomeScreen() {
       router.push({
         pathname: "/route/result",
         params: {
-          route_id: result.route.route_id,
+          routeId: result.route.route_id + "",
         },
       });
     }

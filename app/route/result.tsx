@@ -1,15 +1,8 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { router, useLocalSearchParams } from "expo-router";
+import { SafeAreaView, Platform, View, TouchableOpacity } from "react-native";
 import {
-  SafeAreaView,
-  Platform,
-  View,
-  Pressable,
-  TouchableOpacity,
-} from "react-native";
-import {
-  Appbar,
   Menu,
   Text,
   useTheme,
@@ -38,17 +31,26 @@ import { Route, RouteGetResult } from "../../types/route";
 import { selectIsLoading } from "../../store/appSlice";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useNotification } from "../../hooks/useNotification";
+import { useAppTheme } from "../../theme/theme";
 
 const MORE_ICON = Platform.OS === "ios" ? "dots-horizontal" : "dots-vertical";
 
+const modes: Array<string> = [
+  "Walk",
+  "Local",
+  "Cultural Enjoyment",
+  "Greeting and Interaction",
+  "Personal Safety",
+];
+
 export default function MapScreen() {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const currentTheme = useSelector(selectTheme);
   const routeState: RouteState = useSelector(selectRouteState);
   const loading = useSelector(selectIsLoading);
   const { pushNotification } = useNotification();
 
-  const route_id_ = useLocalSearchParams().route_id;
+  const routeId = useLocalSearchParams<{ routeId: string }>().routeId;
   const [useHistory, setUseHistory] = useState(true);
 
   const [data, setData] = useState<Route>({
@@ -68,7 +70,7 @@ export default function MapScreen() {
     ],
     instructions: [],
     duration: 0,
-    route_image_name: ''
+    route_image_name: "",
   });
 
   const {
@@ -89,40 +91,9 @@ export default function MapScreen() {
   const { checked, handlePress } = useCheckedList(data);
 
   const { map, printMap } = usePrintMap(data);
-
-  const modes: Array<string> = [
-    "Walk",
-    "Local",
-    "Cultural Enjoyment",
-    "Greeting and Interaction",
-    "Personal Safety",
-  ];
+  const mapRef = useRef<MapView>(null);
 
   const tipList: Array<Tip> = getTipForMode(tips, modes);
-
-  const [dataFromFetch, fetchData] = useFetch<Route>(
-    {
-      method: "POST",
-      url: "/search/v2/route/",
-      data: routeState,
-    },
-    [routeState],
-    data,
-    false
-  );
-
-  const [routeDataFromHistory, fetchRouteDataFromHistory] =
-    useFetch<RouteGetResult>(
-      {
-        method: "GET",
-        url: `/route/${route_id_}`,
-      },
-      [route_id_],
-      { num_votes: 0, route: data },
-      false
-    );
-
-  const mapRef = useRef<MapView>(null);
 
   const {
     region,
@@ -142,28 +113,48 @@ export default function MapScreen() {
     mapRef,
   });
 
+  const [dataFromFetch, fetchData] = useFetch<Route>(
+    {
+      method: "POST",
+      url: "/search/v2/route/",
+      data: routeState,
+    },
+    [routeState],
+    data,
+    false
+  );
+
+  const [routeDataFromHistory, fetchRouteDataFromHistory] =
+    useFetch<RouteGetResult>(
+      {
+        method: "GET",
+        url: `/route/${routeId}`,
+      },
+      [routeId],
+      { num_votes: 0, route: data },
+      false
+    );
+
   const fetchRoute = useCallback(async () => {
-    if (typeof route_id_ === "string") {
+    if (typeof routeId === "string") {
       try {
         await fetchRouteDataFromHistory().then(() => {
           setUseHistory(true);
         });
-        return;
+      } catch (error) {
+        console.error("Failed to fetch route:", error);
+      }
+    } else {
+      try {
+        await fetchData().then(() => {
+          setUseHistory(false);
+        });
       } catch (error) {
         console.error("Failed to fetch route:", error);
         return;
       }
     }
-
-    try {
-      await fetchData().then(() => {
-        setUseHistory(false);
-      });
-    } catch (error) {
-      console.error("Failed to fetch route:", error);
-      return;
-    }
-  }, [routeState, mapRef, setData, route_id_]);
+  }, [routeId]);
 
   useEffect(() => {
     if (!useHistory && dataFromFetch && dataFromFetch.locations.length > 0) {
@@ -240,7 +231,7 @@ export default function MapScreen() {
         ) : (
           <>
             <Text variant="titleLarge">No route found</Text>
-            <Text variant="bodyLarge">{route_id_}</Text>
+            <Text variant="bodyLarge">{routeId}</Text>
             <Button
               mode="contained"
               style={{
@@ -323,17 +314,13 @@ export default function MapScreen() {
                 />
               }
             >
-              {typeof route_id_ !== "string" && (
+              {typeof routeId !== "string" && (
                 <Menu.Item onPress={fetchRoute} title="Re-plan" />
               )}
               <Menu.Item onPress={showDatePicker} title="Schedule" />
               <Menu.Item
                 onPress={() => {
                   printMap();
-                  pushNotification({
-                    message: "Printing route for you",
-                    type: "success",
-                  });
                 }}
                 title="Share"
               />
