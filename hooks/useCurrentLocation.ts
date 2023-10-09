@@ -13,6 +13,7 @@ const useCurrentLocation = () => {
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
       dispatch(fail({ message: "not granted" }));
+      dispatch(loaded());
       return;
     }
 

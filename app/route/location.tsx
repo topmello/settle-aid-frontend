@@ -31,6 +31,7 @@ import {
   selectPrivacyChecked,
   selectTheme,
   loaded,
+  selectIsLoading,
 } from "../../store/appSlice";
 import {
   setLonLat,
@@ -55,7 +56,7 @@ export default function RouteGenLocation() {
 
   const privacyChecked = useSelector(selectPrivacyChecked);
 
-  const isLoading = useSelector((state: RootState) => state.app.isLoading);
+  const isLoading = useSelector(selectIsLoading);
   const locationState = useSelector(selectLonLat);
   const distanceThres = useSelector(selectDistanceThres);
   const fetchLocation = useCurrentLocation();

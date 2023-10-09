@@ -31,6 +31,7 @@ import { WeatherWidget } from "../../components/WeatherWidget";
 
 import * as Linking from "expo-linking";
 import { isString } from "lodash";
+import { FunctionButton } from "../../components/FunctionButton";
 
 export default function HomeScreen() {
   const { t } = useTranslation();
@@ -164,134 +165,44 @@ export default function HomeScreen() {
               },
             ]}
           >
-            <AnimatedButton
-              color={theme.colors.purpleContainer}
-              style={{
-                paddingVertical: 24,
-              }}
-              onPress={() => {
-                router.push("/route/activity");
-              }}
-            >
-              <View style={styles.animatedButtonInner}>
-                <RouteIcon
-                  style={styles.iconStyle}
-                  height={40}
-                  width={40}
-                  fill={theme.colors.onPurpleContainer}
-                />
-                <View style={styles.columnFlexStart}>
-                  <View style={styles.rowSpaceBetween}>
-                    <Text variant="headlineSmall" style={styles.headerText}>
-                      {t("Plan my route", { ns: "home" })}
-                    </Text>
-                    <ArrowIcon
-                      style={styles.moreIcon}
-                      fill={theme.colors.onPurpleContainer}
-                    />
-                  </View>
-                  <Text style={{ color: theme.colors.onPurpleContainer }}>
-                    {t("Plan your trip", { ns: "home" })}
-                  </Text>
-                </View>
-              </View>
-            </AnimatedButton>
-            <AnimatedButton
-              height={76}
-              color={theme.colors.successContainer}
-              style={{
-                paddingVertical: 24,
-              }}
-              onPress={() => {
-                router.push("/track/track");
-              }}
-            >
-              <View style={styles.animatedButtonInner}>
-                <PersonPinIcon
-                  height={40}
-                  width={40}
-                  fill={theme.colors.onSuccessContainer}
-                />
-                <View style={styles.columnFlexStart}>
-                  <View style={styles.rowSpaceBetween}>
-                    <Text
-                      variant="titleLarge"
-                      style={[
-                        styles.headerText,
-                        { color: theme.colors.onSuccessContainer },
-                      ]}
-                    >
-                      {t("Location Sharing", { ns: "home" })}
-                    </Text>
-                    <ArrowIcon
-                      style={styles.moreIcon}
-                      fill={theme.colors.onSuccessContainer}
-                    />
-                  </View>
-                </View>
-              </View>
-            </AnimatedButton>
-            <AnimatedButton
-              height={76}
-              color={theme.colors.secondaryContainer}
-              style={{
-                paddingVertical: 24,
-              }}
-              onPress={() => {
-                router.push("/history/sharedroute");
-              }}
-            >
-              <View style={styles.animatedButtonInner}>
-                <ForumIcon
-                  height={40}
-                  width={40}
-                  fill={theme.colors.onSecondaryContainer}
-                />
-                <View style={styles.columnFlexStart}>
-                  <View style={styles.rowSpaceBetween}>
-                    <Text
-                      variant="titleLarge"
-                      style={[
-                        styles.headerText,
-                        { color: theme.colors.onSecondaryContainer },
-                      ]}
-                    >
-                      {t("Shared Route", { ns: "home" })}
-                    </Text>
-                    <ArrowIcon
-                      style={styles.moreIcon}
-                      fill={theme.colors.onSuccessContainer}
-                    />
-                  </View>
-                </View>
-              </View>
-            </AnimatedButton>
+            <FunctionButton
+              destination="/route/activity"
+              icon={<RouteIcon />}
+              color={theme.colors.onPurpleContainer}
+              containerColor={theme.colors.purpleContainer}
+              title={t("Plan my route", { ns: "home" })}
+              subtitle={t("Plan your trip", { ns: "home" })}
+            />
+            <FunctionButton
+              destination="/track/track"
+              icon={<PersonPinIcon />}
+              color={theme.colors.onSuccessContainer}
+              containerColor={theme.colors.successContainer}
+              title={t("Location Sharing", { ns: "home" })}
+              subtitle={t("Share your location in realtime with ease", {
+                ns: "home",
+              })}
+            />
+            <FunctionButton
+              destination="/history/sharedroute"
+              icon={<ForumIcon />}
+              color={theme.colors.onPrimaryContainer}
+              containerColor={theme.colors.primaryContainer}
+              title={t("Community Routes", { ns: "home" })}
+              subtitle={t("Follow beloved routes by community", { ns: "home" })}
+            />
           </View>
         </View>
         {routeList && (
           <View>
-            <View style={styles.historySection}>
-              <Text variant="titleLarge" style={styles.titleLarge}>
+            <View style={styles.sectionWrapper}>
+              <Text variant="titleLarge" style={styles.titleWithMargin}>
                 {t("Route History", { ns: "home" })}
               </Text>
-              <TouchableOpacity
-                onPress={() => {
-                  handlePressMoreHistory();
-                }}
-              >
-                <View
-                  style={{
-                    alignItems: "center",
-                    marginRight: 16,
-                    marginTop: 10,
-                    flexDirection: "row",
-                  }}
-                >
+              <TouchableOpacity onPress={handlePressMoreHistory}>
+                <View style={styles.moreWrapper}>
                   <Text
-                    style={{
-                      color: theme.colors.primary,
-                      fontWeight: "bold",
-                    }}
+                    style={[styles.moreText, { color: theme.colors.primary }]}
                   >
                     {t("comm:More")}
                   </Text>
@@ -303,81 +214,44 @@ export default function HomeScreen() {
                 </View>
               </TouchableOpacity>
             </View>
-
-            <View>
-              <View
-                style={{
-                  gap: 6,
-                  marginVertical: 16,
-                  marginHorizontal: 16,
-                }}
-              >
-                {routeList.map((result, index) => (
-                  <RouteCard
-                    key={index}
-                    routeResult={result}
-                    isSimplified={true}
-                    onPressCard={() => {
-                      handlePressCard(result);
-                    }}
-                  />
-                ))}
-                {routeList.length === 0 && (
-                  <View
-                    style={{
-                      alignItems: "center",
-                      justifyContent: "center",
-                      marginVertical: 8,
-                    }}
-                  >
-                    <Text
-                      variant="bodyLarge"
-                      style={{
-                        textAlign: "center",
+            <View style={styles.cardsWrapper}>
+              {routeList.map((result, index) => (
+                <RouteCard
+                  key={index}
+                  routeResult={result}
+                  isSimplified={true}
+                  onPressCard={() => handlePressCard(result)}
+                />
+              ))}
+              {routeList.length === 0 && (
+                <View style={styles.emptyStateWrapper}>
+                  <Text
+                    variant="bodyLarge"
+                    style={[
+                      styles.emptyStateText,
+                      {
                         color: theme.colors.outline,
-                      }}
-                    >
-                      {t("Plan your route to see your history")}
-                    </Text>
-                  </View>
-                )}
-              </View>
+                      },
+                    ]}
+                  >
+                    {t("Plan your route to see your history")}
+                  </Text>
+                </View>
+              )}
             </View>
           </View>
         )}
 
         {favRouteList && (
           <View>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginTop: 12,
-              }}
-            >
-              <Text
-                variant="titleLarge"
-                style={{
-                  marginHorizontal: 16,
-                }}
-              >
+            <View style={styles.sectionWrapper}>
+              <Text variant="titleLarge" style={styles.titleWithMargin}>
                 {t("Favorite Route", { ns: "home" })}
               </Text>
-              <TouchableOpacity onPress={() => handlePressMoreFavorite()}>
-                <View
-                  style={{
-                    alignItems: "center",
-                    marginRight: 16,
-                    marginTop: 10,
-                    flexDirection: "row",
-                  }}
-                >
+              <TouchableOpacity onPress={handlePressMoreFavorite}>
+                <View style={styles.moreWrapper}>
                   <Text
-                    style={{
-                      color: theme.colors.primary,
-                      fontWeight: "bold",
-                    }}
+                    style={[styles.moreText, { color: theme.colors.primary }]}
                   >
                     {t("comm:More")}
                   </Text>
@@ -389,39 +263,18 @@ export default function HomeScreen() {
                 </View>
               </TouchableOpacity>
             </View>
-
-            <View
-              style={{
-                gap: 6,
-                marginVertical: 16,
-                marginHorizontal: 16,
-              }}
-            >
+            <View style={styles.cardsWrapper}>
               {favRouteList.map((result, index) => (
                 <RouteCard
                   key={index}
                   routeResult={result}
                   isSimplified={true}
-                  onPressCard={() => {
-                    handlePressCard(result);
-                  }}
+                  onPressCard={() => handlePressCard(result)}
                 />
               ))}
               {favRouteList.length === 0 && (
-                <View
-                  style={{
-                    alignItems: "center",
-                    justifyContent: "center",
-                    marginVertical: 8,
-                  }}
-                >
-                  <Text
-                    variant="bodyLarge"
-                    style={{
-                      color: theme.colors.outline,
-                      textAlign: "center",
-                    }}
-                  >
+                <View style={styles.emptyStateWrapper}>
+                  <Text variant="bodyLarge" style={styles.emptyStateText}>
                     {t("Add your favorite route by tapping the bookmark icon")}
                   </Text>
                 </View>
@@ -475,48 +328,41 @@ const styles = StyleSheet.create({
     marginVertical: 4,
     marginTop: 12,
   },
-  animatedButtonContainer: {
-    marginTop: 16,
-  },
-  animatedButtonInner: {
-    flexDirection: "row",
-    flex: 1,
-    alignItems: "center",
-    gap: 8,
-  },
-  iconStyle: {
-    // marginHorizontal: 18,
-  },
-  columnFlexStart: {
-    flexDirection: "column",
-    flex: 1,
-    alignItems: "flex-start",
-  },
-  rowSpaceBetween: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    gap: 8,
-  },
-  moreIcon: {
-    marginTop: 2,
-  },
   historySection: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     marginTop: 12,
   },
-  dateText: {
-    marginHorizontal: 16,
-    marginTop: 12,
-    marginBottom: 16,
-    fontWeight: "bold",
-  },
-  favoriteSection: {
+  sectionWrapper: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginTop: 24,
+    marginTop: 12,
+  },
+  titleWithMargin: {
+    marginHorizontal: 16,
+  },
+  moreWrapper: {
+    alignItems: "center",
+    marginRight: 16,
+    marginTop: 10,
+    flexDirection: "row",
+  },
+  moreText: {
+    fontWeight: "bold",
+  },
+  cardsWrapper: {
+    gap: 6,
+    marginVertical: 16,
+    marginHorizontal: 16,
+  },
+  emptyStateWrapper: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginVertical: 8,
+  },
+  emptyStateText: {
+    textAlign: "center",
   },
 });

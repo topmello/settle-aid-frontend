@@ -29,7 +29,6 @@ import useEventScheduler from "../../hooks/useEventScheduler";
 import { usePrintMap } from "../../hooks/usePrintMap";
 import { Route, RouteGetResult } from "../../types/route";
 import { selectIsLoading } from "../../store/appSlice";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useNotification } from "../../hooks/useNotification";
 import { useAppTheme } from "../../theme/theme";
 import { AppDispatch } from "../../store";
@@ -265,217 +264,218 @@ export default function MapScreen() {
 
   // main screen
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <SafeAreaView
+      style={{
+        flex: 1,
+        backgroundColor: theme.colors.background,
+      }}
+    >
       {map}
-      <SafeAreaView
+      <View
+        pointerEvents="box-none"
         style={{
-          flex: 1,
-          backgroundColor: theme.colors.background,
+          marginTop: 32,
+          width: "100%",
+          position: "absolute",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          padding: 20,
+          zIndex: 1,
         }}
       >
-        <View
-          pointerEvents="box-none"
+        <TouchableOpacity
+          onPress={() => router.back()}
+          onLongPress={() => {
+            router.replace("/(tabs)");
+          }}
           style={{
-            marginTop: 32,
-            width: "100%",
-            position: "absolute",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            padding: 20,
-            zIndex: 1,
+            backgroundColor: theme.colors.primaryContainer,
+            borderRadius: 20,
+            width: 40,
+            height: 40,
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
-          <TouchableOpacity
-            onPress={() => router.back()}
-            style={{
-              backgroundColor: theme.colors.primaryContainer,
-              borderRadius: 20,
-              width: 40,
-              height: 40,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <ArrowBackIcon
-              fill={theme.colors.onPrimaryContainer}
-              width={34}
-              height={34}
-            />
-          </TouchableOpacity>
-          <View>
-            <Menu
-              visible={menuVisible}
-              onDismiss={closeMenu}
-              anchor={
-                <IconButton
-                  icon={MORE_ICON}
-                  onPress={openMenu}
-                  mode="contained"
-                  style={{
-                    backgroundColor: theme.colors.primaryContainer,
-                  }}
-                />
-              }
-            >
-              {typeof routeId !== "string" && (
-                <Menu.Item onPress={fetchRoute} title="Re-plan" />
-              )}
-              <Menu.Item onPress={showDatePicker} title="Schedule" />
-              <Menu.Item
-                onPress={() => {
-                  printMap();
+          <ArrowBackIcon
+            fill={theme.colors.onPrimaryContainer}
+            width={34}
+            height={34}
+          />
+        </TouchableOpacity>
+        <View>
+          <Menu
+            visible={menuVisible}
+            onDismiss={closeMenu}
+            anchor={
+              <IconButton
+                icon={MORE_ICON}
+                onPress={openMenu}
+                mode="contained"
+                style={{
+                  backgroundColor: theme.colors.primaryContainer,
                 }}
-                title="Share"
               />
-              <Menu.Item
-                onPress={() => handleFavRoute(data.route_id)}
-                title="Favourite"
-              />
-            </Menu>
-            <IconButton
-              icon="map-marker-path"
-              style={{
-                marginTop: 16,
+            }
+          >
+            {typeof routeId !== "string" && (
+              <Menu.Item onPress={fetchRoute} title="Re-plan" />
+            )}
+            <Menu.Item onPress={showDatePicker} title="Schedule" />
+            <Menu.Item
+              onPress={() => {
+                printMap();
               }}
-              onPress={handleOverview}
-              mode="contained"
-              containerColor={theme.colors.tertiaryContainer}
-              iconColor={theme.colors.onTertiaryContainer}
+              title="Share"
             />
-            <IconButton
-              icon="arrow-u-right-bottom"
-              style={{
-                marginTop: 2,
-              }}
-              disabled={currentRoute === 0}
-              onPress={resetRoute}
-              mode="contained"
-              containerColor={theme.colors.tertiaryContainer}
-              iconColor={theme.colors.onTertiaryContainer}
+            <Menu.Item
+              onPress={() => handleFavRoute(data.route_id)}
+              title="Favourite"
             />
-            <IconButton
-              icon="skip-previous-outline"
-              style={{
-                marginTop: 2,
-              }}
-              disabled={currentRoute === 0}
-              onPress={prevRoute}
-              mode="contained"
-              containerColor={theme.colors.tertiaryContainer}
-              iconColor={theme.colors.onTertiaryContainer}
-            />
-            <IconButton
-              icon="skip-next-outline"
-              style={{
-                marginTop: 2,
-              }}
-              disabled={currentRoute === data.route.length - 2}
-              onPress={nextRoute}
-              mode="contained"
-              containerColor={theme.colors.tertiaryContainer}
-              iconColor={theme.colors.onTertiaryContainer}
-            />
-          </View>
-
-          <DateTimePickerModal
-            isVisible={isDatePickerVisible}
-            mode="date"
-            onConfirm={async (date) => {
-              if (handleDateConfirm) {
-                await handleDateConfirm(date, data);
-              }
+          </Menu>
+          <IconButton
+            icon="map-marker-path"
+            style={{
+              marginTop: 16,
             }}
-            onCancel={hideDatePicker}
+            onPress={handleOverview}
+            mode="contained"
+            containerColor={theme.colors.tertiaryContainer}
+            iconColor={theme.colors.onTertiaryContainer}
+          />
+          <IconButton
+            icon="arrow-u-right-bottom"
+            style={{
+              marginTop: 2,
+            }}
+            disabled={currentRoute === 0}
+            onPress={resetRoute}
+            mode="contained"
+            containerColor={theme.colors.tertiaryContainer}
+            iconColor={theme.colors.onTertiaryContainer}
+          />
+          <IconButton
+            icon="skip-previous-outline"
+            style={{
+              marginTop: 2,
+            }}
+            disabled={currentRoute === 0}
+            onPress={prevRoute}
+            mode="contained"
+            containerColor={theme.colors.tertiaryContainer}
+            iconColor={theme.colors.onTertiaryContainer}
+          />
+          <IconButton
+            icon="skip-next-outline"
+            style={{
+              marginTop: 2,
+            }}
+            disabled={currentRoute === data.route.length - 2}
+            onPress={nextRoute}
+            mode="contained"
+            containerColor={theme.colors.tertiaryContainer}
+            iconColor={theme.colors.onTertiaryContainer}
           />
         </View>
 
-        <MapView
-          provider={PROVIDER_GOOGLE}
-          customMapStyle={currentTheme === "dark" ? mapDarkTheme : []}
-          ref={mapRef}
-          showsUserLocation={true}
-          showsCompass={false}
-          showsMyLocationButton={false}
-          showsPointsOfInterest={false}
-          onRegionChangeComplete={(region, { isGesture }) => {
-            if (isGesture) {
-              handleMapDeltaChange(region);
+        <DateTimePickerModal
+          isVisible={isDatePickerVisible}
+          mode="date"
+          onConfirm={async (date) => {
+            if (handleDateConfirm) {
+              await handleDateConfirm(date, data);
             }
           }}
-          mapPadding={{
-            top: 0,
-            right: 0,
-            bottom: isBottomSheetShow ? 440 : 160,
-            left: 0,
-          }}
-          style={{
-            height: "100%",
-            width: "100%",
-          }}
-          region={initialRegion}
-          scrollEnabled={true}
-          pitchEnabled={true}
-          rotateEnabled={true}
-        >
-          {data?.locations_coordinates
-            .filter((_, index) => index !== 0)
-            .map((location: Coordinates, index: number) => {
-              return (
-                <Marker
-                  key={index}
-                  coordinate={location}
-                  title={data.locations[index]}
-                  pinColor={"red"}
-                  description=""
-                />
-              );
-            })}
-          <Marker
-            coordinate={{
-              latitude: region.userLatitude,
-              longitude: region.userLongitude,
-            }}
-            pinColor="blue"
-            title="Start Point"
-          />
-          <Polyline
-            coordinates={data?.route}
-            strokeWidth={3}
-            strokeColor={theme.colors.onBackground}
-            lineDashPattern={[1, 3]}
-          />
-          <Polyline
-            coordinates={[
-              {
-                latitude: data?.route[currentRoute].latitude,
-                longitude: data?.route[currentRoute].longitude,
-              },
-              {
-                latitude: data?.route[currentRoute + 1].latitude,
-                longitude: data?.route[currentRoute + 1].longitude,
-              },
-            ]}
-            strokeWidth={5}
-            strokeColor={theme.colors.primary}
-          />
-        </MapView>
+          onCancel={hideDatePicker}
+        />
+      </View>
 
-        <ActivityIndicator animating={loading} size="large" />
+      <MapView
+        provider={PROVIDER_GOOGLE}
+        customMapStyle={currentTheme === "dark" ? mapDarkTheme : []}
+        ref={mapRef}
+        showsUserLocation={true}
+        showsCompass={false}
+        showsMyLocationButton={false}
+        showsPointsOfInterest={false}
+        onRegionChangeComplete={(region, { isGesture }) => {
+          if (isGesture) {
+            handleMapDeltaChange(region);
+          }
+        }}
+        mapPadding={{
+          top: 0,
+          right: 0,
+          bottom: isBottomSheetShow ? 440 : 160,
+          left: 0,
+        }}
+        style={{
+          height: "100%",
+          width: "100%",
+        }}
+        region={initialRegion}
+        scrollEnabled={true}
+        pitchEnabled={true}
+        rotateEnabled={true}
+      >
+        {data?.locations_coordinates
+          .filter((_, index) => index !== 0)
+          .map((location: Coordinates, index: number) => {
+            return (
+              <Marker
+                key={index}
+                coordinate={location}
+                title={data.locations[index]}
+                pinColor={"red"}
+                description=""
+              />
+            );
+          })}
+        <Marker
+          coordinate={{
+            latitude: region.userLatitude,
+            longitude: region.userLongitude,
+          }}
+          pinColor="blue"
+          title="Start Point"
+        />
+        <Polyline
+          coordinates={data?.route}
+          strokeWidth={3}
+          strokeColor={theme.colors.onBackground}
+          lineDashPattern={[1, 3]}
+        />
+        <Polyline
+          coordinates={[
+            {
+              latitude: data?.route[currentRoute].latitude,
+              longitude: data?.route[currentRoute].longitude,
+            },
+            {
+              latitude: data?.route[currentRoute + 1].latitude,
+              longitude: data?.route[currentRoute + 1].longitude,
+            },
+          ]}
+          strokeWidth={5}
+          strokeColor={theme.colors.primary}
+        />
+      </MapView>
 
-        {data && (
-          <ResultOverlay
-            tipList={tipList}
-            handleHide={handleBottomSheetHide}
-            data={data}
-            body={routeState}
-            handleLocationSelect={handleLocationSelect}
-            handlePressRoute={handlePressRoute}
-            handlePress={handlePress}
-            checked={checked}
-            locationIcons={locationIcons}
-          />
-        )}
-      </SafeAreaView>
-    </GestureHandlerRootView>
+      <ActivityIndicator animating={loading} size="large" />
+
+      {data && (
+        <ResultOverlay
+          tipList={tipList}
+          handleHide={handleBottomSheetHide}
+          data={data}
+          body={routeState}
+          handleLocationSelect={handleLocationSelect}
+          handlePressRoute={handlePressRoute}
+          handlePress={handlePress}
+          checked={checked}
+          locationIcons={locationIcons}
+        />
+      )}
+    </SafeAreaView>
   );
 }

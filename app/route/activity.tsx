@@ -138,7 +138,7 @@ export default function RouteActivityScreen() {
               onPress={() => addOrRemoveOption(option)}
               style={{
                 backgroundColor: optionExists(option)
-                  ? theme.colors.surface
+                  ? theme.colors.surfaceVariant
                   : theme.colors.background,
                 borderRadius: 16,
                 width: "42%",

@@ -44,7 +44,7 @@ const RouteCard: React.FC<CardProps> = ({
   return (
     <AnimatedButton
       onPress={onPressCard ? onPressCard : () => {}}
-      color={theme.colors.infoContainer}
+      color={theme.colors.secondaryContainer}
       style={{
         paddingHorizontal: 20,
         overflow: "hidden",
@@ -64,7 +64,7 @@ const RouteCard: React.FC<CardProps> = ({
           style={[
             styles.card_title,
             {
-              color: theme.colors.onInfoContainer,
+              color: theme.colors.onSecondaryContainer,
               width: "80%",
             },
           ]}
@@ -74,7 +74,7 @@ const RouteCard: React.FC<CardProps> = ({
         <Text
           style={{
             textAlign: "right",
-            color: theme.colors.info,
+            color: theme.colors.onSurfaceVariant,
           }}
         >
           {routeResult.route?.created_at
@@ -87,7 +87,7 @@ const RouteCard: React.FC<CardProps> = ({
           style={[
             styles.tag,
             {
-              color: theme.colors.onInfoContainer,
+              color: theme.colors.onSecondaryContainer,
             },
           ]}
           numberOfLines={1}
@@ -108,11 +108,11 @@ const RouteCard: React.FC<CardProps> = ({
             <MaterialCommunityIcons
               name="walk"
               size={20}
-              color={theme.colors.info}
+              color={theme.colors.secondary}
             />
             <Text
               style={{
-                color: theme.colors.info,
+                color: theme.colors.secondary,
                 marginLeft: 4,
               }}
             >
@@ -128,7 +128,7 @@ const RouteCard: React.FC<CardProps> = ({
           >
             <IconButton
               icon={voted ? "bookmark" : "bookmark-outline"}
-              iconColor={theme.colors.onInfoContainer}
+              iconColor={theme.colors.onSecondaryContainer}
               mode="outlined"
               onPress={() =>
                 handleFavRoute && handleFavRoute(routeResult.route.route_id)
@@ -141,8 +141,8 @@ const RouteCard: React.FC<CardProps> = ({
               anchor={
                 <IconButton
                   mode="contained-tonal"
-                  iconColor={theme.colors.onInfo}
-                  containerColor={theme.colors.info}
+                  iconColor={theme.colors.onSecondary}
+                  containerColor={theme.colors.secondary}
                   icon="dots-vertical"
                   onPress={() => setMenuVisible(true)}
                 />

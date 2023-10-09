@@ -188,7 +188,7 @@ export const WeatherWidget = () => {
             fontWeight: "bold",
           }}
         >
-          {currentWeatherOption?.tempDay} - {currentWeatherOption?.tempNight} C°
+          {currentWeatherOption?.tempNight}-{currentWeatherOption?.tempDay} C°
         </Text>
         <Text
           variant="bodySmall"
