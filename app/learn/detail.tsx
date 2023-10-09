@@ -6,6 +6,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import ArrowBackIcon from "../../assets/images/icons/arrow_back.svg";
 import { useMemo, useEffect } from "react";
+import { TipImage } from "../../components/TipImage";
 
 export default function LearnDetailScreen() {
   const {
@@ -126,6 +127,24 @@ export default function LearnDetailScreen() {
         >
           {resultTip?.content ? resultTip.content : currentTip?.content}
         </Text>
+        {currentTip?.photo && (
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+            }}
+          >
+            <TipImage
+              photo={currentTip.photo}
+              imageStyle={{
+                marginTop: 20,
+                width: "100%",
+                height: 200,
+                borderRadius: 8,
+              }}
+            />
+          </View>
+        )}
       </View>
       <View
         style={{

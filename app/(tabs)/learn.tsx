@@ -8,6 +8,7 @@ import { useTip } from "../../store/TipContext";
 import { router } from "expo-router";
 import { useAppTheme } from "../../theme/theme";
 import { useTranslation } from "react-i18next";
+import { useEffect } from "react";
 
 type IconName =
   | "airplane-outline"
@@ -35,6 +36,18 @@ export default function LearnScreen() {
   const { t } = useTranslation();
   const theme = useAppTheme();
   const { setCategory } = useTip();
+
+  // useEffect(() => {
+  //   tips.forEach((cate) => {
+  //     cate.tips.forEach((tip) => {
+  //       tip.type.forEach((tip) => {
+  //         console.log(
+  //           `case "${tip.photo}": return require("../../assets/images/tip/${tip.photo}");`
+  //         );
+  //       });
+  //     });
+  //   });
+  // }, []);
 
   return (
     <SafeAreaView

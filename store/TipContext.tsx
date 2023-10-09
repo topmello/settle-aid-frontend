@@ -4,6 +4,7 @@ export type Tip = {
   description: string;
   content: string;
   link?: string;
+  photo?: string;
 };
 
 export type TipCategory = {
