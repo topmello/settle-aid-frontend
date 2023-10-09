@@ -5,6 +5,17 @@ import ArrowBackIcon from "../../assets/images/icons/arrow_back.svg";
 import { useAppTheme } from "../../theme/theme";
 import useFetch from "../../hooks/useFetch";
 
+export type Achievement = {
+  challenge: {
+    name: string;
+    type: string;
+  };
+  year: number;
+  month: number;
+  day: number;
+  progress: number;
+};
+
 export default function AchievementListPage() {
   const theme = useAppTheme();
 
@@ -24,25 +35,9 @@ export default function AchievementListPage() {
   //   }
   // )
 
-
   // console.log(loggedInRes)
   // console.log(routeGenRes)
 
-
-
-export type Achievement = {
-  challenge: {
-    name: string;
-    type: string;
-  };
-  year: number;
-  month: number;
-  day: number;
-  progress: number;
-};
-
-export default function AchievementListPage() {
-  const theme = useAppTheme();
   const [achievementToday, fetchAchievementToday] = useFetch<Achievement[]>(
     {
       method: "GET",
