@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Image } from "react-native";
 import { Route, RouteHistory } from "../types/route";
 import { Button, IconButton, Menu } from "react-native-paper";
 import { AnimatedButton } from "./AnimatedButton";
@@ -19,6 +19,15 @@ interface CardProps {
   index?: number;
   shareUrl?: (route_id: number) => Promise<void>;
   handlePublishRoute?: (route_id: number) => Promise<void>;
+}
+
+const getRouteImage = (photo: string) => {
+  switch (photo) {
+    case "landmarks/Arcade":
+      return require("../assets/images/feedcards/landmark/Arcade.jpg");
+    case "grocery/Market":
+      return require("../assets/images/feedcards/grocery/Market.jpg");
+  }
 }
 
 const RouteCard: React.FC<CardProps> = ({
@@ -43,13 +52,17 @@ const RouteCard: React.FC<CardProps> = ({
   const { map, printMap } = usePrintMap(routeResult.route);
   return (
     <AnimatedButton
-      onPress={onPressCard ? onPressCard : () => {}}
+      onPress={onPressCard ? onPressCard : () => { }}
       color={theme.colors.secondaryContainer}
       style={{
         paddingHorizontal: 20,
         overflow: "hidden",
       }}
     >
+      {getRouteImage(routeResult.route.route_image_name) && <View>
+        <Image source={getRouteImage(routeResult.route.route_image_name)} />
+      </View>}
+      <View><Text>{routeResult.route.route_image_name}</Text></View>
       {menuVisible && map}
       <View
         style={{
@@ -229,5 +242,6 @@ const styles = StyleSheet.create({
   },
   button: {},
 });
+
 
 export default RouteCard;
