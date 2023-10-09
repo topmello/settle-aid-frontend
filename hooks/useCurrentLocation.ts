@@ -13,16 +13,18 @@ const useCurrentLocation = () => {
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
       dispatch(fail({ message: "not granted" }));
-      dispatch(loaded());
       return;
     }
 
-    let location = await Location.getCurrentPositionAsync({});
-    const { longitude, latitude } = location.coords;
-    dispatch(setLonLat({ longitude, latitude }));
-    setTimeout(() => {
+    let location = await Location.getLastKnownPositionAsync({});
+    if (location) {
+      const { longitude, latitude } = location.coords;
+      dispatch(setLonLat({ longitude, latitude }));
       dispatch(loaded());
-    }, 1000);
+    }
+    setTimeout(() => {
+      dispatch(fail({ message: "timeout" }));
+    }, 3000);
   }, [dispatch]);
 
   return fetchLocation;

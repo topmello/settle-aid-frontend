@@ -1,15 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { router } from "expo-router";
 import MapView, { Marker } from "react-native-maps";
-import {
-  StyleSheet,
-  View,
-  ActivityIndicator,
-  Pressable,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native";
+import { StyleSheet, View, ScrollView, TouchableOpacity } from "react-native";
 import {
   Text,
   Card,
@@ -24,7 +17,7 @@ import Slider from "@react-native-community/slider";
 import ArrowBackIcon from "../../assets/images/icons/arrow_back.svg";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { useTranslation } from "react-i18next";
-import { AppDispatch, RootState } from "../../store";
+import { AppDispatch } from "../../store";
 import {
   setPrivacyChecked,
   setPrivacyUnchecked,
