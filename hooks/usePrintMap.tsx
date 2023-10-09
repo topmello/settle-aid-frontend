@@ -96,7 +96,6 @@ const usePrintMap = (route: Route) => {
             position: "absolute",
             top: 0,
             left: 0,
-            zIndex: -1,
           }}
           region={{
             latitude: initialRegion.latitude,

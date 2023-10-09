@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { fetch } from "../api/fetch";
 
-
 export type ChallengeState = {
   lastLogin: Date | null;
   status: "idle" | "loading" | "failed";
@@ -11,7 +10,6 @@ const initialState: ChallengeState = {
   lastLogin: null,
   status: "idle",
 };
-
 
 interface UpdateRoutesGeneratedArg {
   token?: string;

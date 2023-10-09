@@ -8,27 +8,52 @@ import useFetch from "../../hooks/useFetch";
 export default function AchievementListPage() {
   const theme = useAppTheme();
 
-  const [loggedInRes,] = useFetch(
+  // const [loggedInRes,] = useFetch(
+  //   {
+  //     method: "POST",
+  //     url: "/challenge/logged_in/",
+  //     data: { "logged_in": 1 }
+  //   }
+  // )
+
+  // const [routeGenRes,] = useFetch(
+  //   {
+  //     method: "POST",
+  //     url: "/challenge/route_generation/",
+  //     data: { "routes_generated": 1 }
+  //   }
+  // )
+
+
+  // console.log(loggedInRes)
+  // console.log(routeGenRes)
+
+
+
+export type Achievement = {
+  challenge: {
+    name: string;
+    type: string;
+  };
+  year: number;
+  month: number;
+  day: number;
+  progress: number;
+};
+
+export default function AchievementListPage() {
+  const theme = useAppTheme();
+  const [achievementToday, fetchAchievementToday] = useFetch<Achievement[]>(
     {
-      method: "POST",
-      url: "/challenge/logged_in/",
-      data: { "logged_in": 1 }
-    }
-  )
+      method: "GET",
+      url: "/challenge/today-history",
+    },
+    [],
+    [],
+    true
+  );
 
-  const [routeGenRes,] = useFetch(
-    {
-      method: "POST",
-      url: "/challenge/route_generation/",
-      data: { "routes_generated": 1 }
-    }
-  )
-
-
-  console.log(loggedInRes)
-  console.log(routeGenRes)
-
-
+  console.log(achievementToday);
   return (
     <SafeAreaView
       style={{
