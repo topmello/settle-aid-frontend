@@ -193,7 +193,13 @@ export default function HomeScreen() {
             />
             <FunctionButton
               destination="/achievement/list"
-              icon={<MaterialCommunityIcons name="trophy" size={36} />}
+              icon={
+                <MaterialCommunityIcons
+                  name="trophy"
+                  color={theme.colors.onAmberContainer}
+                  size={36}
+                />
+              }
               color={theme.colors.onAmberContainer}
               containerColor={theme.colors.amberContainer}
               title={t("Achievements", { ns: "home" })}

@@ -19,10 +19,10 @@ export const selectRoutesFavoriteShared = (state: any) =>
 export const updateRoutesGenerated = createAsyncThunk(
   "challenge/updateRoutesGenerated",
   async (arg, { getState }) => {
-    const state = getState() as any;
+    console.log("updateRoutesGenerated");
     const response = await fetch({
       method: "POST",
-      url: `/challenge/route_generation/${state.auth.id}/`,
+      url: `/challenge/route_generation/`,
       data: {
         routes_generated: 1,
       },
@@ -34,10 +34,9 @@ export const updateRoutesGenerated = createAsyncThunk(
 export const updateRoutesFavourited = createAsyncThunk(
   "challenge/updateRoutesFavourited",
   async (arg, { getState }) => {
-    const state = getState() as any;
     const response = await fetch({
       method: "POST",
-      url: `/challenge/favourited/${state.auth.id}/`,
+      url: `/challenge/favourited/`,
       data: {
         routes_favourited_shared: 1,
       },
@@ -49,10 +48,9 @@ export const updateRoutesFavourited = createAsyncThunk(
 export const updateRoutesShared = createAsyncThunk(
   "challenge/updateRoutesShared",
   async (arg, { getState }) => {
-    const state = getState() as any;
     const response = await fetch({
       method: "POST",
-      url: `/challenge/shared/${state.auth.id}/`,
+      url: `/challenge/shared/`,
       data: {
         routes_favourited_shared: 1,
       },
@@ -67,7 +65,7 @@ export const updateRoutesPublished = createAsyncThunk(
     const state = getState() as any;
     const response = await fetch({
       method: "POST",
-      url: `/challenge/published/${state.auth.id}/`,
+      url: `/challenge/published/`,
       data: {
         routes_published: 1,
       },
@@ -82,7 +80,7 @@ export const updateRoutesTipsRead = createAsyncThunk(
     const state = getState() as any;
     const response = await fetch({
       method: "POST",
-      url: `/challenge/tips_read/${state.auth.id}/`,
+      url: `/challenge/tips_read/`,
       data: {
         routes_tips_read: 1,
       },

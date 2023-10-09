@@ -29,7 +29,6 @@ import { usePrintMap } from "../../hooks/usePrintMap";
 import { AppDispatch } from "../../store";
 
 export default function HistoryOverviewScreen() {
-  const { t } = useTranslation();
   const theme = useTheme();
   const userID = useSelector(selectUserId);
   const loading = useSelector(selectIsLoading);
