@@ -32,7 +32,7 @@ const iconList: IconName[] = [
 ];
 
 export default function LearnScreen() {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const theme = useAppTheme();
   const { setCategory } = useTip();
 
@@ -45,17 +45,17 @@ export default function LearnScreen() {
       }}
     >
       <Text
-          style={{
-            fontSize: 24,
-            fontWeight: "bold",
-            width: "100%",
-            padding: 16,
-            paddingTop: 48,
-            color: theme.colors.onBackground,
-          }}
-        >
-          {t("Cultural Tips", { ns: "settings" })}
-        </Text>
+        style={{
+          fontSize: 24,
+          fontWeight: "bold",
+          width: "100%",
+          padding: 16,
+          paddingTop: 32,
+          color: theme.colors.onBackground,
+        }}
+      >
+        {t("Cultural Tips", { ns: "settings" })}
+      </Text>
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={{

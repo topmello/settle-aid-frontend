@@ -1,4 +1,5 @@
 export interface Route {
+  created_at?: string;
   route_id: number;
   locations: string[];
   locations_coordinates: {

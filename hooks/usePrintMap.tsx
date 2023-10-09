@@ -31,36 +31,13 @@ const usePrintMap = (route: Route) => {
     return route.locations
       .map(
         (location, index) =>
-          `<p><span class="num">${index + 1}</span>${location}</p>`
+          `<span class="location"><span class="num">${
+            index + 1
+          }</span>${location} </span>`
       )
       .join("");
   }, [route.locations]);
 
-  const cssContent = `
-<style>
-  h1 {
-    background-color: #333;
-    color: #fff;
-    padding: 10px 20px;
-    border-radius: 5px;
-  }
-  h2 {
-    border-bottom: 2px solid #333;
-    padding-bottom: 5px;
-    margin-top: 30px;
-  }
-  p {
-    margin: 10px 0;
-    line-height: 1.6;
-    font-size: 16px;
-  }
-  .num {
-    font-size: 20px;
-    font-weight: bold;
-    margin-right: 5px;
-  }
-</style>
-`;
   const printMap = useCallback(() => {
     setPrinting(true);
     pushNotification({
@@ -78,13 +55,13 @@ const usePrintMap = (route: Route) => {
           <html>
             <head>${cssContent}</head>
             <body>
-              <div style="height:'90%'">
+              <div>
                 <h1>Route</h1>
-                <img src="data:image/png;base64,${image}" width="90%" />
+                <img class="map" src="data:image/png;base64,${image}" width="100%" />
               </div>
-              <div style="height:'10%'">
+              <div>
                 <h2>Locations</h2>
-                ${locations}
+                <p>${locations}</p>
               </div> 
             </body>
           </html>
@@ -122,7 +99,7 @@ const usePrintMap = (route: Route) => {
             zIndex: -1,
           }}
           region={{
-            latitude: initialRegion.latitude + 0.002,
+            latitude: initialRegion.latitude,
             longitude: initialRegion.longitude,
             latitudeDelta: initialRegion.latitudeDelta,
             longitudeDelta: initialRegion.longitudeDelta,
@@ -166,5 +143,33 @@ const usePrintMap = (route: Route) => {
     printing,
   };
 };
+
+const cssContent = `
+<style>
+  h2 {
+    border-bottom: 2px solid #333;
+    padding-bottom: 5px;
+    margin-top: 30px;
+  }
+  p {
+    margin: 10px 0;
+    line-height: 1.6;
+    font-size: 16px;
+  }
+  .num {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-right: 5px;
+  }
+  .location {
+    font-size: 1.1rem;
+    margin-right: 10px;
+  }
+  .map {
+    border: 2px solid #888;
+    border-radius: 12px;
+  }
+</style>
+`;
 
 export { usePrintMap };

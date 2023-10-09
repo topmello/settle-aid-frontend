@@ -1,14 +1,5 @@
 import React, { useRef, forwardRef } from "react";
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  Animated,
-  TouchableOpacity,
-  Image,
-} from "react-native";
+import { StyleSheet, Animated, TouchableOpacity } from "react-native";
 
 export const AnimatedButton = ({
   color,
@@ -45,7 +36,7 @@ export const AnimatedButton = ({
       onPressOut={onPressOut}
       onPress={onPress}
     >
-      <Animated.View 
+      <Animated.View
         style={[
           styles.roundedRectangle,
           {
@@ -63,7 +54,7 @@ export const AnimatedButton = ({
 
 const styles = StyleSheet.create({
   roundedRectangle: {
-    borderRadius: 15,
-    padding: 16
+    borderRadius: 12,
+    padding: 16,
   },
 });

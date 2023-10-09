@@ -137,7 +137,7 @@ export const useMapRegion = ({
     const newRegion = {
       userLatitude: routeState.latitude,
       userLongitude: routeState.longitude,
-      latitude: centerLat - 0.001,
+      latitude: centerLat,
       longitude: centerLon,
       latitudeDelta: latitudeDelta * 1.4,
       longitudeDelta: longitudeDelta * 1.4,

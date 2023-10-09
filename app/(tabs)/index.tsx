@@ -13,13 +13,16 @@ import { Button, Text, ActivityIndicator } from "react-native-paper";
 import { useTranslation } from "react-i18next";
 import RouteIcon from "../../assets/images/icons/route.svg";
 import ArrowIcon from "../../assets/images/icons/navigate_next.svg";
-import { AnimatedButton } from "../../components/AnimatedButton";
+import ForumIcon from "../../assets/images/icons/forum.svg";
 import PersonPinIcon from "../../assets/images/icons/person_pin.svg";
-
+import { AnimatedButton } from "../../components/AnimatedButton";
 import { router } from "expo-router";
 import { useSelector } from "react-redux";
 import { selectToken, selectUserId } from "../../store/authSlice";
-import { selectIsLoading } from "../../store/appSlice";
+import {
+  selectIsLoading,
+  selectTriggerRefreshHome,
+} from "../../store/appSlice";
 import RouteCard from "../../components/RouteCard";
 import useFetch from "../../hooks/useFetch";
 import { RouteHistory } from "../../types/route";
@@ -32,29 +35,30 @@ import { isString } from "lodash";
 export default function HomeScreen() {
   const { t } = useTranslation();
   const theme = useAppTheme();
-  const userID = useSelector(selectUserId);
+  const userId = useSelector(selectUserId);
   const loading = useSelector(selectIsLoading);
+  const triggerRefreshHome = useSelector(selectTriggerRefreshHome);
 
   const [routeList, refetchRouteList] = useFetch<RouteHistory[]>(
     {
       method: "GET",
-      url: `/route/user/${userID}/?limit=2`,
+      url: `/route/user/${userId}/?limit=2`,
     },
-    [userID]
+    [userId]
   );
 
   const [favRouteList, refetchFavRouteList] = useFetch<RouteHistory[]>(
     {
       method: "GET",
-      url: `/route/user/fav/${userID}/?limit=5`,
+      url: `/route/user/fav/${userId}/?limit=5`,
     },
-    [userID]
+    [userId]
   );
 
   useEffect(() => {
     refetchRouteList();
     refetchFavRouteList();
-  }, []);
+  }, [triggerRefreshHome]);
 
   const [routeId, setRouteId] = useState<string | null>(null);
 
@@ -156,7 +160,7 @@ export default function HomeScreen() {
             style={[
               styles.containerView,
               {
-                gap: 12,
+                gap: 6,
               },
             ]}
           >
@@ -238,10 +242,10 @@ export default function HomeScreen() {
               }}
             >
               <View style={styles.animatedButtonInner}>
-                <PersonPinIcon
+                <ForumIcon
                   height={40}
                   width={40}
-                  fill={theme.colors.onSuccessContainer}
+                  fill={theme.colors.onSecondaryContainer}
                 />
                 <View style={styles.columnFlexStart}>
                   <View style={styles.rowSpaceBetween}>
@@ -249,7 +253,7 @@ export default function HomeScreen() {
                       variant="titleLarge"
                       style={[
                         styles.headerText,
-                        { color: theme.colors.onSuccessContainer },
+                        { color: theme.colors.onSecondaryContainer },
                       ]}
                     >
                       {t("Shared Route", { ns: "home" })}
@@ -303,7 +307,7 @@ export default function HomeScreen() {
             <View>
               <View
                 style={{
-                  gap: 12,
+                  gap: 6,
                   marginVertical: 16,
                   marginHorizontal: 16,
                 }}
@@ -388,7 +392,7 @@ export default function HomeScreen() {
 
             <View
               style={{
-                gap: 12,
+                gap: 6,
                 marginVertical: 16,
                 marginHorizontal: 16,
               }}

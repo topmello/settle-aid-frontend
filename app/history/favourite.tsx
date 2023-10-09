@@ -16,18 +16,20 @@ import { useTranslation } from "react-i18next"; // <-- Import the hook
 import { useTheme } from "react-native-paper";
 import { router } from "expo-router";
 import ArrowBackIcon from "../../assets/images/icons/arrow_back.svg";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectUserId, selectToken } from "../../store/authSlice";
-import { selectIsLoading } from "../../store/appSlice";
+import { refreshHome, selectIsLoading } from "../../store/appSlice";
 import RouteCard from "../../components/RouteCard";
 import { RequestOptions } from "../../api/fetch";
 import useFetch from "../../hooks/useFetch";
 import { RouteHistory } from "../../types/route";
 import useEventScheduler from "../../hooks/useEventScheduler";
+import { AppDispatch } from "../../store";
 
 export default function HistoryOverviewScreen() {
   const { t } = useTranslation();
   const theme = useTheme();
+  const dispatch = useDispatch<AppDispatch>();
   const userID = useSelector(selectUserId);
   const loading = useSelector(selectIsLoading);
 
@@ -57,6 +59,7 @@ export default function HistoryOverviewScreen() {
       await executeVote({ ...voteRequestOptions, url: `/vote/${route_id}/` });
     } catch (error) {
     } finally {
+      dispatch(refreshHome());
       refetchFavRouteList();
     }
   };
@@ -164,28 +167,27 @@ export default function HistoryOverviewScreen() {
         animating={loading}
         size="large"
       />
+      <View style={styles.row_text}>
+        <TouchableOpacity onPress={() => router.back()}>
+          <ArrowBackIcon
+            fill={theme.colors.onPrimaryContainer}
+            width={28}
+            height={28}
+          />
+        </TouchableOpacity>
+        <View style={{ flex: 1, marginLeft: 12 }}>
+          <Text style={styles.text_title}>Favorite Routes</Text>
+        </View>
+      </View>
       <ScrollView
         contentContainerStyle={{
           flexGrow: 1,
           flexDirection: "column",
         }}
       >
-        <View style={styles.row_text}>
-          <TouchableOpacity onPress={() => router.back()}>
-            <ArrowBackIcon
-              fill={theme.colors.onPrimaryContainer}
-              width={28}
-              height={28}
-            />
-          </TouchableOpacity>
-          <View style={{ flex: 1, marginLeft: 12 }}>
-            <Text style={styles.text_title}>Favorite Routes</Text>
-          </View>
-        </View>
-
         <View
           style={{
-            gap: 12,
+            gap: 6,
             marginHorizontal: 16,
             marginBottom: 20,
           }}

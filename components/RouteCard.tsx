@@ -7,6 +7,8 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { useAppTheme } from "../theme/theme";
 import { usePrintMap } from "../hooks/usePrintMap";
 import useEventScheduler from "../hooks/useEventScheduler";
+import { timeSince } from "../utils/time";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 interface CardProps {
   routeResult: RouteHistory;
@@ -31,65 +33,6 @@ const RouteCard: React.FC<CardProps> = ({
 }) => {
   const theme = useAppTheme();
 
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      alignItems: "center",
-      justifyContent: "center",
-    },
-    row_text: {
-      flexDirection: "row",
-      justifyContent: "center",
-      alignItems: "center",
-    },
-    text_title: {
-      alignContent: "center",
-      fontWeight: "bold",
-      fontSize: 28,
-    },
-    card: {
-      overflow: "hidden",
-    },
-    card_title: {
-      fontWeight: "bold",
-      fontSize: 20,
-      color: theme.colors.info,
-    },
-    card_description: {
-      fontSize: 20,
-      marginTop: 8,
-      marginBottom: 8,
-      overflow: "hidden",
-      whiteSpace: "nowrap",
-      textOverflow: "ellipsis",
-    },
-    tags_container: {
-      flexDirection: "row",
-      marginTop: 2,
-    },
-    tag: {
-      fontSize: 14,
-      marginRight: 8,
-      color: theme.colors.info,
-    },
-    button_container: {
-      flexDirection: "row",
-      justifyContent: "flex-end",
-      alignItems: "center",
-      marginTop: 16,
-      gap: 8,
-    },
-    circle: {
-      width: 34,
-      height: 34,
-      borderRadius: 42,
-      justifyContent: "center",
-      alignItems: "center",
-      backgroundColor: theme.colors.info,
-    },
-    button: {},
-  });
-
   const [menuVisible, setMenuVisible] = React.useState(false);
   const {
     isDatePickerVisible,
@@ -98,7 +41,6 @@ const RouteCard: React.FC<CardProps> = ({
     handleDateConfirm,
   } = useEventScheduler();
   const { map, printMap } = usePrintMap(routeResult.route);
-
   return (
     <AnimatedButton
       onPress={onPressCard ? onPressCard : () => {}}
@@ -109,67 +51,183 @@ const RouteCard: React.FC<CardProps> = ({
       }}
     >
       {menuVisible && map}
-      <Text style={styles.card_title}>{routeResult.route.locations[0]}</Text>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Text
+          numberOfLines={1}
+          lineBreakMode="tail"
+          style={[
+            styles.card_title,
+            {
+              color: theme.colors.onInfoContainer,
+              width: "80%",
+            },
+          ]}
+        >
+          {routeResult.route.locations[0]}
+        </Text>
+        <Text
+          style={{
+            textAlign: "right",
+            color: theme.colors.info,
+          }}
+        >
+          {routeResult.route?.created_at
+            ? timeSince(routeResult.route?.created_at)
+            : ""}
+        </Text>
+      </View>
       <View style={styles.tags_container}>
-        <Text style={styles.tag} numberOfLines={1} ellipsizeMode="tail">
-          {routeResult.route.locations.map((location, index) => `#${location}`)}
+        <Text
+          style={[
+            styles.tag,
+            {
+              color: theme.colors.onInfoContainer,
+            },
+          ]}
+          numberOfLines={1}
+          ellipsizeMode="tail"
+        >
+          {routeResult.route.locations.map((location) => `#${location} `)}
         </Text>
       </View>
       {!isSimplified && (
         <View style={styles.button_container}>
-          <IconButton
-            icon={voted ? "bookmark" : "bookmark-outline"}
-            iconColor={theme.colors.onInfoContainer}
-            mode="outlined"
-            onPress={() =>
-              handleFavRoute && handleFavRoute(routeResult.route.route_id)
-            }
-          />
-
-          <Menu
-            visible={menuVisible}
-            onDismiss={() => setMenuVisible(false)}
-            anchor={
-              <IconButton
-                mode="contained-tonal"
-                iconColor={theme.colors.onInfo}
-                containerColor={theme.colors.info}
-                icon="dots-vertical"
-                onPress={() => setMenuVisible(true)}
-              />
-            }
-          >
-            <Menu.Item title="Schedule" onPress={showDatePicker} />
-            <Menu.Item
-              onPress={() => {
-                printMap();
-              }}
-              title="Share"
-            />
-            <Menu.Item
-              onPress={() => shareUrl?.(routeResult.route.route_id)}
-              title="Share Link"
-            />
-            <Menu.Item
-              onPress={() => handlePublishRoute?.(routeResult.route.route_id)} // Use the new prop
-              title="Publish Route"
-            />
-          </Menu>
-          <DateTimePickerModal
-            isVisible={isDatePickerVisible}
-            mode="date"
-            onConfirm={async (date) => {
-              if (handleDateConfirm) {
-                handleDateConfirm(date, routeResult.route);
-              }
+          <View
+            style={{
+              height: 42,
+              flexDirection: "row",
+              alignItems: "flex-end",
             }}
-            onCancel={hideDatePicker}
-          />
+          >
+            <MaterialCommunityIcons
+              name="walk"
+              size={20}
+              color={theme.colors.info}
+            />
+            <Text
+              style={{
+                color: theme.colors.info,
+                marginLeft: 4,
+              }}
+            >
+              {Math.ceil((routeResult.route.duration * 1.5) / 60)} mins
+            </Text>
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              gap: 2,
+              alignItems: "center",
+            }}
+          >
+            <IconButton
+              icon={voted ? "bookmark" : "bookmark-outline"}
+              iconColor={theme.colors.onInfoContainer}
+              mode="outlined"
+              onPress={() =>
+                handleFavRoute && handleFavRoute(routeResult.route.route_id)
+              }
+            />
+
+            <Menu
+              visible={menuVisible}
+              onDismiss={() => setMenuVisible(false)}
+              anchor={
+                <IconButton
+                  mode="contained-tonal"
+                  iconColor={theme.colors.onInfo}
+                  containerColor={theme.colors.info}
+                  icon="dots-vertical"
+                  onPress={() => setMenuVisible(true)}
+                />
+              }
+            >
+              <Menu.Item title="Schedule" onPress={showDatePicker} />
+              <Menu.Item
+                onPress={() => {
+                  printMap();
+                }}
+                title="Share"
+              />
+              <Menu.Item
+                onPress={() => shareUrl?.(routeResult.route.route_id)}
+                title="Share Link"
+              />
+              <Menu.Item
+                onPress={() => handlePublishRoute?.(routeResult.route.route_id)} // Use the new prop
+                title="Publish Route"
+              />
+            </Menu>
+          </View>
         </View>
       )}
+      <DateTimePickerModal
+        isVisible={isDatePickerVisible}
+        mode="date"
+        onConfirm={async (date) => {
+          if (handleDateConfirm) {
+            handleDateConfirm(date, routeResult.route);
+          }
+        }}
+        onCancel={hideDatePicker}
+      />
     </AnimatedButton>
     // </Animated.View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  row_text: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  text_title: {
+    alignContent: "center",
+    fontWeight: "bold",
+    fontSize: 28,
+  },
+  card: {
+    overflow: "hidden",
+  },
+  card_title: {
+    fontWeight: "bold",
+    fontSize: 20,
+  },
+  card_description: {
+    fontSize: 20,
+    marginTop: 8,
+    marginBottom: 8,
+    overflow: "hidden",
+    whiteSpace: "nowrap",
+    textOverflow: "ellipsis",
+  },
+  tags_container: {
+    flexDirection: "row",
+    marginTop: 2,
+  },
+  tag: {
+    fontSize: 14,
+    marginRight: 8,
+  },
+  button_container: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 8,
+  },
+  button: {},
+});
 
 export default RouteCard;

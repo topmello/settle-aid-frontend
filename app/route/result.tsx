@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { router, useLocalSearchParams } from "expo-router";
 import { SafeAreaView, Platform, View, TouchableOpacity } from "react-native";
 import {
@@ -21,7 +21,7 @@ import getTipForMode from "../../tips/getTip";
 
 import { locationIcons } from "../../constants/icons";
 import { mapDarkTheme } from "../../theme/map";
-import { selectTheme } from "../../store/appSlice";
+import { refreshHome, selectTheme } from "../../store/appSlice";
 import { RequestOptions } from "../../api/fetch";
 import useFetch from "../../hooks/useFetch";
 import { useMapRegion, Coordinates } from "../../hooks/useMapRegion";
@@ -32,6 +32,7 @@ import { selectIsLoading } from "../../store/appSlice";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useNotification } from "../../hooks/useNotification";
 import { useAppTheme } from "../../theme/theme";
+import { AppDispatch } from "../../store";
 
 const MORE_ICON = Platform.OS === "ios" ? "dots-horizontal" : "dots-vertical";
 
@@ -48,6 +49,7 @@ export default function MapScreen() {
   const currentTheme = useSelector(selectTheme);
   const routeState: RouteState = useSelector(selectRouteState);
   const loading = useSelector(selectIsLoading);
+  const dispatch = useDispatch<AppDispatch>();
   const { pushNotification } = useNotification();
 
   const routeId = useLocalSearchParams<{ routeId: string }>().routeId;
@@ -149,6 +151,7 @@ export default function MapScreen() {
         await fetchData().then(() => {
           setUseHistory(false);
         });
+        dispatch(refreshHome());
       } catch (error) {
         console.error("Failed to fetch route:", error);
         return;

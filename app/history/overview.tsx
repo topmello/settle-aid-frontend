@@ -14,9 +14,9 @@ import { useTranslation } from "react-i18next"; // <-- Import the hook
 import { useTheme } from "react-native-paper";
 import { router, useLocalSearchParams } from "expo-router";
 import ArrowBackIcon from "../../assets/images/icons/arrow_back.svg";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectUserId, selectToken } from "../../store/authSlice";
-import { selectIsLoading } from "../../store/appSlice";
+import { refreshHome, selectIsLoading } from "../../store/appSlice";
 import RouteCard from "../../components/RouteCard";
 import { RequestOptions } from "../../api/fetch";
 import useFetch from "../../hooks/useFetch";
@@ -26,12 +26,14 @@ import useEventScheduler from "../../hooks/useEventScheduler";
 import * as Linking from "expo-linking";
 import * as Sharing from "expo-sharing";
 import { usePrintMap } from "../../hooks/usePrintMap";
+import { AppDispatch } from "../../store";
 
 export default function HistoryOverviewScreen() {
   const { t } = useTranslation();
   const theme = useTheme();
   const userID = useSelector(selectUserId);
   const loading = useSelector(selectIsLoading);
+  const dispatch = useDispatch<AppDispatch>();
 
   const [routeList, refetchRouteList] = useFetch<RouteHistory[]>(
     {
@@ -71,6 +73,7 @@ export default function HistoryOverviewScreen() {
     } catch (error) {
       return;
     } finally {
+      dispatch(refreshHome());
       refetchRouteList();
     }
   };
@@ -222,7 +225,7 @@ export default function HistoryOverviewScreen() {
       >
         <View
           style={{
-            gap: 12,
+            gap: 6,
             marginBottom: 20,
             paddingHorizontal: 16,
           }}

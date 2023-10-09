@@ -85,7 +85,7 @@ export default function SettingsScreen() {
           fontWeight: "bold",
           width: "100%",
           padding: 16,
-          paddingTop: 48,
+          paddingTop: 32,
           color: paperTheme.colors.onBackground,
         }}
       >
