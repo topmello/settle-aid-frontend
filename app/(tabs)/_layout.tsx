@@ -10,12 +10,14 @@ import SettingsScreen from "./settings";
 import { selectLanguage } from "../../store/appSlice";
 import { useSelector } from "react-redux";
 import { useAppTheme } from "../../theme/theme";
+import { useAchievement } from "../../hooks/useAchievement";
 
 export default function TabLayout() {
   const { t } = useTranslation();
   const rootNativationState = useRootNavigationState();
   const language = useSelector(selectLanguage);
   const theme = useAppTheme();
+  const achieve = useAchievement();
 
   const Tab = createMaterialBottomTabNavigator();
   const { checkSession } = useSession();
@@ -30,6 +32,8 @@ export default function TabLayout() {
       checkSession().then((isSessionVaild) => {
         if (!isSessionVaild) {
           router.replace("/auth/login");
+        } else {
+          achieve("loggedIn");
         }
       });
     }

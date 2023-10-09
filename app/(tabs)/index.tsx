@@ -15,7 +15,6 @@ import RouteIcon from "../../assets/images/icons/route.svg";
 import ArrowIcon from "../../assets/images/icons/navigate_next.svg";
 import ForumIcon from "../../assets/images/icons/forum.svg";
 import PersonPinIcon from "../../assets/images/icons/person_pin.svg";
-import { AnimatedButton } from "../../components/AnimatedButton";
 import { router } from "expo-router";
 import { useSelector } from "react-redux";
 import { selectToken, selectUserId } from "../../store/authSlice";
@@ -32,6 +31,7 @@ import { WeatherWidget } from "../../components/WeatherWidget";
 import * as Linking from "expo-linking";
 import { isString } from "lodash";
 import { FunctionButton } from "../../components/FunctionButton";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export default function HomeScreen() {
   const { t } = useTranslation();
@@ -190,6 +190,13 @@ export default function HomeScreen() {
               containerColor={theme.colors.primaryContainer}
               title={t("Community Routes", { ns: "home" })}
               subtitle={t("Follow beloved routes by community", { ns: "home" })}
+            />
+            <FunctionButton
+              destination="/achievement/list"
+              icon={<MaterialCommunityIcons name="trophy" size={36} />}
+              color={theme.colors.onAmberContainer}
+              containerColor={theme.colors.amberContainer}
+              title={t("Achievements", { ns: "home" })}
             />
           </View>
         </View>

@@ -137,6 +137,7 @@ export function RootLayout() {
             <Stack.Screen name="route/prompt" />
             <Stack.Screen name="route/result" />
             <Stack.Screen name="track/track" />
+            <Stack.Screen name="achievement/list" />
             <Stack.Screen name="modal" options={{ presentation: "modal" }} />
           </Stack>
         </TipProvider>

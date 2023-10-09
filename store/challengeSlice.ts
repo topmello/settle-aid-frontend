@@ -2,14 +2,12 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { fetch } from "../api/fetch";
 
 export type ChallengeState = {
-  routesGenerated: number;
-  routesFavouritedShared: number;
+  lastLogin: Date | null;
   status: "idle" | "loading" | "failed";
 };
 
 const initialState: ChallengeState = {
-  routesGenerated: 0,
-  routesFavouritedShared: 0,
+  lastLogin: null,
   status: "idle",
 };
 
@@ -22,27 +20,110 @@ export const updateRoutesGenerated = createAsyncThunk(
   "challenge/updateRoutesGenerated",
   async (arg, { getState }) => {
     const state = getState() as any;
-    console.log("state.auth.id", state.auth.id);
     const response = await fetch({
       method: "POST",
       url: `/challenge/route_generation/${state.auth.id}/`,
       data: {
-        routes_generated: state.challenge.routesGenerated,
+        routes_generated: 1,
       },
     });
     return response.data;
   }
 );
 
-export const updateRoutesFavouritedShared = createAsyncThunk(
-  "challenge/updateRoutesFavouritedShared",
+export const updateRoutesFavourited = createAsyncThunk(
+  "challenge/updateRoutesFavourited",
   async (arg, { getState }) => {
     const state = getState() as any;
     const response = await fetch({
       method: "POST",
-      url: `/challenge/favourite_sharing/${state.auth.id}/`,
+      url: `/challenge/favourited/${state.auth.id}/`,
       data: {
-        routes_favourited_shared: state.challenge.routesFavouritedShared,
+        routes_favourited_shared: 1,
+      },
+    });
+    return response.data;
+  }
+);
+
+export const updateRoutesShared = createAsyncThunk(
+  "challenge/updateRoutesShared",
+  async (arg, { getState }) => {
+    const state = getState() as any;
+    const response = await fetch({
+      method: "POST",
+      url: `/challenge/shared/${state.auth.id}/`,
+      data: {
+        routes_favourited_shared: 1,
+      },
+    });
+    return response.data;
+  }
+);
+
+export const updateRoutesPublished = createAsyncThunk(
+  "challenge/updateRoutesPublished",
+  async (arg, { getState }) => {
+    const state = getState() as any;
+    const response = await fetch({
+      method: "POST",
+      url: `/challenge/published/${state.auth.id}/`,
+      data: {
+        routes_published: 1,
+      },
+    });
+    return response.data;
+  }
+);
+
+export const updateRoutesTipsRead = createAsyncThunk(
+  "challenge/updateRoutesTipsRead",
+  async (arg, { getState }) => {
+    const state = getState() as any;
+    const response = await fetch({
+      method: "POST",
+      url: `/challenge/tips_read/${state.auth.id}/`,
+      data: {
+        routes_tips_read: 1,
+      },
+    });
+    return response.data;
+  }
+);
+
+export const updateRoutesLoggedIn = createAsyncThunk(
+  "challenge/updateRoutesLoggedIn",
+  async (arg, { getState }) => {
+    const state = getState() as any;
+    if (
+      !state.challenge.lastLogin ||
+      (state.challenge.lastLogin.getDay() !== new Date().getDay() &&
+        state.challenge.lastLogin.getMonth() !== new Date().getMonth() &&
+        state.challenge.lastLogin.getFullYear() !== new Date().getFullYear())
+    ) {
+      const response = await fetch({
+        method: "POST",
+        url: `/challenge/logged_in/${state.auth.id}/`,
+        data: {
+          routes_logged_in: 1,
+        },
+      });
+      return response.data;
+    } else {
+      return {};
+    }
+  }
+);
+
+export const updateAccessedGlobalFeed = createAsyncThunk(
+  "challenge/updateAccessedGlobalFeed",
+  async (arg, { getState }) => {
+    const state = getState() as any;
+    const response = await fetch({
+      method: "POST",
+      url: `/challenge/accessed_global_feed/${state.auth.id}/`,
+      data: {
+        access_global_feed: 1,
       },
     });
     return response.data;
@@ -55,7 +136,6 @@ const challengeSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(updateRoutesGenerated.fulfilled, (state, action) => {
-      state.routesGenerated = action.payload.routes_generated;
       state.status = "idle";
     });
 
@@ -67,16 +147,75 @@ const challengeSlice = createSlice({
       state.status = "failed";
     });
 
-    builder.addCase(updateRoutesFavouritedShared.fulfilled, (state, action) => {
-      state.routesFavouritedShared = action.payload.routes_favourited_shared;
+    builder.addCase(updateRoutesFavourited.fulfilled, (state, action) => {
       state.status = "idle";
     });
 
-    builder.addCase(updateRoutesFavouritedShared.pending, (state, action) => {
+    builder.addCase(updateRoutesFavourited.pending, (state, action) => {
       state.status = "loading";
     });
 
-    builder.addCase(updateRoutesFavouritedShared.rejected, (state, action) => {
+    builder.addCase(updateRoutesFavourited.rejected, (state, action) => {
+      state.status = "failed";
+    });
+
+    builder.addCase(updateRoutesShared.fulfilled, (state, action) => {
+      state.status = "idle";
+    });
+
+    builder.addCase(updateRoutesShared.pending, (state, action) => {
+      state.status = "loading";
+    });
+
+    builder.addCase(updateRoutesShared.rejected, (state, action) => {
+      state.status = "failed";
+    });
+
+    builder.addCase(updateRoutesPublished.fulfilled, (state, action) => {
+      state.status = "idle";
+    });
+
+    builder.addCase(updateRoutesPublished.pending, (state, action) => {
+      state.status = "loading";
+    });
+
+    builder.addCase(updateRoutesPublished.rejected, (state, action) => {
+      state.status = "failed";
+    });
+
+    builder.addCase(updateRoutesTipsRead.fulfilled, (state, action) => {
+      state.status = "idle";
+    });
+
+    builder.addCase(updateRoutesTipsRead.pending, (state, action) => {
+      state.status = "loading";
+    });
+
+    builder.addCase(updateRoutesTipsRead.rejected, (state, action) => {
+      state.status = "failed";
+    });
+
+    builder.addCase(updateRoutesLoggedIn.fulfilled, (state, action) => {
+      state.status = "idle";
+    });
+
+    builder.addCase(updateRoutesLoggedIn.pending, (state, action) => {
+      state.status = "loading";
+    });
+
+    builder.addCase(updateRoutesLoggedIn.rejected, (state, action) => {
+      state.status = "failed";
+    });
+
+    builder.addCase(updateAccessedGlobalFeed.fulfilled, (state, action) => {
+      state.status = "idle";
+    });
+
+    builder.addCase(updateAccessedGlobalFeed.pending, (state, action) => {
+      state.status = "loading";
+    });
+
+    builder.addCase(updateAccessedGlobalFeed.rejected, (state, action) => {
       state.status = "failed";
     });
   },

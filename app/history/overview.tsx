@@ -207,7 +207,7 @@ export default function HistoryOverviewScreen() {
       <View style={styles.row_text}>
         <TouchableOpacity onPress={() => router.back()}>
           <ArrowBackIcon
-            fill={theme.colors.onPrimaryContainer}
+            fill={theme.colors.onBackground}
             width={28}
             height={28}
           />

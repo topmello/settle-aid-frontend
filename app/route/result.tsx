@@ -32,6 +32,7 @@ import { selectIsLoading } from "../../store/appSlice";
 import { useNotification } from "../../hooks/useNotification";
 import { useAppTheme } from "../../theme/theme";
 import { AppDispatch } from "../../store";
+import { useAchievement } from "../../hooks/useAchievement";
 
 const MORE_ICON = Platform.OS === "ios" ? "dots-horizontal" : "dots-vertical";
 
@@ -50,6 +51,7 @@ export default function MapScreen() {
   const loading = useSelector(selectIsLoading);
   const dispatch = useDispatch<AppDispatch>();
   const { pushNotification } = useNotification();
+  const achieve = useAchievement();
 
   const routeId = useLocalSearchParams<{ routeId: string }>().routeId;
   const [useHistory, setUseHistory] = useState(true);
@@ -172,9 +174,13 @@ export default function MapScreen() {
 
   // fetch route
   useEffect(() => {
-    fetchRoute().catch((error) => {
-      console.error("Failed to fetch route:", error);
-    });
+    fetchRoute()
+      .then(() => {
+        achieve("routeGeneration");
+      })
+      .catch((error) => {
+        console.error("Failed to fetch route:", error);
+      });
   }, [fetchRoute]);
 
   const voteRequestOptions: RequestOptions = {
