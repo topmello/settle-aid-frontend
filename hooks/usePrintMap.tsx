@@ -45,8 +45,7 @@ const usePrintMap = (route: Route) => {
     return route.locations
       .map(
         (location, index) =>
-          `<span class="location"><span class="num">${
-            index + 1
+          `<span class="location"><span class="num">${index + 1
           }</span>${location} </span>`
       )
       .join("");
@@ -124,7 +123,7 @@ const usePrintMap = (route: Route) => {
           showsMyLocationButton={false}
           toolbarEnabled={false}
           style={{
-            opacity: 0,
+            opacity: 1,
             height: 900,
             width: 900,
             position: "absolute",
@@ -174,7 +173,7 @@ const usePrintMap = (route: Route) => {
           ref={qrCodeRef}
           options={{ format: "jpg", quality: 1 }}
           captureMode="mount"
-          onCapture={() => {}}
+          onCapture={() => { }}
           style={{ position: "absolute", top: -1000, left: -1000 }}
         >
           <QRCode value={initialUrl || "N/A"} size={100} />

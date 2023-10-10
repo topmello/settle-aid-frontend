@@ -45,7 +45,7 @@ const RouteCard: React.FC<CardProps> = ({
   const { map, printMap } = usePrintMap(routeResult.route);
   return (
     <AnimatedButton
-      onPress={onPressCard ? onPressCard : () => {}}
+      onPress={onPressCard ? onPressCard : () => { }}
       color={theme.colors.secondaryContainer}
       style={{
         padding: 0,
@@ -64,7 +64,7 @@ const RouteCard: React.FC<CardProps> = ({
         </View>
       )}
       {/*<View><Text>{routeResult.route.route_image_name}</Text></View>*/}
-      {menuVisible && map}
+      {menuVisible && map && <View style={{ opacity: 0 }}>{map}</View>}
       <View
         style={{
           paddingHorizontal: 16,
