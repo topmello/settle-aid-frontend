@@ -23,9 +23,7 @@ export type Achievement =
 
 export const useAchievement = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { token, checkSession } = useSession();
-
-
+  const { checkSession } = useSession();
 
   const achieve = useCallback(
     (achievement: Achievement) => {
@@ -33,7 +31,7 @@ export const useAchievement = () => {
         if (res) {
           switch (achievement) {
             case "routeGeneration":
-              dispatch(updateRoutesGenerated({ token }));
+              dispatch(updateRoutesGenerated());
               break;
             case "routeFavourited":
               dispatch(updateRoutesFavourited());

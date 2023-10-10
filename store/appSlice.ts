@@ -8,7 +8,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
  * - notifications
  */
 
-interface AppState {
+export interface AppState {
   isLoading: boolean;
   isFail: {
     message: string;

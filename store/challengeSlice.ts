@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { fetch } from "../api/fetch";
+import { RootState } from ".";
 
 export type ChallengeState = {
   lastLogin: Date | null;
@@ -22,14 +23,15 @@ export const selectRoutesFavoriteShared = (state: any) =>
 
 export const updateRoutesGenerated = createAsyncThunk(
   "challenge/updateRoutesGenerated",
-  async (arg: UpdateRoutesGeneratedArg, { getState }) => {
+  async (arg, { getState }) => {
+    const state = getState() as RootState;
     const response = await fetch({
       method: "POST",
       url: `/challenge/route_generation/`,
       data: {
         routes_generated: 1,
       },
-      token: arg.token || null,
+      token: state.auth.token,
     });
     return response.data;
   }
@@ -38,12 +40,14 @@ export const updateRoutesGenerated = createAsyncThunk(
 export const updateRoutesFavourited = createAsyncThunk(
   "challenge/updateRoutesFavourited",
   async (arg, { getState }) => {
+    const state = getState() as RootState;
     const response = await fetch({
       method: "POST",
       url: `/challenge/favourited/`,
       data: {
         routes_favourited_shared: 1,
       },
+      token: state.auth.token,
     });
     return response.data;
   }
@@ -52,12 +56,14 @@ export const updateRoutesFavourited = createAsyncThunk(
 export const updateRoutesShared = createAsyncThunk(
   "challenge/updateRoutesShared",
   async (arg, { getState }) => {
+    const state = getState() as RootState;
     const response = await fetch({
       method: "POST",
       url: `/challenge/shared/`,
       data: {
         routes_favourited_shared: 1,
       },
+      token: state.auth.token,
     });
     return response.data;
   }
@@ -66,13 +72,14 @@ export const updateRoutesShared = createAsyncThunk(
 export const updateRoutesPublished = createAsyncThunk(
   "challenge/updateRoutesPublished",
   async (arg, { getState }) => {
-    const state = getState() as any;
+    const state = getState() as RootState;
     const response = await fetch({
       method: "POST",
       url: `/challenge/published/`,
       data: {
         routes_published: 1,
       },
+      token: state.auth.token,
     });
     return response.data;
   }
@@ -81,13 +88,14 @@ export const updateRoutesPublished = createAsyncThunk(
 export const updateRoutesTipsRead = createAsyncThunk(
   "challenge/updateRoutesTipsRead",
   async (arg, { getState }) => {
-    const state = getState() as any;
+    const state = getState() as RootState;
     const response = await fetch({
       method: "POST",
       url: `/challenge/tips_read/`,
       data: {
         routes_tips_read: 1,
       },
+      token: state.auth.token,
     });
     return response.data;
   }
@@ -96,7 +104,7 @@ export const updateRoutesTipsRead = createAsyncThunk(
 export const updateRoutesLoggedIn = createAsyncThunk(
   "challenge/updateRoutesLoggedIn",
   async (arg, { getState }) => {
-    const state = getState() as any;
+    const state = getState() as RootState;
     if (
       !state.challenge.lastLogin ||
       (state.challenge.lastLogin.getDay() !== new Date().getDay() &&
@@ -105,10 +113,11 @@ export const updateRoutesLoggedIn = createAsyncThunk(
     ) {
       const response = await fetch({
         method: "POST",
-        url: `/challenge/logged_in/${state.auth.id}/`,
+        url: `/challenge/logged_in/`,
         data: {
           routes_logged_in: 1,
         },
+        token: state.auth.token,
       });
       return response.data;
     } else {
