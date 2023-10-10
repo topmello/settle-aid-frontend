@@ -62,28 +62,19 @@ export default function HomeScreen() {
     refetchFavRouteList();
   }, [triggerRefreshHome]);
 
-  const [routeId, setRouteId] = useState<string | null>(null);
-
   useEffect(() => {
     if (url) {
       const { path, queryParams } = Linking.parse(url);
-      if (queryParams && path === "route" && queryParams.routeId) {
-        setRouteId(queryParams.routeId as string);
+      if (queryParams && queryParams.routeId) {
+        router.push({
+          pathname: "/route/result",
+          params: {
+            routeId: queryParams.routeId + "",
+          },
+        });
       }
     }
   }, []);
-
-  // Navigate
-  useEffect(() => {
-    if (routeId) {
-      router.push({
-        pathname: "/route/result",
-        params: {
-          routeId: routeId + "",
-        },
-      });
-    }
-  }, [routeId]);
 
   const handlePressCard = (result: RouteHistory) => {
     if (result && result.route) {

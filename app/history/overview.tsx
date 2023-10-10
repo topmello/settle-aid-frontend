@@ -83,7 +83,7 @@ export default function HistoryOverviewScreen() {
   // get the initial url and share
   const shareUrl = async (route_id: number) => {
     Share.share({
-      message: Linking.createURL("/route", {
+      message: Linking.createURL("/", {
         queryParams: { routeid: route_id + "" },
       }),
     });

@@ -33,6 +33,7 @@ import { useAppTheme } from "../../theme/theme";
 import { AppDispatch } from "../../store";
 import { useAchievement } from "../../hooks/useAchievement";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import * as Linking from "expo-linking";
 
 const MORE_ICON = Platform.OS === "ios" ? "dots-horizontal" : "dots-vertical";
 
@@ -249,7 +250,6 @@ export default function MapScreen() {
         {
           <>
             <Text variant="titleLarge">No route found</Text>
-            <Text variant="bodyLarge">{routeId}</Text>
             <Button
               mode="contained"
               style={{

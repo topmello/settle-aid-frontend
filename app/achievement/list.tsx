@@ -77,6 +77,10 @@ export default function AchievementListPage() {
     }
   }, [achievementToday]);
 
+  useEffect(() => {
+    fetchAchievementToday();
+  }, []);
+
   return (
     <SafeAreaView
       style={{
