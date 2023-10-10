@@ -26,7 +26,7 @@ const usePrintMap = (route: Route) => {
   useEffect(() => {
     // Retrieve the initial url
     Linking.getInitialURL().then((url) => {
-      setInitialUrl(url || "N/A");
+      setInitialUrl(url + "/?routeid=" + route.route_id || "N/A");
     });
   }, []);
 
@@ -89,7 +89,7 @@ const usePrintMap = (route: Route) => {
                   </div>
                   <div>
                     <h2>App Link</h2>
-                    <p>${appLink}</p>
+                    <p>${initialUrl}</p>
                   </div>
                   <div>
                     <h2>App Link QR Code</h2>
@@ -172,7 +172,12 @@ const usePrintMap = (route: Route) => {
             lineDashPattern={[1, 3]}
           />
         </MapView>
-        <ViewShot ref={qrCodeRef} options={{ format: "jpg", quality: 1 }}>
+        <ViewShot
+          ref={qrCodeRef}
+          options={{ format: "jpg", quality: 1 }}
+          captureMode="mount"
+          style={{ position: "absolute", top: -1000, left: -1000 }}
+        >
           <QRCode value={initialUrl || "N/A"} size={100} />
         </ViewShot>
       </>
