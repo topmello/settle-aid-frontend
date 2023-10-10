@@ -26,7 +26,9 @@ const usePrintMap = (route: Route) => {
   useEffect(() => {
     // Retrieve the initial url
     Linking.getInitialURL().then((url) => {
-      setInitialUrl(url + "/?routeid=" + route.route_id || "N/A");
+      setInitialUrl(
+        url?.split("?")[0] + "/?routeid=" + route.route_id || "N/A"
+      );
     });
   }, []);
 
@@ -86,10 +88,6 @@ const usePrintMap = (route: Route) => {
                   <div>
                     <h2>Locations</h2>
                     <p>${locations}</p>
-                  </div>
-                  <div>
-                    <h2>App Link</h2>
-                    <p>${initialUrl}</p>
                   </div>
                   <div>
                     <h2>App Link QR Code</h2>
@@ -176,6 +174,7 @@ const usePrintMap = (route: Route) => {
           ref={qrCodeRef}
           options={{ format: "jpg", quality: 1 }}
           captureMode="mount"
+          onCapture={() => {}}
           style={{ position: "absolute", top: -1000, left: -1000 }}
         >
           <QRCode value={initialUrl || "N/A"} size={100} />

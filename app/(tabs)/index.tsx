@@ -96,7 +96,7 @@ export default function HomeScreen() {
       router.push({
         pathname: "/route/result",
         params: {
-          route_id_: routeId,
+          routeId: routeId + "",
         },
       });
     }
