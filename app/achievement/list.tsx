@@ -29,25 +29,6 @@ export type Achievement = {
 export default function AchievementListPage() {
   const theme = useAppTheme();
 
-  // const [loggedInRes,] = useFetch(
-  //   {
-  //     method: "POST",
-  //     url: "/challenge/logged_in/",
-  //     data: { "logged_in": 1 }
-  //   }
-  // )
-
-  // const [routeGenRes,] = useFetch(
-  //   {
-  //     method: "POST",
-  //     url: "/challenge/route_generation/",
-  //     data: { "routes_generated": 1 }
-  //   }
-  // )
-
-  // console.log(loggedInRes)
-  // console.log(routeGenRes)
-
   const [achievementToday, fetchAchievementToday] = useFetch<Achievement[]>(
     {
       method: "GET",
@@ -189,18 +170,16 @@ export default function AchievementListPage() {
                       gap: 8,
                     }}
                   >
-                    {challenge.day && (
-                      <Text
-                        style={{
-                          color: theme.colors[`${challenge.color}`] as string,
-                          fontWeight: "bold",
-                          fontSize: 20,
-                          marginRight: 8,
-                        }}
-                      >
-                        {challenge.currentProgress}/{challenge.goal}
-                      </Text>
-                    )}
+                    <Text
+                      style={{
+                        color: theme.colors[`${challenge.color}`] as string,
+                        fontWeight: "bold",
+                        fontSize: 20,
+                        marginRight: 8,
+                      }}
+                    >
+                      {challenge.currentProgress || "0"}/{challenge.goal}
+                    </Text>
                   </View>
                 </View>
                 {challenge.progress && (

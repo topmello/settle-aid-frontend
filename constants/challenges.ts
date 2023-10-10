@@ -27,6 +27,7 @@ export const allChallenges: ChallengeType[] = [
     progressColor: "primary",
     score: 1,
     grade: 1,
+    goal: 1,
     id: 1,
   },
   {
@@ -38,6 +39,7 @@ export const allChallenges: ChallengeType[] = [
     icon: "routes",
     score: 3,
     grade: 2,
+    goal: 5,
     id: 2,
   },
   {
@@ -49,6 +51,7 @@ export const allChallenges: ChallengeType[] = [
     icon: "routes",
     score: 5,
     grade: 3,
+    goal: 10,
     id: 3,
   },
   {
@@ -60,6 +63,7 @@ export const allChallenges: ChallengeType[] = [
     icon: "bookmark-check-outline",
     score: 1,
     grade: 1,
+    goal: 1,
     id: 4,
   },
   {
@@ -71,6 +75,7 @@ export const allChallenges: ChallengeType[] = [
     icon: "bookmark-check-outline",
     score: 3,
     grade: 2,
+    goal: 5,
     id: 5,
   },
   {
@@ -82,6 +87,7 @@ export const allChallenges: ChallengeType[] = [
     icon: "bookmark-check-outline",
     score: 5,
     grade: 3,
+    goal: 10,
     id: 6,
   },
   {
@@ -93,6 +99,7 @@ export const allChallenges: ChallengeType[] = [
     icon: "share",
     score: 1,
     grade: 1,
+    goal: 1,
     id: 7,
   },
   {
@@ -104,6 +111,7 @@ export const allChallenges: ChallengeType[] = [
     icon: "share",
     score: 3,
     grade: 2,
+    goal: 5,
     id: 8,
   },
   {
@@ -115,6 +123,7 @@ export const allChallenges: ChallengeType[] = [
     icon: "share",
     score: 5,
     grade: 3,
+    goal: 10,
     id: 9,
   },
   {
@@ -126,6 +135,7 @@ export const allChallenges: ChallengeType[] = [
     icon: "monitor-share",
     score: 1,
     grade: 1,
+    goal: 1,
     id: 10,
   },
   {
@@ -137,6 +147,7 @@ export const allChallenges: ChallengeType[] = [
     icon: "monitor-share",
     score: 3,
     grade: 2,
+    goal: 5,
     id: 11,
   },
   {
@@ -148,6 +159,7 @@ export const allChallenges: ChallengeType[] = [
     icon: "monitor-share",
     score: 5,
     grade: 3,
+    goal: 10,
     id: 12,
   },
   {
@@ -159,6 +171,7 @@ export const allChallenges: ChallengeType[] = [
     icon: "book-check",
     score: 1,
     grade: 1,
+    goal: 1,
     id: 13,
   },
   {
@@ -170,6 +183,7 @@ export const allChallenges: ChallengeType[] = [
     icon: "book-check",
     score: 3,
     grade: 2,
+    goal: 5,
     id: 14,
   },
   {
@@ -181,6 +195,7 @@ export const allChallenges: ChallengeType[] = [
     icon: "book-check",
     score: 5,
     grade: 3,
+    goal: 10,
     id: 15,
   },
   {
@@ -192,6 +207,7 @@ export const allChallenges: ChallengeType[] = [
     icon: "login",
     score: 1,
     grade: 1,
+    goal: 1,
     id: 16,
   },
   {
@@ -203,6 +219,7 @@ export const allChallenges: ChallengeType[] = [
     icon: "broadcast",
     score: 1,
     grade: 1,
+    goal: 1,
     id: 17,
   },
 ];

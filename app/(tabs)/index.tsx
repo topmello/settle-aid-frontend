@@ -142,42 +142,50 @@ export default function HomeScreen() {
             <FunctionButton
               destination="/route/activity"
               icon={<RouteIcon />}
-              color={theme.colors.onPurpleContainer}
-              containerColor={theme.colors.purpleContainer}
+              color={theme.colors.onSuccessContainer}
+              containerColor={theme.colors.successContainer}
               title={t("Plan my route", { ns: "home" })}
               subtitle={t("Plan your trip", { ns: "home" })}
             />
             <FunctionButton
               destination="/track/track"
               icon={<PersonPinIcon />}
-              color={theme.colors.onSuccessContainer}
-              containerColor={theme.colors.successContainer}
+              color={theme.colors.onPrimaryContainer}
+              containerColor={theme.colors.primaryContainer}
               title={t("Location Sharing", { ns: "home" })}
               subtitle={t("Share your location in realtime with ease", {
                 ns: "home",
               })}
             />
-            <FunctionButton
-              destination="/history/sharedroute"
-              icon={<ForumIcon />}
-              color={theme.colors.onPrimaryContainer}
-              containerColor={theme.colors.primaryContainer}
-              title={t("Community Routes", { ns: "home" })}
-              subtitle={t("Follow beloved routes by community", { ns: "home" })}
-            />
-            <FunctionButton
-              destination="/achievement/list"
-              icon={
-                <MaterialCommunityIcons
-                  name="trophy"
-                  color={theme.colors.onAmberContainer}
-                  size={36}
-                />
-              }
-              color={theme.colors.onAmberContainer}
-              containerColor={theme.colors.amberContainer}
-              title={t("Achievements", { ns: "home" })}
-            />
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+              }}
+            >
+              <FunctionButton
+                destination="/history/sharedroute"
+                icon={<ForumIcon />}
+                color={theme.colors.onPurpleContainer}
+                containerColor={theme.colors.purpleContainer}
+                title={t("Community Routes", { ns: "home" })}
+                vertical
+              />
+              <FunctionButton
+                destination="/achievement/list"
+                icon={
+                  <MaterialCommunityIcons
+                    name="trophy"
+                    color={theme.colors.onAmberContainer}
+                    size={36}
+                  />
+                }
+                color={theme.colors.onAmberContainer}
+                containerColor={theme.colors.amberContainer}
+                title={t("Achievements", { ns: "home" })}
+                vertical
+              />
+            </View>
           </View>
         </View>
         {routeList && (

@@ -35,15 +35,19 @@ export const AnimatedButton = ({
       onPressIn={onPressIn}
       onPressOut={onPressOut}
       onPress={onPress}
+      style={[
+        styles.roundedRectangle,
+        {
+          backgroundColor: color,
+        },
+        style,
+      ]}
     >
       <Animated.View
         style={[
-          styles.roundedRectangle,
           {
-            backgroundColor: color,
             transform: [{ scale: scaleAnim }],
           },
-          style,
         ]}
       >
         {children}
