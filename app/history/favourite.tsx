@@ -39,7 +39,7 @@ export default function HistoryOverviewScreen() {
   const [favRouteList, refetchFavRouteList] = useFetch<RouteHistory[]>(
     {
       method: "GET",
-      url: `/route/user/fav/${userID}/?limit=10`,
+      url: `/route/feed/user/fav/${userID}/?limit=10`,
     },
     [userID]
   );

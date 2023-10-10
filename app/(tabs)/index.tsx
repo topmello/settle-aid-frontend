@@ -52,7 +52,7 @@ export default function HomeScreen() {
   const [favRouteList, refetchFavRouteList] = useFetch<RouteHistory[]>(
     {
       method: "GET",
-      url: `/route/user/fav/${userId}/?limit=5`,
+      url: `/route/feed/user/fav/${userId}/?limit=5`,
     },
     [userId]
   );
