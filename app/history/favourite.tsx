@@ -25,6 +25,8 @@ import useFetch from "../../hooks/useFetch";
 import { RouteHistory } from "../../types/route";
 import useEventScheduler from "../../hooks/useEventScheduler";
 import { AppDispatch } from "../../store";
+import * as Linking from "expo-linking";
+import * as Sharing from "expo-sharing";
 
 export default function HistoryOverviewScreen() {
   const { t } = useTranslation();
@@ -72,6 +74,20 @@ export default function HistoryOverviewScreen() {
           routeId: result.route.route_id + "",
         },
       });
+    }
+  };
+
+  // get the initial url and share
+  const shareUrl = async (route_id: number) => {
+    const initialUrl = await Linking.getInitialURL();
+    console.log(initialUrl?.split("/?")[0] + "/?routeid=" + route_id);
+    const url = initialUrl?.split("/?")[0] + "/?routeid=" + route_id;
+
+    try {
+      await Sharing.shareAsync(url);
+      console.log("Shared successfully");
+    } catch (error) {
+      console.error("Error while sharing:", error);
     }
   };
 
@@ -200,6 +216,7 @@ export default function HistoryOverviewScreen() {
               routeResult={result}
               handleFavRoute={handleFavRoute}
               voted={result.voted_by_user}
+              shareUrl={shareUrl}
               onPressCard={() => handlePressCard(result)}
             />
           ))}

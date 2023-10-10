@@ -27,7 +27,7 @@ const usePrintMap = (route: Route) => {
     // Retrieve the initial url
     Linking.getInitialURL().then((url) => {
       setInitialUrl(
-        url?.split("?")[0] + "/?routeid=" + route.route_id || "N/A"
+        url?.split("/?")[0] + "/?routeid=" + route.route_id || "N/A"
       );
     });
   }, []);
