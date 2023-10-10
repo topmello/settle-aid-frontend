@@ -55,7 +55,7 @@ export const getRouteImage = (photo: string) => {
     case "restaurant/Burger":
       return require("../assets/images/feedcards/restaurant/Burger.jpg");
     case "restaurant/Chinese Skew":
-      return require("../assets/images/feedcards/restaurant/Chinese Skew.jpg");
+      return require("../assets/images/feedcards/restaurant/Chinese_Skew.jpg");
     case "restaurant/Chinese_Fancy":
       return require("../assets/images/feedcards/restaurant/Chinese_Fancy.jpg");
     case "restaurant/Chinese_Noodles":
