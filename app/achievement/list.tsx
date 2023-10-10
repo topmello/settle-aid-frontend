@@ -3,9 +3,52 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ArrowBackIcon from "../../assets/images/icons/arrow_back.svg";
 import { useAppTheme } from "../../theme/theme";
+import useFetch from "../../hooks/useFetch";
+
+export type Achievement = {
+  challenge: {
+    name: string;
+    type: string;
+  };
+  year: number;
+  month: number;
+  day: number;
+  progress: number;
+};
 
 export default function AchievementListPage() {
   const theme = useAppTheme();
+
+  // const [loggedInRes,] = useFetch(
+  //   {
+  //     method: "POST",
+  //     url: "/challenge/logged_in/",
+  //     data: { "logged_in": 1 }
+  //   }
+  // )
+
+  // const [routeGenRes,] = useFetch(
+  //   {
+  //     method: "POST",
+  //     url: "/challenge/route_generation/",
+  //     data: { "routes_generated": 1 }
+  //   }
+  // )
+
+  // console.log(loggedInRes)
+  // console.log(routeGenRes)
+
+  const [achievementToday, fetchAchievementToday] = useFetch<Achievement[]>(
+    {
+      method: "GET",
+      url: "/challenge/today-history",
+    },
+    [],
+    [],
+    true
+  );
+
+  console.log(achievementToday);
   return (
     <SafeAreaView
       style={{

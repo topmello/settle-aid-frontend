@@ -59,6 +59,14 @@ export const TipProvider = ({ children }: { children: React.ReactNode }) => {
     content: "",
   });
 
+  const resetResultTip = useCallback(() => {
+    setResultTip({
+      description: "",
+      content: "",
+    });
+    setCurrentTipIndex(0);
+  }, []);
+
   const tips = useMemo(() => {
     return category.type;
   }, [category]);
@@ -112,7 +120,7 @@ export const TipProvider = ({ children }: { children: React.ReactNode }) => {
         clearTips,
         currentTip,
         resultTip,
-        setResultTip,
+        setResultTip: resetResultTip,
       }}
     >
       {children}

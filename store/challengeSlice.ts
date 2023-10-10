@@ -11,6 +11,10 @@ const initialState: ChallengeState = {
   status: "idle",
 };
 
+interface UpdateRoutesGeneratedArg {
+  token?: string;
+}
+
 export const selectRoutesGenerated = (state: any) =>
   state.challenge.routesGenerated;
 export const selectRoutesFavoriteShared = (state: any) =>
@@ -18,14 +22,14 @@ export const selectRoutesFavoriteShared = (state: any) =>
 
 export const updateRoutesGenerated = createAsyncThunk(
   "challenge/updateRoutesGenerated",
-  async (arg, { getState }) => {
-    console.log("updateRoutesGenerated");
+  async (arg: UpdateRoutesGeneratedArg, { getState }) => {
     const response = await fetch({
       method: "POST",
       url: `/challenge/route_generation/`,
       data: {
         routes_generated: 1,
       },
+      token: arg.token || null,
     });
     return response.data;
   }
