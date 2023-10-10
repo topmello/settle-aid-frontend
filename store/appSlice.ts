@@ -29,7 +29,7 @@ const initialState: AppState = {
   triggerRefreshHome: 0,
 };
 
-export const selectIsLoading = (state: any) => state.app.isLoading;
+export const selectIsLoading = (state: any): boolean => state.app.isLoading;
 export const selectIsFail = (state: any) => state.app.isFail;
 export const selectTheme = (state: any) => state.app.theme;
 export const selectLanguage = (state: any) => state.app.language;

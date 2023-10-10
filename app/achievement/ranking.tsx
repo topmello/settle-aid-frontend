@@ -5,9 +5,20 @@ import { Text } from "react-native-paper";
 import { router } from "expo-router";
 import ArrowBackIcon from "../../assets/images/icons/arrow_back.svg";
 import PodiumIcon from "../../assets/images/achievement/podium.svg";
+import useFetch from "../../hooks/useFetch";
 
 export default function AchievementRankingPage() {
   const theme = useAppTheme();
+  // const [routeDataFromHistory, fetchRouteDataFromHistory] =
+  //   useFetch(
+  //     {
+  //       method: "GET",
+  //       url: `/route/${routeId}`,
+  //     },
+  //     [routeId],
+  //     { num_votes: 0, route: data },
+  //     false
+  //   );
   return (
     <SafeAreaView
       style={{
@@ -60,13 +71,6 @@ export default function AchievementRankingPage() {
         >
           <PodiumIcon width="100%" height={300} />
         </View>
-        {/* <Image
-          source={require("../../assets/images/animation/success.gif")}
-          style={{
-            width: 180,
-            height: 180,
-          }}
-        /> */}
       </View>
     </SafeAreaView>
   );

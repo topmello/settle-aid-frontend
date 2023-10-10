@@ -7,6 +7,7 @@ import {
   StatusBar,
   Platform,
   TouchableOpacity,
+  Share,
 } from "react-native";
 import { Text, ActivityIndicator } from "react-native-paper";
 import { useTranslation } from "react-i18next";
@@ -104,14 +105,12 @@ export default function SharedOverviewScreen() {
     }
   };
 
-  const shareUrl = async (route_id) => {
-    const initialUrl = await Linking.getInitialURL();
-    const url = initialUrl + "/?routeid=" + route_id;
-    try {
-      await Sharing.shareAsync(url);
-    } catch (error) {
-      console.error("Error while sharing:", error);
-    }
+  const shareUrl = async (route_id: number) => {
+    Share.share({
+      message: Linking.createURL("/route", {
+        queryParams: { routeid: route_id + "" },
+      }),
+    });
   };
 
   const styles = StyleSheet.create({

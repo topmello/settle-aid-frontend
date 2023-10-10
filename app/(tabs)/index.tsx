@@ -39,6 +39,7 @@ export default function HomeScreen() {
   const userId = useSelector(selectUserId);
   const loading = useSelector(selectIsLoading);
   const triggerRefreshHome = useSelector(selectTriggerRefreshHome);
+  const url = Linking.useURL();
 
   const [routeList, refetchRouteList] = useFetch<RouteHistory[]>(
     {
@@ -64,30 +65,12 @@ export default function HomeScreen() {
   const [routeId, setRouteId] = useState<string | null>(null);
 
   useEffect(() => {
-    // Handle the initial deep link
-    const handleInitialDeepLink = async () => {
-      const initialUrl = await Linking.getInitialURL();
-      if (initialUrl) {
-        const { queryParams } = Linking.parse(initialUrl);
-        if (queryParams?.routeid && isString(queryParams?.routeid)) {
-          setRouteId(queryParams?.routeid);
-        }
+    if (url) {
+      const { path, queryParams } = Linking.parse(url);
+      if (queryParams && path === "route" && queryParams.routeId) {
+        setRouteId(queryParams.routeId as string);
       }
-    };
-
-    handleInitialDeepLink();
-
-    // Add an event listener for deep links
-    const handleDeepLink = (event: { url: string }) => {
-      const { queryParams } = Linking.parse(event.url);
-      if (queryParams?.routeid && isString(queryParams?.routeid)) {
-        setRouteId(queryParams.routeid);
-      }
-    };
-
-    Linking.addEventListener("url", handleDeepLink);
-
-    return () => {};
+    }
   }, []);
 
   // Navigate

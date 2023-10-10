@@ -8,6 +8,7 @@ import {
   Platform,
   Pressable,
   TouchableOpacity,
+  Share,
 } from "react-native";
 import { Button, Text, ActivityIndicator } from "react-native-paper";
 import { useTranslation } from "react-i18next"; // <-- Import the hook
@@ -81,16 +82,11 @@ export default function HistoryOverviewScreen() {
 
   // get the initial url and share
   const shareUrl = async (route_id: number) => {
-    const initialUrl = await Linking.getInitialURL();
-    console.log(initialUrl?.split("/?")[0] + "/?routeid=" + route_id);
-    const url = initialUrl?.split("/?")[0] + "/?routeid=" + route_id;
-
-    try {
-      await Sharing.shareAsync(url);
-      console.log("Shared successfully");
-    } catch (error) {
-      console.error("Error while sharing:", error);
-    }
+    Share.share({
+      message: Linking.createURL("/route", {
+        queryParams: { routeid: route_id + "" },
+      }),
+    });
   };
 
   //publish

@@ -51,7 +51,6 @@ export default function MapScreen() {
   const routeState: RouteState = useSelector(selectRouteState);
   const loading = useSelector(selectIsLoading);
   const dispatch = useDispatch<AppDispatch>();
-  const { pushNotification } = useNotification();
   const achieve = useAchievement();
 
   const routeId = useLocalSearchParams<{ routeId: string }>().routeId;
@@ -248,9 +247,7 @@ export default function MapScreen() {
           flex: 1,
         }}
       >
-        {!region || !region.latitude || !region.longitude ? (
-          <ActivityIndicator size="large" />
-        ) : (
+        {
           <>
             <Text variant="titleLarge">No route found</Text>
             <Text variant="bodyLarge">{routeId}</Text>
@@ -277,7 +274,7 @@ export default function MapScreen() {
               Home
             </Button>
           </>
-        )}
+        }
       </SafeAreaView>
     );
   }
@@ -319,7 +316,7 @@ export default function MapScreen() {
           <MaterialCommunityIcons
             name="home-variant-outline"
             color={theme.colors.onPrimaryContainer}
-            size={32}
+            size={30}
           />
         </TouchableOpacity>
         <View>
