@@ -8,7 +8,7 @@ import useFetch from "../../hooks/useFetch";
 import { AnimatedButton } from "../../components/AnimatedButton";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { ProgressBar } from "react-native-paper";
-import { allChallenges } from "../../constants/challenges";
+import { ChallengeType, allChallenges } from "../../constants/challenges";
 import { ScrollView } from "react-native-gesture-handler";
 import { useEffect, useMemo, useState } from "react";
 export type Achievement = {
@@ -34,11 +34,8 @@ export default function AchievementListPage() {
     url: "/challenge/today-history",
   });
 
-  console.log(achievementToday);
+  const [challengeList, setChallengeList] = useState<ChallengeType[]>([]);
 
-  const [achievementList, setAchievementList] = useState<Achievement[]>([]);
-
-  // FIXME sometimes the achievementToday is not fetched yet and the allChallenges is already rendered
   useEffect(() => {
     if (achievementToday && achievementToday.length > 0) {
       allChallenges.forEach((challenge) => {
@@ -54,6 +51,12 @@ export default function AchievementListPage() {
             break;
           }
         }
+        setChallengeList((prev) => [
+          ...prev,
+          {
+            ...challenge,
+          },
+        ]);
       });
     }
   }, [achievementToday]);
@@ -118,7 +121,7 @@ export default function AchievementListPage() {
             paddingBottom: 32,
           }}
         >
-          {allChallenges.map((challenge, index) => {
+          {challengeList.map((challenge, index) => {
             return (
               <AnimatedButton
                 key={index}
