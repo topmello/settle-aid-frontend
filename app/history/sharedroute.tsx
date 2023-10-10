@@ -20,19 +20,17 @@ import { selectIsLoading } from "../../store/appSlice";
 import RouteCard from "../../components/RouteCard";
 import useFetch from "../../hooks/useFetch";
 import { RouteHistory } from "../../types/route";
-import * as Linking from "expo-linking";
-import * as Sharing from "expo-sharing";
+import Linking from "expo-linking";
 
 export default function SharedOverviewScreen() {
   const { t } = useTranslation();
   const theme = useTheme();
   const userID = useSelector(selectUserId);
   const loading = useSelector(selectIsLoading);
-  const [limit, setLimit] = useState(4);
   const [routeList, refetchRouteList] = useFetch<RouteHistory[]>(
     {
       method: "GET",
-      url: `/route/feed/top_routes/?limit=2&order_by=num_votes&offset=0`,
+      url: `/route/feed/top_routes/?limit=6&order_by=num_votes&offset=0`,
     },
     [userID]
   );
@@ -47,14 +45,14 @@ export default function SharedOverviewScreen() {
     }
   }, [routeList]);
 
-  const handleScroll = async (event) => {
-    if (isLoadingMore && !routeList && routeList.length === 0) return;
+  const handleScroll = async (event: any) => {
+    if (isLoadingMore || !routeList || routeList.length === 0) return;
     const scrollY = event.nativeEvent.contentOffset.y;
     const windowHeight = event.nativeEvent.layoutMeasurement.height;
     const contentHeight = event.nativeEvent.contentSize.height;
 
     if (scrollY + windowHeight >= contentHeight - 100 && !isLoadingMore) {
-      setIsLoadingMore(true); // 设置为正在加载
+      setIsLoadingMore(true);
 
       const newLimit = accumulatedRouteList.length + 2;
 
@@ -62,8 +60,6 @@ export default function SharedOverviewScreen() {
         method: "GET",
         url: `/route/feed/top_routes/?limit=${newLimit}&order_by=num_votes&offset=0`,
       });
-
-      console.log("newLimit", newLimit);
 
       setTimeout(() => {
         setIsLoadingMore(false);
@@ -82,22 +78,23 @@ export default function SharedOverviewScreen() {
     }
   };
 
-  const voteRequestOptions = {
-    method: "POST",
-    url: `/vote/`,
-  };
-
   const [, executeVote] = useFetch(
-    voteRequestOptions,
+    {
+      method: "POST",
+      url: `/vote/`,
+    },
     [],
     null,
     false,
     "Added to favourites"
   );
 
-  const handleFavRoute = async (route_id) => {
+  const handleFavRoute = async (route_id: number) => {
     try {
-      await executeVote({ ...voteRequestOptions, url: `/vote/${route_id}/` });
+      await executeVote({
+        method: "POST",
+        url: `/vote/${route_id}/`,
+      });
     } catch (error) {
       return;
     } finally {
@@ -241,6 +238,14 @@ export default function SharedOverviewScreen() {
             />
           ))}
         </View>
+        <ActivityIndicator
+          animating={isLoadingMore}
+          size="large"
+          style={{
+            marginTop: 20,
+            marginBottom: 36,
+          }}
+        />
       </ScrollView>
     </SafeAreaView>
   );

@@ -29,7 +29,6 @@ import useEventScheduler from "../../hooks/useEventScheduler";
 import { usePrintMap } from "../../hooks/usePrintMap";
 import { Route, RouteGetResult } from "../../types/route";
 import { selectIsLoading } from "../../store/appSlice";
-import { useNotification } from "../../hooks/useNotification";
 import { useAppTheme } from "../../theme/theme";
 import { AppDispatch } from "../../store";
 import { useAchievement } from "../../hooks/useAchievement";

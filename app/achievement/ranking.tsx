@@ -9,16 +9,6 @@ import useFetch from "../../hooks/useFetch";
 
 export default function AchievementRankingPage() {
   const theme = useAppTheme();
-  // const [routeDataFromHistory, fetchRouteDataFromHistory] =
-  //   useFetch(
-  //     {
-  //       method: "GET",
-  //       url: `/route/${routeId}`,
-  //     },
-  //     [routeId],
-  //     { num_votes: 0, route: data },
-  //     false
-  //   );
   return (
     <SafeAreaView
       style={{
@@ -69,7 +59,161 @@ export default function AchievementRankingPage() {
             width: "100%",
           }}
         >
+          <View
+            style={{
+              position: "absolute",
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+              paddingTop: 16,
+              width: "100%",
+            }}
+          >
+            <Text
+              variant="titleMedium"
+              style={{
+                fontSize: 24,
+                color: theme.colors.onBackground,
+                textAlign: "center",
+                fontWeight: "bold",
+                marginRight: 24,
+                paddingTop: 48,
+              }}
+            >
+              guy
+            </Text>
+            <Text
+              variant="titleMedium"
+              style={{
+                fontSize: 24,
+                color: theme.colors.onBackground,
+                textAlign: "center",
+                fontWeight: "bold",
+                marginHorizontal: 16,
+              }}
+            >
+              admin
+            </Text>
+            <Text
+              variant="titleMedium"
+              style={{
+                fontSize: 24,
+                color: theme.colors.onBackground,
+                textAlign: "center",
+                fontWeight: "bold",
+                marginLeft: 24,
+                paddingTop: 72,
+              }}
+            >
+              cam
+            </Text>
+          </View>
           <PodiumIcon width="100%" height={300} />
+        </View>
+        <View
+          style={{
+            flex: 1,
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-around",
+              gap: 8,
+              marginTop: 16,
+            }}
+          >
+            <Text
+              variant="titleMedium"
+              style={{
+                fontSize: 24,
+                color: theme.colors.onAmberContainer,
+                textAlign: "center",
+                fontWeight: "bold",
+              }}
+            >
+              1
+            </Text>
+            <Text
+              variant="titleMedium"
+              style={{
+                fontSize: 24,
+                color: theme.colors.onBackground,
+                textAlign: "center",
+              }}
+            >
+              admin
+            </Text>
+            <Text variant="titleMedium" style={{ fontSize: 24 }}>
+              97
+            </Text>
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-around",
+              gap: 8,
+              marginTop: 16,
+            }}
+          >
+            <Text
+              variant="titleMedium"
+              style={{
+                fontSize: 24,
+                color: theme.colors.onAmberContainer,
+                textAlign: "center",
+                fontWeight: "bold",
+              }}
+            >
+              2
+            </Text>
+            <Text
+              variant="titleMedium"
+              style={{
+                fontSize: 24,
+                color: theme.colors.onBackground,
+                textAlign: "center",
+              }}
+            >
+              guy
+            </Text>
+            <Text variant="titleMedium" style={{ fontSize: 24 }}>
+              82
+            </Text>
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-around",
+              gap: 8,
+              marginTop: 16,
+            }}
+          >
+            <Text
+              variant="titleMedium"
+              style={{
+                fontSize: 24,
+                color: theme.colors.onAmberContainer,
+                textAlign: "center",
+                fontWeight: "bold",
+              }}
+            >
+              1
+            </Text>
+            <Text
+              variant="titleMedium"
+              style={{
+                fontSize: 24,
+                color: theme.colors.onBackground,
+                textAlign: "center",
+              }}
+            >
+              cam
+            </Text>
+            <Text variant="titleMedium" style={{ fontSize: 24 }}>
+              48
+            </Text>
+          </View>
         </View>
       </View>
     </SafeAreaView>
