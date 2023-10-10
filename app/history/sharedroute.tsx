@@ -66,9 +66,8 @@ export default function SharedOverviewScreen() {
 
       console.log("newLimit", newLimit);
 
-      // 稍作延迟以确保状态得到更新
       setTimeout(() => {
-        setIsLoadingMore(false); // 设置为加载完毕
+        setIsLoadingMore(false);
       }, 500);
     }
   };
@@ -214,7 +213,7 @@ export default function SharedOverviewScreen() {
       >
         <View
           style={{
-            gap: 12,
+            gap: 10,
             marginBottom: 20,
             paddingHorizontal: 16,
           }}

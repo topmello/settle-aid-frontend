@@ -366,7 +366,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   cardsWrapper: {
-    gap: 6,
+    gap: 10,
     marginVertical: 16,
     marginHorizontal: 16,
   },

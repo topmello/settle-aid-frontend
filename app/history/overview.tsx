@@ -224,7 +224,7 @@ export default function HistoryOverviewScreen() {
       >
         <View
           style={{
-            gap: 6,
+            gap: 10,
             marginBottom: 20,
             paddingHorizontal: 16,
           }}

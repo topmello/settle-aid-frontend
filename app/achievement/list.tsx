@@ -121,6 +121,7 @@ export default function AchievementListPage() {
           {allChallenges.map((challenge, index) => {
             return (
               <AnimatedButton
+                key={index}
                 color={theme.colors[`${challenge.containerColor}`] + ""}
                 style={{
                   padding: 0,
