@@ -218,7 +218,7 @@ export default function RegisterPage() {
           <HelperText type={usernameError ? "error" : "info"}>
             {usernameError
               ? usernameError
-              : t("At least 3 characters", { ns: "acc" })}
+              : t("At least 4 characters", { ns: "acc" })}
           </HelperText>
         </View>
         <View>

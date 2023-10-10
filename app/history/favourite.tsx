@@ -10,6 +10,7 @@ import {
   StatusBar,
   Platform,
   Pressable,
+  Share,
 } from "react-native";
 import { Button, Text, ActivityIndicator } from "react-native-paper";
 import { useTranslation } from "react-i18next"; // <-- Import the hook
@@ -38,7 +39,7 @@ export default function HistoryOverviewScreen() {
   const [favRouteList, refetchFavRouteList] = useFetch<RouteHistory[]>(
     {
       method: "GET",
-      url: `/route/user/fav/${userID}/?limit=10`,
+      url: `/route/feed/user/fav/${userID}/?limit=10`,
     },
     [userID]
   );
@@ -78,16 +79,25 @@ export default function HistoryOverviewScreen() {
   };
 
   // get the initial url and share
-  const shareUrl = async (route_id: number) => {
-    const initialUrl = await Linking.getInitialURL();
-    console.log(initialUrl?.split("/?")[0] + "/?routeid=" + route_id);
-    const url = initialUrl?.split("/?")[0] + "/?routeid=" + route_id;
+  const shareUrl = async (route_id: number): Promise<void> => {
 
     try {
-      await Sharing.shareAsync(url);
-      console.log("Shared successfully");
+      if (Platform.OS === "ios") {
+        const initialUrl = await Linking.getInitialURL();
+        const url = initialUrl + "?routeId=" + route_id;
+
+        await Share.share({ message: url })
+      } else {
+        await Share.share({
+          message: Linking.createURL("/", {
+            queryParams: { routeid: route_id + "" },
+          }),
+        });
+      }
+
     } catch (error) {
-      console.error("Error while sharing:", error);
+      console.log(error)
+      return;
     }
   };
 

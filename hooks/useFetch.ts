@@ -29,12 +29,12 @@ const useFetch = <T = any>(
   const fetchData = async (
     overrideOptions?: RequestOptions
   ): Promise<T | null> => {
+    dispatch(loading());
     let options = overrideOptions || requestOptions;
     let finalOptions = {
       ...options,
       ...(token ? { token } : {}),
     };
-
     const isSessionValid = await checkSession();
 
     if (!isSessionValid) {

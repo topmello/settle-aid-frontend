@@ -8,6 +8,7 @@ import {
   Platform,
   Pressable,
   TouchableOpacity,
+  Share,
 } from "react-native";
 import { Button, Text, ActivityIndicator } from "react-native-paper";
 import { useTranslation } from "react-i18next"; // <-- Import the hook
@@ -27,12 +28,14 @@ import * as Linking from "expo-linking";
 import * as Sharing from "expo-sharing";
 import { usePrintMap } from "../../hooks/usePrintMap";
 import { AppDispatch } from "../../store";
+import { useNotification } from "../../hooks/useNotification";
 
 export default function HistoryOverviewScreen() {
   const theme = useTheme();
   const userID = useSelector(selectUserId);
   const loading = useSelector(selectIsLoading);
   const dispatch = useDispatch<AppDispatch>();
+  const { pushNotification } = useNotification();
 
   const [routeList, refetchRouteList] = useFetch<RouteHistory[]>(
     {
@@ -78,16 +81,25 @@ export default function HistoryOverviewScreen() {
   };
 
   // get the initial url and share
-  const shareUrl = async (route_id: number) => {
-    const initialUrl = await Linking.getInitialURL();
-    console.log(initialUrl?.split("/?")[0] + "/?routeid=" + route_id);
-    const url = initialUrl?.split("/?")[0] + "/?routeid=" + route_id;
+  const shareUrl = async (route_id: number): Promise<void> => {
 
     try {
-      await Sharing.shareAsync(url);
-      console.log("Shared successfully");
+      if (Platform.OS === "ios") {
+        const initialUrl = await Linking.getInitialURL();
+        const url = initialUrl + "?routeId=" + route_id;
+
+        await Share.share({ message: url })
+      } else {
+        await Share.share({
+          message: Linking.createURL("/", {
+            queryParams: { routeid: route_id + "" },
+          }),
+        });
+      }
+
     } catch (error) {
-      console.error("Error while sharing:", error);
+      console.log(error)
+      return;
     }
   };
 
@@ -105,17 +117,21 @@ export default function HistoryOverviewScreen() {
     "Route Published"
   );
 
-  const handlePublishRoute = async (route_id: number) => {
-    try {
-      await executePublish({
-        ...publishRequestOptions,
-        url: `/route/publish/${route_id}/`,
+  const handlePublishRoute = (route_id: number) => {
+    pushNotification({
+      message: "Publishing...",
+      type: "info",
+    });
+    executePublish({
+      ...publishRequestOptions,
+      url: `/route/publish/${route_id}/`,
+    })
+      .then(() => {
+        refetchRouteList();
+      })
+      .catch((err) => {
+        console.error("Error publishing the route:", err);
       });
-    } catch (error) {
-      console.error("Error publishing the route:", error);
-    } finally {
-      refetchRouteList(); // Optional: You can refetch the routes if necessary
-    }
   };
 
   const styles = StyleSheet.create({

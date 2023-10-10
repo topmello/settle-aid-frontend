@@ -30,7 +30,7 @@ import {
   LocationType,
   selectLocationType,
   setQueryWithLocationType,
-  setSimilarityThreshold
+  setSimilarityThreshold,
 } from "../../store/routeSlice";
 import { ActivityOption } from "./activity";
 import { useAppTheme } from "../../theme/theme";
@@ -121,8 +121,12 @@ export default function RoutePromptScreen() {
   React.useEffect(() => {
     if (activityPrompts.length > 0) {
       setSelectedActivity(activityPrompts[0]);
-      dispatch(setSimilarityThreshold({ similarity_threshold: 0.2, negative_similarity_threshold: 0.2 }))
-
+      dispatch(
+        setSimilarityThreshold({
+          similarity_threshold: 0.1,
+          negative_similarity_threshold: 0.1,
+        })
+      );
     }
   }, [activityPrompts]);
 

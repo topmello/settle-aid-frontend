@@ -1,37 +1,36 @@
-import { useState, useEffect } from "react";
+import { useEffect, useRef } from "react";
 
-import {
-  SafeAreaView,
-  StyleSheet,
-  View,
-  ScrollView,
-  TouchableOpacity,
-  StatusBar,
-  Platform,
-} from "react-native";
-import { Button, Text, ActivityIndicator } from "react-native-paper";
-import { useTranslation } from "react-i18next";
-import RouteIcon from "../../assets/images/icons/route.svg";
-import ArrowIcon from "../../assets/images/icons/navigate_next.svg";
-import ForumIcon from "../../assets/images/icons/forum.svg";
-import PersonPinIcon from "../../assets/images/icons/person_pin.svg";
 import { router } from "expo-router";
+import { useTranslation } from "react-i18next";
+import {
+  Platform,
+  SafeAreaView,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { ActivityIndicator, Text } from "react-native-paper";
 import { useSelector } from "react-redux";
-import { selectToken, selectUserId } from "../../store/authSlice";
+import ForumIcon from "../../assets/images/icons/forum.svg";
+import ArrowIcon from "../../assets/images/icons/navigate_next.svg";
+import PersonPinIcon from "../../assets/images/icons/person_pin.svg";
+import RouteIcon from "../../assets/images/icons/route.svg";
+import RouteCard from "../../components/RouteCard";
+import { WeatherWidget } from "../../components/WeatherWidget";
+import useFetch from "../../hooks/useFetch";
 import {
   selectIsLoading,
   selectTriggerRefreshHome,
 } from "../../store/appSlice";
-import RouteCard from "../../components/RouteCard";
-import useFetch from "../../hooks/useFetch";
-import { RouteHistory } from "../../types/route";
+import { selectUserId } from "../../store/authSlice";
 import { useAppTheme } from "../../theme/theme";
-import { WeatherWidget } from "../../components/WeatherWidget";
+import { RouteHistory } from "../../types/route";
 
-import * as Linking from "expo-linking";
-import { isString } from "lodash";
-import { FunctionButton } from "../../components/FunctionButton";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import * as Linking from "expo-linking";
+import { FunctionButton } from "../../components/FunctionButton";
 
 export default function HomeScreen() {
   const { t } = useTranslation();
@@ -39,6 +38,8 @@ export default function HomeScreen() {
   const userId = useSelector(selectUserId);
   const loading = useSelector(selectIsLoading);
   const triggerRefreshHome = useSelector(selectTriggerRefreshHome);
+  const url = Linking.useURL();
+  const listenerAddedRef = useRef(false);
 
   const [routeList, refetchRouteList] = useFetch<RouteHistory[]>(
     {
@@ -51,7 +52,7 @@ export default function HomeScreen() {
   const [favRouteList, refetchFavRouteList] = useFetch<RouteHistory[]>(
     {
       method: "GET",
-      url: `/route/user/fav/${userId}/?limit=5`,
+      url: `/route/feed/user/fav/${userId}/?limit=5`,
     },
     [userId]
   );
@@ -61,46 +62,39 @@ export default function HomeScreen() {
     refetchFavRouteList();
   }, [triggerRefreshHome]);
 
-  const [routeId, setRouteId] = useState<string | null>(null);
-
   useEffect(() => {
-    // Handle the initial deep link
-    const handleInitialDeepLink = async () => {
-      const initialUrl = await Linking.getInitialURL();
-      if (initialUrl) {
-        const { queryParams } = Linking.parse(initialUrl);
-        if (queryParams?.routeid && isString(queryParams?.routeid)) {
-          setRouteId(queryParams?.routeid);
+    if (url) {
+      const { path, queryParams } = Linking.parse(url);
+
+      const handleDeepLink = async (event: Linking.EventType) => {
+        if (event.url) {
+          const { path, queryParams } = Linking.parse(event.url);
+
+          if (queryParams && queryParams.routeId) {
+            router.push({
+              pathname: "/route/result",
+              params: {
+                routeId: queryParams.routeId + "",
+              },
+            });
+          }
         }
+      };
+      if (!listenerAddedRef.current) {
+        listenerAddedRef.current = true;
+        Linking.addEventListener("url", handleDeepLink);
       }
-    };
 
-    handleInitialDeepLink();
-
-    // Add an event listener for deep links
-    const handleDeepLink = (event: { url: string }) => {
-      const { queryParams } = Linking.parse(event.url);
-      if (queryParams?.routeid && isString(queryParams?.routeid)) {
-        setRouteId(queryParams.routeid);
+      if (queryParams && queryParams.routeId) {
+        router.push({
+          pathname: "/route/result",
+          params: {
+            routeId: queryParams.routeId + "",
+          },
+        });
       }
-    };
-
-    Linking.addEventListener("url", handleDeepLink);
-
-    return () => {};
-  }, []);
-
-  // Navigate
-  useEffect(() => {
-    if (routeId) {
-      router.push({
-        pathname: "/route/result",
-        params: {
-          routeId: routeId + "",
-        },
-      });
     }
-  }, [routeId]);
+  }, []);
 
   const handlePressCard = (result: RouteHistory) => {
     if (result && result.route) {
@@ -168,42 +162,50 @@ export default function HomeScreen() {
             <FunctionButton
               destination="/route/activity"
               icon={<RouteIcon />}
-              color={theme.colors.onPurpleContainer}
-              containerColor={theme.colors.purpleContainer}
+              color={theme.colors.onSuccessContainer}
+              containerColor={theme.colors.successContainer}
               title={t("Plan my route", { ns: "home" })}
               subtitle={t("Plan your trip", { ns: "home" })}
             />
             <FunctionButton
               destination="/track/track"
               icon={<PersonPinIcon />}
-              color={theme.colors.onSuccessContainer}
-              containerColor={theme.colors.successContainer}
+              color={theme.colors.onPrimaryContainer}
+              containerColor={theme.colors.primaryContainer}
               title={t("Location Sharing", { ns: "home" })}
-              subtitle={t("Share your location in realtime with ease", {
+              subtitle={t("Share your location in realtime", {
                 ns: "home",
               })}
             />
-            <FunctionButton
-              destination="/history/sharedroute"
-              icon={<ForumIcon />}
-              color={theme.colors.onPrimaryContainer}
-              containerColor={theme.colors.primaryContainer}
-              title={t("Community Routes", { ns: "home" })}
-              subtitle={t("Follow beloved routes by community", { ns: "home" })}
-            />
-            <FunctionButton
-              destination="/achievement/list"
-              icon={
-                <MaterialCommunityIcons
-                  name="trophy"
-                  color={theme.colors.onAmberContainer}
-                  size={36}
-                />
-              }
-              color={theme.colors.onAmberContainer}
-              containerColor={theme.colors.amberContainer}
-              title={t("Achievements", { ns: "home" })}
-            />
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+              }}
+            >
+              <FunctionButton
+                destination="/history/sharedroute"
+                icon={<ForumIcon />}
+                color={theme.colors.onPurpleContainer}
+                containerColor={theme.colors.purpleContainer}
+                title={t("Community Routes", { ns: "home" })}
+                vertical
+              />
+              <FunctionButton
+                destination="/achievement/list"
+                icon={
+                  <MaterialCommunityIcons
+                    name="trophy"
+                    color={theme.colors.onAmberContainer}
+                    size={36}
+                  />
+                }
+                color={theme.colors.onAmberContainer}
+                containerColor={theme.colors.amberContainer}
+                title={t("Achievements", { ns: "home" })}
+                vertical
+              />
+            </View>
           </View>
         </View>
         {routeList && (

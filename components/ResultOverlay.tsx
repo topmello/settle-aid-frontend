@@ -52,7 +52,7 @@ const ResultOverlay: React.FC<OverlayProps> = ({
 }: OverlayProps) => {
   const theme = useTheme();
   const bottomSheetRef = React.useRef<Animated.View>(null);
-  const { resultTip, setResultTip } = useTip();
+  const { setCategory } = useTip();
   const [showBottomSheet, setShowBottomSheet] = React.useState(true);
 
   return (
@@ -113,7 +113,10 @@ const ResultOverlay: React.FC<OverlayProps> = ({
                   padding: 16,
                 }}
                 onPress={() => {
-                  setResultTip(item);
+                  setCategory({
+                    mode: "tip",
+                    type: tipList,
+                  });
                   router.push("/learn/detail");
                 }}
               >
@@ -143,7 +146,10 @@ const ResultOverlay: React.FC<OverlayProps> = ({
                   <IconButton
                     icon="chevron-right"
                     onPress={() => {
-                      setResultTip(item);
+                      setCategory({
+                        mode: "tip",
+                        type: tipList,
+                      });
                       router.push("/learn/detail");
                     }}
                   />

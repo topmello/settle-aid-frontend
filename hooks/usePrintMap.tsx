@@ -53,6 +53,10 @@ const usePrintMap = (route: Route) => {
   }, [route.locations]);
 
   const printMap = useCallback(() => {
+    pushNotification({
+      message: "Generating... Please wait",
+      type: "info",
+    });
     setPrinting(true);
 
     // Capture the map as a base64 image
@@ -76,7 +80,7 @@ const usePrintMap = (route: Route) => {
           );
 
           // Capture the QR code as an image
-          qrCodeRef.current.capture().then((qrCodeImage) => {
+          qrCodeRef?.current?.capture().then((qrCodeImage) => {
             const html = `
               <html>
                 <head>${cssContent}</head>
@@ -124,7 +128,7 @@ const usePrintMap = (route: Route) => {
           showsMyLocationButton={false}
           toolbarEnabled={false}
           style={{
-            opacity: 0,
+            opacity: 1,
             height: 900,
             width: 900,
             position: "absolute",

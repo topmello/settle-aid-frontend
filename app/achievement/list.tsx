@@ -10,50 +10,35 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { ProgressBar } from "react-native-paper";
 import { allChallenges } from "../../constants/challenges";
 import { ScrollView } from "react-native-gesture-handler";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 export type Achievement = {
   challenge: {
     name: string;
     type: string;
+    goal: number;
+    grade: number;
+    score: number;
   };
   year: number;
   month: number;
   day: number;
+  current_progress: number;
   progress: number;
 };
 
 export default function AchievementListPage() {
   const theme = useAppTheme();
 
-  // const [loggedInRes,] = useFetch(
-  //   {
-  //     method: "POST",
-  //     url: "/challenge/logged_in/",
-  //     data: { "logged_in": 1 }
-  //   }
-  // )
+  const [achievementToday, fetchAchievementToday] = useFetch<Achievement[]>({
+    method: "GET",
+    url: "/challenge/today-history",
+  });
 
-  // const [routeGenRes,] = useFetch(
-  //   {
-  //     method: "POST",
-  //     url: "/challenge/route_generation/",
-  //     data: { "routes_generated": 1 }
-  //   }
-  // )
+  console.log(achievementToday);
 
-  // console.log(loggedInRes)
-  // console.log(routeGenRes)
+  const [achievementList, setAchievementList] = useState<Achievement[]>([]);
 
-  const [achievementToday, fetchAchievementToday] = useFetch<Achievement[]>(
-    {
-      method: "GET",
-      url: "/challenge/today-history",
-    },
-    [],
-    [],
-    true
-  );
-
+  // FIXME sometimes the achievementToday is not fetched yet and the allChallenges is already rendered
   useEffect(() => {
     if (achievementToday && achievementToday.length > 0) {
       allChallenges.forEach((challenge) => {
@@ -63,6 +48,8 @@ export default function AchievementListPage() {
             challenge.day = achievementToday[i].day;
             challenge.month = achievementToday[i].month;
             challenge.year = achievementToday[i].year;
+            challenge.goal = achievementToday[i].challenge.goal;
+            challenge.currentProgress = achievementToday[i].current_progress;
             achievementToday.splice(i, 1);
             break;
           }
@@ -71,10 +58,15 @@ export default function AchievementListPage() {
     }
   }, [achievementToday]);
 
+  useEffect(() => {
+    fetchAchievementToday();
+  }, []);
+
   return (
     <SafeAreaView
       style={{
         flex: 1,
+        backgroundColor: theme.colors.background,
       }}
     >
       <View
@@ -104,7 +96,15 @@ export default function AchievementListPage() {
             Achievements
           </Text>
         </View>
-        <View style={{ width: 34, height: 34 }}></View>
+        <View style={{ width: 34, height: 34 }}>
+          <TouchableOpacity onPress={() => router.push("/achievement/ranking")}>
+            <MaterialCommunityIcons
+              name="podium-gold"
+              size={28}
+              color={theme.colors.onBackground}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
       <ScrollView
         style={{
@@ -147,8 +147,8 @@ export default function AchievementListPage() {
                   >
                     <MaterialCommunityIcons
                       name={challenge.icon as any}
-                      size={40}
-                      color="black"
+                      size={32}
+                      color={theme.colors[`${challenge.color}`] as string}
                     />
                     <Text
                       variant="titleLarge"
@@ -156,6 +156,7 @@ export default function AchievementListPage() {
                         color: theme.colors[`${challenge.color}`] as string,
                         fontWeight: "bold",
                         fontSize: 20,
+                        marginLeft: 6,
                       }}
                     >
                       {challenge.name}
@@ -177,7 +178,7 @@ export default function AchievementListPage() {
                         marginRight: 8,
                       }}
                     >
-                      {challenge.day ? challenge.day : ""}
+                      {challenge.currentProgress || "0"}/{challenge.goal}
                     </Text>
                   </View>
                 </View>

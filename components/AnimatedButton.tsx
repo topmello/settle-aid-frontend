@@ -30,25 +30,25 @@ export const AnimatedButton = ({
   };
 
   return (
-    <TouchableOpacity
-      activeOpacity={0.8}
-      onPressIn={onPressIn}
-      onPressOut={onPressOut}
-      onPress={onPress}
+    <Animated.View
+      style={[
+        styles.roundedRectangle,
+        {
+          backgroundColor: color,
+          transform: [{ scale: scaleAnim }],
+        },
+        style,
+      ]}
     >
-      <Animated.View
-        style={[
-          styles.roundedRectangle,
-          {
-            backgroundColor: color,
-            transform: [{ scale: scaleAnim }],
-          },
-          style,
-        ]}
+      <TouchableOpacity
+        activeOpacity={0.8}
+        onPressIn={onPressIn}
+        onPressOut={onPressOut}
+        onPress={onPress}
       >
         {children}
-      </Animated.View>
-    </TouchableOpacity>
+      </TouchableOpacity>
+    </Animated.View>
   );
 };
 
