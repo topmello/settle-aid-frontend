@@ -66,25 +66,6 @@ export default function HomeScreen() {
     if (url) {
       const { path, queryParams } = Linking.parse(url);
 
-      const handleDeepLink = async (event: Linking.EventType) => {
-        if (event.url) {
-          const { path, queryParams } = Linking.parse(event.url);
-
-          if (queryParams && queryParams.routeId) {
-            router.push({
-              pathname: "/route/result",
-              params: {
-                routeId: queryParams.routeId + "",
-              },
-            });
-          }
-        }
-      };
-      if (!listenerAddedRef.current) {
-        listenerAddedRef.current = true;
-        Linking.addEventListener("url", handleDeepLink);
-      }
-
       if (queryParams && queryParams.routeId) {
         router.push({
           pathname: "/route/result",
@@ -94,7 +75,7 @@ export default function HomeScreen() {
         });
       }
     }
-  }, []);
+  }, [url]);
 
   const handlePressCard = (result: RouteHistory) => {
     if (result && result.route) {
