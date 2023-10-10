@@ -6,9 +6,11 @@ export type ChallengeType = {
   containerColor: keyof AppTheme["colors"];
   progressColor: keyof AppTheme["colors"];
   progress?: number;
+  currentProgress?: number;
   day?: number;
   month?: number;
   year?: number;
+  goal?: number;
   icon: string;
   score: number;
   grade: number;
@@ -17,7 +19,7 @@ export type ChallengeType = {
 
 export const allChallenges: ChallengeType[] = [
   {
-    name: "1 Route Generated",
+    name: "Generate 1 Route",
     type: "route_generation",
     color: "onPrimaryContainer",
     containerColor: "primaryContainer",
@@ -28,7 +30,7 @@ export const allChallenges: ChallengeType[] = [
     id: 1,
   },
   {
-    name: "5 Routes Generated",
+    name: "Generate 5 Routes",
     type: "route_generation",
     color: "onPrimaryContainer",
     containerColor: "primaryContainer",
@@ -39,7 +41,7 @@ export const allChallenges: ChallengeType[] = [
     id: 2,
   },
   {
-    name: "10 Routes Generated",
+    name: "Generate 10 Routes",
     type: "route_generation",
     color: "onPrimaryContainer",
     containerColor: "primaryContainer",
@@ -50,7 +52,7 @@ export const allChallenges: ChallengeType[] = [
     id: 3,
   },
   {
-    name: "1 Favorited",
+    name: "Favorite 1 Route",
     type: "favourited",
     color: "onAmberContainer",
     containerColor: "amberContainer",
@@ -61,7 +63,7 @@ export const allChallenges: ChallengeType[] = [
     id: 4,
   },
   {
-    name: "5 Favorited",
+    name: "Favorite 5 Routes",
     type: "favourited",
     color: "onAmberContainer",
     containerColor: "amberContainer",
@@ -72,7 +74,7 @@ export const allChallenges: ChallengeType[] = [
     id: 5,
   },
   {
-    name: "10 Favorited",
+    name: "Favorite 10 Routes",
     type: "favourited",
     color: "onAmberContainer",
     containerColor: "amberContainer",
@@ -83,7 +85,7 @@ export const allChallenges: ChallengeType[] = [
     id: 6,
   },
   {
-    name: "1 Shared",
+    name: "Share 1 Route",
     type: "shared",
     color: "onSuccessContainer",
     containerColor: "successContainer",
@@ -94,7 +96,7 @@ export const allChallenges: ChallengeType[] = [
     id: 7,
   },
   {
-    name: "5 Shared",
+    name: "Share 5 Routes",
     type: "shared",
     color: "onSuccessContainer",
     containerColor: "successContainer",
@@ -105,7 +107,7 @@ export const allChallenges: ChallengeType[] = [
     id: 8,
   },
   {
-    name: "10 Shared",
+    name: "Share 10 Routes",
     type: "shared",
     color: "onSuccessContainer",
     containerColor: "successContainer",
@@ -116,7 +118,7 @@ export const allChallenges: ChallengeType[] = [
     id: 9,
   },
   {
-    name: "1 Published",
+    name: "Publish 1 Route",
     type: "published",
     color: "onPinkContainer",
     containerColor: "pinkContainer",
@@ -127,7 +129,7 @@ export const allChallenges: ChallengeType[] = [
     id: 10,
   },
   {
-    name: "5 Published",
+    name: "Publish 5 Routes",
     type: "published",
     color: "onPinkContainer",
     containerColor: "pinkContainer",
@@ -138,7 +140,7 @@ export const allChallenges: ChallengeType[] = [
     id: 11,
   },
   {
-    name: "10 Published",
+    name: "Publish 10 Route",
     type: "published",
     color: "onPinkContainer",
     containerColor: "pinkContainer",
@@ -149,7 +151,7 @@ export const allChallenges: ChallengeType[] = [
     id: 12,
   },
   {
-    name: "1 Read",
+    name: "Read 1 Tip",
     type: "read_tips",
     color: "onTealContainer",
     containerColor: "tealContainer",
@@ -160,7 +162,7 @@ export const allChallenges: ChallengeType[] = [
     id: 13,
   },
   {
-    name: "5 Read",
+    name: "Read 5 Tips",
     type: "read_tips",
     color: "onTealContainer",
     containerColor: "tealContainer",
@@ -171,7 +173,7 @@ export const allChallenges: ChallengeType[] = [
     id: 14,
   },
   {
-    name: "10 Read",
+    name: "Read 10 Tips",
     type: "read_tipes",
     color: "onTealContainer",
     containerColor: "tealContainer",
@@ -182,7 +184,7 @@ export const allChallenges: ChallengeType[] = [
     id: 15,
   },
   {
-    name: "Logged In",
+    name: "Daily Log In",
     type: "logged_in",
     color: "onPurpleContainer",
     containerColor: "purpleContainer",
@@ -193,7 +195,7 @@ export const allChallenges: ChallengeType[] = [
     id: 16,
   },
   {
-    name: "Accessed Global Feed",
+    name: "Access Global Feed",
     type: "accessed_global_feed",
     color: "onBrownContainer",
     containerColor: "brownContainer",

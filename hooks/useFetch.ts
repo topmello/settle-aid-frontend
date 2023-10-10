@@ -34,7 +34,6 @@ const useFetch = <T = any>(
       ...options,
       ...(token ? { token } : {}),
     };
-
     const isSessionValid = await checkSession();
 
     if (!isSessionValid) {

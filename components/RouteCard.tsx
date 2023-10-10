@@ -19,7 +19,7 @@ interface CardProps {
   voted?: boolean;
   index?: number;
   shareUrl?: (route_id: number) => Promise<void>;
-  handlePublishRoute?: (route_id: number) => Promise<void>;
+  handlePublishRoute?: (route_id: number) => void;
 }
 
 const RouteCard: React.FC<CardProps> = ({
@@ -45,7 +45,7 @@ const RouteCard: React.FC<CardProps> = ({
   const { map, printMap } = usePrintMap(routeResult.route);
   return (
     <AnimatedButton
-      onPress={onPressCard ? onPressCard : () => { }}
+      onPress={onPressCard ? onPressCard : () => {}}
       color={theme.colors.secondaryContainer}
       style={{
         padding: 0,
@@ -53,7 +53,7 @@ const RouteCard: React.FC<CardProps> = ({
       }}
     >
       {getRouteImage(routeResult.route.route_image_name) && (
-        <View >
+        <View>
           <Image
             source={getRouteImage(routeResult.route.route_image_name)}
             style={{
@@ -180,12 +180,14 @@ const RouteCard: React.FC<CardProps> = ({
                   onPress={() => shareUrl?.(routeResult.route.route_id)}
                   title="Share Link"
                 />
-                <Menu.Item
-                  onPress={() =>
-                    handlePublishRoute?.(routeResult.route.route_id)
-                  } // Use the new prop
-                  title="Publish Route"
-                />
+                {handlePublishRoute && (
+                  <Menu.Item
+                    onPress={() =>
+                      handlePublishRoute?.(routeResult.route.route_id)
+                    } // Use the new prop
+                    title="Publish Route"
+                  />
+                )}
               </Menu>
             </View>
           </View>

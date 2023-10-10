@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import {
   SafeAreaView,
   StyleSheet,
@@ -6,19 +6,17 @@ import {
   ScrollView,
   StatusBar,
   Platform,
-  Pressable,
   TouchableOpacity,
 } from "react-native";
-import { Button, Text, ActivityIndicator } from "react-native-paper";
+import { Text, ActivityIndicator } from "react-native-paper";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "react-native-paper";
-import { router, useLocalSearchParams } from "expo-router";
+import { router } from "expo-router";
 import ArrowBackIcon from "../../assets/images/icons/arrow_back.svg";
 import { useSelector } from "react-redux";
-import { selectUserId, selectToken } from "../../store/authSlice";
+import { selectUserId } from "../../store/authSlice";
 import { selectIsLoading } from "../../store/appSlice";
 import RouteCard from "../../components/RouteCard";
-import { RequestOptions } from "../../api/fetch";
 import useFetch from "../../hooks/useFetch";
 import { RouteHistory } from "../../types/route";
 import * as Linking from "expo-linking";
@@ -69,6 +67,17 @@ export default function SharedOverviewScreen() {
       setTimeout(() => {
         setIsLoadingMore(false);
       }, 500);
+    }
+  };
+
+  const handlePressCard = (result: RouteHistory) => {
+    if (result && result.route) {
+      router.push({
+        pathname: "/route/result",
+        params: {
+          routeId: result.route.route_id + "",
+        },
+      });
     }
   };
 
@@ -199,7 +208,7 @@ export default function SharedOverviewScreen() {
           />
         </TouchableOpacity>
         <View style={{ flex: 1, marginLeft: 12 }}>
-          <Text style={styles.text_title}>Shared Route</Text>
+          <Text style={styles.text_title}>Community Route</Text>
         </View>
         <View style={{ width: 34, height: 34 }}></View>
       </View>
@@ -224,6 +233,9 @@ export default function SharedOverviewScreen() {
               key={result.route.route_id}
               isSimplified={false}
               routeResult={result}
+              onPressCard={() => {
+                handlePressCard(result);
+              }}
               handleFavRoute={handleFavRoute}
               voted={result.voted_by_user}
               shareUrl={shareUrl}

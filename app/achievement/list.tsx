@@ -15,10 +15,14 @@ export type Achievement = {
   challenge: {
     name: string;
     type: string;
+    goal: number;
+    grade: number;
+    score: number;
   };
   year: number;
   month: number;
   day: number;
+  current_progress: number;
   progress: number;
 };
 
@@ -63,6 +67,8 @@ export default function AchievementListPage() {
             challenge.day = achievementToday[i].day;
             challenge.month = achievementToday[i].month;
             challenge.year = achievementToday[i].year;
+            challenge.goal = achievementToday[i].challenge.goal;
+            challenge.currentProgress = achievementToday[i].current_progress;
             achievementToday.splice(i, 1);
             break;
           }
@@ -75,6 +81,7 @@ export default function AchievementListPage() {
     <SafeAreaView
       style={{
         flex: 1,
+        backgroundColor: theme.colors.background,
       }}
     >
       <View
@@ -104,7 +111,15 @@ export default function AchievementListPage() {
             Achievements
           </Text>
         </View>
-        <View style={{ width: 34, height: 34 }}></View>
+        <View style={{ width: 34, height: 34 }}>
+          <TouchableOpacity onPress={() => router.push("/achievement/ranking")}>
+            <MaterialCommunityIcons
+              name="podium-gold"
+              size={28}
+              color={theme.colors.onBackground}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
       <ScrollView
         style={{
@@ -147,8 +162,8 @@ export default function AchievementListPage() {
                   >
                     <MaterialCommunityIcons
                       name={challenge.icon as any}
-                      size={40}
-                      color="black"
+                      size={32}
+                      color={theme.colors[`${challenge.color}`] as string}
                     />
                     <Text
                       variant="titleLarge"
@@ -156,6 +171,7 @@ export default function AchievementListPage() {
                         color: theme.colors[`${challenge.color}`] as string,
                         fontWeight: "bold",
                         fontSize: 20,
+                        marginLeft: 6,
                       }}
                     >
                       {challenge.name}
@@ -169,16 +185,18 @@ export default function AchievementListPage() {
                       gap: 8,
                     }}
                   >
-                    <Text
-                      style={{
-                        color: theme.colors[`${challenge.color}`] as string,
-                        fontWeight: "bold",
-                        fontSize: 20,
-                        marginRight: 8,
-                      }}
-                    >
-                      {challenge.day ? challenge.day : ""}
-                    </Text>
+                    {challenge.day && (
+                      <Text
+                        style={{
+                          color: theme.colors[`${challenge.color}`] as string,
+                          fontWeight: "bold",
+                          fontSize: 20,
+                          marginRight: 8,
+                        }}
+                      >
+                        {challenge.currentProgress}/{challenge.goal}
+                      </Text>
+                    )}
                   </View>
                 </View>
                 {challenge.progress && (

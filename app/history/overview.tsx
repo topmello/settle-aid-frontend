@@ -27,12 +27,14 @@ import * as Linking from "expo-linking";
 import * as Sharing from "expo-sharing";
 import { usePrintMap } from "../../hooks/usePrintMap";
 import { AppDispatch } from "../../store";
+import { useNotification } from "../../hooks/useNotification";
 
 export default function HistoryOverviewScreen() {
   const theme = useTheme();
   const userID = useSelector(selectUserId);
   const loading = useSelector(selectIsLoading);
   const dispatch = useDispatch<AppDispatch>();
+  const { pushNotification } = useNotification();
 
   const [routeList, refetchRouteList] = useFetch<RouteHistory[]>(
     {
@@ -105,17 +107,21 @@ export default function HistoryOverviewScreen() {
     "Route Published"
   );
 
-  const handlePublishRoute = async (route_id: number) => {
-    try {
-      await executePublish({
-        ...publishRequestOptions,
-        url: `/route/publish/${route_id}/`,
+  const handlePublishRoute = (route_id: number) => {
+    pushNotification({
+      message: "Publishing...",
+      type: "info",
+    });
+    executePublish({
+      ...publishRequestOptions,
+      url: `/route/publish/${route_id}/`,
+    })
+      .then(() => {
+        refetchRouteList();
+      })
+      .catch((err) => {
+        console.error("Error publishing the route:", err);
       });
-    } catch (error) {
-      console.error("Error publishing the route:", error);
-    } finally {
-      refetchRouteList(); // Optional: You can refetch the routes if necessary
-    }
   };
 
   const styles = StyleSheet.create({

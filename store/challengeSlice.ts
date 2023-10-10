@@ -105,24 +105,15 @@ export const updateRoutesLoggedIn = createAsyncThunk(
   "challenge/updateRoutesLoggedIn",
   async (arg, { getState }) => {
     const state = getState() as RootState;
-    if (
-      !state.challenge.lastLogin ||
-      (state.challenge.lastLogin.getDay() !== new Date().getDay() &&
-        state.challenge.lastLogin.getMonth() !== new Date().getMonth() &&
-        state.challenge.lastLogin.getFullYear() !== new Date().getFullYear())
-    ) {
-      const response = await fetch({
-        method: "POST",
-        url: `/challenge/logged_in/`,
-        data: {
-          routes_logged_in: 1,
-        },
-        token: state.auth.token,
-      });
-      return response.data;
-    } else {
-      return {};
-    }
+    const response = await fetch({
+      method: "POST",
+      url: `/challenge/logged_in/`,
+      data: {
+        routes_logged_in: 1,
+      },
+      token: state.auth.token,
+    });
+    return response.data;
   }
 );
 

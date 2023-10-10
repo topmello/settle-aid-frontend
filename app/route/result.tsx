@@ -33,6 +33,7 @@ import { useNotification } from "../../hooks/useNotification";
 import { useAppTheme } from "../../theme/theme";
 import { AppDispatch } from "../../store";
 import { useAchievement } from "../../hooks/useAchievement";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const MORE_ICON = Platform.OS === "ios" ? "dots-horizontal" : "dots-vertical";
 
@@ -214,7 +215,20 @@ export default function MapScreen() {
           alignItems: "center",
           flex: 1,
         }}
-      ></SafeAreaView>
+      >
+        <ActivityIndicator size="large" />
+        <Text
+          variant="titleLarge"
+          style={{
+            marginTop: 16,
+            color: theme.colors.onPrimaryContainer,
+          }}
+        >
+          {useHistory
+            ? "Loading route from history..."
+            : "Route is being generated..."}
+        </Text>
+      </SafeAreaView>
     );
   } else if (
     !data ||
@@ -290,8 +304,7 @@ export default function MapScreen() {
         }}
       >
         <TouchableOpacity
-          onPress={() => router.back()}
-          onLongPress={() => {
+          onPress={() => {
             router.replace("/(tabs)");
           }}
           style={{
@@ -303,10 +316,10 @@ export default function MapScreen() {
             alignItems: "center",
           }}
         >
-          <ArrowBackIcon
-            fill={theme.colors.onPrimaryContainer}
-            width={34}
-            height={34}
+          <MaterialCommunityIcons
+            name="home-variant-outline"
+            color={theme.colors.onPrimaryContainer}
+            size={32}
           />
         </TouchableOpacity>
         <View>
