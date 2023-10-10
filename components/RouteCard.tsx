@@ -40,6 +40,8 @@ const RouteCard: React.FC<CardProps> = ({
     hideDatePicker,
     handleDateConfirm,
   } = useEventScheduler();
+
+  
   const { map, printMap } = usePrintMap(routeResult.route);
   return (
     <AnimatedButton

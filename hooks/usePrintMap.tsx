@@ -5,6 +5,9 @@ import MapView, { Marker, PROVIDER_GOOGLE, Polyline } from "react-native-maps";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Coordinates, useMapRegion } from "./useMapRegion";
 import { useNotification } from "./useNotification";
+import * as Linking from "expo-linking";
+import QRCode from "react-native-qrcode-svg";
+import ViewShot from "react-native-view-shot";
 
 const customPins = [
   require("../assets/images/pin/pin1.png"),
@@ -14,9 +17,18 @@ const customPins = [
 ];
 
 const usePrintMap = (route: Route) => {
+  const qrCodeRef = useRef(null);
   const mapRef = useRef<MapView>(null);
   const [printing, setPrinting] = useState(false);
   const { pushNotification } = useNotification();
+  const [initialUrl, setInitialUrl] = useState("");
+
+  useEffect(() => {
+    // Retrieve the initial url
+    Linking.getInitialURL().then((url) => {
+      setInitialUrl(url || "N/A");
+    });
+  }, []);
 
   const { region, initialRegion } = useMapRegion({
     data: route,
@@ -40,10 +52,8 @@ const usePrintMap = (route: Route) => {
 
   const printMap = useCallback(() => {
     setPrinting(true);
-    pushNotification({
-      message: "Printing route for you...",
-      type: "info",
-    });
+
+    // Capture the map as a base64 image
     mapRef.current
       ?.takeSnapshot({
         format: "png",
@@ -51,34 +61,60 @@ const usePrintMap = (route: Route) => {
         result: "base64",
       })
       .then((image) => {
-        const html = `
-          <html>
-            <head>${cssContent}</head>
-            <body>
-              <div>
-                <h1>Route</h1>
-                <img class="map" src="data:image/png;base64,${image}" width="100%" />
-              </div>
-              <div>
-                <h2>Locations</h2>
-                <p>${locations}</p>
-              </div> 
-            </body>
-          </html>
-        `;
-        return Print.printToFileAsync({
-          html,
+        // Use Linking.getInitialURL() to get the initial app URL
+        Linking.getInitialURL().then((initialUrl) => {
+          const appLink = initialUrl || "N/A"; // Use "N/A" if no initial URL is available
+
+          // Generate the QR code
+          const qrCode = (
+            <QRCode
+              value={appLink}
+              size={100} // Adjust the size as needed
+            />
+          );
+
+          // Capture the QR code as an image
+          qrCodeRef.current.capture().then((qrCodeImage) => {
+            const html = `
+              <html>
+                <head>${cssContent}</head>
+                <body>
+                  <div>
+                    <h1>Route</h1>
+                    <img class="map" src="data:image/png;base64,${image}" width="100%" />
+                  </div>
+                  <div>
+                    <h2>Locations</h2>
+                    <p>${locations}</p>
+                  </div>
+                  <div>
+                    <h2>App Link</h2>
+                    <p>${appLink}</p>
+                  </div>
+                  <div>
+                    <h2>App Link QR Code</h2>
+                    <img src="${qrCodeImage}" />
+                  </div>
+                </body>
+              </html>
+            `;
+
+            return Print.printToFileAsync({
+              html,
+            }).then((result) => {
+              return Sharing.shareAsync(result.uri, {
+                mimeType: "application/pdf",
+                dialogTitle: "Share PDF",
+                UTI: "com.adobe.pdf",
+              });
+            });
+          });
         });
       })
-      .then((result) => {
-        return Sharing.shareAsync(result.uri, {
-          mimeType: "application/pdf",
-          dialogTitle: "Share PDF",
-          UTI: "com.adobe.pdf",
-        });
+      .then(() => {
+        setPrinting(false);
       });
-    setPrinting(false);
-  }, [mapRef, locations]);
+  }, [mapRef, qrCodeRef, locations]);
 
   return {
     map: (
@@ -137,6 +173,9 @@ const usePrintMap = (route: Route) => {
             lineDashPattern={[1, 3]}
           />
         </MapView>
+        <ViewShot ref={qrCodeRef} options={{ format: "jpg", quality: 1 }}>
+          <QRCode value={initialUrl || "N/A"} size={100} />
+        </ViewShot>
       </>
     ),
     printMap,
