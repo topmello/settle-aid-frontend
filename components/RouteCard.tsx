@@ -192,7 +192,7 @@ const RouteCard: React.FC<CardProps> = ({
       </View>
       <DateTimePickerModal
         isVisible={isDatePickerVisible}
-        mode="date"
+        mode="datetime"
         onConfirm={async (date) => {
           if (handleDateConfirm) {
             handleDateConfirm(date, routeResult.route);
