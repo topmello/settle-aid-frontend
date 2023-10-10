@@ -23,7 +23,7 @@ import { RouteHistory } from "../../types/route";
 import Linking from "expo-linking";
 
 export default function SharedOverviewScreen() {
-  const { t } = useTranslation();
+  useTranslation();
   const theme = useTheme();
   const userID = useSelector(selectUserId);
   const loading = useSelector(selectIsLoading);
@@ -102,12 +102,26 @@ export default function SharedOverviewScreen() {
     }
   };
 
-  const shareUrl = async (route_id: number) => {
-    Share.share({
-      message: Linking.createURL("/", {
-        queryParams: { routeId: route_id + "" },
-      }),
-    });
+  const shareUrl = async (route_id: number): Promise<void> => {
+
+    try {
+      if (Platform.OS === "ios") {
+        const initialUrl = await Linking.getInitialURL();
+        const url = initialUrl + "?routeId=" + route_id;
+
+        await Share.share({ message: url })
+      } else {
+        await Share.share({
+          message: Linking.createURL("/", {
+            queryParams: { routeid: route_id + "" },
+          }),
+        });
+      }
+
+    } catch (error) {
+      console.log(error)
+      return;
+    }
   };
 
   const styles = StyleSheet.create({

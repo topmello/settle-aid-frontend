@@ -1,37 +1,36 @@
-import { useState, useEffect } from "react";
+import { useEffect, useRef } from "react";
 
-import {
-  SafeAreaView,
-  StyleSheet,
-  View,
-  ScrollView,
-  TouchableOpacity,
-  StatusBar,
-  Platform,
-} from "react-native";
-import { Button, Text, ActivityIndicator } from "react-native-paper";
-import { useTranslation } from "react-i18next";
-import RouteIcon from "../../assets/images/icons/route.svg";
-import ArrowIcon from "../../assets/images/icons/navigate_next.svg";
-import ForumIcon from "../../assets/images/icons/forum.svg";
-import PersonPinIcon from "../../assets/images/icons/person_pin.svg";
 import { router } from "expo-router";
+import { useTranslation } from "react-i18next";
+import {
+  Platform,
+  SafeAreaView,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { ActivityIndicator, Text } from "react-native-paper";
 import { useSelector } from "react-redux";
-import { selectToken, selectUserId } from "../../store/authSlice";
+import ForumIcon from "../../assets/images/icons/forum.svg";
+import ArrowIcon from "../../assets/images/icons/navigate_next.svg";
+import PersonPinIcon from "../../assets/images/icons/person_pin.svg";
+import RouteIcon from "../../assets/images/icons/route.svg";
+import RouteCard from "../../components/RouteCard";
+import { WeatherWidget } from "../../components/WeatherWidget";
+import useFetch from "../../hooks/useFetch";
 import {
   selectIsLoading,
   selectTriggerRefreshHome,
 } from "../../store/appSlice";
-import RouteCard from "../../components/RouteCard";
-import useFetch from "../../hooks/useFetch";
-import { RouteHistory } from "../../types/route";
+import { selectUserId } from "../../store/authSlice";
 import { useAppTheme } from "../../theme/theme";
-import { WeatherWidget } from "../../components/WeatherWidget";
+import { RouteHistory } from "../../types/route";
 
-import * as Linking from "expo-linking";
-import { isString } from "lodash";
-import { FunctionButton } from "../../components/FunctionButton";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import * as Linking from "expo-linking";
+import { FunctionButton } from "../../components/FunctionButton";
 
 export default function HomeScreen() {
   const { t } = useTranslation();
@@ -40,6 +39,7 @@ export default function HomeScreen() {
   const loading = useSelector(selectIsLoading);
   const triggerRefreshHome = useSelector(selectTriggerRefreshHome);
   const url = Linking.useURL();
+  const listenerAddedRef = useRef(false);
 
   const [routeList, refetchRouteList] = useFetch<RouteHistory[]>(
     {
@@ -65,6 +65,28 @@ export default function HomeScreen() {
   useEffect(() => {
     if (url) {
       const { path, queryParams } = Linking.parse(url);
+
+
+      const handleDeepLink = async (event: Linking.EventType) => {
+        if (event.url) {
+          const { path, queryParams } = Linking.parse(event.url);
+
+
+          if (queryParams && queryParams.routeId) {
+            router.push({
+              pathname: "/route/result",
+              params: {
+                routeId: queryParams.routeId + "",
+              },
+            });
+          }
+        }
+      }
+      if (!listenerAddedRef.current) {
+        listenerAddedRef.current = true
+        Linking.addEventListener("url", handleDeepLink)
+      }
+
       if (queryParams && queryParams.routeId) {
         router.push({
           pathname: "/route/result",
@@ -74,6 +96,7 @@ export default function HomeScreen() {
         });
       }
     }
+
   }, []);
 
   const handlePressCard = (result: RouteHistory) => {
