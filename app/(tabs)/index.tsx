@@ -153,7 +153,7 @@ export default function HomeScreen() {
               color={theme.colors.onPrimaryContainer}
               containerColor={theme.colors.primaryContainer}
               title={t("Location Sharing", { ns: "home" })}
-              subtitle={t("Share your location in realtime with ease", {
+              subtitle={t("Share your location in realtime", {
                 ns: "home",
               })}
             />
