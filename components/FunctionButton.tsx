@@ -61,12 +61,7 @@ export function FunctionButton({
           </View>
           {subtitle && <Text style={{ color: color }}>{subtitle}</Text>}
         </View>
-        {!vertical && (
-          <ArrowIcon
-            style={styles.moreIcon}
-            fill={theme.colors.onSecondaryContainer}
-          />
-        )}
+        {!vertical && <ArrowIcon style={styles.moreIcon} fill={color} />}
       </View>
     </AnimatedButton>
   );

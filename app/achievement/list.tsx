@@ -10,7 +10,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { ProgressBar } from "react-native-paper";
 import { allChallenges } from "../../constants/challenges";
 import { ScrollView } from "react-native-gesture-handler";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 export type Achievement = {
   challenge: {
     name: string;
@@ -29,16 +29,16 @@ export type Achievement = {
 export default function AchievementListPage() {
   const theme = useAppTheme();
 
-  const [achievementToday, fetchAchievementToday] = useFetch<Achievement[]>(
-    {
-      method: "GET",
-      url: "/challenge/today-history",
-    },
-    [],
-    [],
-    true
-  );
+  const [achievementToday, fetchAchievementToday] = useFetch<Achievement[]>({
+    method: "GET",
+    url: "/challenge/today-history",
+  });
 
+  console.log(achievementToday);
+
+  const [achievementList, setAchievementList] = useState<Achievement[]>([]);
+
+  // FIXME sometimes the achievementToday is not fetched yet and the allChallenges is already rendered
   useEffect(() => {
     if (achievementToday && achievementToday.length > 0) {
       allChallenges.forEach((challenge) => {
