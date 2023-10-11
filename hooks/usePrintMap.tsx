@@ -27,11 +27,10 @@ const usePrintMap = (route: Route) => {
 
   useEffect(() => {
     // Retrieve the initial url
-    Linking.getInitialURL().then((url) => {
-      setInitialUrl(
-        url?.split("/?")[0] + "/?routeid=" + route.route_id || "N/A"
-      );
+    const url = Linking.createURL("/route/result", {
+      queryParams: { routeId: route.route_id + "" },
     });
+    setInitialUrl(url);
   }, []);
 
   const { region, initialRegion } = useMapRegion({
