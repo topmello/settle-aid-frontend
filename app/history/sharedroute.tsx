@@ -22,6 +22,7 @@ import useFetch from "../../hooks/useFetch";
 import { RouteHistory } from "../../types/route";
 import * as Linking from "expo-linking";
 import usePaginateRoute from "../../hooks/usePaginateRoute";
+import { useAchievement } from "../../hooks/useAchievement";
 
 const ROUTES_PER_PAGE: number = 6;
 
@@ -29,6 +30,7 @@ export default function SharedOverviewScreen() {
   useTranslation();
   const theme = useTheme();
   const loading = useSelector(selectIsLoading);
+  const achieve = useAchievement();
 
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const offsetRef = useRef(0);
@@ -56,11 +58,16 @@ export default function SharedOverviewScreen() {
           queryParams: { routeId: route_id + "" },
         }),
       });
+      achieve("routeShared");
     } catch (error) {
       console.log(error);
       return;
     }
   };
+
+  useEffect(() => {
+    achieve("accessedGlobalFeed");
+  }, []);
 
   const styles = StyleSheet.create({
     container: {

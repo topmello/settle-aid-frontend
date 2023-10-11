@@ -29,6 +29,7 @@ import * as Sharing from "expo-sharing";
 import { usePrintMap } from "../../hooks/usePrintMap";
 import { AppDispatch } from "../../store";
 import { useNotification } from "../../hooks/useNotification";
+import { useAchievement } from "../../hooks/useAchievement";
 
 export default function HistoryOverviewScreen() {
   const theme = useTheme();
@@ -88,6 +89,7 @@ export default function HistoryOverviewScreen() {
           queryParams: { routeId: route_id + "" },
         }),
       });
+      achieve("routeShared");
     } catch (error) {
       console.log(error);
       return;
@@ -108,6 +110,8 @@ export default function HistoryOverviewScreen() {
     "Route Published"
   );
 
+  const achieve = useAchievement();
+
   const handlePublishRoute = (route_id: number) => {
     pushNotification({
       message: "Publishing...",
@@ -119,6 +123,7 @@ export default function HistoryOverviewScreen() {
     })
       .then(() => {
         refetchRouteList();
+        achieve("routePublished");
       })
       .catch((err) => {
         console.error("Error publishing the route:", err);

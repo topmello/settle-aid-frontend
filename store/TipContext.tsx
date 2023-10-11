@@ -1,4 +1,5 @@
 import React, { useState, createContext, useMemo, useCallback } from "react";
+import { useAchievement } from "../hooks/useAchievement";
 
 export type Tip = {
   description: string;
@@ -69,6 +70,8 @@ export const TipProvider = ({ children }: { children: React.ReactNode }) => {
     setCurrentTipIndex(0);
   }, []);
 
+  const achieve = useAchievement();
+
   const tips = useMemo(() => {
     return category.type;
   }, [category]);
@@ -115,7 +118,12 @@ export const TipProvider = ({ children }: { children: React.ReactNode }) => {
         setCategory,
         tips,
         currentTipIndex,
-        setCurrentTipIndex,
+        setCurrentTipIndex: (index: number) => {
+          if (index >= 0 && index < tips.length) {
+            setCurrentTipIndex(index);
+            achieve("tipsRead");
+          }
+        },
         nextTip,
         prevTip,
         canNext,

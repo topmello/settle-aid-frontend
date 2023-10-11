@@ -20,7 +20,7 @@ export default function TabLayout() {
   const achieve = useAchievement();
 
   const Tab = createMaterialBottomTabNavigator();
-  const { checkSession } = useSession();
+  const { checkSession, token } = useSession();
 
   // language check guard
   useEffect(() => {
@@ -37,7 +37,7 @@ export default function TabLayout() {
         }
       });
     }
-  }, [rootNativationState?.key, language, checkSession, achieve]);
+  }, [rootNativationState?.key, language, achieve, token]);
 
   return (
     <Tab.Navigator initialRouteName="home" theme={theme}>
