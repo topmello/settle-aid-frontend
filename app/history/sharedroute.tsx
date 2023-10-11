@@ -21,6 +21,7 @@ import RouteCard from "../../components/RouteCard";
 import useFetch from "../../hooks/useFetch";
 import { RouteHistory } from "../../types/route";
 import Linking from "expo-linking";
+import usePaginateRoute from "../../hooks/usePaginateRoute";
 
 
 const ROUTES_PER_PAGE: number = 6;
@@ -29,50 +30,14 @@ export default function SharedOverviewScreen() {
   useTranslation();
   const theme = useTheme();
   const loading = useSelector(selectIsLoading);
-  const [accumulatedRouteList, setAccumulatedRouteList] = useState<
-    RouteHistory[]
-  >([]);
+
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const offsetRef = useRef(0)
 
-  const [routeList, refetchRouteList] = useFetch<RouteHistory[]>(
-    {
-      method: "GET",
-      url: `/route/feed/top_routes/?limit=${ROUTES_PER_PAGE}&order_by=num_votes&offset=${offsetRef.current}`,
-    },
-    [offsetRef],
-    accumulatedRouteList,
-    true
-  );
 
-  useEffect(() => {
-    if (routeList && routeList.length > 0) {
-      const filteredList = routeList.filter(
-        newRoute => !accumulatedRouteList.some(
-          accRoute => accRoute.route.route_id === newRoute.route.route_id
-        )
-      );
-      offsetRef.current += ROUTES_PER_PAGE
-      setAccumulatedRouteList((prev) => [...prev, ...filteredList] as RouteHistory[]);
-    }
-  }, [routeList]);
-
-
-  const handleScroll = async (event: any) => {
-    if (isLoadingMore || !routeList || routeList.length === 0) return;
-    const scrollY = event.nativeEvent.contentOffset.y;
-    const windowHeight = event.nativeEvent.layoutMeasurement.height;
-    const contentHeight = event.nativeEvent.contentSize.height;
-
-    if (scrollY + windowHeight >= contentHeight - 100 && !isLoadingMore) {
-      setIsLoadingMore(true);
-      await refetchRouteList();
-
-      setTimeout(() => {
-        setIsLoadingMore(false);
-      }, 500);
-    }
-  };
+  const [accumulatedRouteList, handleScroll, handleFavRoute] = usePaginateRoute(
+    `/route/feed/top_routes/`, 6
+  )
 
   const handlePressCard = (result: RouteHistory) => {
     if (result && result.route) {
@@ -85,29 +50,7 @@ export default function SharedOverviewScreen() {
     }
   };
 
-  const [, executeVote] = useFetch(
-    {
-      method: "POST",
-      url: `/vote/`,
-    },
-    [],
-    null,
-    false,
-    "Added to favourites"
-  );
 
-  const handleFavRoute = async (route_id: number) => {
-    try {
-      await executeVote({
-        method: "POST",
-        url: `/vote/${route_id}/`,
-      });
-    } catch (error) {
-      return;
-    } finally {
-      refetchRouteList();
-    }
-  };
 
   const shareUrl = async (route_id: number): Promise<void> => {
 
@@ -251,7 +194,7 @@ export default function SharedOverviewScreen() {
           ))}
         </View>
         <ActivityIndicator
-          animating={isLoadingMore}
+          animating={loading}
           size="large"
           style={{
             marginTop: 20,
