@@ -262,7 +262,7 @@ export default function MapScreen() {
         backgroundColor: theme.colors.background,
       }}
     >
-      {map}
+      {map && <View style={{ opacity: 0 }}>{map}</View>}
       <View
         pointerEvents="box-none"
         style={{
