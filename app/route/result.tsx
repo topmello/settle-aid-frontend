@@ -26,7 +26,11 @@ import useEventScheduler from "../../hooks/useEventScheduler";
 import { usePrintMap } from "../../hooks/usePrintMap";
 import { Route, initialRoute } from "../../types/route";
 import { selectIsLoading } from "../../store/appSlice";
-import { selectHistoryRoute, selectUseHistory, setRouteHistory } from "../../store/routeHistorySlice";
+import {
+  selectHistoryRoute,
+  selectUseHistory,
+  setRouteHistory,
+} from "../../store/routeHistorySlice";
 import { useAppTheme } from "../../theme/theme";
 import { AppDispatch } from "../../store";
 import { useAchievement } from "../../hooks/useAchievement";
@@ -45,8 +49,6 @@ const modes: Array<string> = [
 ];
 
 export default function MapScreen() {
-
-
   const { t } = useTranslation();
   const theme = useAppTheme();
   const currentTheme = useSelector(selectTheme);
@@ -57,8 +59,6 @@ export default function MapScreen() {
 
   const dispatch = useDispatch<AppDispatch>();
   const achieve = useAchievement();
-
-
 
   const {
     isDatePickerVisible,
@@ -111,17 +111,14 @@ export default function MapScreen() {
     false
   );
 
-
-
   const fetchRoute = useCallback(async () => {
     if (useHistory) {
-
       return;
     } else {
       try {
         await fetchData().then(() => {
-          achieve("routeGeneration")
-        })
+          achieve("routeGeneration");
+        });
         dispatch(refreshHome());
       } catch (error) {
         console.error("Failed to fetch route:", error);
@@ -132,10 +129,12 @@ export default function MapScreen() {
 
   useEffect(() => {
     if (!useHistory && dataFromFetch) {
-      dispatch(setRouteHistory({
-        route: dataFromFetch as Route,
-        history: false
-      }));
+      dispatch(
+        setRouteHistory({
+          route: dataFromFetch as Route,
+          history: false,
+        })
+      );
     }
   }, [useHistory, dataFromFetch]);
 
@@ -215,9 +214,16 @@ export default function MapScreen() {
             <Text variant="titleLarge">No route found</Text>
             <Text
               variant="titleMedium"
-              style={{ color: theme.colors.primary, marginTop: 12, padding: 20 }}
+              style={{
+                color: theme.colors.primary,
+                marginTop: 12,
+                padding: 20,
+              }}
             >
-              {t("At the moment, we only support CBD. Thanks for understanding! 😊", { ns: "route" })}
+              {t(
+                "At the moment, we only support CBD. Thanks for understanding! 😊",
+                { ns: "route" }
+              )}
             </Text>
 
             <Button
@@ -303,9 +309,7 @@ export default function MapScreen() {
               />
             }
           >
-            {!useHistory && (
-              <Menu.Item onPress={fetchRoute} title="Re-plan" />
-            )}
+            {!useHistory && <Menu.Item onPress={fetchRoute} title="Re-plan" />}
             <Menu.Item onPress={showDatePicker} title="Schedule" />
             <Menu.Item
               onPress={() => {
@@ -364,6 +368,8 @@ export default function MapScreen() {
         </View>
 
         <DateTimePickerModal
+          textColor={theme.colors.onBackground}
+          isDarkModeEnabled={theme.dark}
           isVisible={isDatePickerVisible}
           mode="date"
           onConfirm={async (date) => {

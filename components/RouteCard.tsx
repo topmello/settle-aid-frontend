@@ -28,7 +28,6 @@ const RouteCard: React.FC<CardProps> = ({
   handleFavRoute,
   onPressCard,
   voted = false,
-  index,
   shareUrl,
   handlePublishRoute,
 }) => {
@@ -45,7 +44,7 @@ const RouteCard: React.FC<CardProps> = ({
   const { map, printMap } = usePrintMap(routeResult.route);
   return (
     <AnimatedButton
-      onPress={onPressCard ? onPressCard : () => { }}
+      onPress={onPressCard ? onPressCard : () => {}}
       color={theme.colors.secondaryContainer}
       style={{
         padding: 0,

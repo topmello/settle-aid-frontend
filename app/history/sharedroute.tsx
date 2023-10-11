@@ -26,7 +26,6 @@ import usePaginateRoute from "../../hooks/usePaginateRoute";
 import { useAchievement } from "../../hooks/useAchievement";
 import { setRouteHistory } from "../../store/routeHistorySlice";
 
-
 export default function SharedOverviewScreen() {
   useTranslation();
   const theme = useTheme();
@@ -42,8 +41,7 @@ export default function SharedOverviewScreen() {
 
   const handlePressCard = (result: RouteHistory) => {
     if (result && result.route) {
-
-      dispatch(setRouteHistory({ route: result.route, history: true }))
+      dispatch(setRouteHistory({ route: result.route, history: true }));
       router.push({
         pathname: "/route/result",
       });
@@ -157,7 +155,7 @@ export default function SharedOverviewScreen() {
           />
         </TouchableOpacity>
         <View style={{ flex: 1, marginLeft: 12 }}>
-          <Text style={styles.text_title}>Community Route</Text>
+          <Text style={styles.text_title}>Community Routes</Text>
         </View>
         <View style={{ width: 34, height: 34 }}></View>
       </View>
