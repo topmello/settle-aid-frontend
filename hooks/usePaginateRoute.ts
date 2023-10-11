@@ -80,7 +80,9 @@ const usePaginateRoute = (url: string, routePerPage: number = 6) => {
       setAccumulatedRouteList(prev => {
         return prev.map(route => {
           if (route.route.route_id === route_id) {
-            return { ...route, voted_by_user: true }
+            return {
+              ...route, voted_by_user: !route.voted_by_user
+            };
           }
 
           return route
@@ -91,12 +93,12 @@ const usePaginateRoute = (url: string, routePerPage: number = 6) => {
       return;
     } finally {
     }
-  };
+};
+    
 
+return [accumulatedRouteList, handleScroll, handleFavRoute] as [RouteHistory[], typeof handleScroll, typeof handleFavRoute]
+  
 
-  return [accumulatedRouteList, handleScroll, handleFavRoute] as [RouteHistory[], typeof handleScroll, typeof handleFavRoute]
-
-
-}
+  }
 
 export default usePaginateRoute
