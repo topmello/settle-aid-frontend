@@ -29,11 +29,14 @@ import useEventScheduler from "../../hooks/useEventScheduler";
 import { usePrintMap } from "../../hooks/usePrintMap";
 import { Route, RouteGetResult } from "../../types/route";
 import { selectIsLoading } from "../../store/appSlice";
+import { selectRouteId, selectHistoryRoute, selectUseHistory } from "../../store/routeHistorySlice";
 import { useAppTheme } from "../../theme/theme";
 import { AppDispatch } from "../../store";
 import { useAchievement } from "../../hooks/useAchievement";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as Linking from "expo-linking";
+import { useTranslation } from "react-i18next";
+
 
 const MORE_ICON = Platform.OS === "ios" ? "dots-horizontal" : "dots-vertical";
 
@@ -46,15 +49,22 @@ const modes: Array<string> = [
 ];
 
 export default function MapScreen() {
+
+
+  const { t } = useTranslation();
   const theme = useAppTheme();
   const currentTheme = useSelector(selectTheme);
   const routeState: RouteState = useSelector(selectRouteState);
   const loading = useSelector(selectIsLoading);
+  const useHistory = useSelector(selectUseHistory);
+  const historyRoute = useSelector<Route>(selectHistoryRoute);
+
+
   const dispatch = useDispatch<AppDispatch>();
   const achieve = useAchievement();
 
-  const routeId = useLocalSearchParams<{ routeId: string }>().routeId;
-  const [useHistory, setUseHistory] = useState(true);
+  //const routeId = useLocalSearchParams<{ routeId: string }>().routeId;
+  //const [useHistory, setUseHistory] = useState(true);
 
   const [data, setData] = useState<Route>({
     route_id: 0,
@@ -127,50 +137,33 @@ export default function MapScreen() {
     false
   );
 
-  const [routeDataFromHistory, fetchRouteDataFromHistory] =
-    useFetch<RouteGetResult>(
-      {
-        method: "GET",
-        url: `/route/${routeId}`,
-      },
-      [routeId],
-      { num_votes: 0, route: data },
-      false
-    );
+
 
   const fetchRoute = useCallback(async () => {
-    if (typeof routeId === "string") {
-      try {
-        await fetchRouteDataFromHistory().then(() => {
-          setUseHistory(true);
-        });
-      } catch (error) {
-        console.error("Failed to fetch route:", error);
-      }
+    if (useHistory) {
+
+      return;
     } else {
       try {
-        await fetchData().then(() => {
-          setUseHistory(false);
-        });
+        await fetchData()
         dispatch(refreshHome());
       } catch (error) {
         console.error("Failed to fetch route:", error);
         return;
       }
     }
-  }, [routeId]);
+  }, [useHistory]);
 
   useEffect(() => {
     if (!useHistory && dataFromFetch && dataFromFetch.locations.length > 0) {
       setData(dataFromFetch as Route);
     } else if (
       useHistory &&
-      routeDataFromHistory &&
-      routeDataFromHistory.route
+      historyRoute
     ) {
-      setData(routeDataFromHistory.route as Route);
+      setData(historyRoute as Route);
     }
-  }, [useHistory, dataFromFetch, routeDataFromHistory]);
+  }, [useHistory, dataFromFetch, historyRoute]);
 
   // fetch route
   useEffect(() => {
@@ -250,6 +243,13 @@ export default function MapScreen() {
         {
           <>
             <Text variant="titleLarge">No route found</Text>
+            <Text
+              variant="titleMedium"
+              style={{ color: theme.colors.primary, marginTop: 12, padding: 20 }}
+            >
+              {t("At the moment, we only support CBD. Thanks for understanding! 😊", { ns: "route" })}
+            </Text>
+
             <Button
               mode="contained"
               style={{
@@ -333,7 +333,7 @@ export default function MapScreen() {
               />
             }
           >
-            {typeof routeId !== "string" && (
+            {!useHistory && (
               <Menu.Item onPress={fetchRoute} title="Re-plan" />
             )}
             <Menu.Item onPress={showDatePicker} title="Schedule" />

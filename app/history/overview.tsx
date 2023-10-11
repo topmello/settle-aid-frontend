@@ -22,14 +22,14 @@ import RouteCard from "../../components/RouteCard";
 import { RequestOptions } from "../../api/fetch";
 import useFetch from "../../hooks/useFetch";
 import { RouteHistory } from "../../types/route";
-import useEventScheduler from "../../hooks/useEventScheduler";
-
 import * as Linking from "expo-linking";
 import * as Sharing from "expo-sharing";
 import { usePrintMap } from "../../hooks/usePrintMap";
 import { AppDispatch } from "../../store";
 import { useNotification } from "../../hooks/useNotification";
 import { useAchievement } from "../../hooks/useAchievement";
+import { setRouteHistory } from "../../store/routeHistorySlice";
+
 
 export default function HistoryOverviewScreen() {
   const theme = useTheme();
@@ -61,11 +61,10 @@ export default function HistoryOverviewScreen() {
 
   const handlePressCard = (result: RouteHistory) => {
     if (result && result.route) {
+
+      dispatch(setRouteHistory({ routeId: result.route.route_id, route: result.route, history: true }))
       router.push({
         pathname: "/route/result",
-        params: {
-          routeId: result.route.route_id + "",
-        },
       });
     }
   };

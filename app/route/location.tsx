@@ -24,6 +24,7 @@ import {
   selectPrivacyChecked,
   selectTheme,
   loaded,
+  loading,
   selectIsLoading,
 } from "../../store/appSlice";
 import {
@@ -32,6 +33,7 @@ import {
   selectLonLat,
   selectDistanceThres,
 } from "../../store/routeSlice";
+import { setUseHistory } from "../../store/routeHistorySlice";
 import { PROVIDER_GOOGLE } from "react-native-maps";
 
 import useCurrentLocation from "../../hooks/useCurrentLocation";
@@ -465,6 +467,8 @@ export default function RouteGenLocation() {
                   type: "error",
                 });
               } else {
+                dispatch(setUseHistory(false))
+                dispatch(loading())
                 router.push("/route/result");
               }
             }}

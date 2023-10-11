@@ -14,7 +14,8 @@ import { useTranslation } from "react-i18next";
 import { useTheme } from "react-native-paper";
 import { router } from "expo-router";
 import ArrowBackIcon from "../../assets/images/icons/arrow_back.svg";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../../store";
 import { selectUserId } from "../../store/authSlice";
 import { selectIsLoading } from "../../store/appSlice";
 import RouteCard from "../../components/RouteCard";
@@ -23,8 +24,8 @@ import { RouteHistory } from "../../types/route";
 import * as Linking from "expo-linking";
 import usePaginateRoute from "../../hooks/usePaginateRoute";
 import { useAchievement } from "../../hooks/useAchievement";
+import { setRouteHistory } from "../../store/routeHistorySlice";
 
-const ROUTES_PER_PAGE: number = 6;
 
 export default function SharedOverviewScreen() {
   useTranslation();
@@ -32,8 +33,7 @@ export default function SharedOverviewScreen() {
   const loading = useSelector(selectIsLoading);
   const achieve = useAchievement();
 
-  const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const offsetRef = useRef(0);
+  const dispatch = useDispatch<AppDispatch>();
 
   const [accumulatedRouteList, handleScroll, handleFavRoute] = usePaginateRoute(
     `/route/feed/top_routes/`,
@@ -42,11 +42,10 @@ export default function SharedOverviewScreen() {
 
   const handlePressCard = (result: RouteHistory) => {
     if (result && result.route) {
+
+      dispatch(setRouteHistory({ routeId: result.route.route_id, route: result.route, history: true }))
       router.push({
         pathname: "/route/result",
-        params: {
-          routeId: result.route.route_id + "",
-        },
       });
     }
   };
@@ -199,7 +198,7 @@ export default function SharedOverviewScreen() {
             marginTop: 20,
             marginBottom: 36,
           }}
-        />
+    />
       </ScrollView>
     </SafeAreaView>
   );
