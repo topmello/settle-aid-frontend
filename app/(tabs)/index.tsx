@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { router } from "expo-router";
 import { useTranslation } from "react-i18next";
 import {
@@ -80,7 +80,7 @@ export default function HomeScreen() {
 
   const handlePressCard = (result: RouteHistory) => {
     if (result && result.route) {
-      dispatch(setRouteHistory({ routeId: result.route.route_id, route: result.route, history: true }))
+      dispatch(setRouteHistory({ route: result.route, history: true }))
       router.push({
         pathname: "/route/result",
       });

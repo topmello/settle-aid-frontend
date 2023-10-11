@@ -43,7 +43,7 @@ export default function SharedOverviewScreen() {
   const handlePressCard = (result: RouteHistory) => {
     if (result && result.route) {
 
-      dispatch(setRouteHistory({ routeId: result.route.route_id, route: result.route, history: true }))
+      dispatch(setRouteHistory({ route: result.route, history: true }))
       router.push({
         pathname: "/route/result",
       });
@@ -198,7 +198,7 @@ export default function SharedOverviewScreen() {
             marginTop: 20,
             marginBottom: 36,
           }}
-    />
+        />
       </ScrollView>
     </SafeAreaView>
   );

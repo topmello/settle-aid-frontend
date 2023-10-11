@@ -3,13 +3,11 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Route } from "../types/route";
 
 export interface RouteHistory {
-  routeId: number;
   route: Route
   history: boolean;
 }
 
 const RouteHistoryState: RouteHistory = {
-  routeId: 0,
   route: {
     route_id: 0,
     locations: [],
@@ -32,7 +30,6 @@ const RouteHistoryState: RouteHistory = {
   history: false,
 }
 
-export const selectRouteId = (state: any): RouteHistory => state.routeHistory.routeId;
 export const selectHistoryRoute = (state: any): RouteHistory => state.routeHistory.route;
 export const selectUseHistory = (state: any): RouteHistory => state.routeHistory.history;
 
@@ -41,7 +38,6 @@ const routeHistorySlice = createSlice({
   initialState: RouteHistoryState,
   reducers: {
     setRouteHistory(state, action: PayloadAction<RouteHistory>) {
-      state.routeId = action.payload.routeId;
       state.route = action.payload.route;
       state.history = action.payload.history;
     },
