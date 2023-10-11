@@ -71,7 +71,7 @@ export default function HistoryOverviewScreen() {
   const handlePressCard = (result: RouteHistory) => {
     if (result && result.route) {
 
-      dispatch(setRouteHistory({ route: result.route, history: true }))
+      dispatch(setRouteHistory({ route: result.route, history: true, fromUrl: false }))
       router.push({
         pathname: "/route/result",
       });

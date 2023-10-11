@@ -25,7 +25,7 @@ import {
   selectTriggerRefreshHome,
 } from "../../store/appSlice";
 import { selectUserId } from "../../store/authSlice";
-import { setRouteHistory } from "../../store/routeHistorySlice";
+import { setRouteHistory, setFromUrl } from "../../store/routeHistorySlice";
 import { useAppTheme } from "../../theme/theme";
 import { RouteHistory } from "../../types/route";
 
@@ -66,13 +66,15 @@ export default function HomeScreen() {
   useEffect(() => {
     if (url) {
       const { path, queryParams } = Linking.parse(url);
-
       if (queryParams && queryParams.routeId) {
+        console.log("from url", queryParams.routeId)
+        dispatch(setFromUrl({
+          routeId: parseInt(queryParams.routeId as string),
+          fromUrl: true,
+          history: true
+        }));
         router.push({
           pathname: "/route/result",
-          params: {
-            routeId: queryParams.routeId + "",
-          },
         });
       }
     }
@@ -80,7 +82,7 @@ export default function HomeScreen() {
 
   const handlePressCard = (result: RouteHistory) => {
     if (result && result.route) {
-      dispatch(setRouteHistory({ route: result.route, history: true }));
+      dispatch(setRouteHistory({ route: result.route, history: true, fromUrl: false }));
       router.push({
         pathname: "/route/result",
       });

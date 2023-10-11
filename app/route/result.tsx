@@ -24,17 +24,20 @@ import useFetch from "../../hooks/useFetch";
 import { useMapRegion, Coordinates } from "../../hooks/useMapRegion";
 import useEventScheduler from "../../hooks/useEventScheduler";
 import { usePrintMap } from "../../hooks/usePrintMap";
-import { Route, initialRoute } from "../../types/route";
+import { Route, RouteGetResult, initialRoute } from "../../types/route";
 import { selectIsLoading } from "../../store/appSlice";
 import {
   selectHistoryRoute,
   selectUseHistory,
+  selectFromUrl,
+  selectRouteId,
   setRouteHistory,
 } from "../../store/routeHistorySlice";
 import { useAppTheme } from "../../theme/theme";
 import { AppDispatch } from "../../store";
 import { useAchievement } from "../../hooks/useAchievement";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import * as Linking from "expo-linking";
 import { useTranslation } from "react-i18next";
 
 const MORE_ICON = Platform.OS === "ios" ? "dots-horizontal" : "dots-vertical";
@@ -54,6 +57,8 @@ export default function MapScreen() {
   const routeState: RouteState = useSelector(selectRouteState);
   const loading = useSelector(selectIsLoading);
   const useHistory = useSelector(selectUseHistory);
+  const routeIdFromUrl = useSelector(selectRouteId);
+  const fromUrl = useSelector(selectFromUrl);
   const data = useSelector<Route>(selectHistoryRoute) as Route;
 
   const dispatch = useDispatch<AppDispatch>();
@@ -110,10 +115,29 @@ export default function MapScreen() {
     false
   );
 
+  const [dataFromGet, fetchGet] = useFetch<RouteGetResult>(
+    {
+      method: "GET",
+      url: `/route/${routeIdFromUrl}/`,
+      data: routeState,
+    },
+    [routeIdFromUrl],
+    { num_votes: 0, route: initialRoute },
+    false
+  );
+
   const fetchRoute = useCallback(async () => {
-    if (useHistory) {
+
+    if (useHistory && !fromUrl) {
       return;
-    } else {
+    } else if (useHistory && fromUrl) {
+      try {
+        await fetchGet()
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    else {
       try {
         await fetchData().then(() => {
           achieve("routeGeneration");
@@ -124,18 +148,27 @@ export default function MapScreen() {
         return;
       }
     }
-  }, [useHistory]);
+  }, [useHistory, fromUrl, routeIdFromUrl]);
 
   useEffect(() => {
-    if (!useHistory && dataFromFetch) {
+    if (!useHistory && !fromUrl && dataFromFetch) {
       dispatch(
         setRouteHistory({
           route: dataFromFetch as Route,
           history: false,
+          fromUrl: false,
+        })
+      );
+    } else if (useHistory && fromUrl && dataFromGet) {
+      dispatch(
+        setRouteHistory({
+          route: dataFromGet.route as Route,
+          history: true,
+          fromUrl: true,
         })
       );
     }
-  }, [useHistory, dataFromFetch]);
+  }, [useHistory, dataFromFetch, dataFromGet]);
 
   // fetch route
   useEffect(() => {
@@ -261,7 +294,7 @@ export default function MapScreen() {
         backgroundColor: theme.colors.background,
       }}
     >
-      {map && <View style={{ opacity: 0 }}>{map}</View>}
+      {map && data && <View style={{ opacity: 0 }}>{map}</View>}
       <View
         pointerEvents="box-none"
         style={{
@@ -276,7 +309,8 @@ export default function MapScreen() {
       >
         <TouchableOpacity
           onPress={() => {
-            router.replace("/(tabs)");
+            dispatch(setRouteHistory({ route: initialRoute, history: false, fromUrl: false })) // reset route history
+            router.push("/(tabs)",);
           }}
           style={{
             backgroundColor: theme.colors.primaryContainer,
