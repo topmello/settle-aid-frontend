@@ -99,6 +99,8 @@ const weatherOptions: WeatherOption[] = [
   },
 ];
 
+const WEATHER_APP_ID = process.env.EXPO_PUBLIC_WEATHER_APP_ID;
+
 export const WeatherWidget = () => {
   const theme = useAppTheme();
   const { t } = useTranslation();
@@ -118,7 +120,7 @@ export const WeatherWidget = () => {
   useEffect(() => {
     fetch({
       method: "GET",
-      url: "https://api.openweathermap.org/data/3.0/onecall?lat=-37.814&lon=144.963&units=metric&exclude=hourly,minutely,current,alerts&appid=2530f69826ffe3f4cd3d72d17fe1f3c2",
+      url: `https://api.openweathermap.org/data/3.0/onecall?lat=-37.814&lon=144.963&units=metric&exclude=hourly,minutely,current,alerts&appid=${WEATHER_APP_ID}`,
     })
       .then((response) => {
         setWeatherData(response);
