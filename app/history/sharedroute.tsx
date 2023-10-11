@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   SafeAreaView,
   StyleSheet,
@@ -22,28 +22,41 @@ import useFetch from "../../hooks/useFetch";
 import { RouteHistory } from "../../types/route";
 import Linking from "expo-linking";
 
+
+const ROUTES_PER_PAGE: number = 6;
+
 export default function SharedOverviewScreen() {
   useTranslation();
   const theme = useTheme();
-  const userID = useSelector(selectUserId);
   const loading = useSelector(selectIsLoading);
-  const [routeList, refetchRouteList] = useFetch<RouteHistory[]>(
-    {
-      method: "GET",
-      url: `/route/feed/top_routes/?limit=6&order_by=num_votes&offset=0`,
-    },
-    [userID]
-  );
-
   const [accumulatedRouteList, setAccumulatedRouteList] = useState<
     RouteHistory[]
   >([]);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const offsetRef = useRef(0)
+
+  const [routeList, refetchRouteList] = useFetch<RouteHistory[]>(
+    {
+      method: "GET",
+      url: `/route/feed/top_routes/?limit=${ROUTES_PER_PAGE}&order_by=num_votes&offset=${offsetRef.current}`,
+    },
+    [offsetRef],
+    accumulatedRouteList,
+    true
+  );
+
   useEffect(() => {
     if (routeList && routeList.length > 0) {
-      setAccumulatedRouteList((prevList) => [...prevList, ...routeList]);
+      const filteredList = routeList.filter(
+        newRoute => !accumulatedRouteList.some(
+          accRoute => accRoute.route.route_id === newRoute.route.route_id
+        )
+      );
+      offsetRef.current += ROUTES_PER_PAGE
+      setAccumulatedRouteList((prev) => [...prev, ...filteredList] as RouteHistory[]);
     }
   }, [routeList]);
+
 
   const handleScroll = async (event: any) => {
     if (isLoadingMore || !routeList || routeList.length === 0) return;
@@ -53,13 +66,7 @@ export default function SharedOverviewScreen() {
 
     if (scrollY + windowHeight >= contentHeight - 100 && !isLoadingMore) {
       setIsLoadingMore(true);
-
-      const newLimit = accumulatedRouteList.length + 2;
-
-      await refetchRouteList({
-        method: "GET",
-        url: `/route/feed/top_routes/?limit=${newLimit}&order_by=num_votes&offset=0`,
-      });
+      await refetchRouteList();
 
       setTimeout(() => {
         setIsLoadingMore(false);
@@ -200,11 +207,6 @@ export default function SharedOverviewScreen() {
         paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
       }}
     >
-      <ActivityIndicator
-        style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }}
-        animating={loading}
-        size="large"
-      />
       <View style={styles.row_text}>
         <TouchableOpacity onPress={() => router.back()}>
           <ArrowBackIcon
@@ -233,7 +235,7 @@ export default function SharedOverviewScreen() {
             paddingHorizontal: 16,
           }}
         >
-          {routeList?.map((result, index) => (
+          {accumulatedRouteList?.map((result, index) => (
             <RouteCard
               index={index}
               key={result.route.route_id}
