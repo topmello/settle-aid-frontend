@@ -38,8 +38,8 @@ export default function HomeScreen() {
   const userId = useSelector(selectUserId);
   const loading = useSelector(selectIsLoading);
   const triggerRefreshHome = useSelector(selectTriggerRefreshHome);
-  const url = Linking.useURL();
   const listenerAddedRef = useRef(false);
+  const url = Linking.useURL();
 
   const [routeList, refetchRouteList] = useFetch<RouteHistory[]>(
     {

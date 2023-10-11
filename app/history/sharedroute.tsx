@@ -23,7 +23,6 @@ import { RouteHistory } from "../../types/route";
 import Linking from "expo-linking";
 import usePaginateRoute from "../../hooks/usePaginateRoute";
 
-
 const ROUTES_PER_PAGE: number = 6;
 
 export default function SharedOverviewScreen() {
@@ -32,12 +31,12 @@ export default function SharedOverviewScreen() {
   const loading = useSelector(selectIsLoading);
 
   const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const offsetRef = useRef(0)
-
+  const offsetRef = useRef(0);
 
   const [accumulatedRouteList, handleScroll, handleFavRoute] = usePaginateRoute(
-    `/route/feed/top_routes/`, 6
-  )
+    `/route/feed/top_routes/`,
+    6
+  );
 
   const handlePressCard = (result: RouteHistory) => {
     if (result && result.route) {
@@ -50,25 +49,18 @@ export default function SharedOverviewScreen() {
     }
   };
 
-
-
   const shareUrl = async (route_id: number): Promise<void> => {
-
     try {
-
       await Share.share({
-        message: Linking.createURL("/", {
+        message: Linking.createURL("/route/result", {
           queryParams: { routeId: route_id + "" },
         }),
       });
-
     } catch (error) {
-      console.log(error)
+      console.log(error);
       return;
     }
   };
-
-
 
   const styles = StyleSheet.create({
     container: {
