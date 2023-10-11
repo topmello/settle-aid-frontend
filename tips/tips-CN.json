@@ -118,9 +118,1111 @@
                 "link": "https://melbournebybike.com/"
               }
             ]
+          },
+          {
+            "mode": "公共交通",
+            "type": [
+              {
+                "description": "Myki卡",
+                "content": "获取Myki卡(墨尔本的公共交通智能卡)。这是乘坐火车、电车和公共汽车的必备工具。",
+                "link": "https://www.ptv.vic.gov.au/tickets/myki/",
+                "photo": "myki.png"
+              },
+              {
+                "description": "火车时刻表",
+                "content": "周一至周四: 上午5点至午夜; 周五和周末：全天运营；时刻表可能会有变化，请参考官方网站获取更新信息。",
+                "link": "https://www.metrotrains.com.au/timetables/?line=Alamein&dir=1&ts=1693361344704",
+                "photo": "train_schedule.png"
+              },
+              {
+                "description": "停靠站提醒",
+                "content": "除了关注路线号码，还要留意终点站的名称。",
+                "link": "",
+                "photo": "stop_awareness.png"
+              },
+              {
+                "description": "公共交通区域",
+                "content": "了解墨尔本的公共交通区域，以确定根据您的出行距离计算车费。",
+                "link": "https://www.ptv.vic.gov.au/footer/legal-and-policies/victorian-fares-and-ticketing-manual/",
+                "photo": "public_transport_zone.png"
+              },
+              {
+                "description": "时刻表和路线",
+                "content": "提前查看官方资源或应用程序的公共交通时刻表和路线，以确保顺畅的旅程。",
+                "link": "https://www.ptv.vic.gov.au/timetables/",
+                "photo": "train_schedule.png"
+              },
+              {
+                "description": "上下车刷卡",
+                "content": "记得上下车使用Myki卡以确保您的旅程计费准确。",
+                "link": "https://www.feat.com/en-US/dimzou/1151#title-1",
+                "photo": "myki_touch.png"
+              },
+              {
+                "description": "免费电车区",
+                "content": "在免费电车区内探索墨尔本的中心景点无需Myki卡。",
+                "link": "https://www.ptv.vic.gov.au/assets/PDFs/Maps/Network-maps/5b4a3efe80/PTV-Free-Tram-Zone-Map.pdf",
+                "photo": "free_tram_zone.png"
+              },
+              {
+                "description": "折扣和优惠",
+                "content": "学生、老年人和其他符合条件的人可以享受公共交通车费的折扣和优惠。",
+                "link": "https://www.ptv.vic.gov.au/tickets/myki/concessions-and-free-travel/",
+                "photo": "cash_disc.png"
+              },
+              {
+                "description": "卫生和礼仪",
+                "content": "保持卫生和遵循公共交通礼仪，以确保每个人都能够舒适和尊重的旅行。",
+                "link": "",
+                "photo": "authenticity.png"
+              },
+              {
+                "description": "客户服务",
+                "content": "如需帮助或信息，请联系公共交通客户服务或前往主要车站的信息中心。",
+                "link": "https://www.ptv.vic.gov.au/more/help-and-support/",
+                "photo": "understand_menu.png"
+              },
+              {
+                "description": "在免费电车区内刷卡上下车",
+                "content": "即使在免费电车区内,您仍需要使用Myki卡刷卡上下电车。",
+                "link": "",
+                "photo": "myki_touch.png"
+              },
+              {
+                "description": "遗失物品",
+                "content": "如果您在公共交通工具上遗失物品，请向当局报告并查看遗失物品收集点。",
+                "link": "https://www.ptv.vic.gov.au/more/travelling-on-the-network/lost-property/",
+                "photo": "understand_menu.png"
+              },
+              {
+                "description": "扶手电梯礼仪",
+                "content": "左边静立，右边行走。",
+                "link": "",
+                "photo": "escalator_etiquette.png"
+              }
+            ]
           }
         ]
-      }
+      },
+      {
+        "title": "地标",
+        "description": "地标",
+        "tips": [
+          {
+            "mode": "本地",
+            "type": [
+              {
+                "description": "探索巷子和拱廊",
+                "content": "探索墨尔本的小巷，这里充满了街头艺术、精品店和咖啡馆，提供独特的体验。",
+                "link": "https://www.visitmelbourne.com/regions/melbourne/destinations/laneways",
+                "photo": "explore_alley.png"
+              },
+              {
+                "description": "扶手电梯礼仪",
+                "content": "左边站着，右边行走。",
+                "link": "",
+                "photo": "escalator_etiquette.png"
+              },
+              {
+                "description": "步行游览",
+                "content": "考虑加入一次导游的步行游览。这可以帮助您从本地导游那里了解城市的历史、建筑和隐藏的宝藏。",
+                "link": "https://imfree.com.au/melbourne/",
+                "photo": "walking_tour.png"
+              },
+              {
+                "description": "尊重",
+                "content": "在参观地标时要保持尊重。保持噪音水平较低，特别是在安静或室内区域，以确保每个人都能享受宁静的环境。",
+                "link": "",
+                "photo": "respect.png"
+              },
+              {
+                "description": "无垃圾区",
+                "content": "使用指定的垃圾箱妥善处理垃圾，保持周围环境的清洁。帮助维护地标及其周围环境的美丽。",
+                "link": "",
+                "photo": "litter_free_zone.png"
+              },
+              {
+                "description": "摄影礼仪",
+                "content": "在拍照时要考虑其他人。避免阻塞通道，尊重隐私，并遵守与摄影或录像相关的任何规定。",
+                "link": "",
+                "photo": "photo_etiquette.png"
+              },
+              {
+                "description": "在指定路径上步行",
+                "content": "要坚守指定的路径和区域。这有助于保护地标的完整性并防止事故发生。",
+                "link": "",
+                "photo": "pedestrian_etiquette.png"
+              },
+              {
+                "description": "遵循导游指导",
+                "content": "如果参加导游游览，请听从导游的指导并遵守时间表。避免打扰其他人的体验。",
+                "link": "",
+                "photo": "walking_tour.png"
+              },
+              {
+                "description": "文化敏感性",
+                "content": "参观具有历史或文化重要性的地标时要保持敏感。遵循指南，除非允许，避免触摸文物，并以尊重的方式提问。",
+                "link": "",
+                "photo": "multi_society.png"
+              },
+              {
+                "description": "尊重野生动植物",
+                "content": "如果地标具有自然元素或花园，请尊重野生动植物和植物。避免喂养动物并留在指定的路径上。",
+                "link": "",
+                "photo": "respect.png"
+              },
+              {
+                "description": "拥挤区域",
+                "content": "在拥挤的地方要有耐心和礼貌。在移动之前允许其他人欣赏风景或拍照。",
+                "link": "",
+                "photo": "safety_awareness.png"
+              },
+              {
+                "description": "有序排队",
+                "content": "如果有排队或队列，请耐心等待您的轮次。保持个人空间并遵守已建立的排队系统。",
+                "link": "",
+                "photo": "respect.png"
+              },
+              {
+                "description": "紧急应变",
+                "content": "熟悉紧急出口和安全程序。在紧急情况下，遵循工作人员的指示并在必要时帮助他人。",
+                "link": "",
+                "photo": "emergency_call.png"
+              },
+              {
+                "description": "反馈和投诉",
+                "content": "如果您有反馈或遇到问题，请尊重地与工作人员沟通。他们在那里以确保所有游客都能有积极的体验。",
+                "link": "",
+                "photo": "understand_menu.png"
+              },
+              {
+                "description": "着装规定",
+                "content": "查看地标是否有特定的着装规定，特别是如果这是宗教或正式场所。为了尊重地方和其习俗，适当着装。",
+                "link": "",
+                "photo": "dress_modestly.png"
+              }
+            ]
+          },
+          {
+            "mode": "印度",
+            "type": [
+              {
+                "description": "保持适度着装",
+                "content": "在许多印度地标，适度的着装备受欢迎。避免穿着暴露的衣物，选择遮盖肩膀、膝盖和领口的服装，特别是在宗教场所。",
+                "link": "",
+                "photo": "dress_modestly.png"
+              },
+              {
+                "description": "尊称",
+                "content": "尊敬地称呼比自己年长的人为阿姨或叔叔。",
+                "link": "",
+                "photo": "respect.png"
+              },
+              {
+                "description": "脱鞋",
+                "content": "在寺庙和一些历史遗址，进入前习惯性地脱鞋。遵循当地人的做法，将鞋子整齐地放在指定区域之外。",
+                "link": "",
+                "photo": "remove_footwear.png"
+              },
+              {
+                "description": "示意方向",
+                "content": "不要用手指指示，最好用整只手或脸部或下巴的动作示意方向。您可能会注意到印度人用下巴朝向某个方向来示意，而不是用手指。",
+                "link": "",
+                "photo": "signal_direction.png"
+              },
+              {
+                "description": "避免触摸",
+                "content": "不要用脚触摸或指向任何物体或任何人。印度人认为脚是肮脏的。",
+                "link": "",
+                "photo": "touching.png"
+              },
+              {
+                "description": "支付",
+                "content": "在商店或市场中，不要用左手递交任何东西，如购物或接收物品。",
+                "link": "",
+                "photo": "touching.png"
+              },
+              {
+                "description": "尊重宗教习俗",
+                "content": "在宗教场所，遵循习俗，如不用脚指向圣物，不公开展示亲昵行为。",
+                "link": "",
+                "photo": "respect.png"
+              },
+              {
+                "description": "拍照前征求许可",
+                "content": "在拍摄人物照片时，请先征得允许，特别是在农村地区或与宗教人物拍照时。某些场所可能会有摄影限制。",
+                "link": "",
+                "photo": "photo_etiquette.png"
+              },
+              {
+                "description": "遵循导游指导",
+                "content": "在导游游览中，请听从导游的指导并遵守时间表。他们可以提供有关地标的历史和重要性的有价值见解。",
+                "link": "",
+                "photo": "walking_tour.png"
+              },
+              {
+                "description": "有序排队",
+                "content": "遵守排队系统，耐心等待您的轮次，特别是在拥挤的地方或售票柜台。保持个人空间和礼貌。",
+                "link": "",
+                "photo": "respect.png"
+              },
+              {
+                "description": "无垃圾环境",
+                "content": "通过妥善处理垃圾来帮助保持环境的清洁。避免乱丢垃圾并使用指定的垃圾箱。",
+                "link": "",
+                "photo": "litter_free_zone.png"
+              },
+              {
+                "description": "守时",
+                "content": "如果参加活动或会议，请准时到达。在印度文化中，守时受到重视，显示对他人时间的尊重。",
+                "link": "",
+                "photo": "arrival_time.png"
+              },
+              {
+                "description": "文化敏感性",
+                "content": "了解您参观的地区的文化规范和习惯。这将帮助您避免无意中的不尊重或误解。",
+                "link": "",
+                "photo": "multi_society.png"
+              },
+              {
+                "description": "休息日",
+                "content": "要了解某些文化或宗教场所的休息日，因为它们可能在一周的某些特定日或节日不向游客开放。",
+                "link": "",
+                "photo": "appointment_booking.png"
+              }
+            ]
+          },
+          {
+            "mode": "中国",
+            "type": [
+              {
+                "description": "公共行为",
+                "content": "在公共场所保持适度和礼貌的行为。避免大声交谈、公开展示亲昵行为和任何扰人的行为。",
+                "link": ""
+              },
+              {
+                "description": "公共空间",
+                "content": "保持公共空间的清洁，避免乱丢垃圾。妥善处理垃圾并使用指定的垃圾箱。",
+                "link": "",
+                "photo": "personal_distance.png"
+              },
+              {
+                "description": "摄影礼仪",
+                "content": "在拍照前请征得许可，特别是在农村地区或与宗教人物拍照。某些场所可能会有摄影限制。",
+                "link": "",
+                "photo": "photo_etiquette.png"
+              },
+              {
+                "description": "有序排队",
+                "content": "遵循排队系统，耐心等待您的轮次，特别是在拥挤的地方或售票柜台。保持个人空间并保持礼貌。",
+                "link": "",
+                "photo": "respect.png"
+              },
+              {
+                "description": "守时",
+                "content": "如果参加活动或会议，请准时到达。守时在中国文化中受到重视，显示对他人时间的尊重。",
+                "link": "",
+                "photo": "arrival_time.png"
+              },
+              {
+                "description": "文化敏感性",
+                "content": "了解您参观的地区的文化规范和习惯。这将帮助您避免无意中的不尊重或误解。",
+                "link": "",
+                "photo": "multi_society.png"
+              },
+              {
+                "description": "讨价还价",
+                "content": "在没有固定价格的市场或商店，讨价还价是常见的。请尊重地讨价还价，避免侵略或对抗性的行为。",
+                "link": "",
+                "photo": "payment_options.png"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "用餐",
+        "description": "用餐",
+        "tips": [
+          {
+            "mode": "本地",
+            "type": [
+              {
+                "description": "预订",
+                "content": "如果餐厅接受预订，尤其是在用餐高峰时段，建议提前预订。这有助于确保您有座位，并保证更顺畅的用餐体验。",
+                "link": "",
+                "photo": "reservation.png"
+              },
+              {
+                "description": "着装要求",
+                "content": "查看餐厅是否有特定的着装要求。一些地方可能要求穿着得体，而其他地方可能更为轻松。",
+                "link": "",
+                "photo": "dress_modestly.png"
+              },
+              {
+                "description": "到达时间",
+                "content": "按时到达预订或入座时间。守时显示对餐厅时间表的尊重，也让您能够充分享受您的用餐。",
+                "link": "",
+                "photo": "arrival_time.png"
+              },
+              {
+                "description": "等候区",
+                "content": "如果有等候区，请在提前到达时使用它。避免拥挤入口，因为这可能会干扰其他用餐者和员工。",
+                "link": "",
+                "photo": "waiting_area.png"
+              },
+              {
+                "description": "入座礼仪",
+                "content": "等待服务员为您安排座位。如果没有指定座位，请谨慎不要占用多余的空间。",
+                "link": "",
+                "photo": "waiting_area.png"
+              },
+              {
+                "description": "使用手机",
+                "content": "在餐厅内，将手机设为静音，避免大声交谈。如果需要接电话，请走到外面。",
+                "link": "",
+                "photo": "phone_use.png"
+              },
+              {
+                "description": "点餐",
+                "content": "仔细阅览菜单，有礼貌地下订单。如果有饮食限制或特殊需求，请明确告知。",
+                "link": "",
+                "photo": "ordering.png"
+              },
+              {
+                "description": "特殊要求",
+                "content": "如果您有特殊要求（过敏、素食等），在点餐时告知员工。他们会欣赏您提前考虑的举止。",
+                "link": "",
+                "photo": "understand_menu.png"
+              },
+              {
+                "description": "餐桌礼仪",
+                "content": "使用适当的餐桌礼仪，如正确使用餐具、嘴巴闭合咀嚼食物，不要在口中含食物时讲话。",
+                "link": "",
+                "photo": "respect.png"
+              },
+              {
+                "description": "小费",
+                "content": "在墨尔本的餐厅可以会给小费。留下账单的大约10%作为小费是表达对良好服务的感激之意。",
+                "link": "",
+                "photo": "respect.png"
+              },
+              {
+                "description": "与员工互动",
+                "content": "与员工有礼貌的互动。简单的“请”和“谢谢”在营造积极的用餐体验方面起着重要作用。",
+                "link": "",
+                "photo": "understand_menu.png"
+              },
+              {
+                "description": "音量水平",
+                "content": "保持适度的声音水平。避免大声交谈，以免干扰其他用餐者，影响整体氛围。",
+                "link": "",
+                "photo": "safety_awareness.png"
+              },
+              {
+                "description": "支付流程",
+                "content": "等待员工送账单。仔细核对账单的准确性，并在准备支付时示意。支付方式可能包括现金、信用卡或数字钱包。",
+                "link": "",
+                "photo": "payment_options.png"
+              }
+            ]
+          },
+          {
+            "mode": "印度",
+            "type": [
+              {
+                "description": "预订",
+                "content": "如果餐厅接受预订，尤其是在用餐高峰时段，建议提前预订。这有助于确保您有座位，并保证更顺畅的用餐体验。",
+                "link": "",
+                "photo": "reservation.png"
+              },
+              {
+                "description": "适当着装",
+                "content": "在印度餐厅用餐时，选择朴素和休闲的服装。穿着舒适对于轻松的用餐体验是理想的。",
+                "link": "",
+                "photo": "dress_modestly.png"
+              },
+              {
+                "description": "餐具使用",
+                "content": "在许多印度餐厅，您可以选择使用餐具或用手吃饭。如果您更喜欢用手，使用右手吃饭，因为左手被认为是不洁净的。",
+                "link": "",
+                "photo": "utensil_use.png"
+              },
+              {
+                "description": "有礼的拒绝",
+                "content": "如果提供的食物多于您能吃的量，请有礼貌地拒绝。您可以说“不，谢谢”或“我吃饱了”以表示感激。",
+                "link": "",
+                "photo": "polite_declining.png"
+              },
+              {
+                "description": "理解菜单",
+                "content": "如果菜单包含不熟悉的菜肴，请不要犹豫向员工要求解释。员工将乐意帮助您浏览各种选项。",
+                "link": "",
+                "photo": "understand_menu.png"
+              },
+              {
+                "description": "美食多样性",
+                "content": "由于多元化的烹饪传统，印度餐厅在印度提供各种各样的地方美食。在澳大利亚，您可能会发现来自各个地区的流行印度菜肴的混合。",
+                "link": "",
+                "photo": "indian_food_variety.png"
+              },
+              {
+                "description": "辛辣程度",
+                "content": "印度的食物通常更辣，辛辣程度更高。在澳大利亚，菜肴可能会根据对辛辣度的本地偏好进行调整。",
+                "link": "",
+                "photo": "spicy.png"
+              },
+              {
+                "description": "食材",
+                "content": "印度餐厅在印度有更广泛的传统食材供应，这可能会导致更地道的风味。澳大利亚的餐厅可能会根据本地食材的供应进行调整。",
+                "link": "",
+                "photo": "ingredient_availability.png"
+              },
+              {
+                "description": "分量大小",
+                "content": "澳大利亚的印度餐厅的分量大小可能较小，以适应不同的饮食习惯。在印度，分量通常较大，因为有家庭式用餐。",
+                "link": "",
+                "photo": "indian_food_variety.png"
+              },
+              {
+                "description": "氛围",
+                "content": "澳大利亚的印度餐厅通常融合了现代和传统的氛围。在印度，您可能会体验到更地道和多元化的餐厅环境。",
+                "link": "",
+                "photo": "indian_food_variety.png"
+              },
+              {
+                "description": "食品标签",
+                "content": "澳大利亚的印度餐厅可能会在菜肴上标明辛辣程度和膳食信息。在印度，标签可能会侧重于地方或文化特色。",
+                "link": "",
+                "photo": "spicy.png"
+              },
+              {
+                "description": "文化适应",
+                "content": "澳大利亚的印度餐厅可能会调整菜肴以适应本地饮食偏好和文化规范。在印度，您将找到更多未经过滤的传统美食。",
+                "link": "",
+                "photo": "multi_society.png"
+              },
+              {
+                "description": "点餐",
+                "content": "在点餐时，请考虑桌上每个人的偏好。如果您对菜单不熟悉，可以向员工询问建议。",
+                "link": "",
+                "photo": "ordering.png"
+              },
+              {
+                "description": "融合菜肴",
+                "content": "澳大利亚的印度餐厅可能会尝试融合美食，以满足不同的口味。在印度，融合菜肴可能仍然保留传统风味。",
+                "link": "",
+                "photo": "indian_food_variety.png"
+              },
+              {
+                "description": "菜单选项",
+                "content": "澳大利亚的印度餐厅可能会提供受欢迎的菜肴的精简选择。在印度，菜单可能会更加广泛，反映更多的选择。",
+                "link": "",
+                "photo": "indian_food_variety.png"
+              },
+              {
+                "description": "上菜方式",
+                "content": "在印度，点餐方式（一盘各种菜肴）很常见。在澳大利亚，点菜方式更为流行，允许用餐者自定义订单。",
+                "link": "",
+                "photo": "indian_food_variety.png"
+              }
+            ]
+          },
+          {
+            "mode": "中国",
+            "type": [
+              {
+                "description": "预订",
+                "content": "如果餐厅接受预订，尤其是在用餐高峰时段，建议提前预订。这有助于确保您有座位，并保证更顺畅的用餐体验。",
+                "link": "",
+                "photo": "reservation.png"
+              },
+              {
+                "description": "餐具供应",
+                "content": "在澳大利亚的中国餐厅用餐时，您可能会被提供刀叉。您可以礼貌地要求筷子。",
+                "link": "",
+                "photo": "utensil_use.png"
+              },
+              {
+                "description": "菜系多样性",
+                "content": "中国餐厅在中国提供丰富的各地菜系，反映了中国丰富的烹饪传统。在澳大利亚，您可能会找到来自不同地区的流行中国菜肴的混合。",
+                "link": "",
+                "photo": "chinese_food_variety.png"
+              },
+              {
+                "description": "地道性",
+                "content": "中国餐厅在中国提供的菜肴与传统风味和制备方法非常接近。在澳大利亚，可能会根据本地口味进行一些调整。",
+                "link": "",
+                "photo": "authenticity.png"
+              },
+              {
+                "description": "食材供应",
+                "content": "中国餐厅在中国有更广泛的本地和季节性食材供应。在澳大利亚，食材可能会根据可用性和本地采购进行调整。",
+                "link": "",
+                "photo": "ingredient_availability.png"
+              },
+              {
+                "description": "菜肴呈现",
+                "content": "澳大利亚的中国餐厅通常注重西方用餐口味的视觉吸引力。在中国，重点可能更多地放在菜肴的味道和文化象征上。",
+                "link": "",
+                "photo": "food_presentation.png"
+              },
+              {
+                "description": "分量大小",
+                "content": "在澳大利亚的中国餐厅，分量可能会略大，以满足当地的期望。在中国，分量通常更适中，鼓励共享。",
+                "link": "",
+                "photo": "chinese_food_variety.png"
+              },
+              {
+                "description": "菜单多样性",
+                "content": "澳大利亚的中国餐厅可能会关注来自不同地区的流行菜肴。在中国，菜单可能会更加广泛，提供更多本地特色。",
+                "link": "",
+                "photo": "chinese_food_variety.png"
+              },
+              {
+                "description": "文化适应",
+                "content": "澳大利亚的中国餐厅可能会修改菜肴以符合当地饮食口味和文化规范。在中国，您将找到更多未经过滤的传统菜肴。",
+                "link": "",
+                "photo": "multi_society.png"
+              },
+              {
+                "description": "融合美食",
+                "content": "澳大利亚的中国餐厅可能会尝试融合美食，以满足不同口味。在中国，融合菜肴可能会保留传统风味，但带有微妙的影响。",
+                "link": "",
+                "photo": "chinese_food_variety.png"
+              },
+              {
+                "description": "菜单",
+                "content": "澳大利亚的中国餐厅可能会标明菜肴的辛辣程度、膳食信息和过敏原。在中国，标签可能会侧重于地区特色和食材。",
+                "link": "",
+                "photo": "spicy.png"
+              },
+              {
+                "description": "茶文化",
+                "content": "中国的餐厅可能会自动提供茶，反映传统的茶文化。在澳大利亚，茶可能会根据需要提供，或者不那么突出。",
+                "link": "",
+                "photo": "tea.png"
+              },
+              {
+                "description": "水温",
+                "content": "您可能会在某些中国餐收到冷水而不是热水。",
+                "link": "",
+                "photo": "stay_hydrated.png"
+              },
+              {
+                "description": "噪音水平",
+                "content": "欢迎充满活力的交谈，但请保持适度的噪音水平。避免大声交谈，以免干扰其他用餐者。",
+                "link": "",
+                "photo": "respect.png"
+              },
+              {
+                "description": "有礼的拒绝",
+                "content": "如果您被提供不想要的食物或饮料，请有礼貌地拒绝。您可以使用短语如“谢谢，我吃饱了”来表示感激。",
+                "link": "",
+                "photo": "polite_declining.png"
+              },
+              {
+                "description": "点餐",
+                "content": "在点餐时，请考虑桌上每个人的偏好。如果您对菜单不熟悉，可以向员工询问建议。",
+                "link": "",
+                "photo": "ordering.png"
+              },
+              {
+                "description": "理解菜单",
+                "content": "如果菜单包含不熟悉的菜肴，请不要犹豫向员工要求解释。员工通常会乐意帮助您浏览各种选项。",
+                "link": "",
+                "photo": "understand_menu.png"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "购物",
+        "description": "杂货购物",
+        "tips": [
+          {
+            "mode": "商店选择",
+            "type": [
+              {
+                "description": "本地市场",
+                "content": "参观本地市场，如维多利亚女王市场，购买新鲜的农产品、手工食品和独特的商品。",
+                "link": "",
+                "photo": "local_market.png"
+              },
+              {
+                "description": "便利店",
+                "content": "前往便利店购买必需品，但要注意价格。",
+                "link": "",
+                "photo": "convenience_store.png"
+              }
+            ]
+          },
+          {
+            "mode": "购物技巧",
+            "type": [
+              {
+                "description": "购物清单",
+                "content": "准备购物清单以保持有条理，集中精力购买所需物品。",
+                "link": "",
+                "photo": "shopping_list.png"
+              },
+              {
+                "description": "时令农产品",
+                "content": "选择时令水果和蔬菜，以享受更加新鲜且可能价格更便宜的选择。",
+                "link": "",
+                "photo": "seasonal_produce.png"
+              },
+              {
+                "description": "比较价格",
+                "content": "比较价格和品牌，以找到您喜欢的物品的最佳价值。",
+                "link": "",
+                "photo": "compare_price.png"
+              },
+              {
+                "description": "大宗购买",
+                "content": "考虑大宗购买不易腐烂的物品，以长期省钱。",
+                "link": "",
+                "photo": "bulk_buying.png"
+              }
+            ]
+          },
+          {
+            "mode": "支付和奖励",
+            "type": [
+              {
+                "description": "支付方式",
+                "content": "使用现金或银行卡支付，考虑使用奖励卡以获取折扣或积分。",
+                "link": "",
+                "photo": "payment_options.png"
+              },
+              {
+                "description": "价格匹配",
+                "content": "查看商店是否提供价格匹配，以确保获得最佳价格。",
+                "link": "",
+                "photo": "price_match.png"
+              },
+              {
+                "description": "奖励计划",
+                "content": "注册参加忠诚计划，以获取奖励、折扣和特别优惠。",
+                "link": "",
+                "photo": "reward.png"
+              }
+            ]
+          },
+          {
+            "mode": "环境与可持续性",
+            "type": [
+              {
+                "description": "环保袋",
+                "content": "携带可重复使用的袋子来减少塑料垃圾。大多数商店对一次性和可回收袋子收费。",
+                "link": "",
+                "photo": "reusable_bag.png"
+              },
+              {
+                "description": "环保包装",
+                "content": "选择最少包装或环保包装的产品。",
+                "link": "",
+                "photo": "eco_package.png"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "户外活动",
+        "description": "墨尔本市的户外活动和娱乐建议",
+        "tips": [
+          {
+            "mode": "休闲",
+            "type": [
+              {
+                "description": "皇家植物园",
+                "content": "在皇家植物园中漫步，享受大自然的宁静。",
+                "link": "",
+                "photo": "botanical_garden.png"
+              },
+              {
+                "description": "河畔咖啡馆",
+                "content": "在雅拉河畔的咖啡馆悠闲地用餐，欣赏美丽的景色和清风。",
+                "link": "",
+                "photo": "cafe_culture.png"
+              },
+              {
+                "description": "在联邦广场享用午餐",
+                "content": "在联邦广场享受一顿轻松的午餐，周围是文化景点和开放空间。",
+                "link": "",
+                "photo": "federation_square.png"
+              },
+              {
+                "description": "在卡尔顿花园野餐",
+                "content": "在卡尔顿花园野餐，尽情享受墨尔本博物馆附近宁静的环境。",
+                "link": "",
+                "photo": "carlton_garden.png"
+              },
+              {
+                "description": "雅拉河游船",
+                "content": "乘坐雅拉河游船，欣赏墨尔本的天际线和宁静的水域。",
+                "link": "",
+                "photo": "yarra_cruise.png"
+              },
+              {
+                "description": "尤里卡天台的日落",
+                "content": "在尤里卡天台欣赏壮观的日落景色，感受宁静的时刻。",
+                "link": "",
+                "photo": "eureka_sunset.png"
+              },
+              {
+                "description": "圣基尔达码头咖啡",
+                "content": "在圣基尔达码头享受一杯咖啡，欣赏大海的景色和标志性的码头魅力。",
+                "link": "",
+                "photo": "st_kilda_coffee.png"
+              }
+            ]
+          },
+          {
+            "mode": "健康",
+            "type": [
+              {
+                "description": "公园里的早晨瑜伽",
+                "content": "参加城市公园举办的早晨瑜伽课程，促进身体和心灵的健康。",
+                "link": "",
+                "photo": "morning_yoga.png"
+              },
+              {
+                "description": "菲茨罗伊花园的自然漫步",
+                "content": "在菲茨罗伊花园进行宁静的自然漫步，与城市中心的大自然亲密接触。",
+                "link": "",
+                "photo": "fitzroy_garden.png"
+              },
+              {
+                "description": "正念艺术工作坊",
+                "content": "在户外环境中参加正念艺术工作坊，发挥创造力和正念。",
+                "link": "",
+                "photo": "art_workshop.png"
+              },
+              {
+                "description": "户外太极",
+                "content": "在宁静的地方练习户外太极，促进放松和内在和谐。",
+                "link": "",
+                "photo": "outdoor_taichi.png"
+              },
+              {
+                "description": "圣基尔达海滩的轻松锻炼",
+                "content": "在圣基尔达海滩参加轻松的锻炼课程，结合健身和海景。",
+                "link": "",
+                "photo": "st_kilda_walk.png"
+              },
+              {
+                "description": "花园中的引导冥想",
+                "content": "在城市花园体验引导冥想课程，促进心智清晰和放松。",
+                "link": "",
+                "photo": "guided_meditation.png"
+              }
+            ]
+          },
+          {
+            "mode": "享受文化",
+            "type": [
+              {
+                "description": "艺术画廊参观",
+                "content": "探索城市的艺术画廊和展览，沉浸在墨尔本的文化场景中。",
+                "link": "",
+                "photo": "art_gallery.png"
+              },
+              {
+                "description": "联邦广场的文化活动",
+                "content": "参加联邦广场的室外文化活动，庆祝艺术、音乐和社区。",
+                "link": "",
+                "photo": "federation_square.png"
+              },
+              {
+                "description": "历史步行游览",
+                "content": "加入城市的历史步行游览，了解墨尔本丰富的历史，享受户外空气。",
+                "link": "",
+                "photo": "walking_tour.png"
+              },
+              {
+                "description": "露天剧院表演",
+                "content": "在皇家植物园等场地欣赏露天剧院表演，在星空下享受艺术。",
+                "link": "",
+                "photo": "open_theatre.png"
+              },
+              {
+                "description": "河畔现场爵士乐",
+                "content": "在雅拉河畔放松，聆听现场爵士音乐表演，享受城市的音乐节目。",
+                "link": "",
+                "photo": "live_jazz.png"
+              },
+              {
+                "description": "户外艺术装置",
+                "content": "欣赏分布在城市的公园和公共空间中的户外艺术装置和雕塑。",
+                "link": "",
+                "photo": "outdoor_art.png"
+              },
+              {
+                "description": "文化游船",
+                "content": "结合一次温和的游船之旅和富有信息的文化讲座，了解墨尔本的历史和地标。",
+                "link": "",
+                "photo": "yarra_cruise.png"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "紧急情况",
+        "description": "重要的紧急情况建议",
+        "tips": [
+          {
+            "mode": "紧急联系",
+            "type": [
+              {
+                "description": "紧急服务",
+                "content": "如果您需要警察、消防或救护服务的紧急帮助，请拨打000。",
+                "link": "",
+                "photo": "emergency_call.png"
+              },
+              {
+                "description": "家人联系",
+                "content": "了解您家人的位置和联系方式，以便当局可以联系到他们。",
+                "link": "",
+                "photo": "family_contact.png"
+              }
+            ]
+          },
+          {
+            "mode": "个人安全",
+            "type": [
+              {
+                "description": "保持警惕",
+                "content": "特别是在拥挤的地区和公共交通工具中，要警惕您的周围环境。",
+                "link": "",
+                "photo": "safety_awareness.png"
+              },
+              {
+                "description": "家人联系",
+                "content": "与您的家人保持联系，并确定回家的时间，以防您迷路。",
+                "link": "",
+                "photo": "family_contact.png"
+              }
+            ]
+          },
+          {
+            "mode": "导航安全",
+            "type": [
+              {
+                "description": "离线地图",
+                "content": "下载离线地图或携带实体地图,以备手机GPS失效的情况下导航。",
+                "link": "",
+                "photo": "offline_map.png"
+              },
+              {
+                "description": "地标和集合点",
+                "content": "确定显著的地标和集合点，以帮助在陌生地区导航。",
+                "link": "",
+                "photo": "yarra_cruise.png"
+              }
+            ]
+          },
+          {
+            "mode": "健康与医疗",
+            "type": [
+              {
+                "description": "紧急医疗服务",
+                "content": "了解市中心最近的医疗设施和诊所。",
+                "link": "",
+                "photo": "urgent_care.png"
+              },
+              {
+                "description": "急救工具包",
+                "content": "携带基本的急救工具包，其中包括绷带、消毒剂和药物。",
+                "link": "",
+                "photo": "first_aid.png"
+              },
+              {
+                "description": "过敏或医疗状况",
+                "content": "佩戴医疗警示手镯或携带包含过敏或医疗状况信息的卡片。",
+                "link": "",
+                "photo": "allergies.png"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "财务提示",
+        "description": "了解澳大利亚财务方面的有用提示",
+        "tips": [
+          {
+            "mode": "货币和支付方式",
+            "type": [
+              {
+                "description": "澳大利亚元 (AUD)",
+                "content": "熟悉澳大利亚元 (AUD) 及其面额，以便进行便捷的交易。",
+                "link": "",
+                "photo": "aus_dollars.png"
+              },
+              {
+                "description": "现金、卡片和应用",
+                "content": "现金和卡片均广泛接受。为了方便，可以使用卡片，但请携带一些现金以支付小额购物。一些商店也可能接受其他支付方式，如微信支付或支付宝。",
+                "link": "",
+                "photo": "payment_options.png"
+              },
+              {
+                "description": "外汇交易费",
+                "content": "在国外使用您的卡片时，请向您的银行或卡片提供商查询是否有外汇交易费用。",
+                "link": "",
+                "photo": "foreign_transaction.png"
+              },
+              {
+                "description": "ATM 位置",
+                "content": "了解ATM机的位置,以避免使用银行网络提取现金时产生额外费用。",
+                "link": "",
+                "photo": "atm_location.png"
+              }
+            ]
+          },
+          {
+            "mode": "购物和折扣",
+            "type": [
+              {
+                "description": "现金折扣",
+                "content": "一些商店可能在现金支付时提供折扣，请咨询现金支付选项。",
+                "link": "",
+                "photo": "cash_disc.png"
+              },
+              {
+                "description": "商品和服务税 (GST)",
+                "content": "请注意，澳大利亚对大多数商品和服务征收商品和服务税 (GST)，通常包含在标价中。",
+                "link": "",
+                "photo": "service_tax.png"
+              },
+              {
+                "description": "旅游者退税计划 (TRS)",
+                "content": "如果符合条件,您可以通过机场的TRS退还在澳大利亚购买的商品上支付的GST。",
+                "link": "",
+                "photo": "tourist_refund.png"
+              },
+              {
+                "description": "价格比较",
+                "content": "比较不同商店和在线平台的价格，以做出明智的购买决策。",
+                "link": "",
+                "photo": "compare_price.png"
+              }
+            ]
+          },
+          {
+            "mode": "财务安全",
+            "type": [
+              {
+                "description": "紧急资金",
+                "content": "保持一笔紧急资金，以应对在逗留期间的意外费用或情况。",
+                "link": "",
+                "photo": "emergency_cash.png"
+              },
+              {
+                "description": "安全交易",
+                "content": "通过使用安全的网站和保护个人信息来进行安全的在线购物和银行交易。",
+                "link": "",
+                "photo": "secure_transaction.png"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "澳大利亚文化",
+        "description": "有用的提示，以拥抱和尊重澳大利亚传统和文化方面的习惯",
+        "tips": [
+          {
+            "mode": "问候与互动",
+            "type": [
+              {
+                "description": "非正式问候",
+                "content": "在社交场合，澳大利亚人经常使用非正式的问候，如'G'day'或'Hi'，后跟名字。",
+                "link": "",
+                "photo": "informal_greetings.png"
+              },
+              {
+                "description": "尊重个人空间",
+                "content": "澳大利亚人珍视个人空间，与他人交谈时请保持舒适的距离，尊重他人的界限。",
+                "link": "",
+                "photo": "personal_distance.png"
+              },
+              {
+                "description": "悠闲的态度",
+                "content": "拥抱澳大利亚人在与他人互动中的轻松友好态度。",
+                "link": "",
+                "photo": "friendly_banter.png"
+              }
+            ]
+          },
+          {
+            "mode": "食物与用餐",
+            "type": [
+              {
+                "description": "烧烤文化",
+                "content": "参与或享受澳大利亚的烧烤文化，户外烧烤是一种常见的社交活动。",
+                "link": "",
+                "photo": "barbe_culture.png"
+              },
+              {
+                "description": "咖啡文化",
+                "content": "体验澳大利亚的活跃咖啡文化，咖啡和休闲餐饮在其中扮演重要角色。",
+                "link": "",
+                "photo": "cafe_culture.png"
+              },
+              {
+                "description": "尝试本土美食",
+                "content": "尝试传统的澳大利亚美食，如肉馅饼、拉明顿蛋糕和维基麦。",
+                "link": "",
+                "photo": "local_culture.png"
+              }
+            ]
+          },
+          {
+            "mode": "文化多样性",
+            "type": [
+              {
+                "description": "土著文化",
+                "content": "尊重澳大利亚土著民族的传统和贡献。",
+                "link": "",
+                "photo": "indi_culture.png"
+              },
+              {
+                "description": "多元社会",
+                "content": "欣赏澳大利亚多元的人口，具有各种文化、语言和民族特色。",
+                "link": "",
+                "photo": "multi_society.png"
+              },
+              {
+                "description": "节庆与庆祝活动",
+                "content": "参与文化节庆，如农历新年、排灯节和希腊节，以庆祝多元文化。",
+                "link": "",
+                "photo": "festival_celebration.png"
+              }
+            ]
+          },
+          {
+            "mode": "语言和俚语",
+            "type": [
+              {
+                "description": "澳大利亚俚语",
+                "content": "熟悉一些常见的澳大利亚俚语，以提高您的交流能力。",
+                "link": "",
+                "photo": "aus_slangs.png"
+              },
+              {
+                "description": "友好戏谑",
+                "content": "参与轻松的戏谑和幽默，澳大利亚人在交谈中经常使用友好的调侃。",
+                "link": "",
+                "photo": "friendly_banter.png"
+              }
+            ]
+          }
+        ]
+      }         
     ]
   }
   
