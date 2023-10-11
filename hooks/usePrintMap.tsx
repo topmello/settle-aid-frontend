@@ -17,7 +17,7 @@ const customPins = [
 ];
 
 const usePrintMap = (route: Route) => {
-  const qrCodeRef = useRef(null);
+  const qrCodeRef = useRef<ViewShot>(null);
   const mapRef = useRef<MapView>(null);
   const [printing, setPrinting] = useState(false);
   const { pushNotification } = useNotification();
@@ -67,19 +67,8 @@ const usePrintMap = (route: Route) => {
         result: "base64",
       })
       .then((image) => {
-        // Use Linking.getInitialURL() to get the initial app URL
-        Linking.getInitialURL().then((initialUrl) => {
-          const appLink = initialUrl || "N/A"; // Use "N/A" if no initial URL is available
-
-          // Generate the QR code
-          const qrCode = (
-            <QRCode
-              value={appLink}
-              size={100} // Adjust the size as needed
-            />
-          );
-
-          // Capture the QR code as an image
+        // Capture the QR code as an image
+        if (!!qrCodeRef && !!qrCodeRef.current && !!qrCodeRef.current.capture) {
           qrCodeRef?.current?.capture().then((qrCodeImage) => {
             const html = `
               <html>
@@ -95,7 +84,8 @@ const usePrintMap = (route: Route) => {
                   </div>
                   <div>
                     <h2>App Link QR Code</h2>
-                    <img src="${qrCodeImage}" />
+                    <p>Scan the QR code to open the route in our app</p>
+                    <img src="data:image/png;base64,${qrCodeImage}" />
                   </div>
                 </body>
               </html>
@@ -111,7 +101,7 @@ const usePrintMap = (route: Route) => {
               });
             });
           });
-        });
+        }
       })
       .then(() => {
         setPrinting(false);
@@ -176,7 +166,7 @@ const usePrintMap = (route: Route) => {
         </MapView>
         <ViewShot
           ref={qrCodeRef}
-          options={{ format: "jpg", quality: 1 }}
+          options={{ format: "png", quality: 1, result: "base64" }}
           captureMode="mount"
           onCapture={() => {}}
           style={{ position: "absolute", top: -1000, left: -1000 }}

@@ -1,3 +1,4 @@
+import { TouchableOpacity } from "@gorhom/bottom-sheet";
 import { Image } from "react-native";
 
 const getTipImage = (photo: string) => {
@@ -380,13 +381,17 @@ const getTipImage = (photo: string) => {
 export function TipImage({
   photo,
   imageStyle,
+  onPress,
 }: {
   photo: string;
   imageStyle?: any;
+  onPress?: () => void;
 }) {
   return (
     getTipImage(photo) && (
-      <Image source={getTipImage(photo)} style={imageStyle} />
+      <TouchableOpacity onPress={onPress} style={imageStyle}>
+        <Image source={getTipImage(photo)} />
+      </TouchableOpacity>
     )
   );
 }
