@@ -114,6 +114,13 @@ export default function RouteActivityScreen() {
         >
           {t("activities you want to do", { ns: "route" })}
         </Text>
+        <Text
+          variant="titleLarge"
+          style={{ color: theme.colors.outline, marginTop: 8 }}
+        >
+          {t("You can chose one or more", { ns: "route" })}
+        </Text>
+
       </View>
       <View
         style={{

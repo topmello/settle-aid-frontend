@@ -249,6 +249,13 @@ export default function RouteGenLocation() {
               ns: "route",
             })}
           </Text>
+          <Text
+            variant="titleMedium"
+            style={{ color: theme.colors.primary, marginTop: 12 }}
+          >
+            {t("At the moment, we only support CBD. Thanks for understanding! 😊", { ns: "route" })}
+          </Text>
+
         </View>
 
         <Card
