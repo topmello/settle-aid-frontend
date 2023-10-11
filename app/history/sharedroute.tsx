@@ -20,7 +20,7 @@ import { selectIsLoading } from "../../store/appSlice";
 import RouteCard from "../../components/RouteCard";
 import useFetch from "../../hooks/useFetch";
 import { RouteHistory } from "../../types/route";
-import Linking from "expo-linking";
+import * as Linking from "expo-linking";
 import usePaginateRoute from "../../hooks/usePaginateRoute";
 
 const ROUTES_PER_PAGE: number = 6;
