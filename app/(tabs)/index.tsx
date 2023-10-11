@@ -80,7 +80,7 @@ export default function HomeScreen() {
 
   const handlePressCard = (result: RouteHistory) => {
     if (result && result.route) {
-      dispatch(setRouteHistory({ route: result.route, history: true }))
+      dispatch(setRouteHistory({ route: result.route, history: true }));
       router.push({
         pathname: "/route/result",
       });

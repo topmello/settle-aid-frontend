@@ -8,6 +8,7 @@ import { useNotification } from "./useNotification";
 import * as Linking from "expo-linking";
 import QRCode from "react-native-qrcode-svg";
 import ViewShot from "react-native-view-shot";
+import { useAchievement } from "./useAchievement";
 
 const customPins = [
   require("../assets/images/pin/pin1.png"),
@@ -22,6 +23,7 @@ const usePrintMap = (route: Route) => {
   const [printing, setPrinting] = useState(false);
   const { pushNotification } = useNotification();
   const [initialUrl, setInitialUrl] = useState("");
+  const achieve = useAchievement();
 
   useEffect(() => {
     // Retrieve the initial url
@@ -94,6 +96,7 @@ const usePrintMap = (route: Route) => {
             return Print.printToFileAsync({
               html,
             }).then((result) => {
+              achieve("routeShared");
               return Sharing.shareAsync(result.uri, {
                 mimeType: "application/pdf",
                 dialogTitle: "Share PDF",

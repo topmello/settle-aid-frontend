@@ -37,6 +37,7 @@ export default function HistoryOverviewScreen() {
   const loading = useSelector(selectIsLoading);
   const dispatch = useDispatch<AppDispatch>();
   const { pushNotification } = useNotification();
+  const achieve = useAchievement();
 
   const [routeList, refetchRouteList] = useFetch<RouteHistory[]>(
     {
@@ -76,6 +77,7 @@ export default function HistoryOverviewScreen() {
       return;
     } finally {
       dispatch(refreshHome());
+      achieve("routeFavourited");
       refetchRouteList();
     }
   };
@@ -108,8 +110,6 @@ export default function HistoryOverviewScreen() {
     false,
     "Route Published"
   );
-
-  const achieve = useAchievement();
 
   const handlePublishRoute = (route_id: number) => {
     pushNotification({

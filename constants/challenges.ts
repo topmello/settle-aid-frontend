@@ -151,7 +151,7 @@ export const allChallenges: ChallengeType[] = [
     id: 11,
   },
   {
-    name: "Publish 10 Route",
+    name: "Publish 10 Routes",
     type: "published",
     color: "onPinkContainer",
     containerColor: "pinkContainer",
