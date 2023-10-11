@@ -52,7 +52,7 @@ const ResultOverlay: React.FC<OverlayProps> = ({
 }: OverlayProps) => {
   const theme = useTheme();
   const bottomSheetRef = React.useRef<Animated.View>(null);
-  const { setCategory } = useTip();
+  const { setCategory, setCurrentTipIndex } = useTip();
   const [showBottomSheet, setShowBottomSheet] = React.useState(true);
 
   return (
@@ -95,7 +95,7 @@ const ResultOverlay: React.FC<OverlayProps> = ({
             width: "100%",
           }}
           data={tipList}
-          renderItem={({ item }) => (
+          renderItem={({ item, index }) => (
             <Surface
               style={{
                 backgroundColor: theme.colors.primaryContainer,
@@ -117,6 +117,7 @@ const ResultOverlay: React.FC<OverlayProps> = ({
                     mode: "tip",
                     type: tipList,
                   });
+                  setCurrentTipIndex(index);
                   router.push("/learn/detail");
                 }}
               >
