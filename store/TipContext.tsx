@@ -17,6 +17,7 @@ export type TipContextType = {
   tips: Tip[];
   currentTip: Tip;
   currentTipIndex: number;
+  setCurrentTipIndex: (index: number) => void;
   nextTip: () => void;
   prevTip: () => void;
   canNext: boolean;
@@ -38,6 +39,7 @@ export const TipContext = createContext<TipContextType>({
     content: "",
   },
   currentTipIndex: 0,
+  setCurrentTipIndex: () => {},
   nextTip: () => {},
   prevTip: () => {},
   canNext: false,
@@ -58,6 +60,14 @@ export const TipProvider = ({ children }: { children: React.ReactNode }) => {
     description: "",
     content: "",
   });
+
+  const resetResultTip = useCallback(() => {
+    setResultTip({
+      description: "",
+      content: "",
+    });
+    setCurrentTipIndex(0);
+  }, []);
 
   const tips = useMemo(() => {
     return category.type;
@@ -105,6 +115,7 @@ export const TipProvider = ({ children }: { children: React.ReactNode }) => {
         setCategory,
         tips,
         currentTipIndex,
+        setCurrentTipIndex,
         nextTip,
         prevTip,
         canNext,
@@ -112,7 +123,7 @@ export const TipProvider = ({ children }: { children: React.ReactNode }) => {
         clearTips,
         currentTip,
         resultTip,
-        setResultTip,
+        setResultTip: resetResultTip,
       }}
     >
       {children}

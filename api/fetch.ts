@@ -23,14 +23,14 @@ export type RequestOptions = {
 
 axios.defaults.baseURL = process.env.EXPO_PUBLIC_API_URL;
 
-axios.interceptors.request.use(request => {
+axios.interceptors.request.use((request) => {
   // console.log(JSON.stringify(request));
-  return request
+  return request;
 });
 
-axios.interceptors.response.use(response => {
+axios.interceptors.response.use((response) => {
   // console.log(JSON.stringify(response));
-  return response
+  return response;
 });
 
 /**
@@ -59,7 +59,7 @@ export const fetch = (options: RequestOptions) => {
         params: options.params,
         headers: token ? { Authorization: `Bearer ${token}` } : undefined,
       });
-    case "POST" || "post":      
+    case "POST" || "post":
       return axios.post(options.url, options.data, {
         headers: {
           "Content-Type": "application/json",

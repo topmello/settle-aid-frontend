@@ -7,6 +7,7 @@ import { router } from "expo-router";
 import ArrowBackIcon from "../../assets/images/icons/arrow_back.svg";
 import { useMemo, useEffect } from "react";
 import { TipImage } from "../../components/TipImage";
+import * as Linking from "expo-linking";
 
 export default function LearnDetailScreen() {
   const {
@@ -135,6 +136,11 @@ export default function LearnDetailScreen() {
             }}
           >
             <TipImage
+              onPress={
+                currentTip?.link
+                  ? () => Linking.openURL(currentTip.link as string)
+                  : undefined
+              }
               photo={currentTip.photo}
               imageStyle={{
                 marginTop: 20,

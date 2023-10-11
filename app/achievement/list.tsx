@@ -1,15 +1,75 @@
 import { router } from "expo-router";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, TouchableOpacity } from "react-native";
+import { Text } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ArrowBackIcon from "../../assets/images/icons/arrow_back.svg";
-import { useAppTheme } from "../../theme/theme";
+import { AppTheme, useAppTheme } from "../../theme/theme";
+import useFetch from "../../hooks/useFetch";
+import { AnimatedButton } from "../../components/AnimatedButton";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { ProgressBar } from "react-native-paper";
+import { ChallengeType, allChallenges } from "../../constants/challenges";
+import { ScrollView } from "react-native-gesture-handler";
+import { useEffect, useMemo, useState } from "react";
+export type Achievement = {
+  challenge: {
+    name: string;
+    type: string;
+    goal: number;
+    grade: number;
+    score: number;
+  };
+  year: number;
+  month: number;
+  day: number;
+  current_progress: number;
+  progress: number;
+};
 
 export default function AchievementListPage() {
   const theme = useAppTheme();
+
+  const [achievementToday, fetchAchievementToday] = useFetch<Achievement[]>({
+    method: "GET",
+    url: "/challenge/today-history",
+  });
+
+  const [challengeList, setChallengeList] = useState<ChallengeType[]>([]);
+
+  useEffect(() => {
+    if (achievementToday && achievementToday.length > 0) {
+      allChallenges.forEach((challenge) => {
+        for (let i = 0; i < achievementToday.length; i++) {
+          if (challenge.name === achievementToday[i].challenge.name) {
+            challenge.progress = achievementToday[i].progress;
+            challenge.day = achievementToday[i].day;
+            challenge.month = achievementToday[i].month;
+            challenge.year = achievementToday[i].year;
+            challenge.goal = achievementToday[i].challenge.goal;
+            challenge.currentProgress = achievementToday[i].current_progress;
+            achievementToday.splice(i, 1);
+            break;
+          }
+        }
+        setChallengeList((prev) => [
+          ...prev,
+          {
+            ...challenge,
+          },
+        ]);
+      });
+    }
+  }, [achievementToday]);
+
+  useEffect(() => {
+    fetchAchievementToday();
+  }, []);
+
   return (
     <SafeAreaView
       style={{
         flex: 1,
+        backgroundColor: theme.colors.background,
       }}
     >
       <View
@@ -39,16 +99,103 @@ export default function AchievementListPage() {
             Achievements
           </Text>
         </View>
-        <View style={{ width: 34, height: 34 }}></View>
+        <View style={{ width: 34, height: 34 }}>
+          <TouchableOpacity onPress={() => router.push("/achievement/ranking")}>
+            <MaterialCommunityIcons
+              name="podium-gold"
+              size={28}
+              color={theme.colors.onBackground}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
-      <View
+      <ScrollView
         style={{
           paddingHorizontal: 16,
           paddingVertical: 8,
         }}
       >
-        <Text>Achievement List</Text>
-      </View>
+        <View
+          style={{
+            gap: 8,
+            paddingBottom: 32,
+          }}
+        >
+          {challengeList.map((challenge, index) => {
+            return (
+              <AnimatedButton
+                key={index}
+                color={theme.colors[`${challenge.containerColor}`] + ""}
+                style={{
+                  padding: 0,
+                  overflow: "hidden",
+                }}
+              >
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    gap: 8,
+                    padding: 16,
+                  }}
+                >
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      flex: 1,
+                      alignItems: "center",
+                      gap: 8,
+                    }}
+                  >
+                    <MaterialCommunityIcons
+                      name={challenge.icon as any}
+                      size={32}
+                      color={theme.colors[`${challenge.color}`] as string}
+                    />
+                    <Text
+                      variant="titleLarge"
+                      style={{
+                        color: theme.colors[`${challenge.color}`] as string,
+                        fontWeight: "bold",
+                        fontSize: 20,
+                        marginLeft: 6,
+                      }}
+                    >
+                      {challenge.name}
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: "column",
+                      flex: 1,
+                      alignItems: "flex-end",
+                      gap: 8,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: theme.colors[`${challenge.color}`] as string,
+                        fontWeight: "bold",
+                        fontSize: 20,
+                        marginRight: 8,
+                      }}
+                    >
+                      {challenge.currentProgress || "0"}/{challenge.goal}
+                    </Text>
+                  </View>
+                </View>
+                {challenge.progress && (
+                  <ProgressBar
+                    progress={challenge.progress}
+                    color={theme.colors[`${challenge.progressColor}`] as string}
+                  />
+                )}
+              </AnimatedButton>
+            );
+          })}
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }

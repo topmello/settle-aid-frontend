@@ -74,7 +74,7 @@ const useEventScheduler = () => {
         return;
       } catch (error) {
         pushNotification({
-          message: "The event could not be added to your calendar!",
+          message: "The event could not be added to your calendar!" ,
           type: "error",
         });
         return;

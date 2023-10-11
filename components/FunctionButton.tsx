@@ -13,6 +13,7 @@ export function FunctionButton({
   containerColor,
   title,
   subtitle = "",
+  vertical = false,
 }: {
   destination: any;
   icon: React.ReactElement;
@@ -20,40 +21,47 @@ export function FunctionButton({
   containerColor: string;
   title: string;
   subtitle?: string;
+  vertical?: boolean;
 }) {
   const theme = useAppTheme();
   return (
     <AnimatedButton
-      height={76}
       color={containerColor}
       style={{
-        paddingVertical: 24,
+        paddingVertical: 22,
+        width: vertical ? "49%" : "100%",
       }}
       onPress={() => {
         router.push(destination);
       }}
     >
-      <View style={styles.animatedButtonInner}>
+      <View
+        style={
+          vertical
+            ? styles.animatedButtonInnerVertical
+            : styles.animatedButtonInner
+        }
+      >
         {React.cloneElement(icon, {
-          height: 40,
-          width: 40,
+          height: vertical ? 32 : 40,
+          width: vertical ? 32 : 40,
           fill: color,
         })}
         <View style={styles.columnFlexStart}>
           <View style={styles.rowSpaceBetween}>
             <Text
-              variant="titleLarge"
-              style={{ color: color, fontWeight: "bold" }}
+              style={{
+                color: color,
+                fontWeight: "bold",
+                fontSize: vertical ? 18 : 24,
+              }}
             >
               {title}
             </Text>
           </View>
           {subtitle && <Text style={{ color: color }}>{subtitle}</Text>}
         </View>
-        <ArrowIcon
-          style={styles.moreIcon}
-          fill={theme.colors.onSecondaryContainer}
-        />
+        {!vertical && <ArrowIcon style={styles.moreIcon} fill={color} />}
       </View>
     </AnimatedButton>
   );
@@ -70,6 +78,11 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     gap: 8,
+  },
+  animatedButtonInnerVertical: {
+    flexDirection: "column",
+    flex: 1,
+    gap: 4,
   },
   columnFlexStart: {
     flexDirection: "column",

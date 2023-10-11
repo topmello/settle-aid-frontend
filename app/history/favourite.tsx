@@ -10,6 +10,7 @@ import {
   StatusBar,
   Platform,
   Pressable,
+  Share,
 } from "react-native";
 import { Button, Text, ActivityIndicator } from "react-native-paper";
 import { useTranslation } from "react-i18next"; // <-- Import the hook
@@ -25,6 +26,8 @@ import useFetch from "../../hooks/useFetch";
 import { RouteHistory } from "../../types/route";
 import useEventScheduler from "../../hooks/useEventScheduler";
 import { AppDispatch } from "../../store";
+import * as Linking from "expo-linking";
+import * as Sharing from "expo-sharing";
 
 export default function HistoryOverviewScreen() {
   const { t } = useTranslation();
@@ -36,7 +39,7 @@ export default function HistoryOverviewScreen() {
   const [favRouteList, refetchFavRouteList] = useFetch<RouteHistory[]>(
     {
       method: "GET",
-      url: `/route/user/fav/${userID}/?limit=10`,
+      url: `/route/feed/user/fav/${userID}/?limit=10`,
     },
     [userID]
   );
@@ -72,6 +75,19 @@ export default function HistoryOverviewScreen() {
           routeId: result.route.route_id + "",
         },
       });
+    }
+  };
+
+  const shareUrl = async (route_id: number): Promise<void> => {
+    try {
+      await Share.share({
+        message: Linking.createURL("/route/result", {
+          queryParams: { routeId: route_id + "" },
+        }),
+      });
+    } catch (error) {
+      console.log(error);
+      return;
     }
   };
 
@@ -187,7 +203,7 @@ export default function HistoryOverviewScreen() {
       >
         <View
           style={{
-            gap: 6,
+            gap: 10,
             marginHorizontal: 16,
             marginBottom: 20,
           }}
@@ -200,6 +216,7 @@ export default function HistoryOverviewScreen() {
               routeResult={result}
               handleFavRoute={handleFavRoute}
               voted={result.voted_by_user}
+              shareUrl={shareUrl}
               onPressCard={() => handlePressCard(result)}
             />
           ))}

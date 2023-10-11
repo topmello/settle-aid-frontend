@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 import { useSession } from "../../hooks/useSession";
-import { useRootNavigationState, router, useNavigation } from "expo-router";
+import { useRootNavigationState, router } from "expo-router";
 import HomeScreen from ".";
 import LearnScreen from "./learn";
 import SettingsScreen from "./settings";
@@ -37,7 +37,7 @@ export default function TabLayout() {
         }
       });
     }
-  }, [rootNativationState?.key, language, checkSession]);
+  }, [rootNativationState?.key, language, checkSession, achieve]);
 
   return (
     <Tab.Navigator initialRouteName="home" theme={theme}>

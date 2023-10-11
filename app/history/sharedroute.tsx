@@ -6,103 +6,59 @@ import {
   ScrollView,
   StatusBar,
   Platform,
-  Pressable,
   TouchableOpacity,
+  Share,
 } from "react-native";
-import { Button, Text, ActivityIndicator } from "react-native-paper";
+import { Text, ActivityIndicator } from "react-native-paper";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "react-native-paper";
-import { router, useLocalSearchParams } from "expo-router";
+import { router } from "expo-router";
 import ArrowBackIcon from "../../assets/images/icons/arrow_back.svg";
 import { useSelector } from "react-redux";
-import { selectUserId, selectToken } from "../../store/authSlice";
+import { selectUserId } from "../../store/authSlice";
 import { selectIsLoading } from "../../store/appSlice";
 import RouteCard from "../../components/RouteCard";
-import { RequestOptions } from "../../api/fetch";
 import useFetch from "../../hooks/useFetch";
 import { RouteHistory } from "../../types/route";
 import * as Linking from "expo-linking";
-import * as Sharing from "expo-sharing";
+import usePaginateRoute from "../../hooks/usePaginateRoute";
+
+const ROUTES_PER_PAGE: number = 6;
 
 export default function SharedOverviewScreen() {
-  const { t } = useTranslation();
+  useTranslation();
   const theme = useTheme();
-  const userID = useSelector(selectUserId);
   const loading = useSelector(selectIsLoading);
-  const [limit, setLimit] = useState(4);
-  const [routeList, refetchRouteList] = useFetch<RouteHistory[]>(
-    {
-      method: "GET",
-      url: `/route/feed/top_routes/?limit=2&order_by=num_votes&offset=0`,
-    },
-    [userID]
-  );
 
-  const [accumulatedRouteList, setAccumulatedRouteList] = useState<
-    RouteHistory[]
-  >([]);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
-  useEffect(() => {
-    if (routeList && routeList.length > 0) {
-      setAccumulatedRouteList((prevList) => [...prevList, ...routeList]);
-    }
-  }, [routeList]);
+  const offsetRef = useRef(0);
 
-  const handleScroll = async (event) => {
-    if (isLoadingMore && !routeList && routeList.length === 0) return;
-    const scrollY = event.nativeEvent.contentOffset.y;
-    const windowHeight = event.nativeEvent.layoutMeasurement.height;
-    const contentHeight = event.nativeEvent.contentSize.height;
-
-    if (scrollY + windowHeight >= contentHeight - 100 && !isLoadingMore) {
-      setIsLoadingMore(true); // 设置为正在加载
-
-      const newLimit = accumulatedRouteList.length + 2;
-
-      await refetchRouteList({
-        method: "GET",
-        url: `/route/feed/top_routes/?limit=${newLimit}&order_by=num_votes&offset=0`,
-      });
-
-      console.log("newLimit", newLimit);
-
-      // 稍作延迟以确保状态得到更新
-      setTimeout(() => {
-        setIsLoadingMore(false); // 设置为加载完毕
-      }, 500);
-    }
-  };
-
-  const voteRequestOptions = {
-    method: "POST",
-    url: `/vote/`,
-  };
-
-  const [, executeVote] = useFetch(
-    voteRequestOptions,
-    [],
-    null,
-    false,
-    "Added to favourites"
+  const [accumulatedRouteList, handleScroll, handleFavRoute] = usePaginateRoute(
+    `/route/feed/top_routes/`,
+    6
   );
 
-  const handleFavRoute = async (route_id) => {
-    try {
-      await executeVote({ ...voteRequestOptions, url: `/vote/${route_id}/` });
-    } catch (error) {
-      return;
-    } finally {
-      refetchRouteList();
+  const handlePressCard = (result: RouteHistory) => {
+    if (result && result.route) {
+      router.push({
+        pathname: "/route/result",
+        params: {
+          routeId: result.route.route_id + "",
+        },
+      });
     }
   };
 
-  const shareUrl = async (route_id) => {
-    const initialUrl = await Linking.getInitialURL();
-    const url = initialUrl + "/?routeid=" + route_id;
+  const shareUrl = async (route_id: number): Promise<void> => {
     try {
-      await Sharing.shareAsync(url);
+      await Share.share({
+        message: Linking.createURL("/route/result", {
+          queryParams: { routeId: route_id + "" },
+        }),
+      });
     } catch (error) {
-      console.error("Error while sharing:", error);
+      console.log(error);
+      return;
     }
   };
 
@@ -186,11 +142,6 @@ export default function SharedOverviewScreen() {
         paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
       }}
     >
-      <ActivityIndicator
-        style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }}
-        animating={loading}
-        size="large"
-      />
       <View style={styles.row_text}>
         <TouchableOpacity onPress={() => router.back()}>
           <ArrowBackIcon
@@ -200,7 +151,7 @@ export default function SharedOverviewScreen() {
           />
         </TouchableOpacity>
         <View style={{ flex: 1, marginLeft: 12 }}>
-          <Text style={styles.text_title}>Shared Route</Text>
+          <Text style={styles.text_title}>Community Route</Text>
         </View>
         <View style={{ width: 34, height: 34 }}></View>
       </View>
@@ -214,23 +165,34 @@ export default function SharedOverviewScreen() {
       >
         <View
           style={{
-            gap: 12,
+            gap: 10,
             marginBottom: 20,
             paddingHorizontal: 16,
           }}
         >
-          {routeList?.map((result, index) => (
+          {accumulatedRouteList?.map((result, index) => (
             <RouteCard
               index={index}
               key={result.route.route_id}
               isSimplified={false}
               routeResult={result}
+              onPressCard={() => {
+                handlePressCard(result);
+              }}
               handleFavRoute={handleFavRoute}
               voted={result.voted_by_user}
               shareUrl={shareUrl}
             />
           ))}
         </View>
+        <ActivityIndicator
+          animating={loading}
+          size="large"
+          style={{
+            marginTop: 20,
+            marginBottom: 36,
+          }}
+        />
       </ScrollView>
     </SafeAreaView>
   );

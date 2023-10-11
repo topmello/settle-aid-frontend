@@ -170,8 +170,8 @@ export const WeatherWidget = () => {
             top: -28,
             left: 0,
           },
-          height: 138,
-          width: 138,
+          height: 120,
+          width: 120,
         }
       )}
       <View

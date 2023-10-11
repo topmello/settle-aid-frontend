@@ -96,12 +96,14 @@ const routeSlice = createSlice({
     },
     setSimilarityThreshold(
       state,
-      action: PayloadAction<{ similarity_threshold: number }>
+      action: PayloadAction<{ similarity_threshold: number, negative_similarity_threshold: number }>
     ) {
-      if (action.payload.similarity_threshold < 0) {
+      if (action.payload.similarity_threshold < 0 || action.payload.negative_similarity_threshold < 0) {
         state.similarity_threshold = 0;
+        state.negative_similarity_threshold = 0;
       } else {
         state.similarity_threshold = action.payload.similarity_threshold;
+        state.negative_similarity_threshold = action.payload.negative_similarity_threshold
       }
     },
     setRouteType(state, action: PayloadAction<{ route_type: RouteType }>) {
