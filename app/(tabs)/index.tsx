@@ -25,7 +25,7 @@ import {
   selectTriggerRefreshHome,
 } from "../../store/appSlice";
 import { selectUserId } from "../../store/authSlice";
-import { setRouteHistory, setFromUrl } from "../../store/routeHistorySlice";
+import { setRouteHistory, setFromUrl, selectHistoryRoute } from "../../store/routeHistorySlice";
 import { useAppTheme } from "../../theme/theme";
 import { RouteHistory } from "../../types/route";
 
@@ -41,6 +41,7 @@ export default function HomeScreen() {
   const loading = useSelector(selectIsLoading);
   const triggerRefreshHome = useSelector(selectTriggerRefreshHome);
   const url = Linking.useURL();
+  const historyRoute = useSelector(selectHistoryRoute);
 
   const [routeList, refetchRouteList] = useFetch<RouteHistory[]>(
     {
@@ -67,7 +68,6 @@ export default function HomeScreen() {
     if (url) {
       const { path, queryParams } = Linking.parse(url);
       if (queryParams && queryParams.routeId) {
-        console.log("from url", queryParams.routeId)
         dispatch(setFromUrl({
           routeId: parseInt(queryParams.routeId as string),
           fromUrl: true,

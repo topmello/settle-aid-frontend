@@ -50,6 +50,7 @@ const routeHistorySlice = createSlice({
     },
     setUseHistory(state, action: PayloadAction<boolean>) {
       state.history = action.payload;
+      state.fromUrl = false;
     },
     setFromUrl(state, action: PayloadAction<{ routeId: number, history: true, fromUrl: boolean }>) {
       state.routeId = action.payload.routeId;

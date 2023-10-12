@@ -168,7 +168,7 @@ export default function MapScreen() {
         })
       );
     }
-  }, [useHistory, dataFromFetch, dataFromGet]);
+  }, [useHistory, dataFromFetch, dataFromGet, fromUrl]);
 
   // fetch route
   useEffect(() => {
@@ -309,7 +309,7 @@ export default function MapScreen() {
       >
         <TouchableOpacity
           onPress={() => {
-            dispatch(setRouteHistory({ route: initialRoute, history: false, fromUrl: false })) // reset route history
+            dispatch(setRouteHistory({ route: initialRoute, history: true, fromUrl: true })) // reset route history
             router.push("/(tabs)",);
           }}
           style={{
