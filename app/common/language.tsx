@@ -15,12 +15,12 @@ import { LanguageCode } from "../../translation";
 
 type Language = {
   name: string;
-  code: LanguageCode,
+  code: LanguageCode;
   desc: string;
   icon: JSX.Element;
 };
 
-export const languages:Language[] = [
+export const languages: Language[] = [
   {
     name: "English(AU)",
     code: "en-AU",
@@ -49,10 +49,13 @@ export default function LanguageScreen() {
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const changeLanguage = useCallback((language: "en-AU" | "hi-IN" | "zh-CN") => {
-    dispatch(setLanguage({ language }));
-    i18n.changeLanguage(language);
-  }, []);
+  const changeLanguage = useCallback(
+    (language: "en-AU" | "hi-IN" | "zh-CN") => {
+      dispatch(setLanguage({ language }));
+      i18n.changeLanguage(language);
+    },
+    []
+  );
 
   return (
     <SafeAreaView
@@ -155,7 +158,7 @@ export default function LanguageScreen() {
           mode="contained"
           style={{ width: 150 }}
           onPress={() => {
-            router.push("/auth/access");
+            router.push("/common/intro");
           }}
         >
           {t("comm:Next")}
