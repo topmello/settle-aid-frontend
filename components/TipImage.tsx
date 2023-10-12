@@ -1,4 +1,4 @@
-import { TouchableOpacity } from "@gorhom/bottom-sheet";
+import { TouchableOpacity } from "react-native";
 import { Image } from "react-native";
 
 const getTipImage = (photo: string) => {

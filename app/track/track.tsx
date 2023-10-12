@@ -30,7 +30,6 @@ import { mapDarkTheme } from "../../theme/map";
 import { useSelector } from "react-redux";
 import { selectTheme, setRoomId } from "../../store/appSlice";
 import { selectLonLat } from "../../store/routeSlice";
-import BottomSheet from "@gorhom/bottom-sheet";
 import { useNotification } from "../../hooks/useNotification";
 import * as Clipboard from "expo-clipboard";
 
