@@ -24,6 +24,7 @@ import {
   selectPrivacyChecked,
   selectTheme,
   loaded,
+  loading,
   selectIsLoading,
 } from "../../store/appSlice";
 import {
@@ -32,6 +33,7 @@ import {
   selectLonLat,
   selectDistanceThres,
 } from "../../store/routeSlice";
+import { setUseHistory } from "../../store/routeHistorySlice";
 import { PROVIDER_GOOGLE } from "react-native-maps";
 
 import useCurrentLocation from "../../hooks/useCurrentLocation";
@@ -249,6 +251,13 @@ export default function RouteGenLocation() {
               ns: "route",
             })}
           </Text>
+          <Text
+            variant="titleMedium"
+            style={{ color: theme.colors.primary, marginTop: 12 }}
+          >
+            {t("At the moment, we only support CBD. Thanks for understanding! 😊", { ns: "route" })}
+          </Text>
+
         </View>
 
         <Card
@@ -458,6 +467,8 @@ export default function RouteGenLocation() {
                   type: "error",
                 });
               } else {
+                dispatch(setUseHistory(false))
+                dispatch(loading())
                 router.push("/route/result");
               }
             }}

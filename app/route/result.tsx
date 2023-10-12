@@ -5,7 +5,6 @@ import { SafeAreaView, Platform, View, TouchableOpacity } from "react-native";
 import {
   Menu,
   Text,
-  useTheme,
   Button,
   ActivityIndicator,
   IconButton,
@@ -15,10 +14,8 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import ResultOverlay from "../../components/ResultOverlay";
 import useCheckedList from "../../hooks/useCheckList";
 import { RouteState, selectRouteState } from "../../store/routeSlice";
-import ArrowBackIcon from "../../assets/images/icons/arrow_back.svg";
 import tips, { Tip } from "../../tips/tipsTyped";
 import getTipForMode from "../../tips/getTip";
-
 import { locationIcons } from "../../constants/icons";
 import { mapDarkTheme } from "../../theme/map";
 import { refreshHome, selectTheme } from "../../store/appSlice";
@@ -27,13 +24,21 @@ import useFetch from "../../hooks/useFetch";
 import { useMapRegion, Coordinates } from "../../hooks/useMapRegion";
 import useEventScheduler from "../../hooks/useEventScheduler";
 import { usePrintMap } from "../../hooks/usePrintMap";
-import { Route, RouteGetResult } from "../../types/route";
+import { Route, RouteGetResult, initialRoute } from "../../types/route";
 import { selectIsLoading } from "../../store/appSlice";
+import {
+  selectHistoryRoute,
+  selectUseHistory,
+  selectFromUrl,
+  selectRouteId,
+  setRouteHistory,
+} from "../../store/routeHistorySlice";
 import { useAppTheme } from "../../theme/theme";
 import { AppDispatch } from "../../store";
 import { useAchievement } from "../../hooks/useAchievement";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as Linking from "expo-linking";
+import { useTranslation } from "react-i18next";
 
 const MORE_ICON = Platform.OS === "ios" ? "dots-horizontal" : "dots-vertical";
 
@@ -46,35 +51,18 @@ const modes: Array<string> = [
 ];
 
 export default function MapScreen() {
+  const { t } = useTranslation();
   const theme = useAppTheme();
   const currentTheme = useSelector(selectTheme);
   const routeState: RouteState = useSelector(selectRouteState);
   const loading = useSelector(selectIsLoading);
+  const useHistory = useSelector(selectUseHistory);
+  const routeIdFromUrl = useSelector(selectRouteId);
+  const fromUrl = useSelector(selectFromUrl);
+  const data = useSelector<Route>(selectHistoryRoute) as Route;
+
   const dispatch = useDispatch<AppDispatch>();
   const achieve = useAchievement();
-
-  const routeId = useLocalSearchParams<{ routeId: string }>().routeId;
-  const [useHistory, setUseHistory] = useState(true);
-
-  const [data, setData] = useState<Route>({
-    route_id: 0,
-    locations: [],
-    locations_coordinates: [
-      {
-        latitude: 0,
-        longitude: 0,
-      },
-    ],
-    route: [
-      {
-        latitude: 0,
-        longitude: 0,
-      },
-    ],
-    instructions: [],
-    duration: 0,
-    route_image_name: "",
-  });
 
   const {
     isDatePickerVisible,
@@ -123,34 +111,36 @@ export default function MapScreen() {
       data: routeState,
     },
     [routeState],
-    data,
+    initialRoute,
     false
   );
 
-  const [routeDataFromHistory, fetchRouteDataFromHistory] =
-    useFetch<RouteGetResult>(
-      {
-        method: "GET",
-        url: `/route/${routeId}`,
-      },
-      [routeId],
-      { num_votes: 0, route: data },
-      false
-    );
+  const [dataFromGet, fetchGet] = useFetch<RouteGetResult>(
+    {
+      method: "GET",
+      url: `/route/${routeIdFromUrl}/`,
+      data: routeState,
+    },
+    [routeIdFromUrl],
+    { num_votes: 0, route: initialRoute },
+    false
+  );
 
   const fetchRoute = useCallback(async () => {
-    if (typeof routeId === "string") {
+
+    if (useHistory && !fromUrl) {
+      return;
+    } else if (useHistory && fromUrl) {
       try {
-        await fetchRouteDataFromHistory().then(() => {
-          setUseHistory(true);
-        });
+        await fetchGet()
       } catch (error) {
-        console.error("Failed to fetch route:", error);
+        console.log(error)
       }
-    } else {
+    }
+    else {
       try {
         await fetchData().then(() => {
-          setUseHistory(false);
+          achieve("routeGeneration");
         });
         dispatch(refreshHome());
       } catch (error) {
@@ -158,29 +148,33 @@ export default function MapScreen() {
         return;
       }
     }
-  }, [routeId]);
+  }, [useHistory, fromUrl, routeIdFromUrl]);
 
   useEffect(() => {
-    if (!useHistory && dataFromFetch && dataFromFetch.locations.length > 0) {
-      setData(dataFromFetch as Route);
-    } else if (
-      useHistory &&
-      routeDataFromHistory &&
-      routeDataFromHistory.route
-    ) {
-      setData(routeDataFromHistory.route as Route);
+    if (!useHistory && !fromUrl && dataFromFetch) {
+      dispatch(
+        setRouteHistory({
+          route: dataFromFetch as Route,
+          history: false,
+          fromUrl: false,
+        })
+      );
+    } else if (useHistory && fromUrl && dataFromGet) {
+      dispatch(
+        setRouteHistory({
+          route: dataFromGet.route as Route,
+          history: true,
+          fromUrl: true,
+        })
+      );
     }
-  }, [useHistory, dataFromFetch, routeDataFromHistory]);
+  }, [useHistory, dataFromFetch, dataFromGet, fromUrl]);
 
   // fetch route
   useEffect(() => {
-    fetchRoute()
-      .then(() => {
-        achieve("routeGeneration");
-      })
-      .catch((error) => {
-        console.error("Failed to fetch route:", error);
-      });
+    fetchRoute().catch((error) => {
+      console.error("Failed to fetch route:", error);
+    });
   }, [fetchRoute]);
 
   const voteRequestOptions: RequestOptions = {
@@ -250,6 +244,20 @@ export default function MapScreen() {
         {
           <>
             <Text variant="titleLarge">No route found</Text>
+            <Text
+              variant="titleMedium"
+              style={{
+                color: theme.colors.primary,
+                marginTop: 12,
+                padding: 20,
+              }}
+            >
+              {t(
+                "At the moment, we only support CBD. Thanks for understanding! 😊",
+                { ns: "route" }
+              )}
+            </Text>
+
             <Button
               mode="contained"
               style={{
@@ -286,7 +294,7 @@ export default function MapScreen() {
         backgroundColor: theme.colors.background,
       }}
     >
-      {map}
+      {map && data && <View style={{ opacity: 0 }}>{map}</View>}
       <View
         pointerEvents="box-none"
         style={{
@@ -301,7 +309,8 @@ export default function MapScreen() {
       >
         <TouchableOpacity
           onPress={() => {
-            router.replace("/(tabs)");
+            dispatch(setRouteHistory({ route: initialRoute, history: true, fromUrl: true })) // reset route history
+            router.push("/(tabs)",);
           }}
           style={{
             backgroundColor: theme.colors.primaryContainer,
@@ -333,9 +342,7 @@ export default function MapScreen() {
               />
             }
           >
-            {typeof routeId !== "string" && (
-              <Menu.Item onPress={fetchRoute} title="Re-plan" />
-            )}
+            {!useHistory && <Menu.Item onPress={fetchRoute} title="Re-plan" />}
             <Menu.Item onPress={showDatePicker} title="Schedule" />
             <Menu.Item
               onPress={() => {
@@ -394,6 +401,8 @@ export default function MapScreen() {
         </View>
 
         <DateTimePickerModal
+          textColor={theme.colors.onBackground}
+          isDarkModeEnabled={theme.dark}
           isVisible={isDatePickerVisible}
           mode="date"
           onConfirm={async (date) => {

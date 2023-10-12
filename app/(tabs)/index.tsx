@@ -1,5 +1,4 @@
-import { useEffect, useRef } from "react";
-
+import { useEffect } from "react";
 import { router } from "expo-router";
 import { useTranslation } from "react-i18next";
 import {
@@ -12,7 +11,8 @@ import {
   View,
 } from "react-native";
 import { ActivityIndicator, Text } from "react-native-paper";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../../store";
 import ForumIcon from "../../assets/images/icons/forum.svg";
 import ArrowIcon from "../../assets/images/icons/navigate_next.svg";
 import PersonPinIcon from "../../assets/images/icons/person_pin.svg";
@@ -25,6 +25,7 @@ import {
   selectTriggerRefreshHome,
 } from "../../store/appSlice";
 import { selectUserId } from "../../store/authSlice";
+import { setRouteHistory, setFromUrl, selectHistoryRoute } from "../../store/routeHistorySlice";
 import { useAppTheme } from "../../theme/theme";
 import { RouteHistory } from "../../types/route";
 
@@ -35,11 +36,12 @@ import { FunctionButton } from "../../components/FunctionButton";
 export default function HomeScreen() {
   const { t } = useTranslation();
   const theme = useAppTheme();
+  const dispatch = useDispatch<AppDispatch>();
   const userId = useSelector(selectUserId);
   const loading = useSelector(selectIsLoading);
   const triggerRefreshHome = useSelector(selectTriggerRefreshHome);
-  const listenerAddedRef = useRef(false);
   const url = Linking.useURL();
+  const historyRoute = useSelector(selectHistoryRoute);
 
   const [routeList, refetchRouteList] = useFetch<RouteHistory[]>(
     {
@@ -65,13 +67,14 @@ export default function HomeScreen() {
   useEffect(() => {
     if (url) {
       const { path, queryParams } = Linking.parse(url);
-
       if (queryParams && queryParams.routeId) {
+        dispatch(setFromUrl({
+          routeId: parseInt(queryParams.routeId as string),
+          fromUrl: true,
+          history: true
+        }));
         router.push({
           pathname: "/route/result",
-          params: {
-            routeId: queryParams.routeId + "",
-          },
         });
       }
     }
@@ -79,11 +82,9 @@ export default function HomeScreen() {
 
   const handlePressCard = (result: RouteHistory) => {
     if (result && result.route) {
+      dispatch(setRouteHistory({ route: result.route, history: true, fromUrl: false }));
       router.push({
         pathname: "/route/result",
-        params: {
-          routeId: result.route.route_id + "",
-        },
       });
     }
   };

@@ -25,3 +25,23 @@ export interface RouteHistory {
   route: Route;
   voted_by_user: boolean;
 }
+
+export const initialRoute: Route = {
+  route_id: 0,
+  locations: [],
+  locations_coordinates: [
+    {
+      latitude: 0,
+      longitude: 0,
+    },
+  ],
+  route: [
+    {
+      latitude: 0,
+      longitude: 0,
+    },
+  ],
+  instructions: [],
+  duration: 0,
+  route_image_name: "",
+}

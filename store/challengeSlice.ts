@@ -3,7 +3,7 @@ import { fetch } from "../api/fetch";
 import { RootState } from ".";
 
 export type ChallengeState = {
-  lastLogin: Date | null;
+  lastLogin: number | null;
   status: "idle" | "loading" | "failed";
 };
 
@@ -45,7 +45,7 @@ export const updateRoutesFavourited = createAsyncThunk(
       method: "POST",
       url: `/challenge/favourited/`,
       data: {
-        routes_favourited_shared: 1,
+        routes_favourited: 1,
       },
       token: state.auth.token,
     });
@@ -61,7 +61,7 @@ export const updateRoutesShared = createAsyncThunk(
       method: "POST",
       url: `/challenge/shared/`,
       data: {
-        routes_favourited_shared: 1,
+        routes_shared: 1,
       },
       token: state.auth.token,
     });
@@ -93,7 +93,7 @@ export const updateRoutesTipsRead = createAsyncThunk(
       method: "POST",
       url: `/challenge/tips_read/`,
       data: {
-        routes_tips_read: 1,
+        tips_read: 1,
       },
       token: state.auth.token,
     });
@@ -103,16 +103,23 @@ export const updateRoutesTipsRead = createAsyncThunk(
 
 export const updateRoutesLoggedIn = createAsyncThunk(
   "challenge/updateRoutesLoggedIn",
-  async (arg, { getState }) => {
+  async (arg, { getState, dispatch }) => {
     const state = getState() as RootState;
+    if (
+      state.challenge.lastLogin &&
+      new Date().getTime() - state.challenge.lastLogin < 1000 * 60 * 60 * 24
+    ) {
+      return null;
+    }
     const response = await fetch({
       method: "POST",
       url: `/challenge/logged_in/`,
       data: {
-        routes_logged_in: 1,
+        logged_in: 1,
       },
       token: state.auth.token,
     });
+    dispatch(updateLastLogin());
     return response.data;
   }
 );
@@ -120,13 +127,14 @@ export const updateRoutesLoggedIn = createAsyncThunk(
 export const updateAccessedGlobalFeed = createAsyncThunk(
   "challenge/updateAccessedGlobalFeed",
   async (arg, { getState }) => {
-    const state = getState() as any;
+    const state = getState() as RootState;
     const response = await fetch({
       method: "POST",
-      url: `/challenge/accessed_global_feed/${state.auth.id}/`,
+      url: `/challenge/accessed_global_feed/`,
       data: {
-        access_global_feed: 1,
+        accessed_global_feed: true,
       },
+      token: state.auth.token,
     });
     return response.data;
   }
@@ -135,7 +143,14 @@ export const updateAccessedGlobalFeed = createAsyncThunk(
 const challengeSlice = createSlice({
   name: "challenge",
   initialState,
-  reducers: {},
+  reducers: {
+    updateLastLogin: (state) => {
+      state.lastLogin = Date.now();
+    },
+    removeLastLogin: (state) => {
+      state.lastLogin = null;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(updateRoutesGenerated.fulfilled, (state, action) => {
       state.status = "idle";
@@ -222,5 +237,7 @@ const challengeSlice = createSlice({
     });
   },
 });
+
+export const { updateLastLogin, removeLastLogin } = challengeSlice.actions;
 
 export default challengeSlice.reducer;

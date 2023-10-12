@@ -22,13 +22,14 @@ import RouteCard from "../../components/RouteCard";
 import { RequestOptions } from "../../api/fetch";
 import useFetch from "../../hooks/useFetch";
 import { RouteHistory } from "../../types/route";
-import useEventScheduler from "../../hooks/useEventScheduler";
-
 import * as Linking from "expo-linking";
 import * as Sharing from "expo-sharing";
 import { usePrintMap } from "../../hooks/usePrintMap";
 import { AppDispatch } from "../../store";
 import { useNotification } from "../../hooks/useNotification";
+import { useAchievement } from "../../hooks/useAchievement";
+import { setRouteHistory } from "../../store/routeHistorySlice";
+
 
 export default function HistoryOverviewScreen() {
   const theme = useTheme();
@@ -36,6 +37,7 @@ export default function HistoryOverviewScreen() {
   const loading = useSelector(selectIsLoading);
   const dispatch = useDispatch<AppDispatch>();
   const { pushNotification } = useNotification();
+  const achieve = useAchievement();
 
   const [routeList, refetchRouteList] = useFetch<RouteHistory[]>(
     {
@@ -60,11 +62,10 @@ export default function HistoryOverviewScreen() {
 
   const handlePressCard = (result: RouteHistory) => {
     if (result && result.route) {
+
+      dispatch(setRouteHistory({ route: result.route, history: true, fromUrl: false }))
       router.push({
         pathname: "/route/result",
-        params: {
-          routeId: result.route.route_id + "",
-        },
       });
     }
   };
@@ -76,6 +77,7 @@ export default function HistoryOverviewScreen() {
       return;
     } finally {
       dispatch(refreshHome());
+      achieve("routeFavourited");
       refetchRouteList();
     }
   };
@@ -88,6 +90,7 @@ export default function HistoryOverviewScreen() {
           queryParams: { routeId: route_id + "" },
         }),
       });
+      achieve("routeShared");
     } catch (error) {
       console.log(error);
       return;
@@ -119,6 +122,7 @@ export default function HistoryOverviewScreen() {
     })
       .then(() => {
         refetchRouteList();
+        achieve("routePublished");
       })
       .catch((err) => {
         console.error("Error publishing the route:", err);

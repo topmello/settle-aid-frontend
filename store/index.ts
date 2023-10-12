@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import authSlice from "./authSlice";
 import appSlice from "./appSlice";
 import routeSlice from "./routeSlice";
+import routeHistorySlice from "./routeHistorySlice";
 import {
   persistReducer,
   persistStore,
@@ -44,6 +45,13 @@ export const store = configureStore({
         storage,
       },
       challengeSlice
+    ),
+    routeHistory: persistReducer(
+      {
+        key: "routeHistory",
+        storage
+      },
+      routeHistorySlice
     ),
   },
   middleware: (getDefaultMiddleware) =>

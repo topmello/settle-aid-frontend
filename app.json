@@ -22,6 +22,16 @@
       "supportsTablet": true
     },
     "android": {
+      "splash": {
+        "backgroundColor": "#ffffff",
+        "image": "./assets/images/splash.png",
+        "resizeMode": "contain",
+        "dark": {
+          "backgroundColor": "#1a1a1a",
+          "image": "./assets/images/splash.png",
+          "resizeMode": "contain"
+        }
+      },
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffe78f"
@@ -38,7 +48,16 @@
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
-    "plugins": ["expo-router", "react-native-add-calendar-event"],
+    "plugins": [
+      "expo-router",
+      "react-native-add-calendar-event",
+      [
+        "expo-calendar",
+        {
+          "calendarPermission": "The app needs to access your calendar."
+        }
+      ]
+    ],
     "experiments": {
       "typedRoutes": true
     },

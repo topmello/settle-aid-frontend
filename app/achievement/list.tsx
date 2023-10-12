@@ -29,10 +29,15 @@ export type Achievement = {
 export default function AchievementListPage() {
   const theme = useAppTheme();
 
-  const [achievementToday, fetchAchievementToday] = useFetch<Achievement[]>({
-    method: "GET",
-    url: "/challenge/today-history",
-  });
+  const [achievementToday, fetchAchievementToday] = useFetch<Achievement[]>(
+    {
+      method: "GET",
+      url: "/challenge/today-history",
+    },
+    [],
+    [],
+    false
+  );
 
   const [challengeList, setChallengeList] = useState<ChallengeType[]>([]);
 

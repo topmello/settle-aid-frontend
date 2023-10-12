@@ -14,7 +14,8 @@ import { useTranslation } from "react-i18next";
 import { useTheme } from "react-native-paper";
 import { router } from "expo-router";
 import ArrowBackIcon from "../../assets/images/icons/arrow_back.svg";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../../store";
 import { selectUserId } from "../../store/authSlice";
 import { selectIsLoading } from "../../store/appSlice";
 import RouteCard from "../../components/RouteCard";
@@ -22,16 +23,16 @@ import useFetch from "../../hooks/useFetch";
 import { RouteHistory } from "../../types/route";
 import * as Linking from "expo-linking";
 import usePaginateRoute from "../../hooks/usePaginateRoute";
-
-const ROUTES_PER_PAGE: number = 6;
+import { useAchievement } from "../../hooks/useAchievement";
+import { setRouteHistory } from "../../store/routeHistorySlice";
 
 export default function SharedOverviewScreen() {
   useTranslation();
   const theme = useTheme();
   const loading = useSelector(selectIsLoading);
+  const achieve = useAchievement();
 
-  const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const offsetRef = useRef(0);
+  const dispatch = useDispatch<AppDispatch>();
 
   const [accumulatedRouteList, handleScroll, handleFavRoute] = usePaginateRoute(
     `/route/feed/top_routes/`,
@@ -40,11 +41,9 @@ export default function SharedOverviewScreen() {
 
   const handlePressCard = (result: RouteHistory) => {
     if (result && result.route) {
+      dispatch(setRouteHistory({ route: result.route, history: true, fromUrl: false }));
       router.push({
         pathname: "/route/result",
-        params: {
-          routeId: result.route.route_id + "",
-        },
       });
     }
   };
@@ -56,11 +55,16 @@ export default function SharedOverviewScreen() {
           queryParams: { routeId: route_id + "" },
         }),
       });
+      achieve("routeShared");
     } catch (error) {
       console.log(error);
       return;
     }
   };
+
+  useEffect(() => {
+    achieve("accessedGlobalFeed");
+  }, []);
 
   const styles = StyleSheet.create({
     container: {
@@ -151,7 +155,7 @@ export default function SharedOverviewScreen() {
           />
         </TouchableOpacity>
         <View style={{ flex: 1, marginLeft: 12 }}>
-          <Text style={styles.text_title}>Community Route</Text>
+          <Text style={styles.text_title}>Community Routes</Text>
         </View>
         <View style={{ width: 34, height: 34 }}></View>
       </View>

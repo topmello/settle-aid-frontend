@@ -440,6 +440,6 @@ const style = StyleSheet.create({
     flex: 1,
   },
   promptInputOutline: {
-    borderRadius: 20,
+    borderRadius: 6,
   },
 });

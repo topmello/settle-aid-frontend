@@ -24,17 +24,18 @@ import RouteCard from "../../components/RouteCard";
 import { RequestOptions } from "../../api/fetch";
 import useFetch from "../../hooks/useFetch";
 import { RouteHistory } from "../../types/route";
-import useEventScheduler from "../../hooks/useEventScheduler";
 import { AppDispatch } from "../../store";
 import * as Linking from "expo-linking";
-import * as Sharing from "expo-sharing";
+import { useAchievement } from "../../hooks/useAchievement";
+import { setRouteHistory } from "../../store/routeHistorySlice";
+
 
 export default function HistoryOverviewScreen() {
-  const { t } = useTranslation();
   const theme = useTheme();
   const dispatch = useDispatch<AppDispatch>();
   const userID = useSelector(selectUserId);
   const loading = useSelector(selectIsLoading);
+  const achieve = useAchievement();
 
   const [favRouteList, refetchFavRouteList] = useFetch<RouteHistory[]>(
     {
@@ -69,11 +70,10 @@ export default function HistoryOverviewScreen() {
 
   const handlePressCard = (result: RouteHistory) => {
     if (result && result.route) {
+
+      dispatch(setRouteHistory({ route: result.route, history: true, fromUrl: false }))
       router.push({
         pathname: "/route/result",
-        params: {
-          routeId: result.route.route_id + "",
-        },
       });
     }
   };
@@ -85,18 +85,12 @@ export default function HistoryOverviewScreen() {
           queryParams: { routeId: route_id + "" },
         }),
       });
+      achieve("routeShared");
     } catch (error) {
       console.log(error);
       return;
     }
   };
-
-  const {
-    isDatePickerVisible,
-    showDatePicker,
-    hideDatePicker,
-    handleDateConfirm,
-  } = useEventScheduler();
 
   const styles = StyleSheet.create({
     container: {

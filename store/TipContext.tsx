@@ -1,4 +1,5 @@
 import React, { useState, createContext, useMemo, useCallback } from "react";
+import { useAchievement } from "../hooks/useAchievement";
 
 export type Tip = {
   description: string;
@@ -61,6 +62,24 @@ export const TipProvider = ({ children }: { children: React.ReactNode }) => {
     content: "",
   });
 
+  const achieve = useAchievement();
+
+  const setCurrentTipIndexWithAchieve = useCallback(
+    (index: number) => {
+      setCurrentTipIndex(index);
+      achieve("tipsRead");
+    },
+    [setCurrentTipIndex, achieve]
+  );
+
+  const setCategoryWithAchieve = useCallback(
+    (category: TipCategory) => {
+      setCategory(category);
+      achieve("tipsRead");
+    },
+    [setCategory, achieve]
+  );
+
   const resetResultTip = useCallback(() => {
     setResultTip({
       description: "",
@@ -75,9 +94,9 @@ export const TipProvider = ({ children }: { children: React.ReactNode }) => {
 
   const nextTip = useCallback(() => {
     if (currentTipIndex < tips.length - 1) {
-      setCurrentTipIndex(currentTipIndex + 1);
+      setCurrentTipIndexWithAchieve(currentTipIndex + 1);
     }
-  }, [currentTipIndex, tips]);
+  }, [currentTipIndex, tips, setCurrentTipIndexWithAchieve]);
 
   const prevTip = useCallback(() => {
     if (currentTipIndex > 0) {
@@ -112,10 +131,10 @@ export const TipProvider = ({ children }: { children: React.ReactNode }) => {
     <TipContext.Provider
       value={{
         category,
-        setCategory,
+        setCategory: setCategoryWithAchieve,
         tips,
         currentTipIndex,
-        setCurrentTipIndex,
+        setCurrentTipIndex: setCurrentTipIndexWithAchieve,
         nextTip,
         prevTip,
         canNext,
