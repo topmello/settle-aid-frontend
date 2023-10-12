@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { router } from "expo-router";
 import MapView, { Marker } from "react-native-maps";
@@ -64,6 +64,10 @@ export default function RouteGenLocation() {
 
   const [showLocationInput, setShowLocationInput] = useState(false);
   const mapRef = useRef<MapView>(null);
+
+  useEffect(() => {
+    fetchLocation();
+  }, []);
 
   return (
     <ScrollView
@@ -255,9 +259,11 @@ export default function RouteGenLocation() {
             variant="titleMedium"
             style={{ color: theme.colors.primary, marginTop: 12 }}
           >
-            {t("At the moment, we only support CBD. Thanks for understanding! 😊", { ns: "route" })}
+            {t(
+              "At the moment, we only support CBD. Thanks for understanding! 😊",
+              { ns: "route" }
+            )}
           </Text>
-
         </View>
 
         <Card
@@ -467,8 +473,8 @@ export default function RouteGenLocation() {
                   type: "error",
                 });
               } else {
-                dispatch(setUseHistory(false))
-                dispatch(loading())
+                dispatch(setUseHistory(false));
+                dispatch(loading());
                 router.push("/route/result");
               }
             }}

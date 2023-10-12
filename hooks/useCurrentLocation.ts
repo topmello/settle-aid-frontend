@@ -16,12 +16,6 @@ const useCurrentLocation = () => {
       return;
     }
 
-    setTimeout(() => {
-      dispatch(
-        fail({ message: "Loading current position took longer than expected" })
-      );
-    }, 3000);
-
     let location = await Location.getLastKnownPositionAsync({});
     if (location) {
       const { longitude, latitude } = location.coords;
