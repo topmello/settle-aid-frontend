@@ -7,7 +7,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { useAppTheme } from "../theme/theme";
 import { usePrintMap } from "../hooks/usePrintMap";
 import useEventScheduler from "../hooks/useEventScheduler";
-import { timeSince } from "../utils/time";
+import { useTranslatedTime } from "../utils/time";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { getRouteImage } from "../utils/routeImage";
 import { useTranslation } from "react-i18next";
@@ -42,6 +42,7 @@ const RouteCard: React.FC<CardProps> = ({
     handleDateConfirm,
   } = useEventScheduler();
   const { t } = useTranslation();
+  const timeSince = useTranslatedTime();
 
   const { map, printMap } = usePrintMap(routeResult.route);
   return (

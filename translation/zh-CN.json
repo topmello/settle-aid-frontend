@@ -25,6 +25,24 @@
     "Share Link": "分享链接",
     "Print": "打印"
   },
+  "time": {
+    "sec": "秒",
+    "secs": "秒",
+    "min": "分钟",
+    "mins": "分钟",
+    "hour": "小时",
+    "hours": "小时",
+    "day": "天",
+    "days": "天",
+    "week": "周",
+    "weeks": "周",
+    "month": "月",
+    "months": "月",
+    "year": "年",
+    "years": "年",
+    "ago": "前",
+    "now": "现在"
+  },
   "trans": {
     "Choose your language": "请选择您习惯使用的语言",
     "Your Ultimate Travel Companion": "您的终极旅行伴侣",

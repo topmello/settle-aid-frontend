@@ -25,6 +25,24 @@
     "Share Link": "Share Link",
     "Print": "Print"
   },
+  "time": {
+    "sec": "sec",
+    "secs": "secs",
+    "min": "min",
+    "mins": "mins",
+    "hour": "hour",
+    "hours": "hours",
+    "day": "day",
+    "days": "days",
+    "week": "week",
+    "weeks": "weeks",
+    "month": "month",
+    "months": "months",
+    "year": "year",
+    "years": "years",
+    "ago": "ago",
+    "now": "now"
+  },
   "trans": {
     "Choose your language": "Choose your Language to get started",
     "Your Ultimate Travel Companion": "Your Ultimate Travel Companion",
@@ -125,14 +143,7 @@
     "Schedule": "Schedule",
     "Share": "Share",
     "Share Link": "Share Link",
-    "mins": "mins",
-    "sec ago": "sec ago",
-    "mins ago": "mins ago",
-    "hr ago": "hr ago",
-    "hs ago": "hs ago",
-    "days ago": "days ago",
-    "mths ago": "mths ago",
-    "yr(s) ago": "yr(s) ago"
+    "mins": "mins"
   },
   "achievements": {
     "Generate": "Generate",
@@ -157,13 +168,6 @@
     "Share Link": "Share Link",
     "Publish Route": "Publish Route",
     "mins": "mins",
-    "sec ago": "sec ago",
-    "mins ago": "mins ago",
-    "hr ago": "hr ago",
-    "hs ago": "hs ago",
-    "days": "days ago",
-    "mths ago": "mths ago",
-    "yr(s) ago": "yr(s) ago",
     "Added to favourite": "Added to favourite",
     "Remove route from favourite": "Remove route from favourite"
   },
@@ -174,13 +178,6 @@
     "Share Link": "Share Link",
     "Publish Route": "Publish Route",
     "mins": "mins",
-    "sec ago": "sec ago",
-    "mins ago": "mins ago",
-    "hr ago": "hr ago",
-    "hs ago": "hs ago",
-    "days ago": "days ago",
-    "mths ago": "mths ago",
-    "yr(s) ago": "yr(s) ago",
     "Added to favourite": "Added to favourite",
     "Remove route from favourite": "Remove route from favourite"
   },
