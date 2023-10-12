@@ -1,24 +1,31 @@
-import TipData from "./tips.json";
+import { tips as tipsCN } from "./tips-CN.json";
+import { tips as tipsEN } from "./tips.json";
+import { tips as tipsIN } from "./tips-IN.json";
+import { SupportedLanguage } from "../store/appSlice";
 
-export interface Tip {
+export type Tip = {
   description: string;
   content: string;
   link: string;
   photo: string;
-}
+};
 
-export interface Tips {
+export type Tips = {
   mode?: string;
   type?: Tip[];
   title?: string;
   description?: string;
   tips?: Tips[];
-}
+};
 
-export interface TipArray {
-  tips: Tips[];
-}
+export type TipArray = typeof tipsCN;
 
-const tips: TipArray = TipData;
+export const tips: {
+  [key in SupportedLanguage]: typeof tipsCN;
+} = {
+  "zh-CN": tipsCN,
+  "en-AU": tipsEN,
+  "hi-IN": tipsIN,
+};
 
 export default tips;

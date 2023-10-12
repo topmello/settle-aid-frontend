@@ -1,30 +1,29 @@
 import { TipArray, Tip } from "./tipsTyped";
 
-function getTipForMode(tips: TipArray, modes: string[]): Array<Tip> {
+const LIMIT = 50;
+
+function getTipForMode(tips: TipArray): Array<Tip> {
   const result: Array<Tip> = [];
-
-  if (tips && tips.tips) {
-    modes.forEach((mode) => {
-      const matchingTypes: Array<Tip> = [];
-
-      tips.tips.forEach((tipGroup) => {
-        if (tipGroup.tips) {
-          const match = tipGroup.tips.find((tip) => tip.mode === mode);
-          if (match && match.type) {
-            matchingTypes.push(...match.type);
-          }
-        }
-      });
-
-      if (matchingTypes.length > 0) {
-        //const randomIndex = Math.floor(Math.random() * matchingTypes.length);
-        const randomIndex: number = 0;
-        result.push(matchingTypes[randomIndex]);
+  const allTypes: (typeof tips)[0]["tips"][0]["type"][] = [];
+  // Flatten all 'type' arrays into the allTypes array
+  let count = 0;
+  for (const item of tips) {
+    for (const tip of item.tips) {
+      if (count++ > LIMIT) {
+        break;
       }
-    });
+      allTypes.push(...tip.type);
+    }
   }
 
-  return result;
+  // Shuffle the allTypes array
+  for (let i = allTypes.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [allTypes[i], allTypes[j]] = [allTypes[j], allTypes[i]];
+  }
+
+  // Get the first 5 elements
+  return allTypes.slice(0, 5);
 }
 
 export default getTipForMode;

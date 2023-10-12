@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { router, useLocalSearchParams } from "expo-router";
 import { SafeAreaView, Platform, View, TouchableOpacity } from "react-native";
@@ -13,12 +13,20 @@ import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from "react-native-maps";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import ResultOverlay from "../../components/ResultOverlay";
 import useCheckedList from "../../hooks/useCheckList";
-import { RouteState, selectRouteState, setRouteLanguage } from "../../store/routeSlice";
-import tips, { Tip } from "../../tips/tipsTyped";
+import {
+  RouteState,
+  selectRouteState,
+  setRouteLanguage,
+} from "../../store/routeSlice";
+import tips, { TipArray } from "../../tips/tipsTyped";
 import getTipForMode from "../../tips/getTip";
 import { locationIcons } from "../../constants/icons";
 import { mapDarkTheme } from "../../theme/map";
-import { SupportedLanguage, refreshHome, selectTheme } from "../../store/appSlice";
+import {
+  SupportedLanguage,
+  refreshHome,
+  selectTheme,
+} from "../../store/appSlice";
 import { RequestOptions } from "../../api/fetch";
 import useFetch from "../../hooks/useFetch";
 import { useMapRegion, Coordinates } from "../../hooks/useMapRegion";
@@ -33,7 +41,7 @@ import {
   selectRouteId,
   setRouteHistory,
   setInstructions,
-  Instructions
+  Instructions,
 } from "../../store/routeHistorySlice";
 import { useAppTheme } from "../../theme/theme";
 import { AppDispatch } from "../../store";
@@ -53,7 +61,9 @@ const modes: Array<string> = [
 
 export default function MapScreen() {
   const { t } = useTranslation();
-  const language = useSelector<SupportedLanguage>(selectLanguage) as SupportedLanguage;
+  const language = useSelector<SupportedLanguage>(
+    selectLanguage
+  ) as SupportedLanguage;
   const theme = useAppTheme();
   const currentTheme = useSelector(selectTheme);
   const routeState: RouteState = useSelector(selectRouteState);
@@ -86,7 +96,13 @@ export default function MapScreen() {
   const { map, printMap } = usePrintMap(data);
   const mapRef = useRef<MapView>(null);
 
-  const tipList: Array<Tip> = getTipForMode(tips, modes);
+  const lang = useSelector(selectLanguage);
+
+  const tipList = useMemo(() => {
+    if (lang && tips[lang]) {
+      return getTipForMode(tips[lang]);
+    }
+  }, [lang, tips]);
 
   const {
     region,
@@ -128,15 +144,16 @@ export default function MapScreen() {
     false
   );
 
-  const [translatedInstructions, fetchTranslatedInstructions] = useFetch<Instructions>(
-    {
-      method: "GET",
-      url: `search/route/instructions/${data.route_id}/${language}/`,
-    },
-    [data.route_id, language],
-    { instructions: [] },
-    false
-  )
+  const [translatedInstructions, fetchTranslatedInstructions] =
+    useFetch<Instructions>(
+      {
+        method: "GET",
+        url: `search/route/instructions/${data.route_id}/${language}/`,
+      },
+      [data.route_id, language],
+      { instructions: [] },
+      false
+    );
   useEffect(() => {
     if (language !== "en-AU") {
       fetchTranslatedInstructions();
@@ -149,7 +166,7 @@ export default function MapScreen() {
     } else if (useHistory && fromUrl) {
       try {
         dispatch(setRouteLanguage({ language }));
-        await fetchGet()
+        await fetchGet();
       } catch (error) {
         console.log(error);
       }
@@ -157,7 +174,7 @@ export default function MapScreen() {
       try {
         dispatch(setRouteLanguage({ language }));
         await fetchData().then(() => {
-          achieve("routeGeneration")
+          achieve("routeGeneration");
         });
 
         dispatch(refreshHome());
@@ -167,7 +184,6 @@ export default function MapScreen() {
       }
     }
   }, [useHistory, fromUrl, routeIdFromUrl, language]);
-
 
   useEffect(() => {
     let routeData: Route | undefined;
@@ -191,24 +207,30 @@ export default function MapScreen() {
         })
       );
     }
-    if (language !== "en-AU" &&
+    if (
+      language !== "en-AU" &&
       translatedInstructions &&
-      translatedInstructions.instructions.length > 0) {
+      translatedInstructions.instructions.length > 0
+    ) {
       dispatch(setInstructions(translatedInstructions as Instructions));
     } else {
       console.log("Skipped dispatching instructions");
     }
-
-  }, [useHistory, dataFromFetch, dataFromGet, fromUrl, translatedInstructions, language]);
-
-
+  }, [
+    useHistory,
+    dataFromFetch,
+    dataFromGet,
+    fromUrl,
+    translatedInstructions,
+    language,
+  ]);
 
   // fetch route
   useEffect(() => {
     fetchRoute().catch((error) => {
       console.error("Failed to fetch route:", error);
     });
-  }, [fetchRoute,]);
+  }, [fetchRoute]);
 
   const voteRequestOptions: RequestOptions = {
     method: "POST",
@@ -302,7 +324,7 @@ export default function MapScreen() {
                 router.back();
               }}
             >
-              Back
+              {t("Back", { ns: "comm" })}
             </Button>
             <Button
               mode="contained"
@@ -313,7 +335,7 @@ export default function MapScreen() {
                 router.replace("/(tabs)");
               }}
             >
-              Home
+              {t("Home", { ns: "comm" })}
             </Button>
           </>
         }
@@ -389,7 +411,10 @@ export default function MapScreen() {
                 title={t("Replan", { ns: "comm" })}
               />
             )}
-            <Menu.Item onPress={showDatePicker} title="Schedule" />
+            <Menu.Item
+              onPress={showDatePicker}
+              title={t("Schedule", { ns: "comm" })}
+            />
             <Menu.Item
               onPress={() => {
                 printMap();
@@ -464,6 +489,9 @@ export default function MapScreen() {
         provider={PROVIDER_GOOGLE}
         customMapStyle={currentTheme === "dark" ? mapDarkTheme : []}
         ref={mapRef}
+        loadingEnabled={true}
+        loadingIndicatorColor={theme.colors.onPrimaryContainer}
+        loadingBackgroundColor={theme.colors.primaryContainer}
         showsUserLocation={true}
         showsCompass={false}
         showsMyLocationButton={false}

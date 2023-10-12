@@ -22,7 +22,7 @@ import Animated from "react-native-reanimated";
 import { useTranslation } from "react-i18next";
 
 type OverlayProps = {
-  tipList: Tip[];
+  tipList?: Tip[];
   data: Route;
   handleLocationSelect: (location: any) => void;
   handlePressRoute: (index: number) => void;
@@ -83,81 +83,83 @@ const ResultOverlay: React.FC<OverlayProps> = ({
       />
       <ScrollView>
         {/** Horizontal Tips */}
-        <FlatList
-          style={{
-            width: "100%",
-          }}
-          data={tipList}
-          renderItem={({ item, index }) => (
-            <Surface
-              style={{
-                backgroundColor: theme.colors.primaryContainer,
-                borderRadius: 8,
-                width: 300,
-                marginTop: 12,
-                marginBottom: 8,
-                flexDirection: "row",
-              }}
-            >
-              <TouchableOpacity
+        {tipList && (
+          <FlatList
+            style={{
+              width: "100%",
+            }}
+            data={tipList}
+            renderItem={({ item, index }) => (
+              <Surface
                 style={{
-                  flex: 1,
+                  backgroundColor: theme.colors.primaryContainer,
+                  borderRadius: 8,
+                  width: 300,
+                  marginTop: 12,
+                  marginBottom: 8,
                   flexDirection: "row",
-                  padding: 16,
-                }}
-                onPress={() => {
-                  setCategory({
-                    mode: "tip",
-                    type: tipList,
-                  });
-                  setCurrentTipIndex(index);
-                  router.push("/learn/detail");
                 }}
               >
-                <View
+                <TouchableOpacity
                   style={{
                     flex: 1,
+                    flexDirection: "row",
+                    padding: 16,
+                  }}
+                  onPress={() => {
+                    setCategory({
+                      mode: "tip",
+                      type: tipList,
+                    });
+                    setCurrentTipIndex(index);
+                    router.push("/learn/detail");
                   }}
                 >
-                  <Text variant="bodyLarge" style={{ fontWeight: "bold" }}>
-                    {item.description}
-                  </Text>
-                  <Text
-                    variant="bodyMedium"
-                    numberOfLines={2}
-                    ellipsizeMode="tail"
-                  >
-                    {item.content}
-                  </Text>
-                </View>
-                <View
-                  style={{
-                    width: 30,
-                    height: "100%",
-                    justifyContent: "center",
-                  }}
-                >
-                  <IconButton
-                    icon="chevron-right"
-                    onPress={() => {
-                      setCategory({
-                        mode: "tip",
-                        type: tipList,
-                      });
-                      router.push("/learn/detail");
+                  <View
+                    style={{
+                      flex: 1,
                     }}
-                  />
-                </View>
-              </TouchableOpacity>
-            </Surface>
-          )}
-          keyExtractor={(tip) => tip?.description}
-          contentContainerStyle={{
-            columnGap: 10,
-            margin: 14,
-          }}
-          horizontal={true}
-        />
+                  >
+                    <Text variant="bodyLarge" style={{ fontWeight: "bold" }}>
+                      {item.description}
+                    </Text>
+                    <Text
+                      variant="bodyMedium"
+                      numberOfLines={2}
+                      ellipsizeMode="tail"
+                    >
+                      {item.content}
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      width: 30,
+                      height: "100%",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <IconButton
+                      icon="chevron-right"
+                      onPress={() => {
+                        setCategory({
+                          mode: "tip",
+                          type: tipList,
+                        });
+                        router.push("/learn/detail");
+                      }}
+                    />
+                  </View>
+                </TouchableOpacity>
+              </Surface>
+            )}
+            keyExtractor={(tip) => tip?.description}
+            contentContainerStyle={{
+              columnGap: 10,
+              margin: 14,
+            }}
+            horizontal={true}
+          />
+        )}
 
         {/** Destinations */}
         <List.Section>
@@ -185,7 +187,7 @@ const ResultOverlay: React.FC<OverlayProps> = ({
                 <List.Item
                   key={index}
                   title={location}
-                  description={capitalizedDescription}
+                  description={t(capitalizedDescription, { ns: "route" })}
                   left={() => (
                     <View style={{ justifyContent: "center", paddingLeft: 10 }}>
                       {Icon ? (
@@ -195,6 +197,7 @@ const ResultOverlay: React.FC<OverlayProps> = ({
                           style={{
                             width: 30,
                             height: 30,
+                            borderRadius: 15,
                             backgroundColor: "grey",
                           }}
                         ></View>

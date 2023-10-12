@@ -2,9 +2,7 @@ import { ScrollView } from "react-native";
 import { View } from "react-native";
 import { Button, List, Text, useTheme } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { tips as tipsCN } from "../../tips/tips-CN.json";
-import { tips as tipsEN } from "../../tips/tips.json";
-import { tips as tipsIN } from "../../tips/tips-IN.json";
+
 import { Ionicons } from "@expo/vector-icons";
 import { useTip } from "../../store/TipContext";
 import { router } from "expo-router";
@@ -12,14 +10,7 @@ import { useAppTheme } from "../../theme/theme";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import { SupportedLanguage, selectLanguage } from "../../store/appSlice";
-
-const tips: {
-  [key in SupportedLanguage]: (typeof tipsCN)[number][];
-} = {
-  "zh-CN": tipsCN,
-  "en-AU": tipsEN,
-  "hi-IN": tipsIN,
-};
+import { tips } from "../../tips/tipsTyped";
 
 type IconName =
   | "airplane-outline"
