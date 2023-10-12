@@ -1,6 +1,6 @@
 
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Route } from "../types/route";
+import { Route, initialRoute } from "../types/route";
 
 export interface RouteHistory {
   routeId: number
@@ -11,25 +11,7 @@ export interface RouteHistory {
 
 const RouteHistoryState: RouteHistory = {
   routeId: 0,
-  route: {
-    route_id: 0,
-    locations: [],
-    locations_coordinates: [
-      {
-        latitude: 0,
-        longitude: 0,
-      },
-    ],
-    route: [
-      {
-        latitude: 0,
-        longitude: 0,
-      },
-    ],
-    instructions: [],
-    duration: 0,
-    route_image_name: "",
-  },
+  route: initialRoute,
   history: false,
   fromUrl: false
 }

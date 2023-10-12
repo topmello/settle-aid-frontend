@@ -164,7 +164,7 @@ const ResultOverlay: React.FC<OverlayProps> = ({
         <List.Section>
           {data &&
             data.locations.map((location: string, index: number) => {
-              const locationType = body?.location_type;
+              const locationType = data?.location_type;
               if (
                 !locationType ||
                 !Array.isArray(locationType) ||

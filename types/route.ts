@@ -13,6 +13,9 @@ export interface Route {
   instructions: string[];
   duration: number;
   route_image_name: string;
+  location_type: string[];
+  query: string[];
+  negative_query: string[];
 }
 
 export interface RouteGetResult {
@@ -44,4 +47,7 @@ export const initialRoute: Route = {
   instructions: [],
   duration: 0,
   route_image_name: "",
+  location_type: [],
+  query: [],
+  negative_query: [],
 }
