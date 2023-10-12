@@ -256,7 +256,9 @@
     "Achievements": "成就",
     "Favourite Route": "收藏路线",
     "More features coming soon": "更多功能即将推出",
-    "Heavy Rain": "大雨"
+    "Heavy Rain": "大雨",
+    "No route history": "还没有路线历史记录，请使用“计划我的路线”生成您的第一条路线",
+    "No favourite route": "通过在历史列表中点击书签图标来添加您喜欢的路线"
   },
   "settings": {
     "Settings": "设置",

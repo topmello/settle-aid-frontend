@@ -239,9 +239,7 @@ export default function HomeScreen() {
                       },
                     ]}
                   >
-                    {t(
-                      "No route history yet, generate your first route using Plan my route"
-                    )}
+                    {t("No route history", { ns: "home" })}
                   </Text>
                 </View>
               )}
@@ -290,9 +288,7 @@ export default function HomeScreen() {
                       },
                     ]}
                   >
-                    {t(
-                      "Add your favorite route by tapping the bookmark icon in history list"
-                    )}
+                    {t("No favourite route", { ns: "home" })}
                   </Text>
                 </View>
               )}
