@@ -313,7 +313,7 @@ export default function HomeScreen() {
               color: theme.colors.outline,
             }}
           >
-            More features coming soon...
+            {t("More features coming soon", { ns: "home" })}...
           </Text>
         </View>
       </ScrollView>
