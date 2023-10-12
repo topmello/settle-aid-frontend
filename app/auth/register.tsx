@@ -4,19 +4,16 @@ import {
   View,
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
   TouchableOpacity,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import {
-  Card,
-  RadioButton,
   Text,
   useTheme,
   Button,
   TextInput,
   HelperText,
-  Snackbar,
 } from "react-native-paper";
 import PersonAddIcon from "../../assets/images/icons/person_add.svg";
 import ArrowBackIcon from "../../assets/images/icons/arrow_back.svg";
