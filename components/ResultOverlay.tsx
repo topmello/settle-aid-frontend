@@ -169,7 +169,6 @@ const ResultOverlay: React.FC<OverlayProps> = ({
         {/** Destinations */}
         <List.Section>
           {data &&
-            Array.isArray(data.locations) &&
             data.locations.map((location: string, index: number) => {
               const locationType = body?.location_type;
               if (
@@ -188,9 +187,7 @@ const ResultOverlay: React.FC<OverlayProps> = ({
                 locationIcons &&
                 locationType &&
                 locationIcons[locationType[index]];
-              if (!Icon) {
-                return null;
-              }
+
               return (
                 <List.Item
                   key={index}
@@ -198,10 +195,10 @@ const ResultOverlay: React.FC<OverlayProps> = ({
                   description={capitalizedDescription}
                   left={() => (
                     <View style={{ justifyContent: "center", paddingLeft: 10 }}>
-                      <Icon width={30} height={30} />
+                      {Icon ? <Icon width={30} height={30} /> :
+                        <View style={{ width: 30, height: 30, backgroundColor: 'grey' }}></View>}
                     </View>
-                  )}
-                  right={() => (
+                  )} right={() => (
                     <TouchableOpacity
                       style={{
                         backgroundColor: theme.colors.primaryContainer,

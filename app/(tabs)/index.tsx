@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { router } from "expo-router";
 import { useTranslation } from "react-i18next";
 import {
@@ -32,6 +32,8 @@ import { RouteHistory } from "../../types/route";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as Linking from "expo-linking";
 import { FunctionButton } from "../../components/FunctionButton";
+
+
 
 export default function HomeScreen() {
   const { t } = useTranslation();
@@ -100,6 +102,7 @@ export default function HomeScreen() {
       pathname: "/history/favourite",
     });
   };
+
 
   return (
     <SafeAreaView
