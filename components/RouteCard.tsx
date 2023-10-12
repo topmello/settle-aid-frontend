@@ -171,23 +171,26 @@ const RouteCard: React.FC<CardProps> = ({
                   />
                 }
               >
-                <Menu.Item title="Schedule" onPress={showDatePicker} />
+                <Menu.Item
+                  title={t("Schedule", { ns: "comm" })}
+                  onPress={showDatePicker}
+                />
                 <Menu.Item
                   onPress={() => {
                     printMap();
                   }}
-                  title="Share"
+                  title={t("Share", { ns: "comm" })}
                 />
                 <Menu.Item
                   onPress={() => shareUrl?.(routeResult.route.route_id)}
-                  title="Share Link"
+                  title={t("Share Link", { ns: "comm" })}
                 />
                 {handlePublishRoute && (
                   <Menu.Item
                     onPress={() =>
                       handlePublishRoute?.(routeResult.route.route_id)
                     } // Use the new prop
-                    title="Publish Route"
+                    title={t("Publish", { ns: "comm" })}
                   />
                 )}
               </Menu>

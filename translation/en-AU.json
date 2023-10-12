@@ -16,7 +16,14 @@
     "Learn": "Learn",
     "Network Error": "Network Error: URL may blocked",
     "Go": "Go",
-    "Previous": "Previous"
+    "Previous": "Previous",
+    "Replan": "Replan",
+    "Schedule": "Schedule",
+    "Share": "Share",
+    "Favourite": "Favourite",
+    "Publish": "Publish",
+    "Share Link": "Share Link",
+    "Print": "Print"
   },
   "trans": {
     "Choose your language": "Choose your Language to get started",

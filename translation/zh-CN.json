@@ -16,7 +16,14 @@
     "Learn": "学习",
     "Network Error": "网络错误",
     "Go": "前往",
-    "Previous": "上一步"
+    "Previous": "上一步",
+    "Replan": "重新规划",
+    "Schedule": "添加到日历",
+    "Share": "分享",
+    "Favourite": "收藏",
+    "Publish": "发布",
+    "Share Link": "分享链接",
+    "Print": "打印"
   },
   "trans": {
     "Choose your language": "请选择您习惯使用的语言",

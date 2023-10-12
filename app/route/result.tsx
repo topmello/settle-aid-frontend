@@ -347,17 +347,22 @@ export default function MapScreen() {
               />
             }
           >
-            {!useHistory && <Menu.Item onPress={fetchRoute} title="Re-plan" />}
+            {!useHistory && (
+              <Menu.Item
+                onPress={fetchRoute}
+                title={t("Replan", { ns: "comm" })}
+              />
+            )}
             <Menu.Item onPress={showDatePicker} title="Schedule" />
             <Menu.Item
               onPress={() => {
                 printMap();
               }}
-              title="Share"
+              title={t("Share", { ns: "comm" })}
             />
             <Menu.Item
               onPress={() => handleFavRoute(data.route_id)}
-              title="Favourite"
+              title={t("Favourite", { ns: "comm" })}
             />
           </Menu>
           <IconButton
