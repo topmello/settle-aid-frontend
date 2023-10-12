@@ -114,6 +114,7 @@
     "Distance between destinations": "目的地之间的距离",
     "Drag the slider to change the distance": "拖动滑块以更改距离",
     "Route is being generated": "路线正在生成",
+    "Route is being loaded": "路线正在加载",
     "Instructions": "说明",
     "No route found": "未找到路线",
     "You can choose one or more": "您可以选择一个或多个",
@@ -157,6 +158,7 @@
   "achievements": {
     "Generate": "生成",
     "Favourite": "收藏",
+    "Favorite": "收藏",
     "Share": "分享",
     "Publish": "发布",
     "Route": "路线",
@@ -165,10 +167,13 @@
     "Tip": "提示",
     "Tips": "提示",
     "Daily Log In": "每日登录",
-    "Access Global Feed": "访问全球动态"
+    "Access Global Feed": "访问社区路线"
   },
   "leaderboard": {
-    "Leaderboard": "排行榜"
+    "Leaderboard": "排行榜",
+    "Rank": "排名",
+    "Username": "用户名",
+    "Points": "积分"
   },
   "history": {
     "Route History": "路线历史",

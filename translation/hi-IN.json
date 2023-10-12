@@ -23,7 +23,7 @@
     "Favourite": "पसंदीदा",
     "Publish": "प्रकाशित करें",
     "Share Link": "साझा करें लिंक",
-    "Print": "प्रिंट",
+    "Print": "प्रिंट"
   },
   "time": {
     "sec": "दूसरा",
@@ -114,6 +114,7 @@
     "Distance between destinations": "गंतव्यों के बीच की दूरी",
     "Drag the slider to change the distance": "दूरी बदलने के लिए स्लाइडर खींचें",
     "Route is being generated": "मार्ग तैयार हो रहा है",
+    "Route is being loaded": "मार्ग लोड हो रहा है",
     "Instructions": "निर्देश",
     "No route found": "कोई मार्ग नहीं मिला",
     "You can choose one or more": "आप एक या एक से अधिक चुन सकते हैं",
@@ -156,6 +157,7 @@
   },
   "achievements": {
     "Generate": "उत्पन्न करें",
+    "Favorite": "पसंदीदा",
     "Favourite": "पसंदीदा",
     "Share": "साझा करें",
     "Publish": "प्रकाशित करें",
@@ -165,10 +167,13 @@
     "Tip": "सुझाव",
     "Tips": "सुझाव",
     "Daily Log In": "रोजाना लॉग इन करें",
-    "Access Global Feed": "वैश्विक फ़ीड तक पहुँचें"
+    "Access Global Feed": "समुदाय द्वारा उत्पन्न रूट तक पहुंचें"
   },
   "leaderboard": {
-    "Leaderboard": "लीडरबोर्ड"
+    "Leaderboard": "लीडरबोर्ड",
+    "Rank": "श्रेणी",
+    "Username": "उपयोगकर्ता नाम",
+    "Points": "अंक"
   },
   "history": {
     "Route History": "रूट इतिहास",

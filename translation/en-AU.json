@@ -114,6 +114,7 @@
     "Distance between destinations": "Distance between destinations",
     "Drag the slider to change the distance": "Drag the slider to change the distance",
     "Route is being generated": "Route is being generated",
+    "Route is being loaded": "Route is being loaded",
     "Instructions": "Instructions",
     "No route found": "No route found",
     "You can choose one or more": "You can choose one or more",
@@ -148,6 +149,7 @@
   "achievements": {
     "Generate": "Generate",
     "Favourite": "Favourite",
+    "Favorite": "Favourite",
     "Share": "Share",
     "Publish": "Publish",
     "Route": "Route",
@@ -159,7 +161,10 @@
     "Access Global Feed": "Access Global Feed"
   },
   "leaderboard": {
-    "Leaderboard": "Leaderboard"
+    "Leaderboard": "Leaderboard",
+    "Rank": "Rank",
+    "Username": "Username",
+    "Points": "Points"
   },
   "history": {
     "Route History": "Route History",

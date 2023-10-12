@@ -10,7 +10,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { ProgressBar } from "react-native-paper";
 import { ChallengeType, allChallenges } from "../../constants/challenges";
 import { ScrollView } from "react-native-gesture-handler";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 export type Achievement = {
   challenge: {
@@ -67,6 +67,20 @@ export default function AchievementListPage() {
       });
     }
   }, [achievementToday]);
+
+  const transChallengeName = (title: string) => {
+    if (title === "Daily Log In" || title === "Access Global Feed") {
+      return t(title, { ns: "achievements" });
+    }
+    const words = title.split(" ");
+    let result = `${t(words[0], { ns: "achievements" })} ${words[1]} ${t(
+      words[2],
+      {
+        ns: "achievements",
+      }
+    )}`;
+    return result;
+  };
 
   useEffect(() => {
     fetchAchievementToday();
@@ -169,7 +183,7 @@ export default function AchievementListPage() {
                         marginLeft: 6,
                       }}
                     >
-                      {challenge.name}
+                      {transChallengeName(challenge.name)}
                     </Text>
                   </View>
                   <View

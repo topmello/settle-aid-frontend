@@ -8,6 +8,8 @@ import PodiumIcon from "../../assets/images/achievement/podium.svg";
 import useFetch from "../../hooks/useFetch";
 import { useEffect } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useTranslation } from "react-i18next";
+import { ScrollView } from "react-native-gesture-handler";
 
 export type UserRank = {
   username: string;
@@ -16,6 +18,7 @@ export type UserRank = {
 
 export default function AchievementRankingPage() {
   const theme = useAppTheme();
+  const { t } = useTranslation();
   const [rankingList, fetchRankingList] = useFetch<UserRank[]>({
     method: "GET",
     url: `/challenge/leaderboard/?limit=10`,
@@ -56,17 +59,13 @@ export default function AchievementRankingPage() {
               color: theme.colors.onAmberContainer,
             }}
           >
-            Leaderboard
+            {t("Leaderboard", { ns: "leaderboard" })}
           </Text>
         </View>
       </View>
       <View
         style={{
-          paddingHorizontal: 16,
-          paddingVertical: 8,
           width: "100%",
-          alignContent: "center",
-          justifyContent: "space-between",
           flex: 1,
         }}
       >
@@ -88,10 +87,10 @@ export default function AchievementRankingPage() {
           </View>
           <View
             style={{
-              display: "flex",
+              width: "100%",
               flexDirection: "row",
               justifyContent: "center",
-              width: "100%",
+              paddingVertical: 16,
             }}
           >
             <View
@@ -145,12 +144,40 @@ export default function AchievementRankingPage() {
             </View>
           </View>
         </View>
-        <View
+        <ScrollView
           style={{
             flex: 1,
-            marginTop: 16,
+            marginTop: 18,
+            backgroundColor: theme.colors.surface,
+            borderTopLeftRadius: 18,
+            borderTopRightRadius: 18,
+          }}
+          contentContainerStyle={{
+            padding: 16,
           }}
         >
+          <View>
+            <View
+              style={{
+                width: "100%",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                height: 56,
+              }}
+            >
+              <Text variant="titleMedium">
+                {t("Rank", { ns: "leaderboard" })}
+              </Text>
+              <Text variant="titleMedium">
+                {t("Username", { ns: "leaderboard" })}
+              </Text>
+              <Text variant="titleMedium">
+                {t("Points", { ns: "leaderboard" })}
+              </Text>
+            </View>
+            <Divider />
+          </View>
           {rankingList?.map((userRank, index) => {
             return (
               <View key={index}>
@@ -191,7 +218,7 @@ export default function AchievementRankingPage() {
               </View>
             );
           })}
-        </View>
+        </ScrollView>
       </View>
     </SafeAreaView>
   );

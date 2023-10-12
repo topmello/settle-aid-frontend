@@ -215,8 +215,8 @@ export default function MapScreen() {
           }}
         >
           {useHistory
-            ? "Loading route from history..."
-            : "Route is being generated..."}
+            ? t("Route is being loaded", { ns: "route" })
+            : t("Route is being generated", { ns: "route" })}
         </Text>
       </SafeAreaView>
     );
