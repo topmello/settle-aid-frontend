@@ -10,6 +10,7 @@ import useEventScheduler from "../hooks/useEventScheduler";
 import { timeSince } from "../utils/time";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { getRouteImage } from "../utils/routeImage";
+import { useTranslation } from "react-i18next";
 
 interface CardProps {
   routeResult: RouteHistory;
@@ -40,6 +41,7 @@ const RouteCard: React.FC<CardProps> = ({
     hideDatePicker,
     handleDateConfirm,
   } = useEventScheduler();
+  const { t } = useTranslation();
 
   const { map, printMap } = usePrintMap(routeResult.route);
   return (
@@ -136,7 +138,8 @@ const RouteCard: React.FC<CardProps> = ({
                   marginLeft: 4,
                 }}
               >
-                {Math.ceil((routeResult.route.duration * 1.5) / 60)} mins
+                {Math.ceil((routeResult.route.duration * 1.5) / 60)}{" "}
+                {t("mins", { ns: "history" })}
               </Text>
             </View>
             <View

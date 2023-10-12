@@ -39,7 +39,6 @@ import { useAchievement } from "../../hooks/useAchievement";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 
-
 const MORE_ICON = Platform.OS === "ios" ? "dots-horizontal" : "dots-vertical";
 
 const modes: Array<string> = [
@@ -241,7 +240,9 @@ export default function MapScreen() {
       >
         {
           <>
-            <Text variant="titleLarge">No route found</Text>
+            <Text variant="titleLarge">
+              {t("No route found", { ns: "route" })}
+            </Text>
             <Text
               variant="titleMedium"
               style={{

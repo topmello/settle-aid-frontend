@@ -346,14 +346,18 @@ export default function RouteGenLocation() {
               padding: 16,
             }}
           >
-            <Text variant="titleLarge">Set your starting point</Text>
+            <Text variant="titleLarge">
+              {t("Set your starting point", { ns: "route" })}
+            </Text>
             <Text
               variant="bodyMedium"
               style={{
                 color: theme.colors.onSurfaceVariant,
               }}
             >
-              Hint: Press and Drag the pin to change location
+              {t("Hint: Press and Drag the pin to change location", {
+                ns: "route",
+              })}
             </Text>
             {searchedLocation && (
               <Text
@@ -382,7 +386,7 @@ export default function RouteGenLocation() {
                 setShowLocationInput(!showLocationInput);
               }}
             >
-              Search
+              {t("Search", { ns: "comm" })}
             </Button>
             <Button
               mode="contained"
@@ -394,7 +398,7 @@ export default function RouteGenLocation() {
                 setSearchedLocation(null);
               }}
             >
-              Locate
+              {t("Locate", { ns: "route" })}
             </Button>
           </View>
         </Card>
@@ -414,14 +418,16 @@ export default function RouteGenLocation() {
               marginBottom: 10,
             }}
           >
-            <Text variant="titleLarge">Distance between destinations</Text>
+            <Text variant="titleLarge">
+              {t("Distance between destinations", { ns: "route" })}
+            </Text>
             <Text
               variant="bodyLarge"
               style={{
                 color: theme.colors.onSurfaceVariant,
               }}
             >
-              Drag the slider to change the distance
+              {t("Drag the slider to change the distance", { ns: "route" })}
             </Text>
           </View>
 

@@ -19,7 +19,9 @@
     "Previous": "上一步"
   },
   "trans": {
-    "Choose your language": "请选择您习惯使用的语言"
+    "Choose your language": "请选择您习惯使用的语言",
+    "Your Ultimate Travel Companion": "您的终极旅行伴侣",
+    "Immerse yourself": "沉浸在定制的旅行冒险中，发现文化宝藏，并通过实时安全跟踪保持安全"
   },
   "test": {
     "helloWorld": "你好世界"
@@ -57,6 +59,7 @@
     "First": "首先",
     "Let us know which": "告诉我们",
     "activities you want to do": "您希望安排什么活动",
+    "You can chose one or more": "您可以选择一个或多个",
     "Dining": "餐饮",
     "Shopping": "购物",
     "Relaxing": "休闲",
@@ -101,8 +104,10 @@
   "track": {
     "Let your children know": "让你的孩子知道",
     "Where you are": "你在哪里",
-    "Let other people track...": "让其他人跟踪...",
-    "Track other people": "跟踪其他人",
+    "Let other people track...": "让其他人定位我...",
+    "Track other people": "定位其他人",
+    "Not connected": "未连接",
+    "You are tracking": "您正在定位",
     "Connected": "已连接",
     "Start sharing": "开始分享",
     "Ask your family to type in": "请家人在他们的设备上输入",

@@ -11,6 +11,7 @@ import { ProgressBar } from "react-native-paper";
 import { ChallengeType, allChallenges } from "../../constants/challenges";
 import { ScrollView } from "react-native-gesture-handler";
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 export type Achievement = {
   challenge: {
     name: string;
@@ -28,6 +29,7 @@ export type Achievement = {
 
 export default function AchievementListPage() {
   const theme = useAppTheme();
+  const { t } = useTranslation();
 
   const [achievementToday, fetchAchievementToday] = useFetch<Achievement[]>(
     {
@@ -101,7 +103,7 @@ export default function AchievementListPage() {
               fontSize: 24,
             }}
           >
-            Achievements
+            {t("Achievements", { ns: "home" })}
           </Text>
         </View>
         <View style={{ width: 34, height: 34 }}>

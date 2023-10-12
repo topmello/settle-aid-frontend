@@ -80,7 +80,6 @@ export default function IntroScreen() {
             style={{ marginTop: 18, color: theme.colors.onPrimaryContainer }}
           >
             {t("Your Ultimate Travel Companion", {
-              lng: "en-AU",
               ns: "trans",
             })}
           </Text>
@@ -88,13 +87,9 @@ export default function IntroScreen() {
             variant="headlineSmall"
             style={{ marginTop: 18, color: theme.colors.primary }}
           >
-            {t(
-              "Immerse yourself in custom travel adventures, uncover cultural gems, and stay secure with real-time safety tracking",
-              {
-                lng: "en-AU",
-                ns: "trans",
-              }
-            )}
+            {t("Immerse yourself", {
+              ns: "trans",
+            })}
           </Text>
         </View>
         <View

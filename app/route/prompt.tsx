@@ -92,26 +92,26 @@ export default function RoutePromptScreen() {
           case "grocery":
             return {
               ...activityOptions[0],
-              positivePrompts: ["fresh"],
-              negativePrompts: ["crowded"],
+              positivePrompts: [t("fresh", { ns: "route" })],
+              negativePrompts: [t("crowded", { ns: "route" })],
             };
           case "restaurant":
             return {
               ...activityOptions[1],
-              positivePrompts: ["tasty"],
-              negativePrompts: ["dirty"],
+              positivePrompts: [t("tasty", { ns: "route" })],
+              negativePrompts: [t("dirty", { ns: "route" })],
             };
           case "landmark":
             return {
               ...activityOptions[2],
-              positivePrompts: ["scenic"],
-              negativePrompts: ["packed"],
+              positivePrompts: [t("scenic", { ns: "route" })],
+              negativePrompts: [t("packed", { ns: "route" })],
             };
           case "pharmacy":
             return {
               ...activityOptions[3],
-              positivePrompts: ["professional"],
-              negativePrompts: ["fake"],
+              positivePrompts: [t("professional", { ns: "route" })],
+              negativePrompts: [t("fake", { ns: "route" })],
             };
         }
       }),

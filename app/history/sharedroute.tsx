@@ -31,6 +31,7 @@ export default function SharedOverviewScreen() {
   const theme = useTheme();
   const loading = useSelector(selectIsLoading);
   const achieve = useAchievement();
+  const { t } = useTranslation();
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -41,7 +42,9 @@ export default function SharedOverviewScreen() {
 
   const handlePressCard = (result: RouteHistory) => {
     if (result && result.route) {
-      dispatch(setRouteHistory({ route: result.route, history: true, fromUrl: false }));
+      dispatch(
+        setRouteHistory({ route: result.route, history: true, fromUrl: false })
+      );
       router.push({
         pathname: "/route/result",
       });
@@ -155,7 +158,9 @@ export default function SharedOverviewScreen() {
           />
         </TouchableOpacity>
         <View style={{ flex: 1, marginLeft: 12 }}>
-          <Text style={styles.text_title}>Community Routes</Text>
+          <Text style={styles.text_title}>
+            {t("Community Routes", { ns: "home" })}
+          </Text>
         </View>
         <View style={{ width: 34, height: 34 }}></View>
       </View>

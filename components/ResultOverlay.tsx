@@ -20,6 +20,7 @@ import { Route } from "../types/route";
 import { useTip } from "../store/TipContext";
 import { router } from "expo-router";
 import Animated from "react-native-reanimated";
+import { useTranslation } from "react-i18next";
 
 type OverlayProps = {
   tipList: Tip[];
@@ -48,6 +49,7 @@ const ResultOverlay: React.FC<OverlayProps> = ({
   const bottomSheetRef = React.useRef<Animated.View>(null);
   const { setCategory, setCurrentTipIndex } = useTip();
   const [showBottomSheet, setShowBottomSheet] = React.useState(true);
+  const { t } = useTranslation();
 
   return (
     <Animated.View
@@ -189,10 +191,20 @@ const ResultOverlay: React.FC<OverlayProps> = ({
                   description={capitalizedDescription}
                   left={() => (
                     <View style={{ justifyContent: "center", paddingLeft: 10 }}>
-                      {Icon ? <Icon width={30} height={30} /> :
-                        <View style={{ width: 30, height: 30, backgroundColor: 'grey' }}></View>}
+                      {Icon ? (
+                        <Icon width={30} height={30} />
+                      ) : (
+                        <View
+                          style={{
+                            width: 30,
+                            height: 30,
+                            backgroundColor: "grey",
+                          }}
+                        ></View>
+                      )}
                     </View>
-                  )} right={() => (
+                  )}
+                  right={() => (
                     <TouchableOpacity
                       style={{
                         backgroundColor: theme.colors.primaryContainer,
@@ -227,7 +239,7 @@ const ResultOverlay: React.FC<OverlayProps> = ({
           }}
         >
           <List.Accordion
-            title="Instructions"
+            title={t("Instructions", { ns: "route" })}
             left={(props) => <List.Icon {...props} icon="map-legend" />}
           >
             {data &&

@@ -144,7 +144,7 @@ export default function TrackScreen() {
             fontWeight: "bold",
           }}
         >
-          {t("Let your children know", { ns: "acc" })}
+          {t("Let your children know", { ns: "track" })}
         </Text>
         <Text
           variant="headlineLarge"
@@ -153,7 +153,7 @@ export default function TrackScreen() {
             color: theme.colors.onPrimaryContainer,
           }}
         >
-          {t("Where you are", { ns: "acc" })}
+          {t("Where you are", { ns: "track" })}
         </Text>
         <View
           style={{
@@ -182,7 +182,7 @@ export default function TrackScreen() {
               setMode("trackme");
             }}
           >
-            Let other people track me
+            {t("Let other people track...", { ns: "track" })}
           </Button>
           <Button
             mode="outlined"
@@ -191,7 +191,7 @@ export default function TrackScreen() {
               setShowRoomIdInput(true);
             }}
           >
-            Track other people
+            {t("Track other people", { ns: "track" })}
           </Button>
         </View>
         <Portal>
@@ -212,7 +212,7 @@ export default function TrackScreen() {
               style={{
                 margin: 20,
               }}
-              label="Room ID"
+              label={t("Room ID", { ns: "track" })}
               value={roomIdInput}
               onChangeText={(text) => {
                 setRoomIdInput(text);
@@ -245,14 +245,14 @@ export default function TrackScreen() {
                   }
                 }}
               >
-                Join
+                {t("Join", { ns: "track" })}
               </Button>
               <Button
                 style={{ marginBottom: 54 }}
                 mode="contained-tonal"
                 onPress={() => setShowRoomIdInput(false)}
               >
-                Cancel
+                {t("Cancel", { ns: "comm" })}
               </Button>
             </View>
           </Modal>
@@ -385,7 +385,11 @@ export default function TrackScreen() {
             alignItems: "center",
           }}
         >
-          <Text>{isConnected ? "Connected" : "Not Connected"}</Text>
+          <Text>
+            {isConnected
+              ? t("Connected", { ns: "track" })
+              : t("Not Connected", { ns: "track" })}
+          </Text>
           {loading && <ActivityIndicator animating={loading} size="large" />}
           {!loading && mode === "trackme" && (
             <View
@@ -405,7 +409,7 @@ export default function TrackScreen() {
                   }}
                   style={{ width: 200, height: 40 }}
                 >
-                  Start sharing
+                  {t("Start sharing", { ns: "track" })}
                 </Button>
               )}
               {tracking && (
@@ -416,7 +420,7 @@ export default function TrackScreen() {
                   }}
                 >
                   <Text variant="bodyLarge" style={{ fontWeight: "bold" }}>
-                    Ask your children to type in
+                    {t("Ask your family to type in", { ns: "track" })}
                   </Text>
                   <Button
                     mode="outlined"
@@ -440,7 +444,7 @@ export default function TrackScreen() {
                     {roomId}
                   </Button>
                   <Text variant="bodyLarge" style={{ fontWeight: "bold" }}>
-                    locate you on their device
+                    {t("locate you on their device", { ns: "track" })}
                   </Text>
                 </View>
               )}
@@ -456,7 +460,7 @@ export default function TrackScreen() {
               }}
             >
               <Text variant="bodyLarge" style={{ fontWeight: "bold" }}>
-                You are tracking
+                {t("You are tracking", { ns: "track" })}
               </Text>
               <Text variant="headlineSmall" style={{ fontWeight: "bold" }}>
                 {roomId}
