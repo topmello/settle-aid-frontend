@@ -37,7 +37,6 @@ import { useAppTheme } from "../../theme/theme";
 import { AppDispatch } from "../../store";
 import { useAchievement } from "../../hooks/useAchievement";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import * as Linking from "expo-linking";
 import { useTranslation } from "react-i18next";
 
 
@@ -128,17 +127,15 @@ export default function MapScreen() {
   );
 
   const fetchRoute = useCallback(async () => {
-
     if (useHistory && !fromUrl) {
       return;
     } else if (useHistory && fromUrl) {
       try {
-        await fetchGet()
+        await fetchGet();
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
-    }
-    else {
+    } else {
       try {
         await fetchData().then(() => {
           achieve("routeGeneration");
@@ -310,8 +307,14 @@ export default function MapScreen() {
       >
         <TouchableOpacity
           onPress={() => {
-            dispatch(setRouteHistory({ route: initialRoute, history: true, fromUrl: true })) // reset route history
-            router.push("/(tabs)",);
+            dispatch(
+              setRouteHistory({
+                route: initialRoute,
+                history: true,
+                fromUrl: true,
+              })
+            ); // reset route history
+            router.push("/(tabs)");
           }}
           style={{
             backgroundColor: theme.colors.primaryContainer,

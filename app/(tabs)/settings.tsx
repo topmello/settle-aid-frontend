@@ -33,6 +33,8 @@ import { useCallback, useState } from "react";
 import { router } from "expo-router";
 import { languages } from "../common/language";
 
+const IS_BUILD = process.env.EXPO_PUBLIC_IS_BUILD;
+
 export default function SettingsScreen() {
   const { t, i18n } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
@@ -201,99 +203,123 @@ export default function SettingsScreen() {
             width: "100%",
           }}
         >
-          <List.Subheader>
-            {t("Development", { ns: "settings" })}
-          </List.Subheader>
+          <List.Subheader>{t("About", { ns: "settings" })}</List.Subheader>
           <List.Item
-            title="Test Admin Login"
-            description={adminAuthStatus}
-            left={(props) => <List.Icon {...props} icon="security" />}
+            title={t("Go to hero page", { ns: "settings" })}
+            description={t("Settle Aid", { ns: "settings" })}
+            left={(props) => <List.Icon {...props} icon="information" />}
             right={() => (
               <Button
                 mode="contained"
-                onPress={() => {
-                  setAdminAuthStatus("Loading");
-                  dispatch(loginUser({ username: "admin", password: "admin" }))
-                    .unwrap()
-                    .then(() => {
-                      setAdminAuthStatus("Success");
-                    })
-                    .catch(() => {
-                      setAdminAuthStatus("Failed");
-                    });
-                }}
+                onPress={() => router.push("/common/intro")}
               >
-                Test
+                {t("Go", { ns: "settings" })}
               </Button>
             )}
           />
-          <List.Item
-            title="Go Access Page"
-            right={() => (
-              <Button
-                mode="contained"
-                onPress={() => router.push("/auth/access")}
-              >
-                Access
-              </Button>
-            )}
-          />
-          <List.Item
-            title="Go Track Page"
-            right={() => (
-              <Button
-                mode="contained"
-                onPress={() => router.push("/track/track")}
-              >
-                Track
-              </Button>
-            )}
-          />
-          <List.Accordion
-            title="Authentication States"
-            left={(props) => <List.Icon {...props} icon="key" />}
+        </List.Section>
+        {IS_BUILD === "false" && (
+          <List.Section
+            style={{
+              width: "100%",
+            }}
           >
-            <List.Item title="Auth Status" description={authStatus} />
+            <List.Subheader>
+              {t("Development", { ns: "settings" })}
+            </List.Subheader>
             <List.Item
-              title="Current UTC Time"
-              description={new Date().toISOString()}
-            />
-            <List.Item title="Token" description={token} />
-            <List.Item title="Id" description={userId} />
-            <List.Item title="Username" description={username} />
-            <List.Item
-              title="Token Expires At"
-              description={tokenExpireAt?.toString()}
-            />
-            <List.Item title="Refresh Token" description={refreshToken} />
-            <List.Item
-              title="Refresh Token Expires At"
-              description={refreshTokenExpireAt?.toString()}
-            />
-          </List.Accordion>
-
-          <List.Item
-            title="Test Notificaiton"
-            description="Send a test notification"
-            style={{ marginBottom: 16 }}
-            left={(props) => <List.Icon {...props} icon="bell" />}
-            right={() => {
-              return (
+              title="Test Admin Login"
+              description={adminAuthStatus}
+              left={(props) => <List.Icon {...props} icon="security" />}
+              right={() => (
                 <Button
                   mode="contained"
                   onPress={() => {
-                    pushNotification({
-                      message: "Hello",
-                      type: "info",
-                    });
+                    setAdminAuthStatus("Loading");
+                    dispatch(
+                      loginUser({ username: "admin", password: "admin" })
+                    )
+                      .unwrap()
+                      .then(() => {
+                        setAdminAuthStatus("Success");
+                      })
+                      .catch(() => {
+                        setAdminAuthStatus("Failed");
+                      });
                   }}
                 >
                   Test
                 </Button>
-              );
-            }}
-          />
-        </List.Section>
+              )}
+            />
+            <List.Item
+              title="Go Access Page"
+              right={() => (
+                <Button
+                  mode="contained"
+                  onPress={() => router.push("/auth/access")}
+                >
+                  Access
+                </Button>
+              )}
+            />
+            <List.Item
+              title="Go Track Page"
+              right={() => (
+                <Button
+                  mode="contained"
+                  onPress={() => router.push("/track/track")}
+                >
+                  Track
+                </Button>
+              )}
+            />
+            <List.Accordion
+              title="Authentication States"
+              left={(props) => <List.Icon {...props} icon="key" />}
+            >
+              <List.Item title="Auth Status" description={authStatus} />
+              <List.Item
+                title="Current UTC Time"
+                description={new Date().toISOString()}
+              />
+              <List.Item title="Token" description={token} />
+              <List.Item title="Id" description={userId} />
+              <List.Item title="Username" description={username} />
+              <List.Item
+                title="Token Expires At"
+                description={tokenExpireAt?.toString()}
+              />
+              <List.Item title="Refresh Token" description={refreshToken} />
+              <List.Item
+                title="Refresh Token Expires At"
+                description={refreshTokenExpireAt?.toString()}
+              />
+            </List.Accordion>
+
+            <List.Item
+              title="Test Notificaiton"
+              description="Send a test notification"
+              style={{ marginBottom: 16 }}
+              left={(props) => <List.Icon {...props} icon="bell" />}
+              right={() => {
+                return (
+                  <Button
+                    mode="contained"
+                    onPress={() => {
+                      pushNotification({
+                        message: "Hello",
+                        type: "info",
+                      });
+                    }}
+                  >
+                    Test
+                  </Button>
+                );
+              }}
+            />
+          </List.Section>
+        )}
       </ScrollView>
     </SafeAreaView>
   );

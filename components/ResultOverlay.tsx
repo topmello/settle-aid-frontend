@@ -17,15 +17,9 @@ import { RouteState } from "../store/routeSlice";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Tip } from "../tips/tipsTyped";
 import { Route } from "../types/route";
-import BottomSheet from "@gorhom/bottom-sheet";
 import { useTip } from "../store/TipContext";
 import { router } from "expo-router";
-import Animated, {
-  CurvedTransition,
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-} from "react-native-reanimated";
+import Animated from "react-native-reanimated";
 
 type OverlayProps = {
   tipList: Tip[];
