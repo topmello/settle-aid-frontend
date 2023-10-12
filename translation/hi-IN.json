@@ -14,7 +14,9 @@
     "Home": "होम",
     "Settings": "सेटिंग्स",
     "Learn": "सीखें",
-    "Network Error": "नेटवर्क त्रुटि"
+    "Network Error": "नेटवर्क त्रुटि",
+    "Go": "जाओ",
+    "Previous": "पिछला"
   },
   "trans": {
     "Choose your language": "अपनी भाषा चुनें"
@@ -210,7 +212,7 @@
     "Relaxing": "आराम करना",
     "Travelling": "यात्रा",
     "Location Sharing": "स्थान सांझा करना",
-    "Share your location in real time": "अपने स्थान को वास्तविक समय में साझा करें",
+    "Share your location in realtime": "अपने स्थान को वास्तविक समय में साझा करें",
     "Community Routes": "समुदाय रूट",
     "Achievements": "उपलब्धियाँ",
     "Favourite Route": "पसंदीदा रूट",
@@ -229,7 +231,9 @@
     "Follow System": "सिस्टम का पालन करें",
     "Account": "खाता",
     "Logout": "लॉग आउट",
-    "Development": "विकास"
+    "Development": "विकास",
+    "About": "के बारे में",
+    "Go to hero page": "हीरो पेज पर जाएं"
   },
   "tip": {
     "Cultural Tips": "सांस्कृतिक सुझाव",

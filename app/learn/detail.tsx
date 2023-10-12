@@ -8,6 +8,7 @@ import ArrowBackIcon from "../../assets/images/icons/arrow_back.svg";
 import { useMemo, useEffect } from "react";
 import { TipImage } from "../../components/TipImage";
 import * as Linking from "expo-linking";
+import { useTranslation } from "react-i18next";
 
 export default function LearnDetailScreen() {
   const {
@@ -21,6 +22,7 @@ export default function LearnDetailScreen() {
     setResultTip,
   } = useTip();
   const theme = useAppTheme();
+  const { t } = useTranslation();
 
   const colorCombinations = useMemo(() => {
     return [
@@ -170,7 +172,7 @@ export default function LearnDetailScreen() {
             onPress={nextTip}
             disabled={!canNext}
           >
-            Next
+            {t("Next", { ns: "comm" })}
           </Button>
         )}
         {canPrev && (
@@ -182,7 +184,7 @@ export default function LearnDetailScreen() {
             onPress={prevTip}
             disabled={!canPrev}
           >
-            Previous
+            {t("Previous", { ns: "comm" })}
           </Button>
         )}
       </View>

@@ -14,7 +14,9 @@
     "Home": "Home",
     "Settings": "Settings",
     "Learn": "Learn",
-    "Network Error": "Network Error: URL may blocked"
+    "Network Error": "Network Error: URL may blocked",
+    "Go": "Go",
+    "Previous": "Previous"
   },
   "trans": {
     "Choose your language": "Choose your Language to get started"
@@ -223,7 +225,7 @@
     "Favourite": "Favourite",
     "new ones": "please delete me",
     "Location Sharing": "Location Sharing",
-    "Share your location in real time": "Share your location in real time",
+    "Share your location in realtime": "Share your location in real time",
     "Community Routes": "Community Routes",
     "Achievements": "Achievements",
     "Favourite Route": "Favourite Route",
@@ -242,11 +244,13 @@
     "Follow System": "Follow System",
     "Account": "Account",
     "Logout": "Logout",
-    "Development": "Development"
+    "Development": "Development",
+    "About": "About",
+    "Go to hero page": "Go to hero page"
   },
   "tip": {
     "Cultural Tips": "Cultural Tips",
-    "Trnasportation": "Trnasportation",
+    "Transportation": "Trnasportation",
     "Walk": "Walk",
     "Micromobility Vehicles": "Micromobility Vehicles",
     "Public Transport": "Public Transport",

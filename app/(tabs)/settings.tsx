@@ -45,7 +45,6 @@ export default function SettingsScreen() {
   const authStatus = useSelector((state) => state.auth.status);
   const userId = useSelector(selectUserId);
   const username = useSelector(selectUsername);
-  const colorScheme = useColorScheme();
   const theme = useSelector(selectTheme);
   const paperTheme = useTheme();
   const appLanguage = useSelector(selectLanguage);
@@ -213,7 +212,7 @@ export default function SettingsScreen() {
                 mode="contained"
                 onPress={() => router.push("/common/intro")}
               >
-                {t("Go", { ns: "settings" })}
+                {t("Go", { ns: "comm" })}
               </Button>
             )}
           />

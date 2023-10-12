@@ -8,13 +8,15 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
  * - notifications
  */
 
+export type SupportedLanguage = "en-AU" | "zh-CN" | "hi-IN";
+
 export interface AppState {
   isLoading: boolean;
   isFail: {
     message: string;
   } | null;
   theme: "light" | "dark" | "system" | undefined;
-  language: "en-AU" | "zh-CN" | "hi-IN" | undefined;
+  language: SupportedLanguage | undefined;
   privacyChecked: boolean;
   roomId?: string;
   triggerRefreshHome: number;
@@ -32,7 +34,8 @@ const initialState: AppState = {
 export const selectIsLoading = (state: any): boolean => state.app.isLoading;
 export const selectIsFail = (state: any) => state.app.isFail;
 export const selectTheme = (state: any) => state.app.theme;
-export const selectLanguage = (state: any) => state.app.language;
+export const selectLanguage = (state: any) =>
+  state.app.language as SupportedLanguage | undefined;
 export const selectPrivacyChecked = (state: any) => state.app.privacyChecked;
 export const selectRoomId = (state: any) => state.app.roomId;
 export const selectTriggerRefreshHome = (state: any) =>

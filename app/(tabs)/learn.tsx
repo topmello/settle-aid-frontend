@@ -2,13 +2,24 @@ import { ScrollView } from "react-native";
 import { View } from "react-native";
 import { Button, List, Text, useTheme } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { tips } from "../../tips/tips.json";
+import { tips as tipsCN } from "../../tips/tips-CN.json";
+import { tips as tipsEN } from "../../tips/tips.json";
+import { tips as tipsIN } from "../../tips/tips-IN.json";
 import { Ionicons } from "@expo/vector-icons";
 import { useTip } from "../../store/TipContext";
 import { router } from "expo-router";
 import { useAppTheme } from "../../theme/theme";
 import { useTranslation } from "react-i18next";
-import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { SupportedLanguage, selectLanguage } from "../../store/appSlice";
+
+const tips: {
+  [key in SupportedLanguage]: (typeof tipsCN)[number][];
+} = {
+  "zh-CN": tipsCN,
+  "en-AU": tipsEN,
+  "hi-IN": tipsIN,
+};
 
 type IconName =
   | "airplane-outline"
@@ -36,18 +47,12 @@ export default function LearnScreen() {
   const { t } = useTranslation();
   const theme = useAppTheme();
   const { setCategory } = useTip();
+  const lang = useSelector(selectLanguage);
 
-  // useEffect(() => {
-  //   tips.forEach((cate) => {
-  //     cate.tips.forEach((tip) => {
-  //       tip.type.forEach((tip) => {
-  //         console.log(
-  //           `case "${tip.photo}": return require("../../assets/images/tip/${tip.photo}");`
-  //         );
-  //       });
-  //     });
-  //   });
-  // }, []);
+  let currentTips;
+  if (lang) {
+    currentTips = tips[lang];
+  }
 
   return (
     <SafeAreaView
@@ -67,7 +72,7 @@ export default function LearnScreen() {
           color: theme.colors.onBackground,
         }}
       >
-        {t("Cultural Tips", { ns: "settings" })}
+        {t("Cultural Tips", { ns: "tip" })}
       </Text>
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -76,7 +81,7 @@ export default function LearnScreen() {
           paddingBottom: 24,
         }}
       >
-        {tips.map((category, cateIndex) => {
+        {currentTips?.map((category, cateIndex) => {
           return (
             <View
               key={cateIndex}
@@ -92,17 +97,23 @@ export default function LearnScreen() {
                 name={iconList[cateIndex]}
               />
               <List.Section
-                title={category.title}
+                title={t(category.title, { ns: "tip" })}
                 key={`${cateIndex}`}
                 style={{
                   flex: 1,
+                }}
+                titleStyle={{
+                  fontSize: 18,
                 }}
               >
                 {category.tips.map((subcate, subcateIndex) => {
                   return (
                     <List.Item
                       key={`${cateIndex}-${subcateIndex}`}
-                      title={subcate.mode}
+                      title={t(subcate.mode, { ns: "tip" })}
+                      titleStyle={{
+                        fontSize: 20,
+                      }}
                       onPress={() => {
                         setCategory(subcate);
                         router.push("/learn/detail");

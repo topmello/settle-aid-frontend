@@ -14,7 +14,9 @@
     "Home": "首页",
     "Settings": "设置",
     "Learn": "学习",
-    "Network Error": "网络错误"
+    "Network Error": "网络错误",
+    "Go": "前往",
+    "Previous": "上一步"
   },
   "trans": {
     "Choose your language": "请选择您习惯使用的语言"
@@ -210,10 +212,10 @@
     "Relaxing": "休闲",
     "Travelling": "旅行",
     "Location Sharing": "位置共享",
-    "Share your location in real time": "实时分享您的位置",
+    "Share your location in realtime": "实时分享您的位置",
     "Community Routes": "社区路线",
     "Achievements": "成就",
-    "Favourite Route": "喜爱路线",
+    "Favourite Route": "收藏路线",
     "More features coming soon": "更多功能即将推出",
     "Heavy Rain": "大雨"
   },
@@ -229,10 +231,12 @@
     "Follow System": "跟随系统",
     "Account": "账户",
     "Logout": "登出",
-    "Development": "开发者选项"
+    "Development": "开发者选项",
+    "About": "关于",
+    "Go to hero page": "前往简介页面"
   },
   "tip": {
-    "Cultural Tips": "文化提示",
+    "Cultural Tips": "风俗习惯",
     "Transportation": "交通",
     "Walk": "步行",
     "Micromobility Vehicles": "微型交通工具",

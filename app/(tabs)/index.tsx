@@ -25,15 +25,17 @@ import {
   selectTriggerRefreshHome,
 } from "../../store/appSlice";
 import { selectUserId } from "../../store/authSlice";
-import { setRouteHistory, setFromUrl, selectHistoryRoute } from "../../store/routeHistorySlice";
+import {
+  setRouteHistory,
+  setFromUrl,
+  selectHistoryRoute,
+} from "../../store/routeHistorySlice";
 import { useAppTheme } from "../../theme/theme";
 import { RouteHistory } from "../../types/route";
 
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as Linking from "expo-linking";
 import { FunctionButton } from "../../components/FunctionButton";
-
-
 
 export default function HomeScreen() {
   const { t } = useTranslation();
@@ -70,11 +72,13 @@ export default function HomeScreen() {
     if (url) {
       const { path, queryParams } = Linking.parse(url);
       if (queryParams && queryParams.routeId) {
-        dispatch(setFromUrl({
-          routeId: parseInt(queryParams.routeId as string),
-          fromUrl: true,
-          history: true
-        }));
+        dispatch(
+          setFromUrl({
+            routeId: parseInt(queryParams.routeId as string),
+            fromUrl: true,
+            history: true,
+          })
+        );
         router.push({
           pathname: "/route/result",
         });
@@ -84,7 +88,9 @@ export default function HomeScreen() {
 
   const handlePressCard = (result: RouteHistory) => {
     if (result && result.route) {
-      dispatch(setRouteHistory({ route: result.route, history: true, fromUrl: false }));
+      dispatch(
+        setRouteHistory({ route: result.route, history: true, fromUrl: false })
+      );
       router.push({
         pathname: "/route/result",
       });
@@ -102,7 +108,6 @@ export default function HomeScreen() {
       pathname: "/history/favourite",
     });
   };
-
 
   return (
     <SafeAreaView
@@ -248,7 +253,7 @@ export default function HomeScreen() {
           <View>
             <View style={styles.sectionWrapper}>
               <Text variant="titleLarge" style={styles.titleWithMargin}>
-                {t("Favorite Route", { ns: "home" })}
+                {t("Favourite Route", { ns: "home" })}
               </Text>
               <TouchableOpacity onPress={handlePressMoreFavorite}>
                 <View style={styles.moreWrapper}>
