@@ -231,7 +231,9 @@ export default function HomeScreen() {
                       },
                     ]}
                   >
-                    {t("Plan your route to see your history")}
+                    {t(
+                      "No route history yet, generate your first route using Plan my route"
+                    )}
                   </Text>
                 </View>
               )}
@@ -271,8 +273,18 @@ export default function HomeScreen() {
               ))}
               {favRouteList.length === 0 && (
                 <View style={styles.emptyStateWrapper}>
-                  <Text variant="bodyLarge" style={styles.emptyStateText}>
-                    {t("Add your favorite route by tapping the bookmark icon")}
+                  <Text
+                    variant="bodyLarge"
+                    style={[
+                      styles.emptyStateText,
+                      {
+                        color: theme.colors.outline,
+                      },
+                    ]}
+                  >
+                    {t(
+                      "Add your favorite route by tapping the bookmark icon in history list"
+                    )}
                   </Text>
                 </View>
               )}
