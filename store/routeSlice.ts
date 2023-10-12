@@ -1,9 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { createSelector } from "reselect";
+import { SupportedLanguage } from "./appSlice";
 
 export type LocationType = "landmark" | "restaurant" | "grocery" | "pharmacy";
 
 export type RouteType = "driving" | "walking" | "cycling";
+
 
 export interface RouteState {
   location_type: LocationType[];
@@ -15,6 +17,7 @@ export interface RouteState {
   similarity_threshold: number; //0-1
   negative_similarity_threshold: number; // 0-1
   route_type: RouteType;
+  language?: SupportedLanguage;
 }
 
 const initialState: RouteState = {
@@ -27,6 +30,7 @@ const initialState: RouteState = {
   similarity_threshold: 0,
   route_type: "walking",
   negative_similarity_threshold: 0,
+  language: "en-AU"
 };
 
 const selectRoute = (state: { route: RouteState }) => state.route;
@@ -109,6 +113,10 @@ const routeSlice = createSlice({
     setRouteType(state, action: PayloadAction<{ route_type: RouteType }>) {
       state.route_type = action.payload.route_type;
     },
+    setRouteLanguage(state, action: PayloadAction<{ language: SupportedLanguage }>) {
+
+      state.language = action.payload.language; //to translate input to english
+    },
   },
 });
 
@@ -119,6 +127,7 @@ export const {
   setDistanceThreshold,
   setSimilarityThreshold,
   setRouteType,
+  setRouteLanguage
 } = routeSlice.actions;
 
 export default routeSlice.reducer;

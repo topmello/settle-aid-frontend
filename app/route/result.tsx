@@ -13,25 +13,27 @@ import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from "react-native-maps";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import ResultOverlay from "../../components/ResultOverlay";
 import useCheckedList from "../../hooks/useCheckList";
-import { RouteState, selectRouteState } from "../../store/routeSlice";
+import { RouteState, selectRouteState, setRouteLanguage } from "../../store/routeSlice";
 import tips, { Tip } from "../../tips/tipsTyped";
 import getTipForMode from "../../tips/getTip";
 import { locationIcons } from "../../constants/icons";
 import { mapDarkTheme } from "../../theme/map";
-import { refreshHome, selectTheme } from "../../store/appSlice";
+import { SupportedLanguage, refreshHome, selectTheme } from "../../store/appSlice";
 import { RequestOptions } from "../../api/fetch";
 import useFetch from "../../hooks/useFetch";
 import { useMapRegion, Coordinates } from "../../hooks/useMapRegion";
 import useEventScheduler from "../../hooks/useEventScheduler";
 import { usePrintMap } from "../../hooks/usePrintMap";
 import { Route, RouteGetResult, initialRoute } from "../../types/route";
-import { selectIsLoading } from "../../store/appSlice";
+import { selectIsLoading, selectLanguage } from "../../store/appSlice";
 import {
   selectHistoryRoute,
   selectUseHistory,
   selectFromUrl,
   selectRouteId,
   setRouteHistory,
+  setInstructions,
+  Instructions
 } from "../../store/routeHistorySlice";
 import { useAppTheme } from "../../theme/theme";
 import { AppDispatch } from "../../store";
@@ -51,12 +53,13 @@ const modes: Array<string> = [
 
 export default function MapScreen() {
   const { t } = useTranslation();
+  const language = useSelector<SupportedLanguage>(selectLanguage) as SupportedLanguage;
   const theme = useAppTheme();
   const currentTheme = useSelector(selectTheme);
   const routeState: RouteState = useSelector(selectRouteState);
   const loading = useSelector(selectIsLoading);
   const useHistory = useSelector(selectUseHistory);
-  const routeIdFromUrl = useSelector(selectRouteId);
+  const routeIdFromUrl = useSelector<number>(selectRouteId);
   const fromUrl = useSelector(selectFromUrl);
   const data = useSelector<Route>(selectHistoryRoute) as Route;
 
@@ -125,54 +128,87 @@ export default function MapScreen() {
     false
   );
 
+  const [translatedInstructions, fetchTranslatedInstructions] = useFetch<Instructions>(
+    {
+      method: "GET",
+      url: `search/route/instructions/${data.route_id}/${language}/`,
+    },
+    [data.route_id, language],
+    { instructions: [] },
+    false
+  )
+  useEffect(() => {
+    if (language !== "en-AU") {
+      fetchTranslatedInstructions();
+    }
+  }, [language, data.route_id]);
+
   const fetchRoute = useCallback(async () => {
     if (useHistory && !fromUrl) {
       return;
     } else if (useHistory && fromUrl) {
       try {
-        await fetchGet();
+        dispatch(setRouteLanguage({ language }));
+        await fetchGet()
       } catch (error) {
         console.log(error);
       }
     } else {
       try {
+        dispatch(setRouteLanguage({ language }));
         await fetchData().then(() => {
-          achieve("routeGeneration");
+          achieve("routeGeneration")
         });
+
         dispatch(refreshHome());
       } catch (error) {
         console.error("Failed to fetch route:", error);
         return;
       }
     }
-  }, [useHistory, fromUrl, routeIdFromUrl]);
+  }, [useHistory, fromUrl, routeIdFromUrl, language]);
+
 
   useEffect(() => {
+    let routeData: Route | undefined;
+    let historyFlag = false;
+    let fromUrlFlag = false;
+
     if (!useHistory && !fromUrl && dataFromFetch) {
-      dispatch(
-        setRouteHistory({
-          route: dataFromFetch as Route,
-          history: false,
-          fromUrl: false,
-        })
-      );
+      routeData = dataFromFetch as Route;
     } else if (useHistory && fromUrl && dataFromGet) {
+      routeData = dataFromGet.route as Route;
+      historyFlag = true;
+      fromUrlFlag = true;
+    }
+
+    if (routeData) {
       dispatch(
         setRouteHistory({
-          route: dataFromGet.route as Route,
-          history: true,
-          fromUrl: true,
+          route: routeData,
+          history: historyFlag,
+          fromUrl: fromUrlFlag,
         })
       );
     }
-  }, [useHistory, dataFromFetch, dataFromGet, fromUrl]);
+    if (language !== "en-AU" &&
+      translatedInstructions &&
+      translatedInstructions.instructions.length > 0) {
+      dispatch(setInstructions(translatedInstructions as Instructions));
+    } else {
+      console.log("Skipped dispatching instructions");
+    }
+
+  }, [useHistory, dataFromFetch, dataFromGet, fromUrl, translatedInstructions, language]);
+
+
 
   // fetch route
   useEffect(() => {
     fetchRoute().catch((error) => {
       console.error("Failed to fetch route:", error);
     });
-  }, [fetchRoute]);
+  }, [fetchRoute,]);
 
   const voteRequestOptions: RequestOptions = {
     method: "POST",

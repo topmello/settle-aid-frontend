@@ -9,6 +9,10 @@ export interface RouteHistory {
   fromUrl: boolean;
 }
 
+export interface Instructions {
+  instructions: string[]
+}
+
 const RouteHistoryState: RouteHistory = {
   routeId: 0,
   route: initialRoute,
@@ -34,11 +38,14 @@ const routeHistorySlice = createSlice({
       state.history = action.payload;
       state.fromUrl = false;
     },
-    setFromUrl(state, action: PayloadAction<{ routeId: number, history: true, fromUrl: boolean }>) {
+    setFromUrl(state, action: PayloadAction<{ routeId: number, history: boolean, fromUrl: boolean }>) {
       state.routeId = action.payload.routeId;
       state.history = action.payload.history;
       state.fromUrl = action.payload.fromUrl;
-    }
+    },
+    setInstructions(state, action: PayloadAction<Instructions>) {
+      state.route.instructions = action.payload.instructions;
+    },
 
   }
 
@@ -48,7 +55,8 @@ const routeHistorySlice = createSlice({
 export const {
   setRouteHistory,
   setUseHistory,
-  setFromUrl
+  setFromUrl,
+  setInstructions
 } = routeHistorySlice.actions;
 
 export default routeHistorySlice.reducer;
