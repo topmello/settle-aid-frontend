@@ -106,7 +106,7 @@ export default function MapScreen() {
   const [dataFromFetch, fetchData] = useFetch<Route>(
     {
       method: "POST",
-      url: "/search/v2/route/",
+      url: "/search/v3/route/",
       data: routeState,
     },
     [routeState],
@@ -497,7 +497,6 @@ export default function MapScreen() {
           tipList={tipList}
           handleHide={handleBottomSheetHide}
           data={data}
-          body={routeState}
           handleLocationSelect={handleLocationSelect}
           handlePressRoute={handlePressRoute}
           handlePress={handlePress}

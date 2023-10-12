@@ -13,7 +13,6 @@ import {
   IconButton,
   Checkbox,
 } from "react-native-paper";
-import { RouteState } from "../store/routeSlice";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Tip } from "../tips/tipsTyped";
 import { Route } from "../types/route";
@@ -25,7 +24,6 @@ import { useTranslation } from "react-i18next";
 type OverlayProps = {
   tipList: Tip[];
   data: Route;
-  body: RouteState;
   handleLocationSelect: (location: any) => void;
   handlePressRoute: (index: number) => void;
   handlePress: (index: number) => void;
@@ -37,7 +35,6 @@ type OverlayProps = {
 const ResultOverlay: React.FC<OverlayProps> = ({
   tipList,
   data,
-  body,
   handleLocationSelect,
   handlePressRoute,
   handlePress,
