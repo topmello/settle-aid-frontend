@@ -208,6 +208,7 @@ export default function TrackScreen() {
             }}
           >
             <TextInput
+              keyboardType="number-pad"
               mode="outlined"
               style={{
                 margin: 20,
