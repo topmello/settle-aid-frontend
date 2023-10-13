@@ -94,7 +94,9 @@ export default function LearnScreen() {
                   flex: 1,
                 }}
                 titleStyle={{
-                  fontSize: 18,
+                  fontSize: 20,
+                  color: theme.colors.primary,
+                  fontWeight: "bold",
                 }}
               >
                 {category.tips.map((subcate, subcateIndex) => {
@@ -103,7 +105,8 @@ export default function LearnScreen() {
                       key={`${cateIndex}-${subcateIndex}`}
                       title={t(subcate.mode, { ns: "tip" })}
                       titleStyle={{
-                        fontSize: 20,
+                        fontSize: 18,
+                        color: theme.colors.onBackground,
                       }}
                       onPress={() => {
                         setCategory(subcate);
