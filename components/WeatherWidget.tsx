@@ -22,8 +22,8 @@ export type WeatherOption = {
   name: string;
   icon: any;
   iconNight?: any;
-  tempNight?: number;
-  tempDay?: number;
+  tempMin?: number;
+  tempMax?: number;
 };
 
 const weatherOptions: WeatherOption[] = [
@@ -113,8 +113,8 @@ export const WeatherWidget = () => {
     ids: [],
     name: "Sunny",
     icon: <SunnyIcon />,
-    tempDay: 20,
-    tempNight: 10,
+    tempMin: 13,
+    tempMax: 18,
   });
 
   useEffect(() => {
@@ -145,10 +145,8 @@ export const WeatherWidget = () => {
       if (weatherOption) {
         setCurrentWeatherOption({
           ...weatherOption,
-          tempDay: Math.round(weatherData?.data?.daily?.[0]?.feels_like?.day),
-          tempNight: Math.round(
-            weatherData?.data?.daily?.[0]?.feels_like?.night
-          ),
+          tempMin: Math.round(weatherData?.data?.daily?.[0]?.temp?.min),
+          tempMax: Math.round(weatherData?.data?.daily?.[0]?.temp?.max),
         });
       }
     }
@@ -190,7 +188,7 @@ export const WeatherWidget = () => {
             fontWeight: "bold",
           }}
         >
-          {currentWeatherOption?.tempNight}-{currentWeatherOption?.tempDay} C°
+          {currentWeatherOption?.tempMin}-{currentWeatherOption?.tempMax} C°
         </Text>
         <Text
           variant="bodySmall"

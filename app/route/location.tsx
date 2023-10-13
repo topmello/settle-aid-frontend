@@ -82,7 +82,7 @@ export default function RouteGenLocation() {
       <SafeAreaView>
         <Banner
           style={{
-            borderRadius: 10,
+            borderRadius: 8,
             backgroundColor: theme.colors.errorContainer,
           }}
           theme={{
@@ -94,15 +94,15 @@ export default function RouteGenLocation() {
           icon="shield-check-outline"
           actions={[
             {
-              label: "Not Allow",
+              label: t("Not Allowed", { ns: "route" }),
               onPress: () => {
                 dispatch(setPrivacyUnchecked());
-                router.back();
+                router.replace("/(tabs)");
               },
               textColor: theme.colors.error,
             },
             {
-              label: "Understood",
+              label: t("Understood", { ns: "route" }),
               onPress: () => dispatch(setPrivacyChecked()),
               mode: "contained",
               buttonColor: theme.colors.error,
