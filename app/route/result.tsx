@@ -472,13 +472,11 @@ export default function MapScreen() {
         </View>
 
         <DateTimePickerModal
-          textColor={theme.colors.onBackground}
-          isDarkModeEnabled={theme.dark}
           isVisible={isDatePickerVisible}
-          mode="date"
+          mode="datetime"
           onConfirm={async (date) => {
             if (handleDateConfirm) {
-              await handleDateConfirm(date, data);
+              handleDateConfirm(date, data);
             }
           }}
           onCancel={hideDatePicker}

@@ -135,6 +135,8 @@ export default function LearnDetailScreen() {
             style={{
               flex: 1,
               justifyContent: "center",
+              overflow: "hidden",
+              marginVertical: 8,
             }}
           >
             <TipImage
