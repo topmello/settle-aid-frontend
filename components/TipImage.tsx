@@ -389,8 +389,8 @@ export function TipImage({
 }) {
   return (
     getTipImage(photo) && (
-      <TouchableOpacity onPress={onPress} style={imageStyle}>
-        <Image source={getTipImage(photo)} />
+      <TouchableOpacity onPress={onPress}>
+        <Image style={imageStyle} source={getTipImage(photo)} />
       </TouchableOpacity>
     )
   );
