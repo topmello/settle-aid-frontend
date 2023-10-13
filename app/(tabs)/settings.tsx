@@ -52,6 +52,10 @@ export default function SettingsScreen() {
     (language: "en-AU" | "hi-IN" | "zh-CN") => {
       dispatch(setLanguage({ language }));
       i18n.changeLanguage(language);
+      setTimeout(() => {
+        dispatch(setLanguage({ language }));
+        i18n.changeLanguage(language);
+      }, 300);
     },
     []
   );
