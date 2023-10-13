@@ -78,7 +78,8 @@
     "Generating Failed": "उत्पन्न विफल",
     "Please fill in all fields": "कृपया सभी फ़ील्ड भरें",
     "Login required": "लॉगिन आवश्यक",
-    "Session expired, please login again": "सत्र समाप्त हो गया, कृपया फिर से लॉगिन करें"
+    "Session expired, please login again": "सत्र समाप्त हो गया, कृपया फिर से लॉगिन करें",
+    "Generating... Please wait": "उत्पन्न हो रहा है... कृपया प्रतीक्षा करें"
   },
   "route": {
     "First": "सबसे पहले",
@@ -259,7 +260,14 @@
     "More features coming soon": "जल्द ही और सुविधाएँ आ रही हैं",
     "Heavy Rain": "भारी बारिश",
     "No route history": "अभी तक कोई रूट इतिहास नहीं है, मेरी रूट योजना का उपयोग करके अपनी पहली रूट उत्पन्न करें",
-    "No favourite route": "इतिहास सूची में बुकमार्क आइकन पर टैप करके अपनी पसंदीदा रूट जोड़ें"
+    "No favourite route": "इतिहास सूची में बुकमार्क आइकन पर टैप करके अपनी पसंदीदा रूट जोड़ें",
+    "Rain": "बारिश",
+    "Thunderstorm": "आंधी-तूफान",
+    "Fog": "कोहरा",
+    "Snow": "बर्फ",
+    "Overcast": "बादलमय",
+    "Clear": "साफ",
+    "Light Cloudy": "हल्की बादलों वाला"
   },
   "settings": {
     "Settings": "सेटिंग्स",

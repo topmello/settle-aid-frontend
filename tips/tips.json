@@ -86,7 +86,7 @@
             },
             {
               "description": "Be Visible",
-              "content": "Wear bright and reflective clothing, especially during low-light conditions, to enhance your visibility to other road users.",
+              "content": "Wear bright and reflective clothing, especially in dark environments, to enhance your visibility to other road users.",
               "link": "",
               "photo": "be_visible.png"
             },
@@ -359,7 +359,7 @@
             },
             {
               "description": "Payment",
-              "content": "Don’t use their left hand to hand over anything like money in a shop, or to receive any item.",
+              "content": "Don’t use your left hand to hand over anything like money in a shop, or to receive any item.",
               "link": "",
               "photo": "touching.png"
             },
@@ -394,12 +394,6 @@
               "photo": "litter_free_zone.png"
             },
             {
-              "description": "Punctuality",
-              "content": "If attending an event or meeting, arrive on time. Punctuality is valued in Chinese culture and shows respect for others' time.",
-              "link": "",
-              "photo": "arrival_time.png"
-            },
-            {
               "description": "Cultural Sensitivity",
               "content": "Educate yourself about the cultural norms and practices of the region you're visiting. This will help you avoid unintentional disrespect or misunderstandings.",
               "link": "",
@@ -419,13 +413,14 @@
             {
               "description": "Public Behavior",
               "content": "Maintain modest and polite behavior in public places. Avoid loud conversations, public displays of affection, and any disruptive actions.",
-              "link": ""
+              "link": "",
+              "photo": "safety_awareness.png"
             },
             {
               "description": "Public Spaces",
               "content": "Keep public spaces clean and avoid littering. Dispose of trash properly and use designated bins.",
               "link": "",
-              "photo": "personal_distance.png"
+              "photo": "authenticity.png"
             },
             {
               "description": "Photography Etiquette",

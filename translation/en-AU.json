@@ -78,7 +78,8 @@
     "Generating Failed": "Generating Failed",
     "Please fill in all fields": "Please fill in all fields",
     "Login required": "Login required",
-    "Session expired, please login again": "Session expired, please login again"
+    "Session expired, please login again": "Session expired, please login again",
+    "Generating... Please wait": "Generating... Please wait"
   },
   "route": {
     "First": "First",
@@ -250,7 +251,14 @@
     "More features coming soon": "More features coming soon",
     "Heavy Rain": "Heavy Rain",
     "No route history yet": "No route history yet, generate your first route using Plan my route",
-    "No favourite route": "Add your favorite route by tapping the bookmark icon in history list"
+    "No favourite route": "Add your favorite route by tapping the bookmark icon in history list",
+    "Rain": "Rain",
+    "Thunderstorm": "Thunderstorm",
+    "Fog": "Fog",
+    "Snow": "Snow",
+    "Overcast": "Overcast",
+    "Clear": "Clear",
+    "Light Cloudy": "Light Cloudy"
   },
   "settings": {
     "Settings": "Settings",

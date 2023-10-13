@@ -78,7 +78,8 @@
     "Generating Failed": "生成失败",
     "Please fill in all fields": "请填写所有字段",
     "Login required": "需要登录",
-    "Session expired, please login again": "登录已过期，请重新登录"
+    "Session expired, please login again": "登录已过期，请重新登录",
+    "Generating... Please wait": "正在產生...請稍候"
   },
   "route": {
     "First": "首先",
@@ -259,7 +260,14 @@
     "More features coming soon": "更多功能即将推出",
     "Heavy Rain": "大雨",
     "No route history": "还没有路线历史记录，请使用“计划我的路线”生成您的第一条路线",
-    "No favourite route": "通过在历史列表中点击书签图标来添加您喜欢的路线"
+    "No favourite route": "通过在历史列表中点击书签图标来添加您喜欢的路线",
+    "Rain": "雨",
+    "Thunderstorm": "雷暴",
+    "Fog": "雾",
+    "Snow": "雪",
+    "Overcast": "多云",
+    "Clear": "晴朗",
+    "Light Cloudy": "轻云"
   },
   "settings": {
     "Settings": "设置",

@@ -394,12 +394,6 @@
               "photo": "litter_free_zone.png"
             },
             {
-              "description": "守时",
-              "content": "如果参加活动或会议，请准时到达。在印度文化中，守时受到重视，显示对他人时间的尊重。",
-              "link": "",
-              "photo": "arrival_time.png"
-            },
-            {
               "description": "文化敏感性",
               "content": "了解您参观的地区的文化规范和习惯。这将帮助您避免无意中的不尊重或误解。",
               "link": "",
@@ -419,13 +413,14 @@
             {
               "description": "公共行为",
               "content": "在公共场所保持适度和礼貌的行为。避免大声交谈、公开展示亲昵行为和任何扰人的行为。",
-              "link": ""
+              "link": "",
+              "photo": "safety_awareness.png"
             },
             {
               "description": "公共空间",
               "content": "保持公共空间的清洁，避免乱丢垃圾。妥善处理垃圾并使用指定的垃圾箱。",
               "link": "",
-              "photo": "personal_distance.png"
+              "photo": "authenticity.png"
             },
             {
               "description": "摄影礼仪",
