@@ -29,7 +29,7 @@ import { AppDispatch } from "../../store";
 import { useNotification } from "../../hooks/useNotification";
 import { useAchievement } from "../../hooks/useAchievement";
 import { setRouteHistory } from "../../store/routeHistorySlice";
-
+import { t } from "i18next";
 
 export default function HistoryOverviewScreen() {
   const theme = useTheme();
@@ -62,8 +62,9 @@ export default function HistoryOverviewScreen() {
 
   const handlePressCard = (result: RouteHistory) => {
     if (result && result.route) {
-
-      dispatch(setRouteHistory({ route: result.route, history: true, fromUrl: false }))
+      dispatch(
+        setRouteHistory({ route: result.route, history: true, fromUrl: false })
+      );
       router.push({
         pathname: "/route/result",
       });
@@ -223,7 +224,9 @@ export default function HistoryOverviewScreen() {
           />
         </TouchableOpacity>
         <View style={{ flex: 1, marginLeft: 12 }}>
-          <Text style={styles.text_title}>Route History</Text>
+          <Text style={styles.text_title}>
+            {t("Route History", { ns: "history" })}
+          </Text>
         </View>
         <View style={{ width: 34, height: 34 }}></View>
       </View>

@@ -29,13 +29,13 @@ import * as Linking from "expo-linking";
 import { useAchievement } from "../../hooks/useAchievement";
 import { setRouteHistory } from "../../store/routeHistorySlice";
 
-
 export default function HistoryOverviewScreen() {
   const theme = useTheme();
   const dispatch = useDispatch<AppDispatch>();
   const userID = useSelector(selectUserId);
   const loading = useSelector(selectIsLoading);
   const achieve = useAchievement();
+  const { t } = useTranslation();
 
   const [favRouteList, refetchFavRouteList] = useFetch<RouteHistory[]>(
     {
@@ -70,8 +70,9 @@ export default function HistoryOverviewScreen() {
 
   const handlePressCard = (result: RouteHistory) => {
     if (result && result.route) {
-
-      dispatch(setRouteHistory({ route: result.route, history: true, fromUrl: false }))
+      dispatch(
+        setRouteHistory({ route: result.route, history: true, fromUrl: false })
+      );
       router.push({
         pathname: "/route/result",
       });
@@ -186,7 +187,9 @@ export default function HistoryOverviewScreen() {
           />
         </TouchableOpacity>
         <View style={{ flex: 1, marginLeft: 12 }}>
-          <Text style={styles.text_title}>Favorite Routes</Text>
+          <Text style={styles.text_title}>
+            {t("Favourite Routes", { ns: "favourite" })}
+          </Text>
         </View>
       </View>
       <ScrollView
