@@ -7,6 +7,7 @@
     "icon": "./assets/images/icon.png",
     "scheme": "settleaid",
     "userInterfaceStyle": "automatic",
+    "platforms": ["ios", "android"],
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
@@ -42,11 +43,6 @@
           "apiKey": "AIzaSyDRCFeHN0Z_yftUs5FKP6nv3XAm_Ex8cbc"
         }
       }
-    },
-    "web": {
-      "bundler": "metro",
-      "output": "static",
-      "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
       "expo-router",
