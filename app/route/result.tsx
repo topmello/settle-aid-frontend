@@ -487,9 +487,6 @@ export default function MapScreen() {
         provider={PROVIDER_GOOGLE}
         customMapStyle={currentTheme === "dark" ? mapDarkTheme : []}
         ref={mapRef}
-        loadingEnabled={true}
-        loadingIndicatorColor={theme.colors.onPrimaryContainer}
-        loadingBackgroundColor={theme.colors.primaryContainer}
         showsUserLocation={true}
         showsCompass={false}
         showsMyLocationButton={false}
