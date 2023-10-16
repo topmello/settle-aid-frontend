@@ -44,6 +44,7 @@ export default function AchievementListPage() {
   const [challengeList, setChallengeList] = useState<ChallengeType[]>([]);
 
   useEffect(() => {
+    setChallengeList([]);
     if (achievementToday && achievementToday.length > 0) {
       allChallenges.forEach((challenge) => {
         for (let i = 0; i < achievementToday.length; i++) {
@@ -58,6 +59,16 @@ export default function AchievementListPage() {
             break;
           }
         }
+        setChallengeList((prev) => [
+          ...prev,
+          {
+            ...challenge,
+          },
+        ]);
+      });
+    } else {
+      setChallengeList([]);
+      allChallenges.forEach((challenge) => {
         setChallengeList((prev) => [
           ...prev,
           {

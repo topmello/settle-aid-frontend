@@ -106,7 +106,7 @@ export default function AchievementRankingPage() {
                   color: theme.colors.onAmberContainer,
                 }}
               >
-                {rankingList?.[1].username}
+                {rankingList?.[1]?.username}
               </Text>
             </View>
             <View
@@ -123,7 +123,7 @@ export default function AchievementRankingPage() {
                   color: theme.colors.onAmberContainer,
                 }}
               >
-                {rankingList?.[0].username}
+                {rankingList?.[0]?.username}
               </Text>
             </View>
             <View
@@ -139,7 +139,7 @@ export default function AchievementRankingPage() {
                   color: theme.colors.onAmberContainer,
                 }}
               >
-                {rankingList?.[2].username}
+                {rankingList?.[2]?.username}
               </Text>
             </View>
           </View>
